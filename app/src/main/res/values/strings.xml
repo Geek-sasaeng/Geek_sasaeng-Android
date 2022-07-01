@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">geeksasaeng</string>
+    <string name="app_name">긱사생</string>
+    <string name="signup"><u>회원가입</u></string>
 </resources>

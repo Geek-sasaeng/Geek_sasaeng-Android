@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- Top Status Bar -->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!-- EditText -->
+        <item name="colorControlActivated">@color/main</item>
+        <item name="android:textSelectHandle">@color/main</item>
     </style>
 </resources>
