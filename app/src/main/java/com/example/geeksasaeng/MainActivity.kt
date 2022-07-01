@@ -2,7 +2,10 @@ package com.example.geeksasaeng
 
 import android.os.Bundle
 import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Chatting.ChattingFragment
+import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
+import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {

@@ -16,10 +16,10 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
 
         handler.postDelayed({
             // Test
-            changeActivity(MainActivity::class.java)
+            // changeActivity(MainActivity::class.java)
 
             // Original
-            // changeActivity(LoginActivity::class.java)
+            changeActivity(LoginActivity::class.java)
             finish()
         }, 1500)
     }

@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home
+package com.example.geeksasaeng.Home.Helper
 
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentHelperBinding

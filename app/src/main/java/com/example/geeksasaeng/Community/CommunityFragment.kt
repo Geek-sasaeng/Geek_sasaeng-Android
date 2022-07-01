@@ -1,4 +1,4 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Community
 
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentCommunityBinding
