@@ -129,6 +129,7 @@
                 android:layout_marginTop="20dp"/>
 
             <TextView
+                android:id="@+id/create_party_date2_tv"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:text="05월 05일 23시 00분"
@@ -138,7 +139,9 @@
                 app:layout_constraintStart_toEndOf="@id/create_party_date_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_date_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_date_tv"
-                android:layout_marginStart="40dp"/>
+                android:layout_marginStart="40dp"
+                android:clickable="true"
+                />
 
             <!--매칭 인원 선택-->
             <TextView
@@ -154,16 +157,16 @@
                 android:layout_marginTop="20dp"/>
 
             <TextView
+                android:id="@+id/create_party_number2_tv"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:text="2/4"
-                android:textColor="@color/black"
                 android:background="@color/gray_0"
                 android:padding="5dp"
-                app:layout_constraintStart_toEndOf="@id/create_party_number_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_number_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_number_tv"
-                android:layout_marginStart="40dp"/>
+                />
 
             <!--카테고리 선택-->
             <TextView
@@ -179,16 +182,16 @@
                 android:layout_marginTop="20dp"/>
 
             <TextView
+                android:id="@+id/create_party_category2_tv"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:text="중식"
-                android:textColor="@color/black"
                 android:background="@color/gray_0"
                 android:padding="5dp"
-                app:layout_constraintStart_toEndOf="@id/create_party_category_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_category_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_category_tv"
-                android:layout_marginStart="40dp"/>
+                />
 
             <!--수령장소 선택-->
             <TextView
@@ -204,16 +207,16 @@
                 android:layout_marginTop="20dp"/>
 
             <TextView
+                android:id="@+id/create_party_place2_tv"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:text="제 1기숙사 후문"
-                android:textColor="@color/black"
                 android:background="@color/gray_0"
                 android:padding="5dp"
-                app:layout_constraintStart_toEndOf="@id/create_party_place_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_place_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_place_tv"
-                android:layout_marginStart="40dp"/>
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

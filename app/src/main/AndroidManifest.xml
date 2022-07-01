@@ -10,6 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Geeksasaeng">
         <activity
+            android:name=".CreatePartyNumDialogActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">f
+        </activity>
+
+        <activity
+            android:name=".CreatePartyDateDialogActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

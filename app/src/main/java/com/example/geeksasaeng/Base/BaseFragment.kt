@@ -24,9 +24,19 @@ abstract class BaseFragment<VB : ViewBinding>(
         return binding.root
     }
 
-    fun showToast(msg: String) {
-        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+    override fun onStart() {
+        super.onStart()
+        initAfterBinding()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     protected abstract fun initAfterBinding()
+
+    fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 }
