@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".StepOneFragment">
+
+
+    <!--아이다-->
+    <TextView
+        android:id="@+id/step_one_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="인증번호 입력"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/step_one_id_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:hint="입력하세요"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/step_one_id_check_tv"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_id_tv" />
+
+    <View
+        android:id="@+id/step_one_id_underscore_view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="#a8a8a8"
+        app:layout_constraintStart_toStartOf="@+id/step_one_id_et"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_id_et"
+        app:layout_constraintEnd_toEndOf="@id/step_one_id_et"/>
+
+    <TextView
+        android:id="@+id/step_one_id_check_tv"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_background_border"
+        android:gravity="center"
+        android:text="재전송 하기"
+        android:textSize="13sp"
+        android:textColor="@color/main"
+        app:layout_constraintStart_toEndOf="@id/step_one_id_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/step_one_id_et"
+        app:layout_constraintBottom_toBottomOf="@id/step_one_id_et"/>
+
+    <TextView
+        android:id="@+id/step_one_id_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/step_one_id_underscore_view"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:text="00분 00초 남ㄴ았어"
+        android:textColor="@color/main"
+        app:layout_constraintTop_toBottomOf="@id/step_one_id_underscore_view"
+        android:visibility="invisible"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
