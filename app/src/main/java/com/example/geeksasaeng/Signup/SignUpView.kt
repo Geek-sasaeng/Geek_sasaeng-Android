@@ -1,4 +1,4 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Signup
 
 interface SignUpView {
     fun onSignUpSuccess()

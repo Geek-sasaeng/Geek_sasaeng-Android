@@ -20,7 +20,7 @@
             android:id="@+id/splash_logo"
             android:layout_width="209dp"
             android:layout_height="209dp"
-            android:src="@drawable/temp_logo"
+            android:src="@drawable/ic_logo"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

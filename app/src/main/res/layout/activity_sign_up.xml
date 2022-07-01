@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
-
+    android:fitsSystemWindows="true"
+    tools:context=".Signup.SignUpActivity">
 
     <ProgressBar
         android:id="@+id/sign_up_progressbar"

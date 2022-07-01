@@ -1,4 +1,4 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Signup
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
