@@ -30,6 +30,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
                 }
                 binding.signUpVp.setCurrentItem(currentPos+1, false)
             }
+            binding.signUpProgressbar.setProgress(currentPos+1) // 프로그레스바 진행률 올리기
         }
     }
 }
