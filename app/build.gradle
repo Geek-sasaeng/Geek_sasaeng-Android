@@ -6,12 +6,17 @@ plugins {
 android {
     compileSdk 31
 
+    viewBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.example.geeksasaeng"
         minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
