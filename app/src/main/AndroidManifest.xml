@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Geeksasaeng">
         <activity
-            android:name=".SignUpActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
