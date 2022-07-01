@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".StepOneFragment">
+
+
+    <!--아이다-->
+    <TextView
+        android:id="@+id/step_one_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="아이디"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/step_one_id_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:hint="3-15자 영문으로 입력"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/step_one_id_check_tv"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_id_tv" />
+
+    <View
+        android:id="@+id/step_one_id_underscore_view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="#a8a8a8"
+        app:layout_constraintStart_toStartOf="@+id/step_one_id_et"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_id_et"
+        app:layout_constraintEnd_toEndOf="@id/step_one_id_et"/>
+
+    <TextView
+        android:id="@+id/step_one_id_check_tv"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_background_border"
+        android:gravity="center"
+        android:text="중복 확인"
+        android:textSize="13sp"
+        android:textColor="@color/main"
+        app:layout_constraintStart_toEndOf="@id/step_one_id_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/step_one_id_et"
+        app:layout_constraintBottom_toBottomOf="@id/step_one_id_et"/>
+
+    <TextView
+        android:id="@+id/step_one_id_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/step_one_id_underscore_view"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:text="사용가능한 아이디입니다."
+        android:textColor="@color/main"
+        app:layout_constraintTop_toBottomOf="@id/step_one_id_underscore_view"
+        android:visibility="invisible"
+        />
+
+    <!--비밀번호-->
+    <TextView
+        android:id="@+id/step_one_password_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="비밀번호"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_one_id_underscore_view"
+        />
+
+    <EditText
+        android:id="@+id/step_one_password_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:hint="3-15자 영문으로 입력"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_password_tv" />
+
+    <View
+        android:id="@+id/step_one_password_underscore_view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="#a8a8a8"
+        app:layout_constraintStart_toStartOf="@+id/step_one_password_et"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_password_et"
+        app:layout_constraintEnd_toEndOf="@id/step_one_password_et"/>
+
+
+    <!--비밀번호 확인-->
+    <TextView
+        android:id="@+id/step_one_password_check_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="비밀번호 확인"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_one_password_underscore_view"
+        />
+
+    <EditText
+        android:id="@+id/step_one_password_check_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:hint="3-15자 영문으로 입력"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_password_check_tv" />
+
+    <View
+        android:id="@+id/step_one_password_check_underscore_view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="#a8a8a8"
+        app:layout_constraintStart_toStartOf="@+id/step_one_password_check_et"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_password_check_et"
+        app:layout_constraintEnd_toEndOf="@id/step_one_password_check_et"/>
+
+
+    <!--닉네임-->
+    <TextView
+        android:id="@+id/step_one_nick_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="닉네임"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_one_password_check_underscore_view"
+        />
+
+    <EditText
+        android:id="@+id/step_one_nick_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:hint="3-15자 영문으로 입력"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/step_one_nick_check_tv"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_nick_tv" />
+
+    <View
+        android:id="@+id/step_one_nick_underscore_view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="#a8a8a8"
+        app:layout_constraintStart_toStartOf="@+id/step_one_nick_et"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_nick_et"
+        app:layout_constraintEnd_toEndOf="@id/step_one_nick_et"/>
+
+    <TextView
+        android:id="@+id/step_one_nick_check_tv"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_background_border"
+        android:gravity="center"
+        android:text="중복 확인"
+        android:textSize="13sp"
+        android:textColor="@color/main"
+        app:layout_constraintStart_toEndOf="@id/step_one_nick_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/step_one_nick_et"
+        app:layout_constraintBottom_toBottomOf="@id/step_one_nick_et"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
