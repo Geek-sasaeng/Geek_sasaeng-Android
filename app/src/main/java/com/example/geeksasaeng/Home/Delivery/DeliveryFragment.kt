@@ -10,6 +10,7 @@ import com.example.geeksasaeng.Data.DeliveryData
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
+
 class DeliveryFragment: Fragment() {
 
     lateinit var binding : FragmentDeliveryBinding
@@ -45,6 +46,11 @@ class DeliveryFragment: Fragment() {
         val deliveryAdapter = DeliveryRVAdapter(deliveryDatas)
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+
+        binding.deliveryFloatingBtn.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
+        }
 
         return binding.root
     }

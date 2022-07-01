@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/look_party_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/look_party_back_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_back"
+            android:backgroundTint="#D9D9D9"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:id="@+id/home_dormitory_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="파티 보기"
+            android:textColor="@color/black"
+            android:fontFamily="@font/spoqa_medium"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
+
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_report"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            android:layout_gravity="right"
+            android:layout_marginRight="24dp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/look_host_profile"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:src="@drawable/ic_default_profile"
+        android:layout_marginLeft="23dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/look_party_toolbar" />
+
+    <TextView
+        android:id="@+id/look_host_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="네오"
+        android:textColor="@color/black"
+        android:fontFamily="@font/spoqa_medium"
+        android:textSize="13sp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@id/look_host_profile"
+        app:layout_constraintBottom_toBottomOf="@id/look_host_profile"
+        app:layout_constraintStart_toEndOf="@id/look_host_profile" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="05/15 23:57"
+        android:textColor="@color/gray_1"
+        android:textSize="11dp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toEndOf="@id/look_host_name"
+        app:layout_constraintTop_toTopOf="@id/look_host_name"
+        app:layout_constraintBottom_toBottomOf="@id/look_host_name" />
+
+    <TextView
+        android:id="@+id/look_option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_2"
+        android:text="# 같이 먹고 싶어요"
+        android:layout_marginTop="22dp"
+        app:layout_constraintStart_toStartOf="@id/look_host_profile"
+        app:layout_constraintTop_toBottomOf="@id/look_host_profile" />
+
+    <TextView
+        android:id="@+id/look_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="중식 같이 먹어요 같이 먹자"
+        android:fontFamily="@font/spoqa_medium"
+        android:textSize="20sp"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        app:layout_constraintStart_toStartOf="@id/look_host_profile"
+        app:layout_constraintTop_toBottomOf="@id/look_option2" />
+
+    <TextView
+        android:id="@+id/look_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        android:textSize="15dp"
+        android:textColor="@color/gray"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글"
+        android:lineHeight="25dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@id/look_title" />
+
+    <View
+        android:id="@+id/look_line"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#F8F8F8"
+        android:layout_marginTop="34dp"
+        app:layout_constraintTop_toBottomOf="@+id/look_content" />
+
+    <TextView
+        android:id="@+id/look_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주문 예정 시간"
+        android:textColor="@color/top"
+        android:textSize="15sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="31dp"
+        app:layout_constraintTop_toBottomOf="@id/look_line"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/look_time_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00월 00일"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:layout_marginLeft="36dp"
+        app:layout_constraintStart_toEndOf="@id/look_time"
+        app:layout_constraintTop_toTopOf="@id/look_time" />
+
+    <TextView
+        android:id="@+id/look_time_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00시 00분"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toTopOf="@id/look_time_date"
+        app:layout_constraintStart_toEndOf="@id/look_time_date" />
+
+    <TextView
+        android:id="@+id/look_matching"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="매칭 현황"
+        android:textColor="@color/top"
+        android:textSize="15sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/look_time"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/look_matching_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2/4"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/look_time_date"
+        app:layout_constraintTop_toTopOf="@id/look_matching" />
+
+    <TextView
+        android:id="@+id/look_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카테고리"
+        android:textColor="@color/top"
+        android:textSize="15sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/look_matching"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/look_category_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="중식"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/look_time_date"
+        app:layout_constraintTop_toTopOf="@id/look_category" />
+
+    <TextView
+        android:id="@+id/look_locate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수령 장소"
+        android:textColor="@color/top"
+        android:textSize="15sp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/look_category"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/look_locate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제1기숙사 후문"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/look_time_date"
+        app:layout_constraintTop_toTopOf="@id/look_locate" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="23dp"
+        android:backgroundTint="@color/gray_0"
+        android:background="@drawable/round_border"
+        android:layout_marginTop="13dp"
+        app:layout_constraintTop_toBottomOf="@id/look_locate" />
+
+    <View
+        android:id="@+id/look_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/look_member_ic"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:src="@drawable/ic_member_white"
+        android:layout_marginStart="26dp"
+        app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/look_member_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2/4"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_marginStart="9dp"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toEndOf="@id/look_member_ic"
+        app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar" />
+
+    <TextView
+        android:id="@+id/look_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/look_next_btn"
+        android:layout_width="12dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_next"
+        android:backgroundTint="@color/white"
+        android:layout_marginRight="29dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="신청하기"
+        android:fontFamily="@font/spoqa_medium"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_marginRight="11dp"
+        app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar"
+        app:layout_constraintEnd_toStartOf="@id/look_next_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
