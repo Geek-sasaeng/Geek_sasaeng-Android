@@ -10,7 +10,14 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemDeliveryBinding
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryData>) : RecyclerView.Adapter<DeliveryRVAdapter.ViewHolder>() {
-
+    // 클릭 리스너 구현 위한 인터페이스
+    interface OnItemClickListener{
+        fun onItemClick(v:View, data: DeliveryData, pos : Int)
+    }
+    private var listener : OnItemClickListener? = null
+    fun setOnItemClickListener(listener : OnItemClickListener) {
+        this.listener = listener
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -29,7 +36,14 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryData>) : Rec
         fun bind (delivery: DeliveryData) {
             binding.deliveryItemTime.text = delivery.time
             binding.deliveryItemTitle.text = delivery.title
-
+            // 파티 클릭하면 상세 페이지로 이동
+            val pos = adapterPosition
+            if(pos!= RecyclerView.NO_POSITION)
+            {
+                itemView.setOnClickListener {
+                    listener?.onItemClick(itemView,delivery,pos)
+                }
+            }
             if (delivery.option1) {
                 binding.deliveryItemOption1.visibility = View.VISIBLE
 

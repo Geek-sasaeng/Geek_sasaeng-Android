@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Delivery
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
 
 class DeliveryFragment: Fragment(), DeliveryPartyView {
-
     lateinit var binding : FragmentDeliveryBinding
     private var deliveryArray = ArrayList<DeliveryData>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
@@ -31,9 +31,17 @@ class DeliveryFragment: Fragment(), DeliveryPartyView {
 
         binding = FragmentDeliveryBinding.inflate(inflater, container, false)
         // 어댑터 설정
-
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
+        // 어댑터 클릭 이벤트 설정
+        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: DeliveryData, pos : Int) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
+            }
+        })
+
+
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {

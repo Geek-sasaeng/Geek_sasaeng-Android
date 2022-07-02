@@ -3,9 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.25" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.36614583333333334" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.36614583333333334" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_signup_phone.xml" value="0.36614583333333334" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.33" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_two.xml" value="0.1" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery.xml" value="0.1" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/checkbox_color.xml" value="0.2015" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/ic_floating_btn.xml" value="0.2125" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/ic_logo.xml" value="0.2015" />
