@@ -6,7 +6,7 @@ import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.databinding.ActivitySignupSkipPopupBinding
 
 class SignupSkipPopupActivity: BaseActivity<ActivitySignupSkipPopupBinding>(ActivitySignupSkipPopupBinding::inflate) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initAfterBinding() {
+        TODO("Not yet implemented")
     }
 }

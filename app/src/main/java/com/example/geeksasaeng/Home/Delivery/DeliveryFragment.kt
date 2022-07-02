@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.geeksasaeng.CreatePartyFragment
 import com.example.geeksasaeng.Data.DeliveryData
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
@@ -49,7 +50,7 @@ class DeliveryFragment: Fragment() {
 
         binding.deliveryFloatingBtn.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
+                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
         }
 
         return binding.root

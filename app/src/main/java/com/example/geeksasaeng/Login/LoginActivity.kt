@@ -25,8 +25,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var phoneNumber: String = ""
     var universityName: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initAfterBinding() {
 
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()

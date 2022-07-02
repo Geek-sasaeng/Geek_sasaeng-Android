@@ -29,6 +29,16 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
 
     protected abstract fun initAfterBinding()
 
+    fun changeActivity(activity: Class<*>) {
+        startActivity(Intent(this, activity))
+    }
+
+    fun setFragment(id: Int, fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(id, fragment)
+            .commit()
+    }
+
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
