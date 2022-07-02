@@ -23,8 +23,8 @@ class SignupDataService() {
 
         signUpService.signup(user).enqueue(object : Callback<SignupResponse> {
             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
-                // Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
-                // Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
 
                 if (response.isSuccessful && response.code() == 200) {
                     val signUpResponse: SignupResponse = response.body()!!

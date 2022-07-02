@@ -7,13 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.LoginActivity
-import com.example.geeksasaeng.R
-import com.example.geeksasaeng.SignUpActivity
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
-import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 
 class StepFourFragment: Fragment() {
 

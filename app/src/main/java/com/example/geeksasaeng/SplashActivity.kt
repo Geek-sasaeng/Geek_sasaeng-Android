@@ -1,11 +1,10 @@
 package com.example.geeksasaeng
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.example.geeksasaeng.Base.BaseActivity
-import com.example.geeksasaeng.Base.Example.ExampleFragment
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
 
 class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate) {
