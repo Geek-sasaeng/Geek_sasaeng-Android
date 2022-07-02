@@ -8,9 +8,7 @@ import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 
 class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun initAfterBinding() {
         val signUpAdapter = SignUpVPAdapter(this)
         binding.signUpVp.setUserInputEnabled(false) // 뷰페이저 스와이프 막기
         binding.signUpVp.adapter = signUpAdapter //어댑터 연결
@@ -36,4 +34,5 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
             binding.signUpProgressbar.setProgress(currentPos+1) // 프로그레스바 진행률 올리기
         }
     }
+
 }

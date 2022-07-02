@@ -8,16 +8,8 @@ import com.example.geeksasaeng.databinding.ActivityExampleBinding
 
 class ExampleActivity : BaseActivity<ActivityExampleBinding>(ActivityExampleBinding::inflate) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun initAfterBinding() {
         // Example
-        binding.btn1.setOnClickListener {
-            changeActivity(MainActivity::class.java)
-        }
 
-        binding.btn2.setOnClickListener {
-            setFragment(R.id.main_fl, ExampleFragment())
-        }
     }
 }

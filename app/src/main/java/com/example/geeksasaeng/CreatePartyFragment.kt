@@ -39,8 +39,11 @@ class CreatePartyFragment : BaseFragment<FragmentCreatePartyBinding>(FragmentCre
             Log.d("click","클릭됨")
 
             //파티생성하기 프레그먼트에서 다이얼로그로 전환
-            val intent = Intent(context, CreatePartyDateDialogActivity::class.java)
-            startActivity(intent)
+           /* val intent = Intent(context, CreatePartyDateDialogActivity::class.java)
+            startActivity(intent)*/
+
+            val dialog = DialogDt()
+            dialog.show(parentFragmentManager, "CustomDialog")
 
         }
     }

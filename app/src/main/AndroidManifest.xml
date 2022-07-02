@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Geeksasaeng">
         <activity
             android:name=".CreatePartyNumDialogActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">f
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
         </activity>
 
         <activity
@@ -20,10 +20,10 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
