@@ -40,8 +40,12 @@ class DialogNum: DialogFragment() {
 
     private fun initClickListener(){
         binding.numDialogNextBtn.setOnClickListener {
+            //다음 다이얼로그 띄우기
             val dialogCategory = DialogCategory()
             dialogCategory.show(parentFragmentManager, "CustomDialog")
+            //자기는 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
         }
 
         binding.numDialogPicker.setOnValueChangedListener { picker, oldVal, newVal ->

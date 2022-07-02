@@ -11,9 +11,9 @@
 
         <ImageView
             android:id="@+id/category_dialog_back_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/arrow_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="20dp"
@@ -183,8 +183,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/category_dialog_next_btn"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/main"
             android:background="@drawable/round_corner"
             android:text="다음"
@@ -199,6 +199,17 @@
             android:layout_marginBottom="30dp"
             android:layout_marginTop="60dp"
             />
+
+        <TextView
+            android:id="@+id/location_dialog_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3/4"
+            app:layout_constraintTop_toBottomOf="@id/category_dialog_next_btn"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
 

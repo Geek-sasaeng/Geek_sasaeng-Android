@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/create_party_back_btn_iv"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_back"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
-        android:src="@drawable/arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />

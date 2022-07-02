@@ -35,7 +35,7 @@ class DialogDt : DialogFragment() {
 
 
     //최초에만 실행시키기 위해??
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+/*    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val cal = Calendar.getInstance()   //캘린더뷰 만들기
         //TimePicker
@@ -51,7 +51,7 @@ class DialogDt : DialogFragment() {
             binding.dateDialogDateTv.text = dateString
         }
         DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
-    }
+    }*/
 
     private fun initClickListener(){
         binding.dateDialogDateTv.setOnClickListener { //날짜 정보
@@ -98,6 +98,10 @@ class DialogDt : DialogFragment() {
             }else{
                 Toast.makeText(requireContext(), "시간을 지정해주세요", Toast.LENGTH_SHORT).show()
             }
+
+            //자기는 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
         }
     }
 

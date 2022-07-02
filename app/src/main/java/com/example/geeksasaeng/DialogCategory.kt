@@ -31,8 +31,13 @@ class DialogCategory : DialogFragment() {
 
 
     private fun initClickListener(){
-        binding.categoryDialogNextBtn.setOnClickListener {
-
+        binding.categoryDialogNextBtn.setOnClickListener{
+            //다음 다이얼로그 띄우기
+            val dialogLocation = DialogLocation()
+            dialogLocation.show(parentFragmentManager, "CustomDialog")
+            //자기는 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
         }
 
         binding.categoryDialogBackBtn.setOnClickListener {
@@ -41,7 +46,7 @@ class DialogCategory : DialogFragment() {
             val dialogNum = DialogNum()
             dialogNum.show(parentFragmentManager, "CustomDialog")
 
-            //자기자신(현 다이얼로그)은 종료
+            //자기자신(현 다이얼로그)은 종료 => 종료가 안되는 것 같기두..?
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this)?.commit()
         }
