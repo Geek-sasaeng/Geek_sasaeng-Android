@@ -1,8 +1,6 @@
 package com.example.geeksasaeng.Home.Delivery
 
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +68,13 @@ class DeliveryFragment: Fragment(), DeliveryPartyView {
         deliveryService = DeliveryPartyService()
         deliveryService.setDeliveryListView(this)
         deliveryService.getDeliveryPartyList(1)
+        binding.deliveryRv.adapter = deliveryAdapter
+        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+
+        binding.deliveryFloatingBtn.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
+        }
 
         return binding.root
     }
