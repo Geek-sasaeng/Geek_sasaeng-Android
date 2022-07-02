@@ -11,8 +11,8 @@ class SignUpVPAdapter(fragment: SignUpActivity) :FragmentStateAdapter(fragment) 
         return when(position){
             0 -> StepOneFragment()
             1 -> StepTwoFragment()
-            else -> StepThreeFragment()
+            2 -> StepThreeFragment()
+            else -> StepFourFragment()
         }
     }
-
 }

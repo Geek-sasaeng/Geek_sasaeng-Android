@@ -1,6 +1,7 @@
-package com.example.geeksasaeng.Data
+package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
+import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.getRetrofit
 import retrofit2.Call
@@ -20,19 +21,13 @@ class SignupDataService() {
     fun signUp(user: Signup) {
         val signUpService = getRetrofit().create(SignupRetrofitInterfaces::class.java)
 
-        Log.d("SIGNUP-RESPONSE", "SignupDataService-signup : " + user.toString())
-        Log.d("SIGNUP-RESPONSE", "SignupDataService-signup : Check")
-
         signUpService.signup(user).enqueue(object : Callback<SignupResponse> {
             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : Check")
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.raw())
+                // Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                // Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
 
                 if (response.isSuccessful && response.code() == 200) {
                     val signUpResponse: SignupResponse = response.body()!!
-                    Log.d("SIGNUP-RESPONSE", signUpResponse.toString())
 
                     when (signUpResponse.code) {
                         1000 -> signUpView.onSignUpSuccess()

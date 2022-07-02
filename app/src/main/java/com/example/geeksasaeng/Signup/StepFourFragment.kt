@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,15 +9,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.LoginActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
-import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
+import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 
+class StepFourFragment: Fragment() {
 
-class StepThreeFragment : Fragment() {
 
-    lateinit var binding: FragmentStepThreeBinding
+    lateinit var binding: FragmentStepFourBinding
 
     var checkPassword: String? = ""
     var loginId: String? = ""
@@ -24,6 +26,7 @@ class StepThreeFragment : Fragment() {
     var password: String? = ""
     var email: String? = ""
     var universityName: String? = ""
+    var phoneNumber: String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +35,7 @@ class StepThreeFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = FragmentStepThreeBinding.inflate(inflater, container, false)
+        binding = FragmentStepFourBinding.inflate(inflater, container, false)
 
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")
@@ -47,30 +50,20 @@ class StepThreeFragment : Fragment() {
     }
 
     private fun initClickListener() {
-        binding.stepThreeNextBtn.setOnClickListener {
-            val transaction: FragmentTransaction =
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
+        binding.stepFourNextBtn.setOnClickListener {
+            phoneNumber = binding.signupPhoneNumberEt.text.toString()
 
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
-            bundle.putString("email", email)
-            bundle.putString("universityName", universityName)
+            Log.d("SignupData", "checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber")
 
-            val stepFourFragment = StepFourFragment()
-            stepFourFragment.arguments = bundle
-
-            Log.d("SignupData", bundle.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepFourFragment).commit()
-
-            stepFourFragment.arguments = bundle
-
-            transaction.replace(R.id.sign_up_vp, stepFourFragment)
-            transaction.commit()
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.putExtra("checkPassword", checkPassword)
+            intent.putExtra("loginId", loginId)
+            intent.putExtra("nickname", nickname)
+            intent.putExtra("password", password)
+            intent.putExtra("email", email)
+            intent.putExtra("universityName", universityName)
+            intent.putExtra("phoneNumber", phoneNumber)
+            startActivity(intent)
         }
     }
 }
