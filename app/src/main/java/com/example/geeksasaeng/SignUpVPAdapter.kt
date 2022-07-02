@@ -11,7 +11,7 @@ class SignUpVPAdapter(fragment: SignUpActivity) :FragmentStateAdapter(fragment) 
             0 -> StepOneFragment()
             1 -> StepTwoFragment()
             2 -> StepThreeFragment()
-            3 -> CreatePartyFragment()
+            3 -> CreatePartyFragment() // test용으로 넣어둠
             else -> StepThreeFragment()
         }
     }
