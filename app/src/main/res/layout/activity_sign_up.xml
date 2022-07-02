@@ -27,7 +27,6 @@
         android:id="@+id/sign_up_vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/sign_up_progressbar"
         app:layout_constraintBottom_toTopOf="@id/sign_up_next_btn"

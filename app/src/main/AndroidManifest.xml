@@ -9,21 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Geeksasaeng">
-        <activity
-            android:name=".CreatePartyNumDialogActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
-        </activity>
 
-        <activity
-            android:name=".CreatePartyDateDialogActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
-        </activity>
-
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SignUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
@@ -94,6 +95,8 @@ class DialogDt : DialogFragment() {
 
                 val dialogNum = DialogNum()
                 dialogNum.show(parentFragmentManager, "CustomDialog")
+            }else{
+                Toast.makeText(requireContext(), "시간을 지정해주세요", Toast.LENGTH_SHORT).show()
             }
         }
     }

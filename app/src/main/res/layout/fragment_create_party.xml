@@ -141,6 +141,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/create_party_date_tv"
                 android:layout_marginStart="40dp"
                 android:clickable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
                 />
 
             <!--매칭 인원 선택-->
@@ -166,6 +168,7 @@
                 app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_number_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_number_tv"
+                app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
                 />
 
             <!--카테고리 선택-->
@@ -191,6 +194,7 @@
                 app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_category_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_category_tv"
+                app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
                 />
 
             <!--수령장소 선택-->
@@ -216,6 +220,7 @@
                 app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_place_tv"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_place_tv"
+                app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
                 />
 
 

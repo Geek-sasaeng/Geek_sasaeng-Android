@@ -40,7 +40,8 @@ class DialogNum: DialogFragment() {
 
     private fun initClickListener(){
         binding.numDialogNextBtn.setOnClickListener {
-
+            val dialogCategory = DialogCategory()
+            dialogCategory.show(parentFragmentManager, "CustomDialog")
         }
 
         binding.numDialogPicker.setOnValueChangedListener { picker, oldVal, newVal ->
