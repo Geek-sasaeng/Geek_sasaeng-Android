@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Signup
+package com.example.geeksasaeng
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -15,4 +15,5 @@ class SignUpVPAdapter(fragment: SignUpActivity) :FragmentStateAdapter(fragment) 
             else -> StepFourFragment()
         }
     }
+
 }

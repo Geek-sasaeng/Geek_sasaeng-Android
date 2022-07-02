@@ -19,4 +19,13 @@
         <item name="colorControlActivated">@color/main</item>
         <item name="android:textSelectHandle">@color/main</item>
     </style>
+
+    <style name="Theme.Geeksasaeng.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Geeksasaeng.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Geeksasaeng.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
