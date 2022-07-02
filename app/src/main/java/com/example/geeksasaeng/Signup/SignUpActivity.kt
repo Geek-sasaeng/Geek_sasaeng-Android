@@ -1,11 +1,18 @@
 package com.example.geeksasaeng
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Data.Signup
+import com.example.geeksasaeng.Data.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpVPAdapter
+import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 
-class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {
+class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate),
+    SignUpView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +35,43 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
                 if(currentPos==1){ //이때 대마지막 전페이지면
                     binding.signUpNextBtn.text = "시작하기"
                     binding.signUpNextBtn.setOnClickListener {
-                        finish()
+                        signup()
+                        // finish()
                     }
                 }
                 binding.signUpVp.setCurrentItem(currentPos+1, false)
             }
             binding.signUpProgressbar.setProgress(currentPos+1) // 프로그레스바 진행률 올리기
         }
+    }
+
+    private fun getUser(): Signup {
+        val checkPassword: String = "00000000"
+        val email: String = "a@a.com"
+        val loginId: String = "luna1234"
+        val nickname: String = "luna1234"
+        val password: String = "00000000"
+        val phoneNumber: String = "01012341234"
+        val universityName: String = "Gachon University"
+
+        Log.d("SIGNUP-RESPONSE", "SignupActivity-getUser : " + Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName).toString())
+        return Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName)
+    }
+
+    private fun signup() {
+        val signupDataService = SignupDataService()
+        signupDataService.setSignUpView(this)
+        signupDataService.signUp(getUser())
+
+        Log.d("SIGNUP-RESPONSE", "SignupActivity-signup : Signup Check")
+    }
+
+    override fun onSignUpSuccess() {
+        Log.d("SIGNUP-RESPONSE", "SignupActivity-onSignUpSuccess : Signup Check")
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    override fun onSignUpFailure() {
+        Log.d("SIGNUP-RESPONSE", "SignupActivity-onSignUpFailure : Signup Check")
     }
 }
