@@ -26,7 +26,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var universityName: String = ""
 
     override fun initAfterBinding() {
-
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()
             email = intent?.getStringExtra("email").toString()
