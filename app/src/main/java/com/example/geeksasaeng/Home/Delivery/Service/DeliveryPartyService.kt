@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyInterface
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyListResponse
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyView
-import com.example.geeksasaeng.getRetrofit
+import com.example.geeksasaeng.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,8 +18,8 @@ class DeliveryPartyService {
 
     // 배달 리스트 목록들 불러오기
     fun getDeliveryPartyList(domitory: Int){
-        val deliveryPartyService = getRetrofit().create(DeliveryPartyInterface::class.java)
-        deliveryPartyService.getAllDeliveryList(domitory).enqueue(object:
+        val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryPartyInterface::class.java)
+        deliveryPartyService?.getAllDeliveryList(domitory)?.enqueue(object:
             Callback<DeliveryPartyListResponse>{
             override fun onResponse(
                 call: Call<DeliveryPartyListResponse>,

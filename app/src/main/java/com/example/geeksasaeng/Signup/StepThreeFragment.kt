@@ -2,21 +2,13 @@ package com.example.geeksasaeng.Signup
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
-import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 
-
-class StepThreeFragment : Fragment() {
-
-    lateinit var binding: FragmentStepThreeBinding
+class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate) {
 
     var checkPassword: String? = ""
     var loginId: String? = ""
@@ -25,14 +17,7 @@ class StepThreeFragment : Fragment() {
     var email: String? = ""
     var universityName: String? = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = FragmentStepThreeBinding.inflate(inflater, container, false)
+    override fun initAfterBinding() {
 
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")
@@ -42,8 +27,6 @@ class StepThreeFragment : Fragment() {
         universityName = arguments?.getString("universityName")
 
         initClickListener()
-
-        return binding.root
     }
 
     private fun initClickListener() {

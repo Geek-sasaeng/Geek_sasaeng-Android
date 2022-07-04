@@ -5,6 +5,5 @@ import com.example.geeksasaeng.databinding.FragmentHelperBinding
 
 class HelperFragment: BaseFragment<FragmentHelperBinding>(FragmentHelperBinding::inflate) {
     override fun initAfterBinding() {
-        TODO("Not yet implemented")
     }
 }

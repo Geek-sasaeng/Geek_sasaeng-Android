@@ -2,39 +2,15 @@ package com.example.geeksasaeng.Signup
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
-import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import com.example.geeksasaeng.databinding.FragmentStepOneBinding
 
-class StepOneFragment: Fragment() {
+class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate) {
 
-    lateinit var binding: FragmentStepOneBinding
-
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-
-        binding = FragmentStepOneBinding.inflate(inflater, container, false)
-
+    override fun initAfterBinding() {
         initClickListener()
-
-        return binding.root
     }
 
     private fun initClickListener() {

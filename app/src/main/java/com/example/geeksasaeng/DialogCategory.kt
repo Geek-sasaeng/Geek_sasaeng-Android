@@ -28,8 +28,6 @@ class DialogCategory : DialogFragment() {
         return binding.root
     }
 
-
-
     private fun initClickListener(){
         binding.categoryDialogNextBtn.setOnClickListener{
             //다음 다이얼로그 띄우기
@@ -61,14 +59,12 @@ class DialogCategory : DialogFragment() {
         }
 
         binding.categoryDialogRg2.setOnCheckedChangeListener { group, checkedId ->
-            if(checkedId!=-1){
+            if (checkedId != -1) {
                 //초기화
                 Log.d("click_Category2", "click_Category2")
                 binding.categoryDialogRg1.clearCheck() // 1번째열의 check는 지워주기
                 binding.categoryDialogRg2.check(checkedId)
             }
         }
-
     }
-
 }

@@ -2,8 +2,8 @@ package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.Data.Signup
+import com.example.geeksasaeng.NetworkModule
 import com.example.geeksasaeng.Signup.SignUpView
-import com.example.geeksasaeng.getRetrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,9 +19,9 @@ class SignupDataService() {
     }
 
     fun signUp(user: Signup) {
-        val signUpService = getRetrofit().create(SignupRetrofitInterfaces::class.java)
+        val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)
 
-        signUpService.signup(user).enqueue(object : Callback<SignupResponse> {
+        signUpService?.signup(user)?.enqueue(object : Callback<SignupResponse> {
             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
