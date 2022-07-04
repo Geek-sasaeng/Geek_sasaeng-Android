@@ -39,9 +39,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginLoginBtn.setOnClickListener {
-            login()
+            Toast.makeText(this, "LOGIN-BTN-RESPONSE", Toast.LENGTH_SHORT).show()
+            // login()
+            changeActivity(MainActivity::class.java)
         }
-        
+
         binding.loginSignupBtn.setOnClickListener {
             changeActivity(SignUpActivity::class.java)
         }

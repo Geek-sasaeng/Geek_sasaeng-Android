@@ -26,30 +26,30 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     private fun initClickListener() {
-        binding.stepTwoNextBtn.setOnClickListener {
-            val transaction: FragmentTransaction =
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
-
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
-            bundle.putString("email", binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2InputEt.text.toString())
-            bundle.putString("universityName", binding.stepTwoSchoolEt.text.toString())
-
-            val stepThreeFragment = StepThreeFragment()
-            stepThreeFragment.arguments = bundle
-
-            Log.d("SignupData", bundle.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepThreeFragment).commit()
-
-            stepThreeFragment.arguments = bundle
-
-            transaction.replace(R.id.sign_up_vp, stepThreeFragment)
-            transaction.commit()
-        }
+//        binding.stepTwoNextBtn.setOnClickListener {
+//            val transaction: FragmentTransaction =
+//                (context as SignUpActivity).supportFragmentManager.beginTransaction()
+//
+//            val bundle = Bundle()
+//            bundle.putString("checkPassword", checkPassword)
+//            bundle.putString("loginId", loginId)
+//            bundle.putString("nickname", nickname)
+//            bundle.putString("password", password)
+//            bundle.putString("email", binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2InputEt.text.toString())
+//            bundle.putString("universityName", binding.stepTwoSchoolEt.text.toString())
+//
+//            val stepThreeFragment = StepThreeFragment()
+//            stepThreeFragment.arguments = bundle
+//
+//            Log.d("SignupData", bundle.toString())
+//
+//            (context as SignUpActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.sign_up_vp, stepThreeFragment).commit()
+//
+//            stepThreeFragment.arguments = bundle
+//
+//            transaction.replace(R.id.sign_up_vp, stepThreeFragment)
+//            transaction.commit()
+//        }
     }
 }

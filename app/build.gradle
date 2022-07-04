@@ -6,9 +6,12 @@ plugins {
 android {
     compileSdk 31
 
-    viewBinding {
-        enabled true
+    buildFeatures {
+        viewBinding true
     }
+//    viewBinding {
+//        enabled true
+//    }
 
     defaultConfig {
         applicationId "com.example.geeksasaeng"

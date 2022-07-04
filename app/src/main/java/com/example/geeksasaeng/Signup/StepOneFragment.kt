@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Signup
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
@@ -14,11 +15,19 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     }
 
     private fun initClickListener() {
+        binding.stepOneIdCheckTv.setOnClickListener {
+            Toast.makeText(activity, "ID-CHECK-BTN", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.stepOneNicknameBtn.setOnClickListener {
+            Toast.makeText(activity, "NICKNAME-CHECK-BTN", Toast.LENGTH_LONG).show()
+        }
+
         binding.stepOneNextBtn.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("checkPassword", binding.stepOnePasswordCheckEt.text.toString())
+            bundle.putString("checkPassword", binding.stepOneCheckPasswordEt.text.toString())
             bundle.putString("loginId", binding.stepOneIdEt.text.toString())
-            bundle.putString("nickname", binding.stepOneNickEt.text.toString())
+            bundle.putString("nickname", binding.stepOneNicknameEt.text.toString())
             bundle.putString("password", binding.stepOnePasswordEt.text.toString())
 
             val stepTwoFragment = StepTwoFragment()
