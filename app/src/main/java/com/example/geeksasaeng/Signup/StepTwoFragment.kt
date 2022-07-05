@@ -1,10 +1,12 @@
 package com.example.geeksasaeng.Signup
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.DialogDt
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
@@ -28,8 +30,15 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
     private fun initClickListener() {
 
+        // 이메일 인증 전송 버튼
         binding.stepTwoEmailCheckBtn.setOnClickListener {
-            Toast.makeText(activity, "SIGNUP-TW0-RESPONSE: Click", Toast.LENGTH_SHORT).show()
+            val dialog = DialogSignUpEmailCheck()
+            dialog.show(parentFragmentManager, "CustomDialog")
+
+            // 1.5초 뒤에 Dialog 자동 종료
+            Handler().postDelayed({
+                dialog.dismiss()
+            }, 1500)
         }
 
         binding.stepTwoNextBtn.setOnClickListener {
