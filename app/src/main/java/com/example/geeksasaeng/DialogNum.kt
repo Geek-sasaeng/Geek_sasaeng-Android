@@ -1,7 +1,5 @@
 package com.example.geeksasaeng
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
 import com.example.geeksasaeng.databinding.DialogNumLayoutBinding
-import java.util.*
 
 class DialogNum: DialogFragment() {
 
@@ -65,5 +61,4 @@ class DialogNum: DialogFragment() {
                 ?.remove(this)?.commit()
         }
     }
-
 }
