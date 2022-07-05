@@ -7,6 +7,9 @@ import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
+import java.text.DecimalFormat
+import java.util.*
+import kotlin.concurrent.timer
 
 class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate) {
 
@@ -17,7 +20,11 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     var email: String? = ""
     var universityName: String? = ""
 
+    private var time = 5000
+    private var timerTask : Timer? = null
+
     override fun initAfterBinding() {
+        startTimer()
 
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")
@@ -30,7 +37,14 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     private fun initClickListener() {
+        binding.stepThreeSendBtn.setOnClickListener {
+            resetTimer()
+            startTimer()
+        }
+
         binding.stepThreeNextBtn.setOnClickListener {
+            timerTask?.cancel()
+
             val transaction: FragmentTransaction =
                 (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
@@ -55,5 +69,31 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
             transaction.replace(R.id.sign_up_vp, stepFourFragment)
             transaction.commit()
         }
+    }
+
+    // 타이머 작동
+    private fun startTimer() {
+        timerTask = timer(period = 10) {
+            time--
+
+            val timeForm = DecimalFormat("00")
+            val min = timeForm.format(time / 1000)
+            val sec = timeForm.format(time / 100)
+
+            activity?.runOnUiThread {
+                binding.stepThreeCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
+
+                if (min == "00" && sec == "00")
+                    timerTask?.cancel()
+            }
+        }
+    }
+
+    // 타이머 초기화
+    private fun resetTimer() {
+        timerTask?.cancel()
+
+        time = 5000
+        binding.stepThreeCheckMsgTv.text = "05분 00초 남았어요"
     }
 }

@@ -47,9 +47,9 @@
             android:layout_marginLeft="27dp" />
 
         <Button
+            android:id="@+id/step_three_send_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/step_three_id_check_btn"
             android:text="재전송 하기"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
@@ -73,7 +73,6 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/step_three_check"
         app:layout_constraintStart_toStartOf="parent" />
 
