@@ -1,10 +1,14 @@
 package com.example.geeksasaeng.Signup
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
+import com.example.geeksasaeng.R
+import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import java.text.DecimalFormat
 import java.util.*
@@ -56,18 +60,30 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
             phoneNumber = binding.stepFourPhoneEt.text.toString()
 
-            Log.d("SignupData", "checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber")
+            val transaction: FragmentTransaction =
+                (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
-            val intent = Intent(activity, LoginActivity::class.java)
-            intent.putExtra("checkPassword", checkPassword)
-            intent.putExtra("loginId", loginId)
-            intent.putExtra("nickname", nickname)
-            intent.putExtra("password", password)
-            intent.putExtra("email", email)
-            intent.putExtra("universityName", universityName)
-            intent.putExtra("phoneNumber", phoneNumber)
+            val bundle = Bundle()
+            bundle.putString("checkPassword", checkPassword)
+            bundle.putString("loginId", loginId)
+            bundle.putString("nickname", nickname)
+            bundle.putString("password", password)
+            bundle.putString("email", email)
+            bundle.putString("universityName", universityName)
+            bundle.putString("phoneNumber", phoneNumber)
 
-            startActivity(intent)
+            val stepFiveFragment = StepFiveFragment()
+            stepFiveFragment.arguments = bundle
+
+            Log.d("SignupData", bundle.toString())
+
+            (context as SignUpActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.sign_up_vp, stepFiveFragment).commit()
+
+            stepFiveFragment.arguments = bundle
+
+            transaction.replace(R.id.sign_up_vp, stepFiveFragment)
+            transaction.commit()
         }
     }
 
