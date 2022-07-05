@@ -39,7 +39,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginLoginBtn.setOnClickListener {
-            login()
+            /*login()*/
+            changeActivity(MainActivity::class.java)
         }
         
         binding.loginSignupBtn.setOnClickListener {
