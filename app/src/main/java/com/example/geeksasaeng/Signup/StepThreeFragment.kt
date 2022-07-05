@@ -74,8 +74,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     // 타이머 작동
     private fun startTimer() {
         timerTask = timer(period = 10) {
-            time--
-
             val timeForm = DecimalFormat("00")
             val min = timeForm.format(time / 1000)
             val sec = timeForm.format(time / 100)
@@ -86,6 +84,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
                 if (min == "00" && sec == "00")
                     timerTask?.cancel()
             }
+
+            time--
         }
     }
 

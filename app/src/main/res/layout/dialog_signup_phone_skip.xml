@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="47dp">
+
+        <TextView
+            android:id="@+id/signup_skip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="건너뛰기"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_margin="25dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/signup_skip_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#e3e3e3"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signup_skip_tv" />
+
+        <TextView
+            android:id="@+id/signup_skip_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="본 단계에서는 앱 내의 커뮤니티와\n프로필 등의 기능을 사용하기 위해\n필요한 정보를 수집합니다.\n정보 입력이 완료되지 않을 시\n앱 사용 범위가 제한될 수 있으며,\n추후 입력이 가능함을 알립니다."
+            android:textColor="@color/black"
+            android:fontFamily="@font/spoqa_medium"
+            android:gravity="center"
+            android:lineHeight="25dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signup_skip_line" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

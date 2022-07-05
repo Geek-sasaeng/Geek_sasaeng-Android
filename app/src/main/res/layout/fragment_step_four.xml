@@ -5,129 +5,136 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/signup_phone_number_tv"
+        android:id="@+id/step_four_phone_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="25dp"
         android:text="휴대폰 번호 입력"
-        android:textColor="@color/black"
         android:textSize="18sp"
+        android:textColor="@color/black"
         android:fontFamily="@font/spoqa_medium"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="27dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/signup_phone_number"
+        android:id="@+id/step_four_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="9dp"
-        app:layout_constraintTop_toBottomOf="@id/signup_phone_number_tv"
+        android:layout_marginTop="3dp"
+        app:layout_constraintTop_toBottomOf="@id/step_four_phone_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/signup_phone_number_et"
+            android:id="@+id/step_four_phone_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="2.2"
             android:hint="- 제외 숫자만 입력하세요"
             android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_1"
             android:fontFamily="@font/spoqa_medium"
             android:textSize="15sp"
-            android:paddingTop="18dp"
             android:paddingLeft="13dp"
-            android:paddingRight="13dp"
-            android:paddingBottom="18dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
             android:layout_marginLeft="27dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/signup_phone_send_btn"
+        <Button
+            android:id="@+id/step_four_phone_send_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="인증번호 전송"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:elevation="10dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="27dp"
             android:background="@drawable/round_background_border"
-            android:textColor="@color/main" />
+            android:backgroundTint="@color/white"
+            android:textColor="@color/main"
+            android:layout_weight="0.8"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="27dp" />
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/signup_phone_check_tv"
+        android:id="@+id/step_four_check_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="인증번호 입력"
-        android:textColor="@color/black"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="30dp"
+        android:text="닉네임"
         android:textSize="18sp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginTop="42dp"
-        android:layout_marginLeft="27dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signup_phone_number" />
+        app:layout_constraintTop_toBottomOf="@id/step_four_phone" />
 
     <LinearLayout
-        android:id="@+id/signup_phone_check"
+        android:id="@+id/step_four_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="9dp"
-        app:layout_constraintTop_toBottomOf="@id/signup_phone_check_tv"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@id/step_four_check_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/signup_phone_check_et"
+            android:id="@+id/step_four_check_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:hint="입력하세요"
+            android:layout_weight="2.2"
+            android:hint="3-15자 영문으로 입력"
             android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_1"
             android:fontFamily="@font/spoqa_medium"
             android:textSize="15sp"
-            android:paddingTop="18dp"
             android:paddingLeft="13dp"
-            android:paddingRight="13dp"
-            android:paddingBottom="18dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
             android:layout_marginLeft="27dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/signup_phone_resend_btn"
+        <Button
+            android:id="@+id/step_four_check_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="재전송 하기"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:elevation="10dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="27dp"
             android:background="@drawable/round_background_border"
-            android:textColor="@color/main" />
+            android:backgroundTint="@color/white"
+            android:textColor="@color/main"
+            android:layout_weight="0.8"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="27dp" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/step_three_check_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00분 00초 남았어요"
         android:textColor="@color/main"
+        android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
-        android:textSize="13sp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/signup_phone_check"
+        android:layout_marginStart="40dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/step_four_check"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/signup_phone_skip_btn"
+        android:id="@+id/step_four_skip_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/skip"
@@ -135,11 +142,11 @@
         android:fontFamily="@font/spoqa_medium"
         android:background="@android:color/transparent"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/step_four_next_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/step_four_next_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
