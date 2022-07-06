@@ -10,6 +10,7 @@ import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.SignUpActivity
+import com.example.geeksasaeng.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
@@ -43,9 +44,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginLoginBtn.setOnClickListener {
-            Toast.makeText(this, "LOGIN-BTN-RESPONSE", Toast.LENGTH_SHORT).show()
             // login()
             changeActivity(MainActivity::class.java)
+        }
+
+        binding.loginNaverBtn.setOnClickListener {
+            changeActivity(SignUpNaverActivity::class.java)
         }
 
         /*

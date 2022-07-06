@@ -8,12 +8,12 @@
     tools:context=".Signup.StepOneFragment">
 
     <TextView
-        android:id="@+id/step_one_id_tv"
+        android:id="@+id/step_naver_one_nickname_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="25dp"
-        android:text="아이디"
+        android:text="닉네임"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -21,172 +21,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step_one_id"
+        android:id="@+id/step_naver_one_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id_tv"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_nickname_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-            android:id="@+id/step_one_id_et"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="3-15자 영문으로 입력"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray_1"
-            android:backgroundTint="@color/gray_1"
-            android:fontFamily="@font/spoqa_medium"
-            android:textSize="15sp"
-            android:paddingLeft="13dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="20dp"
-            android:layout_marginRight="14dp"
-            android:layout_marginLeft="27dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_one_id_check_tv"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/step_one_id_check_tv"
-            android:layout_width="90dp"
-            android:layout_height="50dp"
-            android:text="중복 확인"
-            android:textSize="13sp"
-            android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="27dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/step_one_id_success_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="사용 가능한 아이디입니다"
-        android:textColor="@color/main"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/step_one_id_fail_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="중복된 아이디입니다"
-        android:textColor="@color/main"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/step_one_password_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="26dp"
-        android:text="비밀번호"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id_success_tv" />
-
-    <EditText
-        android:id="@+id/step_one_password_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="3-15자 영문으로 입력"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_1"
-        android:backgroundTint="@color/gray_1"
-        android:fontFamily="@font/spoqa_medium"
-        android:inputType="textPassword"
-        android:textSize="15sp"
-        android:paddingLeft="13dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        app:layout_constraintTop_toBottomOf="@id/step_one_password_tv"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/step_one_check_password_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="30dp"
-        android:text="비밀번호 확인"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_password_et" />
-
-    <EditText
-        android:id="@+id/step_one_check_password_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="3-15자 영문으로 입력"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_1"
-        android:inputType="textPassword"
-        android:backgroundTint="@color/gray_1"
-        android:fontFamily="@font/spoqa_medium"
-        android:textSize="15sp"
-        android:paddingLeft="13dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginRight="27dp"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_password_tv"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/step_one_nickname_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="30dp"
-        android:text="닉네임"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/step_one_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/step_one_nickname_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <EditText
-            android:id="@+id/step_one_nickname_et"
+            android:id="@+id/step_naver_one_nickname_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="3-15자 영문으로 입력"
@@ -202,11 +48,11 @@
             android:layout_marginRight="14dp"
             android:layout_marginLeft="27dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_one_nickname_btn"
+            app:layout_constraintEnd_toStartOf="@id/step_naver_one_nickname_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_one_nickname_btn"
+            android:id="@+id/step_naver_one_nickname_btn"
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:text="중복 확인"
@@ -223,7 +69,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/step_one_nickname_success_tv"
+        android:id="@+id/step_naver_one_nickname_success_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용 가능한 닉네임입니다"
@@ -232,11 +78,11 @@
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_nickname"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/step_one_nickname_fail_tv"
+        android:id="@+id/step_naver_one_nickname_fail_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="중복된 닉네임입니다"
@@ -245,11 +91,126 @@
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_nickname"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/step_naver_one_school_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="30dp"
+        android:text="학교 선택"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_nickname_success_tv" />
+
+    <EditText
+        android:id="@+id/step_naver_one_school_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="입력하세요"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_1"
+        android:backgroundTint="@color/gray_1"
+        android:fontFamily="@font/spoqa_medium"
+        android:inputType="textPassword"
+        android:textSize="15sp"
+        android:paddingLeft="13dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_school_tv"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/step_naver_one_email_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="이메일 입력"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_school_et"
+        />
+
+    <EditText
+        android:id="@+id/step_naver_one_email_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="입력하세요"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_1"
+        android:backgroundTint="@color/gray_1"
+        android:fontFamily="@font/spoqa_medium"
+        android:inputType="textPassword"
+        android:textSize="15sp"
+        android:paddingLeft="13dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginRight="27dp"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_email_tv"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/step_naver_one_email2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_email_et"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/step_naver_one_email2_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="\@"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_1"
+            android:fontFamily="@font/spoqa_medium"
+            android:textSize="15sp"
+            android:editable="false"
+            android:paddingLeft="13dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/step_naver_one_email_check_btn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/step_naver_one_email_check_btn"
+            android:layout_width="125dp"
+            android:layout_height="53dp"
+            android:textSize="15sp"
+            android:text="인증번호 전송"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/signup_btn"
+            android:textColor="@color/main"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="27dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
-        android:id="@+id/step_one_next_btn"
+        android:id="@+id/step_naver_one_next_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:backgroundTint="@color/main"

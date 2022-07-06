@@ -35,6 +35,7 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
+        <activity android:name=".SignUpNaverActivity" />
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="11a3f6b9176965b9b649bef686ad6f91"/>
     </application>
 
