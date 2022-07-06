@@ -19,6 +19,7 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyView
 import com.example.geeksasaeng.Home.Delivery.Service.DeliveryPartyService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
+import kotlin.concurrent.thread
 
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryPartyView {
@@ -28,6 +29,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
+    private val thread = Thread(PagerRunnable())
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -57,7 +59,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
         }
-        /*deliveryArray.apply {
+
+        deliveryArray.apply {
             add(DeliveryData("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
             add(DeliveryData("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
             add(DeliveryData("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4, R.drawable.ic_default_profile, "네오"))
@@ -73,7 +76,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             add(DeliveryData("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6, R.drawable.ic_default_profile, "네오"))
             add(DeliveryData("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4, R.drawable.ic_default_profile, "네오"))
             add(DeliveryData("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
-        }*/
+        }
 
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryPartyService()
@@ -137,7 +140,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
-        val thread = Thread(PagerRunnable())
         thread.start() //스레드 시작
 
         binding.deliveryBannerVp.apply {
@@ -185,6 +187,22 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         currentPosition+=1
     }
 
+    // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
+    override fun onResume() {
+        super.onResume()
+        flag=1
+    }
+
+    // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
+    override fun onPause() {
+        super.onPause()
+        flag=0
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        thread.interrupt() //쓰레드 중지
+    }
 
 
 
