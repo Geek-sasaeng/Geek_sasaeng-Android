@@ -23,7 +23,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     override fun initAfterBinding() {
         progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
 
-        progressVM.currentPro = progressVM.currentPro + 1
+        progressVM.increase()
+        Log.d("PROGRESS-STATUS", "TWO = " + progressVM.currentPro.value.toString())
 
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")

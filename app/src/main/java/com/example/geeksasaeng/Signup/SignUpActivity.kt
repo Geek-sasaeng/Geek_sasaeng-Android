@@ -26,11 +26,10 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
     }
 
     private fun initClickListener() {
-        progressVM.currentPro = progressVM.currentPro + 1
-        binding.signUpProgressbar.setProgress(progressVM.currentPro)
-
-        Log.d("PROGRESS-BAR-STATUS", "PROGRESS = " + progressVM.currentPro)
-
+        progressVM.currentPro.observe(this, Observer {
+            binding.signUpProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
+            Log.d("PROGRESS-STATUS", "${progressVM.currentPro.value!!.toInt()}")
+        })
 
 //        progressVM.currentPro.observe(this, Observer {
 //            progressVM.currentPro = progressVM.currentPro + 1

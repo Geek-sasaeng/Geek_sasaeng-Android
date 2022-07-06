@@ -4,9 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ProgressViewModel: ViewModel() {
-    var currentPro = MutableLiveData<Int>()
+    var currentPro: MutableLiveData<Int> = MutableLiveData<Int>(0)
 
-    fun getCurrentPro(): MutableLiveData<Int> {
-        return currentPro
+    fun increase() {
+        currentPro.setValue(currentPro.getValue()!! + 1)
     }
+
+    fun decrease() {
+        currentPro.setValue(currentPro.getValue()!! - 1)
+    }
+
 }

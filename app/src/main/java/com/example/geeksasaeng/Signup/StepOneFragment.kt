@@ -20,7 +20,8 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     override fun initAfterBinding() {
         progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
 
-        progressVM.currentPro = progressVM.currentPro + 1
+        progressVM.increase()
+        Log.d("PROGRESS-STATUS", "ONE = " + progressVM.currentPro.value.toString())
 
         initClickListener()
     }
