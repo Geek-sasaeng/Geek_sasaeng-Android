@@ -14,7 +14,7 @@
     <item
         android:id="@+id/chattingFragment"
         android:title="채팅"
-        android:icon="@drawable/ic_chatting"
+        android:icon="@drawable/ic_chat"
         android:enabled="true" />
     <item
         android:id="@+id/profileFragment"

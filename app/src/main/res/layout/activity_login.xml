@@ -93,8 +93,10 @@
             <ImageView
                 android:id="@+id/login_naver_iv"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:src="@drawable/temp_naver" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:src="@drawable/ic_naver" />
 
             <TextView
                 android:id="@+id/login_naver_tv"
