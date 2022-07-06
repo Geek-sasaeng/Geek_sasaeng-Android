@@ -93,7 +93,7 @@
             <ImageView
                 android:id="@+id/login_naver_iv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_naver" />
 
             <TextView
@@ -131,7 +131,7 @@
             android:textColor="#5B5B5B"
             android:fontFamily="@font/spoqa_medium"
             android:background="@android:color/transparent"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintTop_toBottomOf="@id/login_autologin_cb"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
