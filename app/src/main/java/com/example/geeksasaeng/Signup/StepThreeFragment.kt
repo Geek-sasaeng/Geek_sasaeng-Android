@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Signup
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
@@ -20,10 +21,14 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     var email: String? = ""
     var universityName: String? = ""
 
+    private val progressVM: ProgressViewModel by activityViewModels()
+
     private var time = 5000
     private var timerTask : Timer? = null
 
     override fun initAfterBinding() {
+        progressVM.increase()
+        
         startTimer()
 
         checkPassword = arguments?.getString("checkPassword")

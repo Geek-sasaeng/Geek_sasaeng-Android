@@ -60,7 +60,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
 
     // 네이버 로그인
-    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+    // implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
 
     // Kakao Map
     // implementation files('libs/libDaumMapAndroid.jar')

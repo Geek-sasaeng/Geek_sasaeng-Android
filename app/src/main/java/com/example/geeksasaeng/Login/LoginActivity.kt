@@ -13,11 +13,11 @@ import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
-import com.navercorp.nid.NaverIdLoginSDK
-import com.navercorp.nid.oauth.NidOAuthLogin
-import com.navercorp.nid.oauth.OAuthLoginCallback
-import com.navercorp.nid.profile.NidProfileCallback
-import com.navercorp.nid.profile.data.NidProfileResponse
+// import com.navercorp.nid.NaverIdLoginSDK
+// import com.navercorp.nid.oauth.NidOAuthLogin
+// import com.navercorp.nid.oauth.OAuthLoginCallback
+// import com.navercorp.nid.profile.NidProfileCallback
+// import com.navercorp.nid.profile.data.NidProfileResponse
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
@@ -48,6 +48,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             changeActivity(MainActivity::class.java)
         }
 
+        /*
         binding.loginNaverBtn.setOnClickListener {
             val oAuthLoginCallback = object : OAuthLoginCallback {
                 override fun onSuccess() {
@@ -84,6 +85,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
             NaverIdLoginSDK.initialize(this@MainActivity, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), "앱 이름")
             NaverIdLoginSDK.authenticate(this@MainActivity, oAuthLoginCallback)
+        }
+        */
+
+        binding.loginSignupBtn.setOnClickListener {
+            changeActivity(SignUpActivity::class.java)
         }
     }
 

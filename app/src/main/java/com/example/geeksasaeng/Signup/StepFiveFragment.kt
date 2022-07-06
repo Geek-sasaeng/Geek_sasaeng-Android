@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.R
@@ -24,7 +25,11 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
     var universityName: String? = ""
     var phoneNumber: String? = ""
 
+    private val progressVM: ProgressViewModel by activityViewModels()
+
     override fun initAfterBinding() {
+        progressVM.increase()
+
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")
         nickname = arguments?.getString("nickname")

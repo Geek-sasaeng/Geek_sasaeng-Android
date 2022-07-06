@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.Home.CreateParty.DialogDt
@@ -18,14 +19,10 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     var nickname: String? = ""
     var password: String? = ""
 
-    private lateinit var progressVM: ProgressViewModel
+    private val progressVM: ProgressViewModel by activityViewModels()
 
     override fun initAfterBinding() {
-        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
-
-        Log.d("PROGRESS-STATUS", "TWO1 = " + progressVM.currentPro.value.toString())
         progressVM.increase()
-        Log.d("PROGRESS-STATUS", "TWO2 = " + progressVM.currentPro.value.toString())
 
         checkPassword = arguments?.getString("checkPassword")
         loginId = arguments?.getString("loginId")
