@@ -22,14 +22,16 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
             .replace(R.id.sign_up_vp, StepOneFragment())
             .commit()
 
+        progressVM.currentPro.observe(this, Observer {
+            Log.d("PROGRESS-STATUS", "SIGNUP-PROGRESS = ${progressVM.currentPro.value.toString()}")
+
+            binding.signUpProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
+        })
+
         initClickListener()
     }
 
     private fun initClickListener() {
-        progressVM.currentPro.observe(this, Observer {
-            binding.signUpProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
-            Log.d("PROGRESS-STATUS", "${progressVM.currentPro.value!!.toInt()}")
-        })
 
 //        progressVM.currentPro.observe(this, Observer {
 //            progressVM.currentPro = progressVM.currentPro + 1

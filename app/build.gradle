@@ -10,8 +10,8 @@ android {
         viewBinding true
     }
 
-    buildFeatures {
-        dataBinding true
+    dataBinding {
+        enabled = true
     }
 
     defaultConfig {

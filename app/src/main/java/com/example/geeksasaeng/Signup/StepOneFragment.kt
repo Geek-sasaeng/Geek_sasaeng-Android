@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Base.BaseFragment
@@ -18,10 +19,10 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     private lateinit var progressVM: ProgressViewModel
 
     override fun initAfterBinding() {
-        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
-
+        progressVM.setPro(progressVM.currentPro.value!!.toInt())
+        Log.d("PROGRESS-STATUS", "ONE1 = " + progressVM.currentPro.value.toString())
         progressVM.increase()
-        Log.d("PROGRESS-STATUS", "ONE = " + progressVM.currentPro.value.toString())
+        Log.d("PROGRESS-STATUS", "ONE2 = " + progressVM.currentPro.value.toString())
 
         initClickListener()
     }
@@ -50,5 +51,10 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             (context as SignUpActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.sign_up_vp, stepTwoFragment).commit()
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
     }
 }
