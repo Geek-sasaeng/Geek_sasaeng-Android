@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.CreatePartyFragment
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Data.DeliveryData
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyListResponse
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyView

@@ -1,4 +1,4 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Home.CreateParty
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -7,10 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.databinding.DialogCategoryLayoutBinding
-import com.example.geeksasaeng.databinding.DialogNumLayoutBinding
 
 
 class DialogCategory : DialogFragment() {

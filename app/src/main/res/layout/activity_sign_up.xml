@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:max="4"
+        android:max="6"
         android:backgroundTint="@color/main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,8 +20,7 @@
         app:layout_constraintBottom_toTopOf="@id/sign_up_vp"
         android:layout_marginStart="26dp"
         android:layout_marginEnd="26dp"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginTop="20dp" />
 
     <FrameLayout
         android:id="@+id/sign_up_vp"

@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.SignUpActivity
@@ -14,7 +15,13 @@ import java.lang.Thread.sleep
 
 class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate) {
 
+    private lateinit var progressVM: ProgressViewModel
+
     override fun initAfterBinding() {
+        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
+
+        progressVM.currentPro = progressVM.currentPro + 1
+
         initClickListener()
     }
 

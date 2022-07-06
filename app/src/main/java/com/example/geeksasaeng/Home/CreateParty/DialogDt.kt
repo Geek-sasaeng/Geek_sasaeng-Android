@@ -1,8 +1,7 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Home.CreateParty
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
 import java.util.*
 
