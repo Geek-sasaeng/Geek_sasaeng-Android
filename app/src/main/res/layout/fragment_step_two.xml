@@ -105,19 +105,19 @@
 
         <Button
             android:id="@+id/step_two_email_check_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="101dp"
+            android:layout_height="45dp"
             android:text="인증번호 전송"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/round_background_border"
-            android:backgroundTint="@color/white"
+            android:background="@drawable/signup_btn"
             android:textColor="@color/main"
-            android:layout_weight="0.8"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="13dp"
             android:layout_marginLeft="14dp"
-            android:layout_marginRight="27dp" />
+            android:layout_marginRight="27dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
