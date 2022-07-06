@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.34837799717912554" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/seekbar.xml" value="0.23" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/seekbar_color.xml" value="0.23" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.4380952380952381" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_splash.xml" value="0.12864583333333332" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_fix.xml" value="0.24947916666666667" />
