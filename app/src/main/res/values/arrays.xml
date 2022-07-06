@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name= "home_dropdown1">
+        <item>2명 이하</item>
+        <item>4명 이하</item>
+        <item>6명 이하</item>
+        <item>8명 이하</item>
+        <item>10명 이하</item>
+    </string-array>
+
+    <string-array name= "home_dropdown2">
+        <item>아침</item>
+        <item>점심</item>
+        <item>저녁</item>
+        <item>야식</item>
+    </string-array>
+
+</resources>
