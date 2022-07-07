@@ -13,17 +13,10 @@ import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
-import com.example.geeksasaeng.Signup.StepNaverOneFragment
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.nhn.android.naverlogin.OAuthLogin
-
-// import com.navercorp.nid.NaverIdLoginSDK
-// import com.navercorp.nid.oauth.NidOAuthLogin
-// import com.navercorp.nid.oauth.OAuthLoginCallback
-// import com.navercorp.nid.profile.NidProfileCallback
-// import com.navercorp.nid.profile.data.NidProfileResponse
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
@@ -79,8 +72,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             }
 
             NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
-
-            // changeActivity(SignUpNaverActivity::class.java)
         }
 
         binding.loginSignupBtn.setOnClickListener {
