@@ -214,7 +214,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 id: Long
             ) {
                 //TODO:이게 맞나?
-                //축소화면에 맞게 아이템 변경
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
