@@ -13,6 +13,7 @@ import com.example.geeksasaeng.SignUpActivity
 import com.example.geeksasaeng.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
+import com.example.geeksasaeng.Signup.StepNaverOneFragment
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -65,6 +66,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 override fun onSuccess() {
                     // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                     Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    changeActivity(SignUpNaverActivity::class.java)
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -80,46 +82,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
             // changeActivity(SignUpNaverActivity::class.java)
         }
-
-        /*
-        binding.loginNaverBtn.setOnClickListener {
-            val oAuthLoginCallback = object : OAuthLoginCallback {
-                override fun onSuccess() {
-                    // 네이버 로그인 API 호출 성공 시 유저 정보를 가져온다
-                    NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
-                        override fun onSuccess(result: NidProfileResponse) {
-                            name = result.profile?.name.toString()
-                            email = result.profile?.email.toString()
-                            gender = result.profile?.gender.toString()
-                            Log.e(TAG, "네이버 로그인한 유저 정보 - 이름 : $name")
-                            Log.e(TAG, "네이버 로그인한 유저 정보 - 이메일 : $email")
-                            Log.e(TAG, "네이버 로그인한 유저 정보 - 성별 : $gender")
-                        }
-
-                        override fun onError(errorCode: Int, message: String) {
-                            //
-                        }
-
-                        override fun onFailure(httpStatus: Int, message: String) {
-                            //
-                        }
-                    })
-                }
-
-                override fun onError(errorCode: Int, message: String) {
-                    val naverAccessToken = NaverIdLoginSDK.getAccessToken()
-                    Log.e(TAG, "naverAccessToken : $naverAccessToken")
-                }
-
-                override fun onFailure(httpStatus: Int, message: String) {
-                    //
-                }
-            }
-
-            NaverIdLoginSDK.initialize(this@MainActivity, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), "앱 이름")
-            NaverIdLoginSDK.authenticate(this@MainActivity, oAuthLoginCallback)
-        }
-        */
 
         binding.loginSignupBtn.setOnClickListener {
             changeActivity(SignUpActivity::class.java)
