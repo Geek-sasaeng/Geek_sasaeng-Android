@@ -14,6 +14,8 @@ import com.example.geeksasaeng.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.nhn.android.naverlogin.OAuthLogin
 
 // import com.navercorp.nid.NaverIdLoginSDK
@@ -57,14 +59,26 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginNaverBtn.setOnClickListener {
-            //초기화
-            mOAuthLoginInstance = OAuthLogin.getInstance();
-            mOAuthLoginInstance.init(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME);
+            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
 
-            binding.loginNaverBtn.setOAuth.setOAuthLoginHandler(mOAuthLoginHandler);
+            val oauthLoginCallback = object : OAuthLoginCallback {
+                override fun onSuccess() {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
 
+            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
 
-            changeActivity(SignUpNaverActivity::class.java)
+            // changeActivity(SignUpNaverActivity::class.java)
         }
 
         /*
