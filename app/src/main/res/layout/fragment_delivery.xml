@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
 
@@ -31,10 +32,14 @@
 
     <Spinner
         android:id="@+id/delivery_people_spinner"
-        android:layout_width="80dp"
+        android:layout_width="95dp"
         android:layout_height="30dp"
         android:layout_marginLeft="15dp"
-        android:background="#e3e3e3"
+        android:background="@drawable/spinner_outline_unclicked"
+        android:popupBackground="@drawable/spinner_outline_clicked"
+        tools:listitem="@layout/item_spinner"
+        android:spinnerMode="dropdown"
+        android:entries="@array/home_dropdown1"
         app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
         app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
         app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />

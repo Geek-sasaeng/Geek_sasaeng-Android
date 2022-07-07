@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,7 +43,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         //배너작업
         initBanner()
+        //필터(spinner) 작업
+        initSpinner()
 
+
+        //루나 코드
         // 어댑터 설정
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
@@ -59,6 +65,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
         }
+
 
         deliveryArray.apply {
             add(DeliveryData("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
@@ -81,7 +88,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryPartyService()
         deliveryService.setDeliveryListView(this)
-        deliveryService.getDeliveryPartyList(1)
+        /*deliveryService.getDeliveryPartyList(1)*/
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
@@ -102,8 +109,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             deliveryArray.add(
                 DeliveryData(
                     orderTime,
-
-
                     title,
                     true,
                     true,
@@ -117,10 +122,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryAdapter.notifyDataSetChanged()
     }
 
+
+
     override fun deliveryPartyListFailure(message: String) {
         Log.d("deliveryPartyList", "실패")
     }
-
 
     //배너 작업
     private fun initBanner(){
@@ -187,16 +193,53 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         currentPosition+=1
     }
 
-    // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
-    override fun onResume() {
-        super.onResume()
-        flag=1
+    //스피너 관련 작업
+    private fun initSpinner(){
+        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+        //어댑터
+        /*val spinnerAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_spinner,
+            items
+        )*/
+
+        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
+        binding.deliveryPeopleSpinner.adapter = spinnerAdapter
+        //이벤트 처리
+        binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                //TODO:이게 맞나?
+                //축소화면에 맞게 아이템 변경
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+
+                items[0]=items[position] // items[0]은 현재 선택된 아이템 저장용
+                val textName: TextView = view!!.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2)) //??꼭 fragment에선 requireContext가 먹더라..?
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
     }
 
-    // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
+    override fun onResume() {
+        super.onResume()
+        flag=1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
+    }
+
     override fun onPause() {
         super.onPause()
-        flag=0
+        flag=0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
     override fun onDestroy() {
