@@ -1,6 +1,8 @@
 package com.example.geeksasaeng.Login
 
+import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
@@ -32,9 +34,32 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private var OAUTH_CLIENT_SECRET = "syoXsVLKN1"
     private var OAUTH_CLIENT_NAME = "긱사생"
 
-    private var mOAuthLoginInstance: OAuthLogin? = null;
+    private var autoLogin: SharedPreferences? = null
+    private var autoLoginEditor: SharedPreferences.Editor? = null
+    private var getAutoLogin: SharedPreferences? = null
+
+    var autoLoginid: String? = null
+    var autoPassword: String? = null
 
     override fun initAfterBinding() {
+        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
+        autoPassword = getAutoLogin?.getString("password", null).toString()
+
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+
+        //////////////////////
+        // 임시로 넣어둔 부분!! //
+        autoLoginid = null
+        autoPassword = null
+        //////////////////////
+
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+
+        if (autoLoginid != null && autoPassword != null) {
+            login(true)
+        }
+
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()
             email = intent?.getStringExtra("email").toString()
@@ -48,7 +73,19 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginLoginBtn.setOnClickListener {
-            // login()
+            if (binding.loginAutologinCb.isChecked) {
+                // SharedPreferences 설정
+                autoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+                autoLoginEditor = autoLogin?.edit()
+
+                autoLoginEditor?.putString("loginid", binding.loginIdEt.text.toString())
+                autoLoginEditor?.putString("password", binding.loginPwdEt.text.toString())
+                autoLoginEditor?.commit()
+
+                Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
+            }
+
+            login(false)
             changeActivity(MainActivity::class.java)
         }
 
@@ -79,17 +116,22 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
-    private fun login() {
+    private fun login(auto: Boolean) {
         val loginDataService = LoginDataService()
         loginDataService.setLoginView(this)
-        loginDataService.login(getLoginUser())
+
+        if (auto) {
+            loginDataService.login(Login(autoLoginid, autoPassword))
+        } else {
+            loginDataService.login(getLoginUser())
+        }
 
         Log.d("LOGIN-RESPONSE", "LoginActivity-login : Login Check")
     }
 
     private fun getLoginUser(): Login {
-        val loginId = binding.loginIdTv.text.toString()
-        val password = binding.loginPwdTv.text.toString()
+        val loginId = binding.loginIdEt.text.toString()
+        val password = binding.loginPwdEt.text.toString()
         Log.d("LOGIN-RESPONSE", Login(loginId, password).toString())
 
         return Login(loginId, password)
