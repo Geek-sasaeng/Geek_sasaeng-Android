@@ -11,12 +11,14 @@ import com.example.geeksasaeng.Signup.*
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 import com.example.geeksasaeng.databinding.ActivitySignUpNaverBinding
+import com.nhn.android.naverlogin.OAuthLogin
 
 class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySignUpNaverBinding::inflate) {
 
     private lateinit var progressVM: ProgressNaverViewModel
 
     override fun initAfterBinding() {
+
         progressVM = ViewModelProvider(this).get(ProgressNaverViewModel::class.java)
 
         supportFragmentManager.beginTransaction()

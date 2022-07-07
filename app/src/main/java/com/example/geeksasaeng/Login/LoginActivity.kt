@@ -14,6 +14,8 @@ import com.example.geeksasaeng.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
+import com.nhn.android.naverlogin.OAuthLogin
+
 // import com.navercorp.nid.NaverIdLoginSDK
 // import com.navercorp.nid.oauth.NidOAuthLogin
 // import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -29,6 +31,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var password: String = ""
     var phoneNumber: String = ""
     var universityName: String = ""
+
+    private var OAUTH_CLIENT_ID: String = "czrW_igO4TDdAeE5WhGW"
+    private var OAUTH_CLIENT_SECRET = "syoXsVLKN1"
+    private var OAUTH_CLIENT_NAME = "긱사생"
+
+    private var mOAuthLoginInstance: OAuthLogin? = null;
 
     override fun initAfterBinding() {
         if (intent != null) {
@@ -49,6 +57,13 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginNaverBtn.setOnClickListener {
+            //초기화
+            mOAuthLoginInstance = OAuthLogin.getInstance();
+            mOAuthLoginInstance.init(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME);
+
+            binding.loginNaverBtn.setOAuth.setOAuthLoginHandler(mOAuthLoginHandler);
+
+
             changeActivity(SignUpNaverActivity::class.java)
         }
 
