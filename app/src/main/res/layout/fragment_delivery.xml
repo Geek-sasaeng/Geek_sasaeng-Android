@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/delivery_banner_vp"
+        android:layout_width="match_parent"
+        android:layout_height="86dp"
+        android:background="@drawable/round_border"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <ImageView
+        android:id='@+id/delivery_sort_img'
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/ic_sort"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="13dp"
+        app:layout_constraintTop_toBottomOf="@id/delivery_banner_vp"
+        app:layout_constraintStart_toStartOf="@id/delivery_banner_vp" />
+
+    <Spinner
+        android:id="@+id/delivery_people_spinner"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/spinner_outline_unclicked"
+        android:popupBackground="@drawable/spinner_outline_clicked"
+        tools:listitem="@layout/item_spinner"
+        android:spinnerMode="dropdown"
+        android:entries="@array/home_dropdown1"
+        app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
+        app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
+
+    <Spinner
+        android:id="@+id/delivery_time_spinner"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="7dp"
+        android:background="#e3e3e3"
+        app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
+        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/delivery_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/delivery_people_spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delivery_floating_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_floating_btn"
+        android:backgroundTint="@color/white"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

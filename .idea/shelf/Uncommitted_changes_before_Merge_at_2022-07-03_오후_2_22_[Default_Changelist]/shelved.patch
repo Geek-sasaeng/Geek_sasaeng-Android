@@ -1,0 +1,195 @@
+Index: app/src/main/java/com/example/geeksasaeng/NetworkModule.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng\r\n\r\nimport retrofit2.Retrofit\r\nimport retrofit2.converter.gson.GsonConverterFactory\r\n\r\nconst val BASE_URL = \"https://geeksasaeng.shop\"\r\n\r\nfun getRetrofit(): Retrofit {\r\n    val retrofit = Retrofit.Builder().baseUrl(BASE_URL)\r\n        .addConverterFactory(GsonConverterFactory.create()).build()\r\n\r\n    return retrofit\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/NetworkModule.kt b/app/src/main/java/com/example/geeksasaeng/NetworkModule.kt
+--- a/app/src/main/java/com/example/geeksasaeng/NetworkModule.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/NetworkModule.kt	(date 1656823610962)
+@@ -3,11 +3,24 @@
+ import retrofit2.Retrofit
+ import retrofit2.converter.gson.GsonConverterFactory
+ 
+-const val BASE_URL = "https://geeksasaeng.shop"
++class NetworkModule {
++    companion object {
++        // retrofit 변수를 외부에서 업데이트할 수 없도록 방지
++        private var retrofit: Retrofit? = null
+ 
+-fun getRetrofit(): Retrofit {
+-    val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
+-        .addConverterFactory(GsonConverterFactory.create()).build()
++        // retrofit 객체를 가져오는 함수
++        // 새로 만들지 않아도 된다!!
++        fun getInstance(): Retrofit? {
++            if (retrofit == null) {
++                synchronized(this) {
++                    retrofit = Retrofit.Builder()
++                        .baseUrl(ApplicationClass.BASE_URL)
++                        .addConverterFactory(GsonConverterFactory.create())
++                        .build()
++                }
++            }
+ 
+-    return retrofit
++            return retrofit
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/geeksasaeng/Signup/Retrofit/SignupDataService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Signup.Retrofit\r\n\r\nimport android.util.Log\r\nimport com.example.geeksasaeng.Data.Signup\r\nimport com.example.geeksasaeng.Signup.SignUpView\r\nimport com.example.geeksasaeng.getRetrofit\r\nimport retrofit2.Call\r\nimport retrofit2.Callback\r\nimport retrofit2.Response\r\n\r\nclass SignupDataService() {\r\n\r\n    lateinit var signup: Signup\r\n\r\n    private lateinit var signUpView: SignUpView\r\n\r\n    fun setSignUpView(signUpView: SignUpView) {\r\n        this.signUpView = signUpView\r\n    }\r\n\r\n    fun signUp(user: Signup) {\r\n        val signUpService = getRetrofit().create(SignupRetrofitInterfaces::class.java)\r\n\r\n        signUpService.signup(user).enqueue(object : Callback<SignupResponse> {\r\n            override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {\r\n                Log.d(\"SIGNUP-RESPONSE\", \"SignupDataService-onResponse : response.code = \" + response.code())\r\n                Log.d(\"SIGNUP-RESPONSE\", \"SignupDataService-onResponse : response.isSuccessful = \" + response.isSuccessful)\r\n\r\n                if (response.isSuccessful && response.code() == 200) {\r\n                    val signUpResponse: SignupResponse = response.body()!!\r\n\r\n                    when (signUpResponse.code) {\r\n                        1000 -> signUpView.onSignUpSuccess()\r\n                        else -> {\r\n                            signUpView.onSignUpFailure()\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n            override fun onFailure(call: Call<SignupResponse>, t: Throwable) {\r\n                //실패처리\r\n                Log.d(\"SIGNUP-RESPONSE\", \"SignupDataService-onFailure : SignupFailed\", t)\r\n            }\r\n        })\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/Retrofit/SignupDataService.kt b/app/src/main/java/com/example/geeksasaeng/Signup/Retrofit/SignupDataService.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Signup/Retrofit/SignupDataService.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Signup/Retrofit/SignupDataService.kt	(date 1656823691869)
+@@ -2,8 +2,8 @@
+ 
+ import android.util.Log
+ import com.example.geeksasaeng.Data.Signup
++import com.example.geeksasaeng.NetworkModule
+ import com.example.geeksasaeng.Signup.SignUpView
+-import com.example.geeksasaeng.getRetrofit
+ import retrofit2.Call
+ import retrofit2.Callback
+ import retrofit2.Response
+@@ -19,9 +19,9 @@
+     }
+ 
+     fun signUp(user: Signup) {
+-        val signUpService = getRetrofit().create(SignupRetrofitInterfaces::class.java)
++        val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)
+ 
+-        signUpService.signup(user).enqueue(object : Callback<SignupResponse> {
++        signUpService?.signup(user)?.enqueue(object : Callback<SignupResponse> {
+             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
+                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+Index: app/src/main/java/com/example/geeksasaeng/Signup/SignupSkipPopupActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.os.Bundle\r\nimport android.view.Window\r\nimport com.example.geeksasaeng.Base.BaseActivity\r\nimport com.example.geeksasaeng.databinding.ActivitySignupSkipPopupBinding\r\n\r\nclass SignupSkipPopupActivity: BaseActivity<ActivitySignupSkipPopupBinding>(ActivitySignupSkipPopupBinding::inflate) {\r\n    override fun initAfterBinding() {\r\n        TODO(\"Not yet implemented\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/SignupSkipPopupActivity.kt b/app/src/main/java/com/example/geeksasaeng/Signup/SignupSkipPopupActivity.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Signup/SignupSkipPopupActivity.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Signup/SignupSkipPopupActivity.kt	(date 1656822267929)
+@@ -7,6 +7,5 @@
+ 
+ class SignupSkipPopupActivity: BaseActivity<ActivitySignupSkipPopupBinding>(ActivitySignupSkipPopupBinding::inflate) {
+     override fun initAfterBinding() {
+-        TODO("Not yet implemented")
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/geeksasaeng/Chatting/ChattingFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Chatting\r\n\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.databinding.FragmentChattingBinding\r\n\r\nclass ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate) {\r\n    override fun initAfterBinding() {\r\n        TODO(\"Not yet implemented\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Chatting/ChattingFragment.kt b/app/src/main/java/com/example/geeksasaeng/Chatting/ChattingFragment.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Chatting/ChattingFragment.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Chatting/ChattingFragment.kt	(date 1656822449887)
+@@ -5,6 +5,5 @@
+ 
+ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate) {
+     override fun initAfterBinding() {
+-        TODO("Not yet implemented")
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/geeksasaeng/Login/Retrofit/LoginDataService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Login.Retrofit\r\n\r\nimport android.util.Log\r\nimport com.example.geeksasaeng.Data.Login\r\nimport com.example.geeksasaeng.Data.Signup\r\nimport com.example.geeksasaeng.Login.LoginView\r\nimport com.example.geeksasaeng.Signup.SignUpView\r\nimport com.example.geeksasaeng.getRetrofit\r\nimport retrofit2.Call\r\nimport retrofit2.Callback\r\nimport retrofit2.Response\r\n\r\nclass LoginDataService() {\r\n\r\n    lateinit var login: Login\r\n\r\n    private lateinit var loginView: LoginView\r\n\r\n    fun setLoginView(loginView: LoginView) {\r\n        this.loginView = loginView\r\n    }\r\n\r\n    fun login(user: Login) {\r\n        val loginService = getRetrofit().create(LoginRetrofitInterfaces::class.java)\r\n\r\n        loginService.login(user).enqueue(object : Callback<LoginResponse> {\r\n            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {\r\n                Log.d(\"LOGIN-RESPONSE\", \"LoginDataService-onResponse : response.code = \" + response.code())\r\n                Log.d(\"LOGIN-RESPONSE\", \"LoginDataService-onResponse : response.isSuccessful = \" + response.isSuccessful)\r\n\r\n                if (response.isSuccessful && response.code() == 200) {\r\n                    val loginResponse: LoginResponse = response.body()!!\r\n\r\n                    when (loginResponse.code) {\r\n                        1000 -> loginView.onLoginSuccess(loginResponse.code, loginResponse.result!!)\r\n                        else -> {\r\n                            loginView.onLoginFailure()\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {\r\n                //실패처리\r\n                Log.d(\"LOGIN-RESPONSE\", \"SignupDataService-onFailure : SignupFailed\", t)\r\n            }\r\n        })\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Login/Retrofit/LoginDataService.kt b/app/src/main/java/com/example/geeksasaeng/Login/Retrofit/LoginDataService.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Login/Retrofit/LoginDataService.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Login/Retrofit/LoginDataService.kt	(date 1656823651334)
+@@ -4,8 +4,8 @@
+ import com.example.geeksasaeng.Data.Login
+ import com.example.geeksasaeng.Data.Signup
+ import com.example.geeksasaeng.Login.LoginView
++import com.example.geeksasaeng.NetworkModule
+ import com.example.geeksasaeng.Signup.SignUpView
+-import com.example.geeksasaeng.getRetrofit
+ import retrofit2.Call
+ import retrofit2.Callback
+ import retrofit2.Response
+@@ -21,9 +21,9 @@
+     }
+ 
+     fun login(user: Login) {
+-        val loginService = getRetrofit().create(LoginRetrofitInterfaces::class.java)
++        val loginService = NetworkModule.getInstance()?.create(LoginRetrofitInterfaces::class.java)
+ 
+-        loginService.login(user).enqueue(object : Callback<LoginResponse> {
++        loginService?.login(user)?.enqueue(object : Callback<LoginResponse> {
+             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                 Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : response.code = " + response.code())
+                 Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+Index: app/src/main/java/com/example/geeksasaeng/Community/CommunityFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Community\r\n\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.databinding.FragmentCommunityBinding\r\n\r\nclass CommunityFragment: BaseFragment<FragmentCommunityBinding>(FragmentCommunityBinding::inflate) {\r\n    override fun initAfterBinding() {\r\n        TODO(\"Not yet implemented\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Community/CommunityFragment.kt b/app/src/main/java/com/example/geeksasaeng/Community/CommunityFragment.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Community/CommunityFragment.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Community/CommunityFragment.kt	(date 1656822455214)
+@@ -5,6 +5,5 @@
+ 
+ class CommunityFragment: BaseFragment<FragmentCommunityBinding>(FragmentCommunityBinding::inflate) {
+     override fun initAfterBinding() {
+-        TODO("Not yet implemented")
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.geeksasaeng\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.Geeksasaeng\">\r\n        <activity\r\n            android:name=\".SplashActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".MainActivity\"\r\n            android:exported=\"true\" />\r\n        <activity android:name=\".Login.LoginActivity\" />\r\n        <activity android:name=\".Signup.SignupSkipPopupActivity\"\r\n            android:theme=\"@style/Theme.AppCompat.DayNight.Dialog\"></activity>\r\n        <activity\r\n            android:name=\".SignUpActivity\"\r\n            android:exported=\"false\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/AndroidManifest.xml	(date 1656822904055)
+@@ -5,6 +5,7 @@
+     <uses-permission android:name="android.permission.INTERNET"/>
+ 
+     <application
++        android:name=".ApplicationClass"
+         android:allowBackup="true"
+         android:icon="@mipmap/ic_launcher"
+         android:label="@string/app_name"
+Index: app/src/main/java/com/example/geeksasaeng/Home/Helper/HelperFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Home.Helper\r\n\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.databinding.FragmentHelperBinding\r\n\r\nclass HelperFragment: BaseFragment<FragmentHelperBinding>(FragmentHelperBinding::inflate) {\r\n    override fun initAfterBinding() {\r\n        TODO(\"Not yet implemented\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Helper/HelperFragment.kt b/app/src/main/java/com/example/geeksasaeng/Home/Helper/HelperFragment.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Helper/HelperFragment.kt	(revision 04784bd89837ca2a0fa188094f6f935de29fc46a)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Helper/HelperFragment.kt	(date 1656822243657)
+@@ -5,6 +5,5 @@
+ 
+ class HelperFragment: BaseFragment<FragmentHelperBinding>(FragmentHelperBinding::inflate) {
+     override fun initAfterBinding() {
+-        TODO("Not yet implemented")
+     }
+ }
+\ No newline at end of file
