@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Home.Delivery
 
 import android.os.Parcelable
 import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Data.DeliveryData
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 

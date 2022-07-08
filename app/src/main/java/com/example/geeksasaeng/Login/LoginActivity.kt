@@ -1,7 +1,8 @@
 package com.example.geeksasaeng.Login
 
+import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
@@ -10,10 +11,13 @@ import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.MainActivity
-import com.example.geeksasaeng.SignUpActivity
+import com.example.geeksasaeng.Signup.Basic.SignUpActivity
+import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
@@ -25,7 +29,36 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var phoneNumber: String = ""
     var universityName: String = ""
 
+    private var OAUTH_CLIENT_ID: String = "czrW_igO4TDdAeE5WhGW"
+    private var OAUTH_CLIENT_SECRET = "syoXsVLKN1"
+    private var OAUTH_CLIENT_NAME = "긱사생"
+
+    private var autoLogin: SharedPreferences? = null
+    private var autoLoginEditor: SharedPreferences.Editor? = null
+    private var getAutoLogin: SharedPreferences? = null
+
+    var autoLoginid: String? = null
+    var autoPassword: String? = null
+
     override fun initAfterBinding() {
+        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
+        autoPassword = getAutoLogin?.getString("password", null).toString()
+
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+
+        //////////////////////
+        // 임시로 넣어둔 부분!! //
+//        autoLoginid = null
+//        autoPassword = null
+        //////////////////////
+
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+
+        if (autoLoginid != null && autoPassword != null) {
+            login(true)
+        }
+
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()
             email = intent?.getStringExtra("email").toString()
@@ -39,26 +72,65 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginLoginBtn.setOnClickListener {
-            /*login()*/
+            if (binding.loginAutologinCb.isChecked) {
+                // SharedPreferences 설정
+                autoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+                autoLoginEditor = autoLogin?.edit()
+
+                autoLoginEditor?.putString("loginid", binding.loginIdEt.text.toString())
+                autoLoginEditor?.putString("password", binding.loginPwdEt.text.toString())
+                autoLoginEditor?.commit()
+
+                Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
+            }
+
+            login(false)
             changeActivity(MainActivity::class.java)
         }
-        
+
+        binding.loginNaverBtn.setOnClickListener {
+            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+            val oauthLoginCallback = object : OAuthLoginCallback {
+                override fun onSuccess() {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    changeActivity(SignUpNaverActivity::class.java)
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
+
+            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+        }
+
         binding.loginSignupBtn.setOnClickListener {
             changeActivity(SignUpActivity::class.java)
         }
     }
 
-    private fun login() {
+    private fun login(auto: Boolean) {
         val loginDataService = LoginDataService()
         loginDataService.setLoginView(this)
-        loginDataService.login(getLoginUser())
+
+        if (auto) {
+            loginDataService.login(Login(autoLoginid, autoPassword))
+        } else {
+            loginDataService.login(getLoginUser())
+        }
 
         Log.d("LOGIN-RESPONSE", "LoginActivity-login : Login Check")
     }
 
     private fun getLoginUser(): Login {
-        val loginId = binding.loginIdTv.text.toString()
-        val password = binding.loginPwdTv.text.toString()
+        val loginId = binding.loginIdEt.text.toString()
+        val password = binding.loginPwdEt.text.toString()
         Log.d("LOGIN-RESPONSE", Login(loginId, password).toString())
 
         return Login(loginId, password)

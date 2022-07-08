@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreatePartyFragment">
+    tools:context=".Home.CreateParty.CreatePartyFragment">
 
     <ImageView
         android:id="@+id/create_party_back_btn_iv"
