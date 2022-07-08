@@ -18,7 +18,6 @@ import com.example.geeksasaeng.Signup.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
-import com.nhn.android.naverlogin.OAuthLogin
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
@@ -50,8 +49,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         //////////////////////
         // 임시로 넣어둔 부분!! //
-        autoLoginid = null
-        autoPassword = null
+//        autoLoginid = null
+//        autoPassword = null
         //////////////////////
 
         Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
