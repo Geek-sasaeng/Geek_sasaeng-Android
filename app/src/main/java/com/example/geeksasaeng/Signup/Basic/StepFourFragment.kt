@@ -1,15 +1,13 @@
-package com.example.geeksasaeng.Signup
+package com.example.geeksasaeng.Signup.Basic
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.SignUpActivity
+import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import java.text.DecimalFormat
 import java.util.*

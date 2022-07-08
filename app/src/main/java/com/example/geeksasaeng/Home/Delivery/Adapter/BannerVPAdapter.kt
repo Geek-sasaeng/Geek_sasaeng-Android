@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.Delivery
+package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

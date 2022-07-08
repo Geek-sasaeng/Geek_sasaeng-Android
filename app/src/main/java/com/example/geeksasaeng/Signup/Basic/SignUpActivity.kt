@@ -1,14 +1,10 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Signup.Basic
 
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Base.BaseActivity
-import com.example.geeksasaeng.Data.Signup
-import com.example.geeksasaeng.Signup.*
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 
 class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {

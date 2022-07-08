@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Data
 
-data class DeliveryData(
+data class Delivery(
     var time: String? = "",
     var title: String? = "",
     var option1: Boolean = false,

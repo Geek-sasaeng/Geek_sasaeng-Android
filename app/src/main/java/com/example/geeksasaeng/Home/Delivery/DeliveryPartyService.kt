@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.Delivery.Service
+package com.example.geeksasaeng.Home.Delivery
 
 import android.util.Log
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyInterface

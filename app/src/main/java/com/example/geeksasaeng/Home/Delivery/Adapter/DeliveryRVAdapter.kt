@@ -1,18 +1,18 @@
-package com.example.geeksasaeng.Home.Delivery
+package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Data.DeliveryData
+import com.example.geeksasaeng.Data.Delivery
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemDeliveryBinding
 
-class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryData>) : RecyclerView.Adapter<DeliveryRVAdapter.ViewHolder>() {
+class DeliveryRVAdapter(private var deliveryList: ArrayList<Delivery>) : RecyclerView.Adapter<DeliveryRVAdapter.ViewHolder>() {
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener{
-        fun onItemClick(v:View, data: DeliveryData, pos : Int)
+        fun onItemClick(v:View, data: Delivery, pos : Int)
     }
     private var listener : OnItemClickListener? = null
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -21,19 +21,19 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryData>) : Rec
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): DeliveryRVAdapter.ViewHolder {
+    ): ViewHolder {
         val binding: ItemDeliveryBinding = ItemDeliveryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DeliveryRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(deliveryList[position])
     }
 
     override fun getItemCount(): Int = deliveryList.size
 
     inner class ViewHolder(val binding: ItemDeliveryBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind (delivery: DeliveryData) {
+        fun bind (delivery: Delivery) {
             binding.deliveryItemTime.text = delivery.time
             binding.deliveryItemTitle.text = delivery.title
             // 파티 클릭하면 상세 페이지로 이동

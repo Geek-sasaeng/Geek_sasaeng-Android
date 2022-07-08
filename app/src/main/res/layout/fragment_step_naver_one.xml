@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Signup.StepOneFragment">
+    tools:context=".Signup.Basic.StepOneFragment">
 
     <TextView
         android:id="@+id/step_naver_one_nickname_tv"
@@ -214,7 +214,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:backgroundTint="@color/main"
-        android:background="@drawable/round_corner"
+        android:background="@drawable/round_border"
         android:text="다음"
         android:textColor="@color/white"
         android:textSize="20sp"

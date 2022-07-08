@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.Delivery
+package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import com.example.geeksasaeng.R
 import android.content.Context

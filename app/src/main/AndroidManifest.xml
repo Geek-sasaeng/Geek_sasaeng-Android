@@ -33,9 +33,9 @@
         <activity android:name=".Signup.DialogSignUpPhoneSkip"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"></activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".SignUpNaverActivity" />
+        <activity android:name=".Signup.Naver.SignUpNaverActivity" />
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="11a3f6b9176965b9b649bef686ad6f91"/>
     </application>
 

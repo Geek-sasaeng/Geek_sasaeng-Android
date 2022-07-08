@@ -51,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main"
-            android:background="@drawable/round_corner"
+            android:background="@drawable/round_border"
             android:text="다음"
             android:textColor="@color/white"
             android:textSize="15sp"

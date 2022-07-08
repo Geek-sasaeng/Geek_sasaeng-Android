@@ -1,15 +1,13 @@
-package com.example.geeksasaeng.Signup
+package com.example.geeksasaeng.Signup.Basic
 
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Home.CreateParty.DialogDt
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.SignUpActivity
+import com.example.geeksasaeng.Signup.DialogSignUpEmailCheck
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate) {
