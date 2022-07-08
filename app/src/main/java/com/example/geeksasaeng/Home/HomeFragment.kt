@@ -15,5 +15,6 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
         TabLayoutMediator(binding.homeTab, binding.homeVp) {
             tab, position -> tab.text = information[position]
         }.attach()
+        binding.homeVp.setUserInputEnabled(false) //뷰페이저 스와이프 막기
     }
 }

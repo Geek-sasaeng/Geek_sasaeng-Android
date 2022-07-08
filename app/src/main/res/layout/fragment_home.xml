@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
@@ -45,12 +46,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="23dp"
         android:layout_marginRight="23dp"
+        app:tabTextColor="#CBCBCB"
         app:tabSelectedTextColor="@color/black"
         app:tabIndicatorColor="@color/main"
         app:tabRippleColor="#00ff0000"
         app:tabIndicatorHeight="3dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
+        app:tabBackground="@drawable/tab_underline"
+        app:tabTextAppearance="@style/tabText"
         app:layout_constraintTop_toBottomOf="@id/main_toolbar">
 
         <com.google.android.material.tabs.TabItem
