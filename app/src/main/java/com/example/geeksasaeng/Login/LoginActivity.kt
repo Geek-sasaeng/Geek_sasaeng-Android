@@ -3,6 +3,9 @@ package com.example.geeksasaeng.Login
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
@@ -11,6 +14,7 @@ import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
@@ -42,21 +46,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun initAfterBinding() {
         getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
-        autoPassword = getAutoLogin?.getString("password", null).toString()
+        var autoJwt = getAutoLogin?.getString("jwt", null).toString()
 
-        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
-
-        //////////////////////
-        // 임시로 넣어둔 부분!! //
-//        autoLoginid = null
-//        autoPassword = null
-        //////////////////////
-
-        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+        Log.d("LOGIN-RESPONSE", "JWT = $autoJwt")
 
         if (autoLoginid != null && autoPassword != null) {
-            login(true)
+            // login(true)
         }
 
         if (intent != null) {
@@ -70,6 +65,135 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
             signup()
         }
+
+        setTextChangedListener()
+        initClickListener()
+    }
+
+    private fun login(auto: Boolean) {
+        val loginDataService = LoginDataService()
+        loginDataService.setLoginView(this)
+
+        if (auto) {
+            loginDataService.login(Login(autoLoginid, autoPassword))
+        } else {
+            loginDataService.login(getLoginUser())
+        }
+
+        Log.d("LOGIN-RESPONSE", "LoginActivity-login : Login Check")
+    }
+
+    private fun getLoginUser(): Login {
+        val loginId = binding.loginIdEt.text.toString()
+        val password = binding.loginPwdEt.text.toString()
+        Log.d("LOGIN-RESPONSE", Login(loginId, password).toString())
+
+        return Login(loginId, password)
+    }
+
+    private fun saveSP(jwt: String) {
+        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.putString("jwt", jwt)
+        editor.apply()
+
+        Log.d("LOGIN-RESPONSE", "jwt = $jwt")
+    }
+
+    private fun removeSP() {
+        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.clear()
+        editor.commit()
+    }
+
+    override fun onLoginSuccess(code : Int , result: LoginResult) {
+        when(code) {
+            1000 -> {
+                if (binding.loginAutologinCb.isChecked)
+                    saveSP(result.jwt)
+                else removeSP()
+
+                changeActivity(MainActivity::class.java)
+            } else -> {
+                Toast.makeText(this, "LoginActivity-onLoginSuccess : Fail", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onLoginFailure(code: Int, message: String) {
+        Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Fail Code = $code")
+
+        if (code == 2011) showToast(message)
+        else if (code == 2400) showToast(message)
+    }
+
+    private fun getSignupUser(): Signup {
+        Log.d("SIGNUP-RESPONSE", Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName).toString())
+        return Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName)
+    }
+
+    private fun signup() {
+        val signupDataService = SignupDataService()
+        signupDataService.setSignUpView(this)
+        signupDataService.signUp(getSignupUser())
+
+        Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
+    }
+
+    override fun onSignUpSuccess() {
+        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpSuccess : Signup Check")
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    override fun onSignUpFailure() {
+        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpFailure : Signup Check")
+    }
+
+    private fun setTextChangedListener() {
+        binding.loginIdEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginIdEt.text.toString())
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginPwdEt.text.toString())
+                if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
+                } else {
+                    binding.loginLoginBtn.isClickable = false;
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+
+        binding.loginPwdEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginIdEt.text.toString())
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginPwdEt.text.toString())
+
+                if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
+                } else {
+                    binding.loginLoginBtn.isClickable = false;
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+    }
+
+    private fun initClickListener() {
 
         binding.loginLoginBtn.setOnClickListener {
             if (binding.loginAutologinCb.isChecked) {
@@ -85,7 +209,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             }
 
             login(false)
-            changeActivity(MainActivity::class.java)
+            // changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {
@@ -113,71 +237,5 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         binding.loginSignupBtn.setOnClickListener {
             changeActivity(SignUpActivity::class.java)
         }
-    }
-
-    private fun login(auto: Boolean) {
-        val loginDataService = LoginDataService()
-        loginDataService.setLoginView(this)
-
-        if (auto) {
-            loginDataService.login(Login(autoLoginid, autoPassword))
-        } else {
-            loginDataService.login(getLoginUser())
-        }
-
-        Log.d("LOGIN-RESPONSE", "LoginActivity-login : Login Check")
-    }
-
-    private fun getLoginUser(): Login {
-        val loginId = binding.loginIdEt.text.toString()
-        val password = binding.loginPwdEt.text.toString()
-        Log.d("LOGIN-RESPONSE", Login(loginId, password).toString())
-
-        return Login(loginId, password)
-    }
-
-    private fun saveJwt(jwt: String) {
-        val spf = getSharedPreferences("auth2" , MODE_PRIVATE)
-        val editor = spf.edit()
-
-        editor.putString("jwt", jwt)
-        editor.apply()
-    }
-
-    override fun onLoginSuccess(code : Int , result: LoginResult) {
-        when(code) {
-            1000 -> {
-                saveJwt(result.jwt)
-                changeActivity(MainActivity::class.java)
-            } else -> {
-                Toast.makeText(this, "LoginActivity-onLoginSuccess : Fail", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onLoginFailure() {
-        Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Login Check")
-    }
-
-    private fun getSignupUser(): Signup {
-        Log.d("SIGNUP-RESPONSE", Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName).toString())
-        return Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName)
-    }
-
-    private fun signup() {
-        val signupDataService = SignupDataService()
-        signupDataService.setSignUpView(this)
-        signupDataService.signUp(getSignupUser())
-
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
-    }
-
-    override fun onSignUpSuccess() {
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpSuccess : Signup Check")
-        startActivity(Intent(this, LoginActivity::class.java))
-    }
-
-    override fun onSignUpFailure() {
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpFailure : Signup Check")
     }
 }

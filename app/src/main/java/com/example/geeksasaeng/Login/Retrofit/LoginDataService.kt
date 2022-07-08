@@ -30,12 +30,12 @@ class LoginDataService() {
 
                 if (response.isSuccessful && response.code() == 200) {
                     val loginResponse: LoginResponse = response.body()!!
+                    Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : loginResponse.code = " + loginResponse.code)
 
                     when (loginResponse.code) {
                         1000 -> loginView.onLoginSuccess(loginResponse.code, loginResponse.result!!)
-                        else -> {
-                            loginView.onLoginFailure()
-                        }
+                        // 2011 : Password 틀림 | 2400 : ID 존재 X
+                        2011, 2400 -> loginView.onLoginFailure(loginResponse.code, loginResponse.message)
                     }
                 }
             }
