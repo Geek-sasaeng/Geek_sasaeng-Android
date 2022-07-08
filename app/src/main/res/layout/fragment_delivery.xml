@@ -5,8 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/delivery_banner_vp"
         android:layout_width="match_parent"
@@ -17,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginTop="20dp" />
 
     <ImageView
         android:id='@+id/delivery_sort_img'
