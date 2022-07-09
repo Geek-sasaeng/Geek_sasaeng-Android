@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp" >
+    app:cardCornerRadius="8dp"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/skip_title"
+            android:id="@+id/signup_skip_title"
             android:background="@color/line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:text="건너뛰기"
                 android:textColor="@color/gray_2"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:fontFamily="@font/spoqa_medium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +59,7 @@
             android:layout_marginRight="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/skip_title" />
+            app:layout_constraintTop_toBottomOf="@id/signup_skip_title" />
 
         <View
             android:id="@+id/signup_skip_line"
@@ -73,6 +74,7 @@
             app:layout_constraintTop_toBottomOf="@id/signup_skip_content_tv" />
 
         <TextView
+            android:id="@+id/signup_ok_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="확인"
@@ -81,7 +83,7 @@
             android:textSize="18sp"
             android:gravity="center"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="22dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signup_skip_line"
