@@ -193,12 +193,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initSpinner(){
         val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
         //어댑터
-        /*val spinnerAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.item_spinner,
-            items
-        )*/
-
         val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
         binding.deliveryPeopleSpinner.adapter = spinnerAdapter
         //이벤트 처리

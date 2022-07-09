@@ -7,5 +7,20 @@ import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
     @POST("/members")
-    fun signup(@Body user: Signup): Call<SignupResponse>
+    fun signup(@Body user: Signup): Call<SignUpResponse>
+
+
+    //<문자 인증>
+    //sms보내기
+    @POST("/sms")
+    fun signupSms(
+        @Body recipientPhoneNumber: SignUpSmsRequest
+    ): Call<SignUpSmsResponse>
+
+    //sms인증확인
+    @POST("/sms/verification")
+    fun verifySms(
+        @Body verifySmsRequest: VerifySmsRequest
+    ): Call<VerifySmsResponse>
+
 }
