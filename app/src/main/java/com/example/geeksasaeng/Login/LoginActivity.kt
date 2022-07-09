@@ -41,17 +41,20 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private var autoLoginEditor: SharedPreferences.Editor? = null
     private var getAutoLogin: SharedPreferences? = null
 
+    var autoJwt: String? = null
     var autoLoginid: String? = null
     var autoPassword: String? = null
 
     override fun initAfterBinding() {
         getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-        var autoJwt = getAutoLogin?.getString("jwt", null).toString()
-
-        Log.d("LOGIN-RESPONSE", "JWT = $autoJwt")
+        autoJwt = getAutoLogin?.getString("jwt", null).toString()
+        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
+        autoPassword = getAutoLogin?.getString("password", null).toString()
+4
+        Log.d("LOGIN-RESPONSE", "AUTO ID = " + autoLoginid + " / AUTO PWD = " + autoPassword)
 
         if (autoLoginid != null && autoPassword != null) {
-            // login(true)
+            login(true)
         }
 
         if (intent != null) {
@@ -96,9 +99,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         val editor = spf.edit()
 
         editor.putString("jwt", jwt)
+        editor?.putString("loginid", binding.loginIdEt.text.toString())
+        editor?.putString("password", binding.loginPwdEt.text.toString())
+
         editor.apply()
 
-        Log.d("LOGIN-RESPONSE", "jwt = $jwt")
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
     }
 
     private fun removeSP() {
@@ -112,10 +118,14 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         when(code) {
             1000 -> {
-                if (binding.loginAutologinCb.isChecked)
+                if (binding.loginAutologinCb.isChecked && binding.loginIdEt.text.isNotEmpty() && binding.loginPwdEt.text.isNotEmpty()) {
+                    Log.d("LOGIN-RESPONSE", "IF CHECK")
+                    removeSP()
                     saveSP(result.jwt)
-                else removeSP()
-
+                } else if (binding.loginAutologinCb.isChecked == false) {
+                    removeSP()
+                }
+                finish()
                 changeActivity(MainActivity::class.java)
             } else -> {
                 Toast.makeText(this, "LoginActivity-onLoginSuccess : Fail", Toast.LENGTH_SHORT).show()
@@ -127,6 +137,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Fail Code = $code")
 
         if (code == 2011) showToast(message)
+        else if (code == 2012) showToast(message)
         else if (code == 2400) showToast(message)
     }
 
@@ -196,18 +207,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun initClickListener() {
 
         binding.loginLoginBtn.setOnClickListener {
-            if (binding.loginAutologinCb.isChecked) {
-                // SharedPreferences 설정
-                autoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-                autoLoginEditor = autoLogin?.edit()
-
-                autoLoginEditor?.putString("loginid", binding.loginIdEt.text.toString())
-                autoLoginEditor?.putString("password", binding.loginPwdEt.text.toString())
-                autoLoginEditor?.commit()
-
-                Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
-            }
-
             login(false)
             // changeActivity(MainActivity::class.java)
         }
@@ -219,11 +218,14 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 override fun onSuccess() {
                     // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                     Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    removeSP()
+                    saveSP(NaverIdLoginSDK.getAccessToken().toString())
                     changeActivity(SignUpNaverActivity::class.java)
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                     val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    removeSP()
                     Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
                 }
                 override fun onError(errorCode: Int, message: String) {
