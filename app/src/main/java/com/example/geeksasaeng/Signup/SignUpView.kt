@@ -9,7 +9,7 @@ interface SignUpView {
 }
 
 interface SignUpSmsView {
-    fun onSignUpSmsSuccess(result: SignUpSmsResult)
+    fun onSignUpSmsSuccess(message: String)
     fun onSignUpSmsFailure(code:Int)
 }
 

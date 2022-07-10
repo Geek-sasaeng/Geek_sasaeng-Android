@@ -98,11 +98,13 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
             override fun afterTextChanged(s: Editable?) {
                 // text가 바뀔 때마다 호출된다.
-                val codepattern = Pattern.compile("^[0-9]{6}\$") //패턴 생성 (숫자로 이루어진 6자리를 조건으로 둠)
-                val macher = codepattern.matcher(binding.stepFourCheckEt.text.toString())
-                //조건이 맞으면 확인버튼 활성화, 안맞으면 비활성화 시키기
-                binding.stepFourPhoneCheckBtn.isEnabled = macher.matches()
-                Log.d("btnEnable", "확인버튼 : "+macher.matches().toString())
+                if (time != 0) {
+                    val codepattern = Pattern.compile("^[0-9]{6}\$") //패턴 생성 (숫자로 이루어진 6자리를 조건으로 둠)
+                    val macher = codepattern.matcher(binding.stepFourCheckEt.text.toString())
+                    //조건이 맞으면 확인버튼 활성화, 안맞으면 비활성화 시키기
+                    binding.stepFourPhoneCheckBtn.isEnabled = macher.matches()
+                    Log.d("btnEnable", "확인버튼 : " + macher.matches().toString())
+                }
             }
 
         })
@@ -197,6 +199,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 binding.stepFourCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
 
                 if (min == "00" && sec == "00"){
+                    Log.d("time", time.toString())
                     timerTask?.cancel()
                     binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepFourCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
@@ -222,8 +225,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     }
 
     //sms인증문자 보내기
-    override fun onSignUpSmsSuccess(result: SignUpSmsResult) {
-        Log.d("sms","SMS 요청에 성공했습니다.")
+    override fun onSignUpSmsSuccess(message: String) {
+        Log.d("sms",message)
     }
 
     override fun onSignUpSmsFailure(code: Int) {

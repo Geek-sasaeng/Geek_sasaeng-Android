@@ -63,6 +63,7 @@ class SignupDataService() {
     // sms 보내기
     fun signUpSmsSender(recipientPhoneNumber: SignUpSmsRequest) {
 
+        Log.d("sms-body", recipientPhoneNumber.toString())
         SignupDataService.signupSms(recipientPhoneNumber).enqueue(object:
             Callback<SignUpSmsResponse>{
             override fun onResponse(
@@ -71,10 +72,13 @@ class SignupDataService() {
             ) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("success", response.toString())
+                    Log.d("sms-response", response.toString())
+                    Log.d("sms-resp", resp.toString())
 
                     when (resp.code) {
-                        1001 -> signUpSmsView.onSignUpSmsSuccess(resp.result!!)
+                        1001 -> {
+                            signUpSmsView.onSignUpSmsSuccess(resp.message)
+                        }
                         else -> signUpSmsView.onSignUpSmsFailure(resp.code)
                     }
                 }
