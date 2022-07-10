@@ -3,7 +3,6 @@ package com.example.geeksasaeng.Signup.Retrofit
 import android.util.Log
 import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.NetworkModule
-import com.example.geeksasaeng.Signup.SignUpView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

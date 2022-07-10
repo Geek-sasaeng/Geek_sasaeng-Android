@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Login
+package com.example.geeksasaeng.Login.Retrofit
 
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 

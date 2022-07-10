@@ -29,7 +29,6 @@
         android:textColorHint="@color/gray_1"
         android:backgroundTint="@color/gray_1"
         android:fontFamily="@font/spoqa_medium"
-        android:inputType="textPassword"
         android:textSize="15sp"
         android:paddingLeft="13dp"
         android:paddingRight="10dp"
