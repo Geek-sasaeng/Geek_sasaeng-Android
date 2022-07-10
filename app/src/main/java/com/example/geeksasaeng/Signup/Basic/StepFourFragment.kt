@@ -262,10 +262,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     //인증번호 문자 보내는 작업
     private fun sendSms(){
         phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
-        if(getUuid()==null){ //uuid가 존재하지 않으면,
-            val uuid = UUID.randomUUID().toString() //uuid 생성
-            saveUuid(uuid) // sharedpref에 저장
-        }
         val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, getUuid().toString())
         Log.d("sms",phoneNumber.toString()+"/"+getUuid().toString()+"으로 문자 보냄")
         signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
