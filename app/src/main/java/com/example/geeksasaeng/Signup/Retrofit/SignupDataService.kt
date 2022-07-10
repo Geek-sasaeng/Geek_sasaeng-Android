@@ -69,19 +69,21 @@ class SignupDataService() {
                 call: Call<SignUpSmsResponse>,
                 response: Response<SignUpSmsResponse>
             ) {
-                //if (response.isSuccessful && response.code() == 200)TODO:이거 왜 필요한지
-                val resp = response.body()!!
-                Log.d("success",response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("success", response.toString())
 
-                when(resp.code) {
-                    200 -> signUpSmsView.onSignUpSmsSuccess(resp.result!!)
-                    else -> signUpSmsView.onSignUpSmsFailure(resp.code)
+                    when (resp.code) {
+                        1001 -> signUpSmsView.onSignUpSmsSuccess(resp.result!!)
+                        else -> signUpSmsView.onSignUpSmsFailure(resp.code)
+                    }
                 }
             }
 
             //통신자체가 안되면
             override fun onFailure(call: Call<SignUpSmsResponse>, t: Throwable) {
                 /*Log.d("hi",t.toString())*/
+                Log.d("SignUpSmsSender-RESP", "SignupDataService-onFailure : SignUpSmsFailed", t)
             }
         }
         )
@@ -96,12 +98,16 @@ class SignupDataService() {
                 call: Call<VerifySmsResponse>,
                 response: Response<VerifySmsResponse>
             ) {
-                val resp = response.body()!!
-                Log.d("success",response.toString())
 
-                when(resp.code) {
-                    1002 -> verifySmsView.onVerifySmsSuccess(resp.result!!) //TODO: 200이 OK던데 이게 성공이야? 1002:SMS인증에 성공했습니다. 이게 성공이야??
-                    else -> verifySmsView.onVerifySmsFailure(resp.code)
+                //TODO: 200이 OK던데 이게 성공이야? 1002:SMS인증에 성공했습니다. 이게 성공이야??
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("success", response.toString())
+
+                    when (resp.code) {
+                        1002 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
+                        else -> verifySmsView.onVerifySmsFailure(resp.code)
+                    }
                 }
             }
 

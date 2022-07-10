@@ -200,6 +200,12 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                     timerTask?.cancel()
                     binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepFourCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
+                    // 인증번호 입력 시간이 만료 되었으므로 클릭 못하게
+                    // TODO: 어떤 걸로 할지 정하기
+                    //<1> - 버튼 비활성화 상태로 만드는 방법
+                    binding.stepFourPhoneCheckBtn.isEnabled = false
+                    //<2> - 버튼 활성화 이미지인데, 클릭만 안되게 막는 방법
+                    //binding.stepFourPhoneCheckBtn.isClickable = false
                 }
             }
 
