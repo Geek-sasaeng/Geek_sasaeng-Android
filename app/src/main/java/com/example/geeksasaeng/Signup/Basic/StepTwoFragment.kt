@@ -40,8 +40,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         password = arguments?.getString("password")
 
         initClickListener()
-
-        getUuid(context as SignUpActivity)
     }
 
     private fun initClickListener() {
@@ -144,28 +142,17 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 //        return deviceUuid.toString()
 //    }
 
-    fun getDevicesUUID(mContext: Context): String? {
-        var tmDevice: String? = null
-        var tmSerial: String? = null
-        val androidId: String
-        val deviceUuid: UUID
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            deviceUuid = UUID.randomUUID() // UUID 대체코드
-        } else {
-            // 기존 UUID 로직
-            val tm = mContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            tmDevice = "" + tm.deviceId
-            tmSerial = "" + tm.simSerialNumber
-            androidId = "" + Settings.Secure.getString(
-                mContext.contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
-            deviceUuid = UUID(
-                androidId.hashCode().toLong(),
-                tmDevice.hashCode().toLong() shl 32 or tmSerial.hashCode()
-                    .toLong()
-            )
-        }
-        return deviceUuid.toString()
-    }
+//    //인증번호 문자 보내는 작업
+//    private fun sendSms(){
+//        email = binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
+//
+//        if (getUuid() == null){ //uuid가 존재하지 않으면,
+//            val uuid = UUID.randomUUID().toString() //uuid 생성
+//            saveUuid(uuid) // sharedpref에 저장
+//        }
+//
+//        val emailSendRequest = EmailSend(email!!, getUuid().toString())
+//        Log.d("sms",email.toString() + "/" + getUuid().toString()+"으로 문자 보냄")
+//        signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
+//    }
 }
