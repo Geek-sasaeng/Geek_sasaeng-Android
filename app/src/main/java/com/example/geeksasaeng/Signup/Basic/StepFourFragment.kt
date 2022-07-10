@@ -19,6 +19,8 @@ import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.SignUpSmsView
 import com.example.geeksasaeng.Signup.VerifySmsView
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
+import com.example.geeksasaeng.util.getUuid
+import com.example.geeksasaeng.util.saveUuid
 import java.text.DecimalFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -39,7 +41,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     private var timerTask : Timer? = null
 
     private lateinit var signUpService :SignupDataService
-    private val uuid = UUID.randomUUID().toString() //uuid //TODO:uuid해결하기★
 
     override fun onStart() {
         super.onStart()
@@ -86,6 +87,26 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
         })
 
+        binding.stepFourCheckEt.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // text가 변경된 후 호출
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // text가 변경되기 전 호출
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // text가 바뀔 때마다 호출된다.
+                val codepattern = Pattern.compile("^[0-9]{6}\$") //패턴 생성 (숫자로 이루어진 6자리를 조건으로 둠)
+                val macher = codepattern.matcher(binding.stepFourCheckEt.text.toString())
+                //조건이 맞으면 확인버튼 활성화, 안맞으면 비활성화 시키기
+                binding.stepFourPhoneCheckBtn.isEnabled = macher.matches()
+                Log.d("btnEnable", "확인버튼 : "+macher.matches().toString())
+            }
+
+        })
+
         //인증번호 전송 버튼
         binding.stepFourPhoneSendBtn.setOnClickListener {
             binding.stepFourCheckMsgTv.visibility = View.VISIBLE //몇초 남았어요 보이게 만들기
@@ -97,10 +118,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             binding.stepFourPhoneReSendBtn.visibility = View.VISIBLE
 
             //인증문자 보내는 작업
-            phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
-            val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, "uuid")
-            Log.d("sms",phoneNumber.toString()+"/"+uuid.toString()+"으로 문자 보냄")
-            signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
+            sendSms()
+
         }
 
         //재전송 하기 버튼
@@ -110,10 +129,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 resetTimer()
                 startTimer()
                 //인증문자 보내는 작업
-                phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
-                val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, "uuid")
-                Log.d("sms",phoneNumber.toString()+"/"+uuid.toString()+"으로 문자 보냄")
-                signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
+                sendSms()
             }else{
                 showToast("잠시 후에 다시 시도해주세요")
             }
@@ -167,6 +183,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             transaction.commit()
         }
     }
+
 
     // 타이머 작동
     private fun startTimer() {
@@ -231,6 +248,18 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기
             }
         }
+    }
+
+    //인증번호 문자 보내는 작업
+    private fun sendSms(){
+        phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
+        if(getUuid()==null){ //uuid가 존재하지 않으면,
+            val uuid = UUID.randomUUID().toString() //uuid 생성
+            saveUuid(uuid) // sharedpref에 저장
+        }
+        val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, getUuid().toString())
+        Log.d("sms",phoneNumber.toString()+"/"+getUuid().toString()+"으로 문자 보냄")
+        signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
     }
 
 
