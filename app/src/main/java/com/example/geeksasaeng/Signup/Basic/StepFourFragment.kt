@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.text.Editable
@@ -39,7 +40,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     private lateinit var signUpService :SignupDataService
     private val uuid = UUID.randomUUID().toString() //uuid //TODO:uuid해결하기★
-
 
     override fun onStart() {
         super.onStart()
@@ -99,6 +99,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             //인증문자 보내는 작업
             phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
             val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, "uuid")
+            Log.d("sms",phoneNumber.toString()+"/"+uuid.toString()+"으로 문자 보냄")
             signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
         }
 
@@ -108,6 +109,11 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             if(time<4900){ //10초가 지났으면
                 resetTimer()
                 startTimer()
+                //인증문자 보내는 작업
+                phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
+                val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, "uuid")
+                Log.d("sms",phoneNumber.toString()+"/"+uuid.toString()+"으로 문자 보냄")
+                signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
             }else{
                 showToast("잠시 후에 다시 시도해주세요")
             }

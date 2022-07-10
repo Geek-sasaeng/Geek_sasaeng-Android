@@ -18,7 +18,19 @@ class DialogSignUpPhoneSkip: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogSignupPhoneSkipBinding.inflate(inflater, container, false)
-
+        initListener()
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
+    }
+
+    private fun initListener(){
+        binding.signupOkBtn.setOnClickListener {
+            //건너뛰기 수행
+        }
+
+        binding.signupCancelBtn.setOnClickListener {
+            //건너뛰기 취소
+            this.dismiss()
+        }
     }
 }

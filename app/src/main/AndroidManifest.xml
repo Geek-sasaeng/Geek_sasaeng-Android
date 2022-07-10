@@ -33,9 +33,9 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity android:name=".Login.LoginActivity" />
-        <activity
+<!--        <activity
             android:name=".Signup.DialogSignUpPhoneSkip"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />-->
         <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
