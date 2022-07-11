@@ -37,6 +37,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     private fun initListener() {
 
         //TEXTWACTHER를 이용한 버튼 활성/비활성 작업
+        //아이디 TEXTWATCHER
         binding.stepOneIdEt.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // text가 변경된 후 호출
@@ -54,9 +55,36 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             }
         })
 
+        //비밀번호 TEXTWATCHER
+        binding.stepOnePasswordEt.addTextChangedListener(object :TextWatcher{
+            //TODO: 비밀번호에 한글 안쳐지게 막아야할 듯?
+            //TODO: 일단 TEXT바뀔때마다 VALIDATION검사하게했는데 , IOS는 TEXT입력 완료했을 때만 검사하기로 해두었대
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // text가 변경된 후 호출
 
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // text가 변경되기 전 호출
+            }
 
+            override fun afterTextChanged(s: Editable?) {
+                // text가 바뀔 때마다 호출된다.
+                // 조건: 숫자, 영어, 특수문자의 조합(하나 이상 포함), 공백 포함 불가
+                val pwRegex = """^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$)[A-Za-z\d!@#$%^+\-=]{8,}$"""
+                val pwPattern = Pattern.compile(pwRegex)
+                val macher = pwPattern.matcher(binding.stepOnePasswordEt.text.toString())
+                binding.stepOnePwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
+                if(macher.matches()){ //조건이 맞으면
+                    binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+                    binding.stepOnePwMsgTv.text = "사용가능한 비밀번호입니다"
+                }else{ //조건이 맞지 않으면
+                    binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                    binding.stepOnePwMsgTv.text = "문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
+                }
+                Log.d("pw", binding.stepOnePasswordEt.text.toString()+"는 조건 :"+macher.matches().toString())
+            }
+        })
 
 
         //아이디 중복확인 버튼
@@ -94,21 +122,21 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     override fun onSignUpIdCheckSuccess(message: String) {
         //사용가능한 아이디일 경우
         Log.d("CheckId", "사용가능한 아이디입니다")
-        binding.stepOneIdSuccessTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
-        binding.stepOneIdSuccessTv.text = message
-        binding.stepOneIdSuccessTv.visibility = View.VISIBLE // 보이게 만들기
+        binding.stepOneIdMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+        binding.stepOneIdMsgTv.text = message
+        binding.stepOneIdMsgTv.visibility = View.VISIBLE // 보이게 만들기
         Log.d(
             "CheckId",
-            binding.stepOneIdSuccessTv.text.toString() + "/" + binding.stepOneIdSuccessTv.visibility.toString()
+            binding.stepOneIdMsgTv.text.toString() + "/" + binding.stepOneIdMsgTv.visibility.toString()
         )
     }
     override fun onSignUpIdCheckFailure(code: Int) {
         when(code){
             2603->{ //존재하는 아이디일 경우
                 Log.d("CheckId", "존재하는 아이디입니다")
-                binding.stepOneIdSuccessTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
-                binding.stepOneIdSuccessTv.text = "존재하는 아이디입니다"
-                binding.stepOneIdSuccessTv.visibility = View.VISIBLE
+                binding.stepOneIdMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                binding.stepOneIdMsgTv.text = "존재하는 아이디입니다"
+                binding.stepOneIdMsgTv.visibility = View.VISIBLE
             }
             4000->{ //서버오류
                 Log.d("CheckId", "4000-서버오류입니다.")
