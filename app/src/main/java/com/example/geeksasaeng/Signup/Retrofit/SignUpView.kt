@@ -9,12 +9,12 @@ interface SignUpView {
 }
 
 interface SignUpEmailView {
-    fun onSignUpEmailSuccess(code : Int)
+    fun onSignUpEmailSuccess(message: String)
     fun onSignUpEmailFailure(code : Int, message : String)
 }
 
 interface VerifyEmailView {
-    fun onVerifyEmailSuccess(code: Int)
+    fun onVerifyEmailSuccess(message: String)
     fun onVerifyEmailFailure(code: Int, message: String)
 }
 

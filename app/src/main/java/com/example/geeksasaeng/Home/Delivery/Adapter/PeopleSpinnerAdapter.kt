@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import com.example.geeksasaeng.R
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,7 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) :
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
             val rootView: View = LayoutInflater.from(context)
-                .inflate(R.layout.item_spinner, viewGroup, false)
+                .inflate(R.layout.item_delivery_people_spinner, viewGroup, false)
             val textName: TextView = rootView.findViewById(R.id.spinner_text)
             val image: ImageView = rootView.findViewById(R.id.arrow_iv)
             //TODO:일단 이게 맞나 싶긴 한데,,

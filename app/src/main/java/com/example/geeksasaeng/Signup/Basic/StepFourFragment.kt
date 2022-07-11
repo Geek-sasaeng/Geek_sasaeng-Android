@@ -1,10 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,7 +14,6 @@ import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.example.geeksasaeng.util.getUuid
-import com.example.geeksasaeng.util.saveUuid
 import java.text.DecimalFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -264,6 +259,4 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         Log.d("sms",phoneNumber.toString()+"/"+getUuid().toString()+"으로 문자 보냄")
         signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
     }
-
-
 }

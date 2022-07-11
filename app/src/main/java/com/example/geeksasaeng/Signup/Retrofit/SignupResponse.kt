@@ -43,7 +43,7 @@ data class VerifyEmailResponse(
 
 data class VerifyEmailRequest(
     @SerializedName("email") val email : String,
-    @SerializedName("key") val key : Int
+    @SerializedName("key") val key : String
 )
 
 //sms 보내기
@@ -82,4 +82,3 @@ data class VerifySmsRequest(
     @SerializedName("recipientPhoneNumber") val recipientPhoneNumber : String,
     @SerializedName("verifyRandomNumber") val verifyRandomNumber : String
 )
-

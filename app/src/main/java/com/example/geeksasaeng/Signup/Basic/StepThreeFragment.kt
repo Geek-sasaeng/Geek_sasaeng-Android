@@ -6,12 +6,17 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Retrofit.SignUpEmailRequest
+import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
+import com.example.geeksasaeng.Signup.Retrofit.VerifyEmailRequest
+import com.example.geeksasaeng.Signup.Retrofit.VerifyEmailView
 import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
+import com.example.geeksasaeng.util.getUuid
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.concurrent.timer
 
-class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate) {
+class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate), VerifyEmailView {
 
     var checkPassword: String? = ""
     var loginId: String? = ""
@@ -21,6 +26,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     var universityName: String? = ""
 
     private val progressVM: ProgressViewModel by activityViewModels()
+
+    private lateinit var signUpService : SignupDataService
 
     private var time = 5000
     private var timerTask : Timer? = null
@@ -37,6 +44,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         email = arguments?.getString("email")
         universityName = arguments?.getString("universityName")
 
+        signUpService = SignupDataService() //서비스 객체 생성
+        signUpService.setVerifyEmailView(this@StepThreeFragment)
+
         initClickListener()
     }
 
@@ -47,6 +57,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         }
 
         binding.stepThreeNextBtn.setOnClickListener {
+            // 이메일 번호 인증
+            verifyEmail()
+
             timerTask?.cancel()
 
             val transaction: FragmentTransaction =
@@ -99,5 +112,27 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
         time = 5000
         binding.stepThreeCheckMsgTv.text = "05분 00초 남았어요"
+    }
+
+    private fun verifyEmail() {
+        val verifyEmailRequest = VerifyEmailRequest("wlals2987@gachon.ac.kr", binding.stepThreeCheckEt.text.toString())
+        Log.d("EMAIL-RESPONSE", "wlals2987@gachon.ac.kr " + binding.stepThreeCheckEt.text.toString())
+        signUpService.verifyEmailSender(verifyEmailRequest)
+    }
+
+    override fun onVerifyEmailSuccess(message: String) {
+        Log.d("EMAIL-RESPONSE", "Success = " + message)
+    }
+
+    override fun onVerifyEmailFailure(code: Int, message: String) {
+        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
+        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Message = $message")
+
+        showToast("code = ${code} / message = ${message}")
+
+//        when(code){
+//            // 2801 : 유효하지 않은 인증번호
+//            2801 -> showToast(message)
+//        }
     }
 }

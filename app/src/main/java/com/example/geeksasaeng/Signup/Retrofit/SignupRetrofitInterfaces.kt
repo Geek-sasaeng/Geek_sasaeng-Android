@@ -13,19 +13,18 @@ interface SignupRetrofitInterfaces {
     // <이메일 인증>
     // 이메일 전송
     @POST("/members/email")
-    fun signupEmail(@Body signupEmailRequest: SignUpEmailRequest): Call<SignUpEmailRequest>
+    fun signupEmail(@Body signupEmailRequest: SignUpEmailRequest): Call<SignUpEmailResponse>
 
     // 이메일 인증 확인
     @POST("/members/email/check")
-    fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<VerifyEmailRequest>
+    fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<VerifyEmailResponse>
 
-    //<문자 인증>
+    // <문자 인증>
     //sms보내기
     @POST("/sms")
     fun signupSms(@Body recipientPhoneNumber: SignUpSmsRequest): Call<SignUpSmsResponse>
 
-    //sms인증확인
+    // sms인증확인
     @POST("/sms/verification")
     fun verifySms(@Body verifySmsRequest: VerifySmsRequest): Call<VerifySmsResponse>
-
 }

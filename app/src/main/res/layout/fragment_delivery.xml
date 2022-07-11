@@ -34,7 +34,7 @@
         android:layout_marginLeft="15dp"
         android:background="@drawable/spinner_outline_unclicked"
         android:popupBackground="@drawable/spinner_outline_clicked"
-        tools:listitem="@layout/item_spinner"
+        tools:listitem="@layout/item_delivery_people_spinner"
         android:spinnerMode="dropdown"
         android:entries="@array/home_dropdown1"
         app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
