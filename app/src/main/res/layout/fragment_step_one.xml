@@ -170,21 +170,9 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <!--비밀번호 확인 밑-->
-    <TextView
-        android:id="@+id/step_one_check_pw_success_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="사용 가능한 비밀번호입니다"
-        android:textColor="@color/main"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/step_one_check_pw_fail_tv"
+        android:id="@+id/step_one_check_pw_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="비밀번호를 다시 확인해주세요"
@@ -207,7 +195,7 @@
         android:textSize="18sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_pw_success_tv" />
+        app:layout_constraintTop_toBottomOf="@id/step_one_check_pw_msg_tv" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

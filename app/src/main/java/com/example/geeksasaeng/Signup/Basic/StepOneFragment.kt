@@ -86,6 +86,29 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             }
         })
 
+        //비밀번호 확인 TEXTWATCHER
+        binding.stepOneCheckPasswordEt.addTextChangedListener(object :TextWatcher{
+            //TODO: 일단 TEXT바뀔때마다 VALIDATION검사하게했는데 , IOS는 TEXT입력 완료했을 때만 검사하기로 해두었대
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // text가 변경된 후 호출
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // text가 변경되기 전 호출
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                Log.d("pw", binding.stepOnePasswordEt.text.toString() +":"+binding.stepOneCheckPasswordEt.text.toString())
+                // text가 바뀔 때마다 호출된다.
+                if(binding.stepOnePasswordEt.text.toString()!=binding.stepOneCheckPasswordEt.text.toString()){ //일치하지 않으면,
+                    binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
+                }else{ // 비밀번호 일치하면,
+                    binding.stepOneCheckPwMsgTv.visibility = View.INVISIBLE // 비밀번호 밑에 안내창 안 보이게하기
+                }
+            }
+        })
+
 
         //아이디 중복확인 버튼
         binding.stepOneIdCheckBtn.setOnClickListener {
