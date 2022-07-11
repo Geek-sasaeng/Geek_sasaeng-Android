@@ -4,19 +4,18 @@ import android.util.Log
 import com.example.geeksasaeng.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.NetworkModule
-import com.example.geeksasaeng.Signup.SignUpSmsView
-import com.example.geeksasaeng.Signup.SignUpView
-import com.example.geeksasaeng.Signup.VerifySmsView
+import com.example.geeksasaeng.Signup.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.sign
 
 class SignupDataService() {
 
     lateinit var signup: Signup
 
+    //뷰 객체 생성
     private lateinit var signUpView: SignUpView
+    private lateinit var signUpIdCheckView : SignUpIdCheckView
     private lateinit var signUpSmsView: SignUpSmsView
     private lateinit var verifySmsView: VerifySmsView
 
@@ -24,6 +23,10 @@ class SignupDataService() {
 
     fun setSignUpView(signUpView: SignUpView) {
         this.signUpView = signUpView
+    }
+
+    fun setSignUpIdCheckView(signUpIdCheckView: SignUpIdCheckView){
+        this.signUpIdCheckView = signUpIdCheckView
     }
 
     fun setSignUpSmsView(signUpSmsView: SignUpSmsView){
@@ -59,12 +62,47 @@ class SignupDataService() {
             }
         })
     }
+    // 아이디 중복확인
+    fun signUpIdCheckSender(loginId: SignUpIdCheckRequest){
+        SignupDataService.signupIdCheck(loginId).enqueue(object:
+            Callback<SignUpIdCheckResponse>{
+            override fun onResponse(
+                call: Call<SignUpIdCheckResponse>,
+                response: Response<SignUpIdCheckResponse>
+            ) {
+
+                Log.d("CheckId", "response: " +response.toString())
+                val resp: SignUpIdCheckResponse = response.body()!!
+                Log.d("CheckId", "resp: " +resp.toString())
+                Log.d("CheckId", response.code().toString()+"발생함")
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp: SignUpIdCheckResponse = response.body()!!
+
+                    when (resp.code) {
+                        2604-> {
+                            signUpIdCheckView.onSignUpIdCheckSuccess(resp.message)
+                        }
+                        else -> signUpIdCheckView.onSignUpIdCheckFailure(resp.code)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<SignUpIdCheckResponse>, t: Throwable) {
+                Log.d("SignUpIdCheckSender", "SignupDataService-onFailure : SignUpIdCheckSmsFailed", t)
+            }
+
+        }
+        )
+    }
+
+
 
     // sms 보내기
-    fun signUpSmsSender(recipientPhoneNumber: SignUpSmsRequest) {
+    fun signUpSmsSender(signUpSmsReq: SignUpSmsRequest) {
 
-        Log.d("sms-body", recipientPhoneNumber.toString())
-        SignupDataService.signupSms(recipientPhoneNumber).enqueue(object:
+        Log.d("sms-body", signUpSmsReq.toString())
+        SignupDataService.signupSms(signUpSmsReq).enqueue(object:
             Callback<SignUpSmsResponse>{
             override fun onResponse(
                 call: Call<SignUpSmsResponse>,

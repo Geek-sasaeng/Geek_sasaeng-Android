@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="25dp"
+        android:fontFamily="@font/spoqa_medium"
         android:text="아이디"
-        android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +36,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="6-20자 영문+숫자로 입력"
+            android:maxLength="20"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
@@ -47,24 +49,26 @@
             android:layout_marginRight="14dp"
             android:layout_marginLeft="27dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_one_id_check_tv"
+            app:layout_constraintEnd_toStartOf="@id/step_one_id_check_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_one_id_check_tv"
+            android:id="@+id/step_one_id_check_btn"
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:text="중복 확인"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/step_one_id_et"
+            app:layout_constraintBottom_toBottomOf="@id/step_one_id_et"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +82,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_id"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -100,11 +104,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="15dp"
         android:text="비밀번호"
+        android:fontFamily="@font/spoqa_medium"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_one_id_success_tv" />
 
@@ -138,7 +142,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_password_et"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -160,11 +164,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="15dp"
         android:text="비밀번호 확인"
+        android:fontFamily="@font/spoqa_medium"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_one_pw_success_tv" />
 
@@ -198,7 +202,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -211,23 +215,23 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <TextView
         android:id="@+id/step_one_nickname_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/spoqa_medium"
         android:text="닉네임"
-        android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_one_check_pw_success_tv" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/step_one_nickname"
@@ -245,6 +249,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="3-15자 영문 혹은 한글로 입력"
+            android:maxLength="15"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
@@ -267,11 +273,12 @@
             android:text="중복 확인"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -287,7 +294,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -300,7 +307,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
         app:layout_constraintStart_toStartOf="parent" />
 
