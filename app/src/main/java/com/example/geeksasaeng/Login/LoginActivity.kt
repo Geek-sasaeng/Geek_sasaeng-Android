@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Data.Signup
-import com.example.geeksasaeng.DormitoryActivity
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView
@@ -180,7 +179,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 } else {
                     binding.loginLoginBtn.isClickable = false;
                     binding.loginLoginBtn.isClickable = true;
-                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray);
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
             }
@@ -200,7 +199,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 } else {
                     binding.loginLoginBtn.isClickable = false;
                     binding.loginLoginBtn.isClickable = true;
-                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray);
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
             }

@@ -21,15 +21,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/step_two_school_et"
+        android:id="@+id/step_two_school_sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/round_border"
-        android:popupBackground="@drawable/round_border"
-        android:backgroundTint="@color/gray_1"
-        tools:listitem="@layout/item_delivery_people_spinner"
+        android:layout_height="40dp"
+        android:background="@drawable/round_border_button_gray1"
+        android:popupBackground="@drawable/round_border_button_gray1"
+        tools:listitem="@layout/item_signup_university_spinner"
+        android:elevation="0dp"
         android:spinnerMode="dropdown"
-        android:entries="@array/home_dropdown1"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
@@ -67,8 +66,7 @@
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_two_school_et"
-        />
+        app:layout_constraintTop_toBottomOf="@id/step_two_school_sp" />
 
     <EditText
         android:id="@+id/step_two_email_et"
