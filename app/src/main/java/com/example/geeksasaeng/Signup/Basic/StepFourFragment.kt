@@ -141,7 +141,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         //인증번호 확인 버튼
         binding.stepFourPhoneCheckBtn.setOnClickListener {
 
-             //인증번호 확인 작업
+            //인증번호 확인 작업
             val code = binding.stepFourCheckEt.text.toString() //사용자가 입력한 인증번호 가져오기
             val verifySmsRequest= VerifySmsRequest(phoneNumber!!, code)
             signUpService.VerifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기

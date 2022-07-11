@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="25dp"
+        android:fontFamily="@font/spoqa_medium"
         android:text="아이디"
-        android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,10 +36,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="6-20자 영문+숫자로 입력"
+            android:maxLength="20"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
-            android:fontFamily="@font/spoqa_medium"
+            android:fontFamily="@font/spoqa_regular"
             android:textSize="15sp"
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
@@ -47,30 +49,32 @@
             android:layout_marginRight="14dp"
             android:layout_marginLeft="27dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_one_id_check_tv"
+            app:layout_constraintEnd_toStartOf="@id/step_one_id_check_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_one_id_check_tv"
+            android:id="@+id/step_one_id_check_btn"
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:text="중복 확인"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/step_one_id_et"
+            app:layout_constraintBottom_toBottomOf="@id/step_one_id_et"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--아이디 밑-->
     <TextView
-        android:id="@+id/step_one_id_success_tv"
+        android:id="@+id/step_one_id_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용 가능한 아이디입니다"
@@ -78,35 +82,23 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_id"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/step_one_id_fail_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="중복된 아이디입니다"
-        android:textColor="@color/error"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/step_one_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="20dp"
         android:text="비밀번호"
+        android:fontFamily="@font/spoqa_medium"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_id_success_tv" />
+        app:layout_constraintTop_toBottomOf="@id/step_one_id_msg_tv" />
 
     <EditText
         android:id="@+id/step_one_password_et"
@@ -116,7 +108,7 @@
         android:textColor="@color/black"
         android:textColorHint="@color/gray_1"
         android:backgroundTint="@color/gray_1"
-        android:fontFamily="@font/spoqa_medium"
+        android:fontFamily="@font/spoqa_regular"
         android:inputType="textPassword"
         android:textSize="15sp"
         android:paddingLeft="13dp"
@@ -130,7 +122,7 @@
 
     <!--비밀번호 밑-->
     <TextView
-        android:id="@+id/step_one_pw_success_tv"
+        android:id="@+id/step_one_pw_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용 가능한 비밀번호입니다"
@@ -138,35 +130,24 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_password_et"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/step_one_pw_fail_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="문자,숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
-        android:textColor="@color/error"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_password_et"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
     <TextView
         android:id="@+id/step_one_check_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="20dp"
         android:text="비밀번호 확인"
+        android:fontFamily="@font/spoqa_medium"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_pw_success_tv" />
+        app:layout_constraintTop_toBottomOf="@id/step_one_pw_msg_tv" />
 
     <EditText
         android:id="@+id/step_one_check_password_et"
@@ -177,7 +158,7 @@
         android:textColorHint="@color/gray_1"
         android:inputType="textPassword"
         android:backgroundTint="@color/gray_1"
-        android:fontFamily="@font/spoqa_medium"
+        android:fontFamily="@font/spoqa_regular"
         android:textSize="15sp"
         android:paddingLeft="13dp"
         android:paddingRight="10dp"
@@ -189,21 +170,9 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <!--비밀번호 확인 밑-->
-    <TextView
-        android:id="@+id/step_one_check_pw_success_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="사용 가능한 비밀번호입니다"
-        android:textColor="@color/main"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/step_one_check_pw_fail_tv"
+        android:id="@+id/step_one_check_pw_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="비밀번호를 다시 확인해주세요"
@@ -211,7 +180,7 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_check_password_et"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -220,13 +189,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="20dp"
         android:text="닉네임"
+        android:fontFamily="@font/spoqa_medium"
         android:textSize="18sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_one_check_pw_success_tv" />
+        app:layout_constraintTop_toBottomOf="@id/step_one_check_pw_msg_tv" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -245,10 +214,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="3-15자 영문 혹은 한글로 입력"
+            android:maxLength="15"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
-            android:fontFamily="@font/spoqa_medium"
+            android:fontFamily="@font/spoqa_regular"
             android:textSize="15sp"
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
@@ -267,11 +238,12 @@
             android:text="중복 확인"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -279,7 +251,7 @@
 
     <!--닉네임 밑-->
     <TextView
-        android:id="@+id/step_one_nickname_success_tv"
+        android:id="@+id/step_one_nickname_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용 가능한 닉네임입니다"
@@ -287,22 +259,10 @@
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="40dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/step_one_nickname_fail_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="중복된 닉네임입니다"
-        android:textColor="@color/error"
-        android:textSize="13dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:layout_marginStart="40dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/step_one_nickname"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/step_one_next_btn"
