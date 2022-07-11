@@ -46,6 +46,38 @@ data class VerifyEmailRequest(
     @SerializedName("key") val key : String
 )
 
+//아이디 중복 체크
+data class SignUpIdCheckResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: SignUpIdCheckResult?
+)
+
+data class SignUpIdCheckResult(
+    @SerializedName("result") val result: String
+)
+
+data class SignUpIdCheckRequest(
+    @SerializedName("loginId") val loginId : String
+)
+
+//닉네임 중복 체크
+data class SignUpNickCheckResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: SignUpNickCheckResult?
+)
+
+data class SignUpNickCheckResult(
+    @SerializedName("result") val result: String
+)
+
+data class SignUpNickCheckRequest(
+    @SerializedName("nickName") val nickName : String
+)
+
 //sms 보내기
 data class SignUpSmsResponse(
     @SerializedName("isSuccess") val isSuccess : Boolean,

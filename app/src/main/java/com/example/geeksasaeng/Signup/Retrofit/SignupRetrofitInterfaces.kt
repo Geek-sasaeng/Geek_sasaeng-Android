@@ -18,6 +18,17 @@ interface SignupRetrofitInterfaces {
     // 이메일 인증 확인
     @POST("/members/email/check")
     fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<VerifyEmailResponse>
+    //<아이디 중복 확인>
+    @POST("/members/id-duplicated")
+    fun signupIdCheck(
+        @Body loginId : SignUpIdCheckRequest
+    ): Call<SignUpIdCheckResponse>
+
+    //<닉네임 중복 확인>
+    @POST("/members/nickname-duplicated")
+    fun signupNickCheck(
+        @Body nickName : SignUpNickCheckRequest
+    ): Call<SignUpNickCheckResponse>
 
     // <문자 인증>
     //sms보내기
