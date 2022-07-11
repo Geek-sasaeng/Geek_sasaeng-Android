@@ -16,8 +16,6 @@ import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Signup.Retrofit.*
-import com.example.geeksasaeng.Signup.SignUpSmsView
-import com.example.geeksasaeng.Signup.VerifySmsView
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.example.geeksasaeng.util.getUuid
 import com.example.geeksasaeng.util.saveUuid
@@ -144,7 +142,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
              //인증번호 확인 작업
             val code = binding.stepFourCheckEt.text.toString() //사용자가 입력한 인증번호 가져오기
             val verifySmsRequest= VerifySmsRequest(phoneNumber!!, code)
-            signUpService.VerifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기
+            signUpService.verifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기
         }
 
         //건너뛰기 버튼

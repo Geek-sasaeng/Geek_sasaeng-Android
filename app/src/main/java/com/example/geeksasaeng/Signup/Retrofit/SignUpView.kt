@@ -8,6 +8,16 @@ interface SignUpView {
     fun onSignUpFailure()
 }
 
+interface SignUpEmailView {
+    fun onSignUpEmailSuccess(code : Int)
+    fun onSignUpEmailFailure(code : Int, message : String)
+}
+
+interface VerifyEmailView {
+    fun onVerifyEmailSuccess(code: Int)
+    fun onVerifyEmailFailure(code: Int, message: String)
+}
+
 interface SignUpSmsView {
     fun onSignUpSmsSuccess(message: String)
     fun onSignUpSmsFailure(code:Int)

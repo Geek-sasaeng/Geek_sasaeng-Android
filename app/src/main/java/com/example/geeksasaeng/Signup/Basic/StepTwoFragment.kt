@@ -1,21 +1,14 @@
 package com.example.geeksasaeng.Signup.Basic
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Data.EmailSend
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpEmailCheck
-import com.example.geeksasaeng.Signup.Email.EmailDataService
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
-import java.util.*
 
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate) {
@@ -86,13 +79,52 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         }
     }
 
-    private fun sendEmail() {
-        val emailSendDataService = EmailDataService()
-        // emailSendDataService.setEmailView(this)
-        emailSendDataService.emailSend(EmailSend(binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString(), binding.stepTwoSchoolEt.text.toString(), uuid))
+//    private fun sendEmail() {
+//        val emailSendDataService = EmailDataService()
+//        emailSendDataService.setEmailView(this@StepTwoFragment)
+//        emailSendDataService.emailSend(EmailSend(binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString(), binding.stepTwoSchoolEt.text.toString(), uuid))
+//
+//        Log.d("EMAIL-RESPONSE", "StepTwoFragment-sendEmail : Send Email Check")
+//    }
+//
+//    //인증번호 문자 보내는 작업
+//    private fun sendSms(){
+//        phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
+//        val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, getUuid().toString())
+//        Log.d("sms",phoneNumber.toString()+"/"+ getUuid().toString()+"으로 문자 보냄")
+//        signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
+//    }
 
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment-sendEmail : Send Email Check")
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    override fun onEmailSendSuccess(code : Int , result: LoginResult) {
 ////        when(code) {

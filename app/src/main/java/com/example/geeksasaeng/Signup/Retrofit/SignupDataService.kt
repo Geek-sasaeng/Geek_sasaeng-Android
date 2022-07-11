@@ -2,21 +2,20 @@ package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.ApplicationClass.Companion.retrofit
+import com.example.geeksasaeng.Data.EmailCheck
 import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.NetworkModule
-import com.example.geeksasaeng.Signup.SignUpSmsView
-import com.example.geeksasaeng.Signup.SignUpView
-import com.example.geeksasaeng.Signup.VerifySmsView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.sign
 
 class SignupDataService() {
 
     lateinit var signup: Signup
 
     private lateinit var signUpView: SignUpView
+    private lateinit var signUpEmailView: SignUpEmailView
+    private lateinit var verifyEmailView: VerifyEmailView
     private lateinit var signUpSmsView: SignUpSmsView
     private lateinit var verifySmsView: VerifySmsView
 
@@ -24,6 +23,14 @@ class SignupDataService() {
 
     fun setSignUpView(signUpView: SignUpView) {
         this.signUpView = signUpView
+    }
+
+    fun setSignUpEmailView() {
+        this.signUpEmailView = signUpEmailView
+    }
+
+    fun setVerifyEmailView() {
+        this.verifyEmailView = verifyEmailView
     }
 
     fun setSignUpSmsView(signUpSmsView: SignUpSmsView){
@@ -60,16 +67,61 @@ class SignupDataService() {
         })
     }
 
+    // email 보내기
+    fun signUpEmailSender(signupEmailRequest: SignUpEmailRequest) {
+        SignupDataService.signupEmail(signupEmailRequest).enqueue(object : Callback<SignUpEmailResponse> {
+            override fun onResponse(call: Call<SignUpEmailResponse>, response: Response<SignUpEmailResponse>) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.code = " + response.code())
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val emailResponse: SignUpEmailResponse = response.body()!!
+                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
+
+                    when (emailResponse.code) {
+                        2802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.code)
+                        // 2803 : 유효하지 않은 인증번호 | 2804 : 이메일 인증 최대 10회 오류 | 2805 : 재시도
+                        2803, 2804, 2805 -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<SignUpEmailResponse>, t: Throwable) {
+                //실패처리
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
+            }
+        })
+    }
+
+    // email 인증확인
+    fun verifyEmailSender(verifyEmailRequest: VerifyEmailRequest) {
+        SignupDataService.verifyEmail(verifyEmailRequest).enqueue(object : Callback<VerifyEmailResponse> {
+            override fun onResponse(call: Call<VerifyEmailResponse>, response: Response<VerifyEmailResponse>) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.code = " + response.code())
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val emailResponse: VerifyEmailResponse = response.body()!!
+                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
+
+                    when (emailResponse.code) {
+                        2800 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.code)
+                        // 2803 : 유효하지 않은 인증번호
+                        2803 -> verifyEmailView.onVerifyEmailFailure(emailResponse.code, emailResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<VerifyEmailResponse>, t: Throwable) {
+                //실패처리
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
+            }
+        })
+    }
+    
     // sms 보내기
     fun signUpSmsSender(recipientPhoneNumber: SignUpSmsRequest) {
-
         Log.d("sms-body", recipientPhoneNumber.toString())
-        SignupDataService.signupSms(recipientPhoneNumber).enqueue(object:
-            Callback<SignUpSmsResponse>{
-            override fun onResponse(
-                call: Call<SignUpSmsResponse>,
-                response: Response<SignUpSmsResponse>
-            ) {
+        SignupDataService.signupSms(recipientPhoneNumber).enqueue(object : Callback<SignUpSmsResponse> {
+            override fun onResponse(call: Call<SignUpSmsResponse>, response: Response<SignUpSmsResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     Log.d("sms-response", response.toString())
@@ -94,8 +146,7 @@ class SignupDataService() {
     }
 
     // sms 인증확인
-    fun VerifySmsSender(verifySmsRequest: VerifySmsRequest) {
-
+    fun verifySmsSender(verifySmsRequest: VerifySmsRequest) {
         SignupDataService.verifySms(verifySmsRequest).enqueue(object:
             Callback<VerifySmsResponse>{
             override fun onResponse(
