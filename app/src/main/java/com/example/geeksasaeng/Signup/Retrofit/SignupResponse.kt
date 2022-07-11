@@ -37,6 +37,21 @@ data class SignUpIdCheckRequest(
     @SerializedName("loginId") val loginId : String
 )
 
+//닉네임 중복 체크
+data class SignUpNickCheckResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: SignUpNickCheckResult?
+)
+
+data class SignUpNickCheckResult(
+    @SerializedName("result") val result: String
+)
+
+data class SignUpNickCheckRequest(
+    @SerializedName("nickName") val nickName : String
+)
 
 //sms 보내기
 data class SignUpSmsResponse(

@@ -15,6 +15,12 @@ interface SignupRetrofitInterfaces {
         @Body loginId : SignUpIdCheckRequest
     ): Call<SignUpIdCheckResponse>
 
+    //<닉네임 중복 확인>
+    @POST("/members/nickname-duplicated")
+    fun signupNickCheck(
+        @Body nickName : SignUpNickCheckRequest
+    ): Call<SignUpNickCheckResponse>
+
     //<문자 인증>
     //sms보내기
     @POST("/sms")

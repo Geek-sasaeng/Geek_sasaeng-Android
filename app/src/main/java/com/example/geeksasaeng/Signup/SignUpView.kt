@@ -14,6 +14,11 @@ interface SignUpIdCheckView{
     fun onSignUpIdCheckFailure(code:Int)
 }
 
+//아이디 중복확인
+interface SignUpNickCheckView{
+    fun onSignUpNickCheckSuccess(message: String)
+    fun onSignUpNickCheckFailure(code:Int)
+}
 
 //SMS문자인증 보내기
 interface SignUpSmsView {

@@ -16,17 +16,23 @@ class SignupDataService() {
     //뷰 객체 생성
     private lateinit var signUpView: SignUpView
     private lateinit var signUpIdCheckView : SignUpIdCheckView
+    private lateinit var signUpNickCheckView: SignUpNickCheckView
     private lateinit var signUpSmsView: SignUpSmsView
     private lateinit var verifySmsView: VerifySmsView
 
     private val SignupDataService = retrofit.create(SignupRetrofitInterfaces::class.java)
 
+    //setView
     fun setSignUpView(signUpView: SignUpView) {
         this.signUpView = signUpView
     }
 
     fun setSignUpIdCheckView(signUpIdCheckView: SignUpIdCheckView){
         this.signUpIdCheckView = signUpIdCheckView
+    }
+
+    fun setSignUpNickCheckView(signUpNickCheckView: SignUpNickCheckView){
+        this.signUpNickCheckView = signUpNickCheckView
     }
 
     fun setSignUpSmsView(signUpSmsView: SignUpSmsView){
@@ -37,6 +43,7 @@ class SignupDataService() {
         this.verifySmsView = verifySmsView
     }
 
+    //회원가입
     fun signUp(user: Signup) {
         val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)
 
@@ -62,6 +69,7 @@ class SignupDataService() {
             }
         })
     }
+
     // 아이디 중복확인
     fun signUpIdCheckSender(loginId: SignUpIdCheckRequest){
         SignupDataService.signupIdCheck(loginId).enqueue(object:
@@ -87,9 +95,43 @@ class SignupDataService() {
                     }
                 }
             }
-
+            //통신 실패
             override fun onFailure(call: Call<SignUpIdCheckResponse>, t: Throwable) {
                 Log.d("SignUpIdCheckSender", "SignupDataService-onFailure : SignUpIdCheckSmsFailed", t)
+            }
+
+        }
+        )
+    }
+
+
+    // 닉네임 중복확인
+    fun signUpNickCheckSender(signUpNickRequest: SignUpNickCheckRequest){
+        SignupDataService.signupNickCheck(signUpNickRequest).enqueue(object:
+            Callback<SignUpNickCheckResponse>{
+            override fun onResponse(
+                call: Call<SignUpNickCheckResponse>,
+                response: Response<SignUpNickCheckResponse>
+            ) {
+                Log.d("CheckNick", "response: " +response.toString())
+                val resp: SignUpNickCheckResponse = response.body()!!
+                Log.d("CheckNick", "resp: " +resp.toString())
+                Log.d("CheckNick", response.code().toString()+"발생함")
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp: SignUpNickCheckResponse = response.body()!!
+
+                    when (resp.code) {
+                        1202-> {
+                            signUpNickCheckView.onSignUpNickCheckSuccess(resp.message)
+                        }
+                        else -> signUpNickCheckView.onSignUpNickCheckFailure(resp.code)
+                    }
+                }
+            }
+            //통신 실패
+            override fun onFailure(call: Call<SignUpNickCheckResponse>, t: Throwable) {
+                TODO("Not yet implemented")
             }
 
         }

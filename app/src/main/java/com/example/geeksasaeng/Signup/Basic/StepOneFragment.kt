@@ -14,11 +14,12 @@ import com.example.geeksasaeng.Signup.Retrofit.SignUpIdCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.VerifySmsRequest
 import com.example.geeksasaeng.Signup.SignUpIdCheckView
+import com.example.geeksasaeng.Signup.SignUpNickCheckView
 import com.example.geeksasaeng.databinding.FragmentStepOneBinding
 import com.navercorp.nid.oauth.NidOAuthPreferencesManager.code
 import java.util.regex.Pattern
 
-class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView {
+class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView, SignUpNickCheckView {
 
     private val progressVM: ProgressViewModel by activityViewModels()
     private lateinit var signUpService : SignupDataService //아이디, 닉네임 중복확인용
@@ -26,11 +27,11 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     override fun onStart() {
         super.onStart()
         signUpService = SignupDataService() // 서비스 객체 생성
-        signUpService.setSignUpIdCheckView(this@StepOneFragment)//뷰 연결
+        signUpService.setSignUpIdCheckView(this@StepOneFragment)//아이디 중복확인 뷰 연결
+        signUpService.setSignUpNickCheckView(this@StepOneFragment)//닉네임 중복확인 뷰 연결
     }
     override fun initAfterBinding() {
         progressVM.increase()
-
         initListener()
     }
 
@@ -141,7 +142,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
         }
     }
 
-    //아이디 중복확인
+    //아이디 중복확인 결과
     override fun onSignUpIdCheckSuccess(message: String) {
         //사용가능한 아이디일 경우
         Log.d("CheckId", "사용가능한 아이디입니다")
@@ -156,13 +157,36 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     override fun onSignUpIdCheckFailure(code: Int) {
         when(code){
             2603->{ //존재하는 아이디일 경우
-                Log.d("CheckId", "존재하는 아이디입니다")
+                Log.d("CheckId", "중복된 아이디입니다")
                 binding.stepOneIdMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
-                binding.stepOneIdMsgTv.text = "존재하는 아이디입니다"
+                binding.stepOneIdMsgTv.text = "중복된 아이디입니다"
                 binding.stepOneIdMsgTv.visibility = View.VISIBLE
             }
             4000->{ //서버오류
                 Log.d("CheckId", "4000-서버오류입니다.")
+            }
+        }
+    }
+
+    //닉네임 중복확인 결과
+    override fun onSignUpNickCheckSuccess(message: String) {
+        //사용가능한 닉네임일 경우
+        Log.d("CheckNick", "사용가능한 닉네임입니다")
+        binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+        binding.stepOneNicknameMsgTv.text = message
+        binding.stepOneNicknameMsgTv.visibility = View.VISIBLE // 보이게 만들기
+    }
+
+    override fun onSignUpNickCheckFailure(code: Int) {
+        when(code){
+            2600->{ //존재하는 닉네임일 경우
+                Log.d("CheckNick", "중복된 닉네임입니다")
+                binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                binding.stepOneNicknameMsgTv.text = "중복된 닉네임입니다"
+                binding.stepOneNicknameMsgTv.visibility = View.VISIBLE
+            }
+            4000->{ //서버오류
+                Log.d("CheckNick", "4000-서버오류입니다.")
             }
         }
     }
