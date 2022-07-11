@@ -32,6 +32,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="- 제외 숫자만 입력하세요"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:inputType="phone"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
@@ -54,13 +57,30 @@
             android:textSize="15sp"
             android:text="인증번호 전송"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="27dp"
+            android:enabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/step_four_phone_reSend_btn"
+            android:layout_width="125dp"
+            android:layout_height="53dp"
+            android:textSize="15sp"
+            android:text="재전송 하기"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -92,6 +112,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="입력하세요"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:inputType="number"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
@@ -104,28 +127,29 @@
             android:layout_marginLeft="27dp"
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_four_check_btn"
+            app:layout_constraintEnd_toStartOf="@id/step_four_phone_check_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_four_check_btn"
+            android:id="@+id/step_four_phone_check_btn"
             android:layout_width="125dp"
             android:layout_height="53dp"
             android:textSize="15sp"
-            android:text="재전송 하기"
+            android:text="확인"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/signup_btn"
-            android:textColor="@color/main"
+            android:background="@drawable/selector_button"
+            android:textColor="@drawable/selector_button_text"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/step_three_check_msg_tv"
+        android:id="@+id/step_four_check_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00분 00초 남았어요"
