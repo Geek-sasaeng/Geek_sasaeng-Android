@@ -4,4 +4,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/spoqa_medium</item>
     </style>
+
+    <style name="DormitoryPicker">
+        <item name="android:textColorHighlight"> @color/main </item>
+        <item name="android:textSize" > 20sp </item>
+        <item name="android:fontFamily">@font/spoqa_medium</item>
+    </style>
+
 </resources>

@@ -53,6 +53,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/domitory_under_question_tv" />
 
+    <TextView
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/gray_0"
+        android:background="@drawable/round_border"
+        app:layout_constraintTop_toTopOf="@id/domitory_picker"
+        app:layout_constraintBottom_toBottomOf="@id/domitory_picker"
+        app:layout_constraintStart_toStartOf="@id/domitory_picker"
+        app:layout_constraintEnd_toEndOf="@id/domitory_picker"/>
+
+    <NumberPicker
+        android:id="@+id/domitory_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/dormitory_logo_img"
+        app:layout_constraintBottom_toBottomOf="@id/dormitory_logo_img"
+        android:selectionDividerHeight="0dp"
+        android:theme="@style/DormitoryPicker" />
+
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/dormitory_start_btn"
         android:layout_width="match_parent"
@@ -60,12 +83,14 @@
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/round_border"
         android:backgroundTint="@color/main"
         android:fontFamily="@font/spoqa_medium"
         android:text="시작하기"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/dormitory_logo_img"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -203,7 +203,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 position: Int,
                 id: Long
             ) {
-                //TODO:?
+                //TODO:스피너
                 //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
@@ -212,7 +212,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 items[0]=items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]
-                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2)) //??꼭 fragment에선 requireContext가 먹더라..?
+                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
