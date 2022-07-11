@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpIdCheckRequest
+import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.VerifySmsRequest
 import com.example.geeksasaeng.Signup.SignUpIdCheckView
@@ -91,23 +92,50 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
         binding.stepOneCheckPasswordEt.addTextChangedListener(object :TextWatcher{
             //TODO: 일단 TEXT바뀔때마다 VALIDATION검사하게했는데 , IOS는 TEXT입력 완료했을 때만 검사하기로 해두었대
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // text가 변경된 후 호출
+                // text가 변경되기 전 호출
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // text가 변경되기 전 호출
+                // text가 바뀔 때마다 호출된다.
             }
 
             override fun afterTextChanged(s: Editable?) {
+                // text가 변경된 후 호출
                 Log.d("pw", binding.stepOnePasswordEt.text.toString() +":"+binding.stepOneCheckPasswordEt.text.toString())
-                // text가 바뀔 때마다 호출된다.
                 if(binding.stepOnePasswordEt.text.toString()!=binding.stepOneCheckPasswordEt.text.toString()){ //일치하지 않으면,
                     binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
                 }else{ // 비밀번호 일치하면,
                     binding.stepOneCheckPwMsgTv.visibility = View.INVISIBLE // 비밀번호 밑에 안내창 안 보이게하기
                 }
             }
+        })
+
+        //닉네임 TEXTWATCHER
+        binding.stepOneNicknameEt.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // text가 변경되기 전 호출
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // text가 바뀔 때마다 호출
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // text가 변경된 후 호출
+                val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
+                val macher = nickPattern.matcher(binding.stepOneNicknameEt.text.toString()) //사용자가 입력한 닉네임과 패턴 비교
+
+                if(!macher.matches()){ //조건식에 맞지 않는 닉네임이 들어온다면
+                    binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                    binding.stepOneNicknameMsgTv.text = "3-15자 영문 혹인 한글로 입력해주세요"
+                }
+                //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기
+                binding.stepOneNicknameBtn.isEnabled = macher.matches()
+
+            }
+
         })
 
 
@@ -118,11 +146,16 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             val userId = binding.stepOneIdEt.text.toString() //사용자가 입력한 아이디 가져오기
             val signUpIdCheckRequest= SignUpIdCheckRequest(userId)
             signUpService.signUpIdCheckSender(signUpIdCheckRequest) //★아이디 중복확인하기
-            Log.d("CheckId", "중복확인 리퀘스트 보냄")
+            Log.d("CheckId", "아이디 중복확인 리퀘스트 보냄")
         }
 
+        //닉네임 중복확인 버튼
         binding.stepOneNicknameBtn.setOnClickListener {
             Toast.makeText(activity, "NICKNAME-CHECK-BTN", Toast.LENGTH_LONG).show()
+            val userNick = binding.stepOneNicknameEt.text.toString() //사용자가 입력한 닉네임 가져오기
+            val signUpNickCheckRequest= SignUpNickCheckRequest(userNick)
+            signUpService.signUpNickCheckSender(signUpNickCheckRequest) //★아이디 중복확인하기
+            Log.d("CheckNick", "닉네임 중복확인 리퀘스트 보냄")
         }
 
         binding.stepOneNextBtn.setOnClickListener {

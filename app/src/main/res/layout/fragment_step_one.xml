@@ -214,6 +214,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="3-15자 영문 혹은 한글로 입력"
+            android:maxLength="15"
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_1"
