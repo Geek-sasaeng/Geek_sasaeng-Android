@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Data.Signup
+import com.example.geeksasaeng.DormitoryActivity
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView

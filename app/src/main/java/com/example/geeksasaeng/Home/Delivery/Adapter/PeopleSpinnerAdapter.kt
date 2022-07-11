@@ -34,19 +34,19 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) :
             val textName: TextView = rootView.findViewById(R.id.spinner_text)
             val image: ImageView = rootView.findViewById(R.id.arrow_iv)
             //TODO:일단 이게 맞나 싶긴 한데,,
-            if (i == 0) { //젤 상단 아이템
+            if (i==0){ //젤 상단 아이템
                 textName.setText(spinnerList!![i])
                 image.setImageResource(R.drawable.ic_spinner_down)
                 /*textName.setTextColor(R.color.main)*/
                 textName.setTextColor(ContextCompat.getColor(context, R.color.main)) //젤 상단 main색으로 바꾸기
-            } else { //나머지 아이템들
+            }else{ //나머지 아이템들
                 textName.setText(spinnerList!![i])
                 image.visibility = View.INVISIBLE
 
                 //색상설정
-                if (textName.text==spinnerList!![0]){
+                if(textName.text==spinnerList!![0]){
                     textName.setTextColor(ContextCompat.getColor(context, R.color.gray_0))
-                } else {
+                }else{
                     textName.setTextColor(ContextCompat.getColor(context, R.color.gray_2))
                 }
             }

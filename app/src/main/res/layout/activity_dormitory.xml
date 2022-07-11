@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DormitoryActivity">
+
+    <TextView
+        android:id="@+id/domitory_hi_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="65dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="홍길동님,\n환영합니다"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/domitory_question_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="현재 어느 기숙사에\n거주하고 계신가요?"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/domitory_hi_tv" />
+
+    <TextView
+        android:id="@+id/domitory_under_question_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="*추후 프로필에서 기숙사를 변경하실 수 있습니다."
+        android:textColor="@color/gray_2"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@id/domitory_question_tv"
+        app:layout_constraintTop_toBottomOf="@id/domitory_question_tv" />
+
+    <ImageView
+        android:id="@+id/dormitory_logo_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_background_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/domitory_under_question_tv" />
+
+    <TextView
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/gray_0"
+        android:background="@drawable/round_border"
+        app:layout_constraintTop_toTopOf="@id/domitory_picker"
+        app:layout_constraintBottom_toBottomOf="@id/domitory_picker"
+        app:layout_constraintStart_toStartOf="@id/domitory_picker"
+        app:layout_constraintEnd_toEndOf="@id/domitory_picker"/>
+
+    <NumberPicker
+        android:id="@+id/domitory_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/dormitory_logo_img"
+        app:layout_constraintBottom_toBottomOf="@id/dormitory_logo_img"
+        android:selectionDividerHeight="0dp"
+        android:theme="@style/DormitoryPicker" />
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dormitory_start_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/round_border"
+        android:backgroundTint="@color/main"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="시작하기"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/dormitory_logo_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
