@@ -116,7 +116,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
                     // 인증번호 입력 시간이 만료 되었으므로 버튼 비활성화 시킴
                     /*binding.stepThreeNextBtn.isEnabled = false*/
                 }
-
             }
 
             time -= 1000 //1초씩 줄이기
