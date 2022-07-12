@@ -2,6 +2,8 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
@@ -32,6 +34,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     private var time = 5000
     private var timerTask : Timer? = null
 
+    var verifyCheck = 0
+
     override fun initAfterBinding() {
         progressVM.increase()
         
@@ -54,37 +58,42 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         binding.stepThreeSendBtn.setOnClickListener {
             resetTimer()
             startTimer()
+
+            binding.stepThreeCheckMsgTv.visibility = View.VISIBLE
+            binding.stepThreeResultMsgTv.visibility = View.GONE
         }
 
         binding.stepThreeNextBtn.setOnClickListener {
             // 이메일 번호 인증
             verifyEmail()
 
-            timerTask?.cancel()
+            if (verifyCheck == 1) {
+                timerTask?.cancel()
 
-            val transaction: FragmentTransaction =
+                val transaction: FragmentTransaction =
+                    (context as SignUpActivity).supportFragmentManager.beginTransaction()
+
+                val bundle = Bundle()
+                bundle.putString("checkPassword", checkPassword)
+                bundle.putString("loginId", loginId)
+                bundle.putString("nickname", nickname)
+                bundle.putString("password", password)
+                bundle.putString("email", email)
+                bundle.putString("universityName", universityName)
+
+                val stepFourFragment = StepFourFragment()
+                stepFourFragment.arguments = bundle
+
+                Log.d("SignupData", bundle.toString())
+
                 (context as SignUpActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.sign_up_vp, stepFourFragment).commit()
 
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
-            bundle.putString("email", email)
-            bundle.putString("universityName", universityName)
+                stepFourFragment.arguments = bundle
 
-            val stepFourFragment = StepFourFragment()
-            stepFourFragment.arguments = bundle
-
-            Log.d("SignupData", bundle.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepFourFragment).commit()
-
-            stepFourFragment.arguments = bundle
-
-            transaction.replace(R.id.sign_up_vp, stepFourFragment)
-            transaction.commit()
+                transaction.replace(R.id.sign_up_vp, stepFourFragment)
+                transaction.commit()
+            }
         }
     }
 
@@ -122,13 +131,19 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun onVerifyEmailSuccess(message: String) {
         Log.d("EMAIL-RESPONSE", "Success = " + message)
+        verifyCheck = 1
     }
 
     override fun onVerifyEmailFailure(code: Int, message: String) {
         Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
         Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Message = $message")
 
-        showToast("code = ${code} / message = ${message}")
+        binding.stepThreeCheckMsgTv.visibility = View.GONE
+        binding.stepThreeResultMsgTv.visibility = View.VISIBLE
+        binding.stepThreeResultMsgTv.text = "인증번호가 틀렸습니다"
+        binding.stepThreeResultMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+
+        verifyCheck = -1
 
 //        when(code){
 //            // 2801 : 유효하지 않은 인증번호
