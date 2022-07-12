@@ -109,8 +109,14 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
             activity?.runOnUiThread {
                 binding.stepThreeCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
 
-                if (min == "00" && sec == "00")
+                if (min == "00" && sec == "00"){
                     timerTask?.cancel()
+                    binding.stepThreeCheckTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                    binding.stepThreeCheckTv.text = "인증번호 입력 시간이 만료되었습니다."
+                    // 인증번호 입력 시간이 만료 되었으므로 버튼 비활성화 시킴
+                    /*binding.stepThreeNextBtn.isEnabled = false*/
+                }
+
             }
 
             time -= 1000 //1초씩 줄이기
