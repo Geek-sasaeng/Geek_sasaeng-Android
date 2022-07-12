@@ -158,6 +158,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
             sendEmail()
         }
 
+        //다음버튼
         binding.stepTwoNextBtn.setOnClickListener {
             val transaction: FragmentTransaction = (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
@@ -199,6 +200,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     override fun onSignUpEmailSuccess(message: String) {
         Log.d("EMAIL-RESPONSE", message)
         showToast("SUCCESS")
+        //이메일이 성공적으로 진행되었을때 버튼 활성화
         binding.stepTwoNextBtn.isClickable = true;
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
         binding.stepTwoNextBtn.setTextColor(Color.parseColor("#ffffff"))

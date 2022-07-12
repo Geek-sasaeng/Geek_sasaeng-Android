@@ -10,7 +10,7 @@ import com.example.geeksasaeng.databinding.FragmentStepNaverOneBinding
 
 class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentStepNaverOneBinding::inflate) {
 
-    private val progressVM: ProgressNaverViewModel by activityViewModels()
+    /*    private val progressVM: ProgressNaverViewModel by activityViewModels()
 
     override fun initAfterBinding() {
         progressVM.increase()
@@ -41,5 +41,8 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             (context as SignUpNaverActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.sign_up_naver_vp, stepNaverOneFragment).commit()
         }
+    }*/
+    override fun initAfterBinding() {
+        TODO("Not yet implemented")
     }
 }

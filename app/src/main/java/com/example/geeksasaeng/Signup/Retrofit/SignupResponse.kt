@@ -5,8 +5,8 @@ import retrofit2.http.Body
 
 
 data class SignUpResponse(
-    @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
     @SerializedName("result") val result: SignUpResult?
 )
@@ -17,6 +17,17 @@ data class SignUpResult(
     @SerializedName("nickname") val nickname: String,
     @SerializedName("phoneNumber") val phoneNumber: String,
     @SerializedName("universityName") val universityName: String
+)
+
+data class SignUpRequest (
+    @SerializedName("checkPassword") var checkPassword: String,
+    @SerializedName("email") var email: String,
+    @SerializedName("informationAgreeStatus") var informationAgreeStatus: String, //개인정보 동의
+    @SerializedName("loginId") var loginId: String,
+    @SerializedName("nickname") var nickname: String,
+    @SerializedName("password") var password: String,
+    @SerializedName("phoneNumber") var phoneNumber: String,
+    @SerializedName("universityName") var universityName: String,
 )
 
 // email 보내기
