@@ -56,7 +56,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     private fun initClickListener() {
 
-        //재전송버튼ㅎ
+        //재전송버튼
        binding.stepThreeSendBtn.setOnClickListener {
             resetTimer()
             startTimer()
@@ -69,7 +69,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
             // 이메일 번호 인증
             verifyEmail()
 
-            if (verifyCheck == 1) {
+            // if (verifyCheck == 1) {
+            if (verifyCheck != 0) {
                 timerTask?.cancel()
 
                 val transaction: FragmentTransaction =
@@ -132,24 +133,23 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     override fun onVerifyEmailSuccess(message: String) {
-        Log.d("EMAIL-RESPONSE", "Success = " + message)
+        // Log.d("EMAIL-RESPONSE", "Success = " + message)
         verifyCheck = 1
     }
 
     override fun onVerifyEmailFailure(code: Int, message: String) {
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Message = $message")
-
-        binding.stepThreeCheckMsgTv.visibility = View.GONE
-        binding.stepThreeResultMsgTv.visibility = View.VISIBLE
-        binding.stepThreeResultMsgTv.text = "인증번호가 틀렸습니다"
-        binding.stepThreeResultMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+        if (verifyCheck == 0) {
+            binding.stepThreeCheckMsgTv.visibility = View.GONE
+            binding.stepThreeResultMsgTv.visibility = View.VISIBLE
+            binding.stepThreeResultMsgTv.text = "인증번호가 틀렸습니다"
+            binding.stepThreeResultMsgTv.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.error
+                )
+            )
+        }
 
         verifyCheck = -1
-
-//        when(code){
-//            // 2801 : 유효하지 않은 인증번호
-//            2801 -> showToast(message)
-//        }
     }
 }

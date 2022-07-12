@@ -92,7 +92,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                 }
 
                 // 임의로 넣어놓은 부분!!
-                // binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
                 if (university == "가천대학교")
                     binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
                 else if (university == "나천대학교")
@@ -117,15 +116,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                 if (university != null && binding.stepTwoEmailEt.text.isNotEmpty()) {
                     binding.stepTwoEmailCheckBtnX.visibility = View.GONE
                     binding.stepTwoEmailCheckBtnO.visibility = View.VISIBLE
-//                    binding.stepTwoEmailCheckBtn.isClickable = true;
-//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.signup_btn);
-//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#29ABE2"))
                 } else {
                     binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
                     binding.stepTwoEmailCheckBtnO.visibility = View.GONE
-//                    binding.stepTwoEmailCheckBtn.isClickable = false;
-//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
-//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
             }
         })
@@ -137,15 +130,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                 if (binding.stepTwoEmail2Et.text.isNotEmpty() && binding.stepTwoEmailEt.text.isNotEmpty()) {
                     binding.stepTwoEmailCheckBtnX.visibility = View.GONE
                     binding.stepTwoEmailCheckBtnO.visibility = View.VISIBLE
-//                    binding.stepTwoEmailCheckBtn.isClickable = true;
-//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.signup_btn);
-//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#29ABE2"))
                 } else {
                     binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
                     binding.stepTwoEmailCheckBtnO.visibility = View.GONE
-//                    binding.stepTwoEmailCheckBtn.isClickable = false;
-//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
-//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
             }
         })

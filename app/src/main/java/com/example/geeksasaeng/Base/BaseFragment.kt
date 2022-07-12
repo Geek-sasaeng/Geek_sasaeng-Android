@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
 ) : Fragment() {
     private var _binding: VB? = null
-    // 자꾸 왜 여기서 오류가 날까..........
     protected val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,6 +21,8 @@ abstract class BaseFragment<VB : ViewBinding>(
         savedInstanceState: Bundle?
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
+        Log.d("VIEW-RESPONSE", "_binding = " + _binding?.toString())
+        Log.d("VIEW-RESPONSE", "binding = " + binding?.toString())
 
         return binding.root
     }
