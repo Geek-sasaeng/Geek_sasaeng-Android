@@ -3,24 +3,29 @@ package com.example.geeksasaeng.Login
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Data.Signup
-import com.example.geeksasaeng.DormitoryActivity
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
+import com.example.geeksasaeng.Login.Retrofit.LoginView
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Signup.SignUpView
+import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
-class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
+class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView,
+    LoginView {
 
     var checkPassword: String = ""
     var email: String = ""
@@ -38,23 +43,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private var autoLoginEditor: SharedPreferences.Editor? = null
     private var getAutoLogin: SharedPreferences? = null
 
+    var autoJwt: String? = null
     var autoLoginid: String? = null
     var autoPassword: String? = null
 
     override fun initAfterBinding() {
         getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        autoJwt = getAutoLogin?.getString("jwt", null).toString()
         autoLoginid = getAutoLogin?.getString("loginid", null).toString()
         autoPassword = getAutoLogin?.getString("password", null).toString()
-
-        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
-
-        //////////////////////
-        // 임시로 넣어둔 부분!! //
-//        autoLoginid = null
-//        autoPassword = null
-        //////////////////////
-
-        Log.d("LOGIN-RESPONSE", "AUTO-ID = $autoLoginid AUTO-PWD = $autoPassword")
+4
+        Log.d("LOGIN-RESPONSE", "AUTO ID = " + autoLoginid + " / AUTO PWD = " + autoPassword)
 
         if (autoLoginid != null && autoPassword != null) {
             login(true)
@@ -72,49 +71,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             signup()
         }
 
-        binding.loginLoginBtn.setOnClickListener {
-            if (binding.loginAutologinCb.isChecked) {
-                // SharedPreferences 설정
-                autoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-                autoLoginEditor = autoLogin?.edit()
-
-                autoLoginEditor?.putString("loginid", binding.loginIdEt.text.toString())
-                autoLoginEditor?.putString("password", binding.loginPwdEt.text.toString())
-                autoLoginEditor?.commit()
-
-                Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
-            }
-
-            login(false)
-            /*changeActivity(MainActivity::class.java)*/
-            changeActivity(DormitoryActivity::class.java) //TODO:기숙사 선택 액티비티 보는용 (TEST용)
-        }
-
-        binding.loginNaverBtn.setOnClickListener {
-            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
-
-            val oauthLoginCallback = object : OAuthLoginCallback {
-                override fun onSuccess() {
-                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
-                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
-                    changeActivity(SignUpNaverActivity::class.java)
-                }
-                override fun onFailure(httpStatus: Int, message: String) {
-                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
-                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
-                }
-                override fun onError(errorCode: Int, message: String) {
-                    onFailure(errorCode, message)
-                }
-            }
-
-            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
-        }
-
-        binding.loginSignupBtn.setOnClickListener {
-            changeActivity(SignUpActivity::class.java)
-        }
+        setTextChangedListener()
+        initClickListener()
     }
 
     private fun login(auto: Boolean) {
@@ -138,18 +96,38 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         return Login(loginId, password)
     }
 
-    private fun saveJwt(jwt: String) {
-        val spf = getSharedPreferences("auth2" , MODE_PRIVATE)
+    private fun saveSP(jwt: String) {
+        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
         val editor = spf.edit()
 
         editor.putString("jwt", jwt)
+        editor?.putString("loginid", binding.loginIdEt.text.toString())
+        editor?.putString("password", binding.loginPwdEt.text.toString())
+
         editor.apply()
+
+        Log.d("LOGIN-RESPONSE", "AUTO-ID = " + binding.loginIdEt.text.toString() + "AUTO-PWD = " + binding.loginPwdEt.text.toString())
+    }
+
+    private fun removeSP() {
+        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.clear()
+        editor.commit()
     }
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         when(code) {
             1000 -> {
-                saveJwt(result.jwt)
+                if (binding.loginAutologinCb.isChecked && binding.loginIdEt.text.isNotEmpty() && binding.loginPwdEt.text.isNotEmpty()) {
+                    Log.d("LOGIN-RESPONSE", "IF CHECK")
+                    removeSP()
+                    saveSP(result.jwt)
+                } else if (binding.loginAutologinCb.isChecked == false) {
+                    removeSP()
+                }
+                finish()
                 changeActivity(MainActivity::class.java)
             } else -> {
                 Toast.makeText(this, "LoginActivity-onLoginSuccess : Fail", Toast.LENGTH_SHORT).show()
@@ -157,8 +135,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
-    override fun onLoginFailure() {
-        Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Login Check")
+    override fun onLoginFailure(code: Int, message: String) {
+        Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Fail Code = $code")
+
+        if (code == 2011) showToast(message)
+        else if (code == 2012) showToast(message)
+        else if (code == 2400) showToast(message)
     }
 
     private fun getSignupUser(): Signup {
@@ -181,5 +163,83 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun onSignUpFailure() {
         Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpFailure : Signup Check")
+    }
+
+    private fun setTextChangedListener() {
+        binding.loginIdEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginIdEt.text.toString())
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginPwdEt.text.toString())
+                if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
+                } else {
+                    binding.loginLoginBtn.isClickable = false;
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+
+        binding.loginPwdEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginIdEt.text.toString())
+                Log.d("LOGIN-TEXT-RESPONSE", binding.loginPwdEt.text.toString())
+
+                if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
+                } else {
+                    binding.loginLoginBtn.isClickable = false;
+                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
+                    binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+    }
+
+    private fun initClickListener() {
+
+        binding.loginLoginBtn.setOnClickListener {
+            login(false)
+            // changeActivity(MainActivity::class.java)
+        }
+
+        binding.loginNaverBtn.setOnClickListener {
+            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+            val oauthLoginCallback = object : OAuthLoginCallback {
+                override fun onSuccess() {
+                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    removeSP()
+                    saveSP(NaverIdLoginSDK.getAccessToken().toString())
+                    changeActivity(SignUpNaverActivity::class.java)
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    removeSP()
+                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
+
+            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+        }
+
+        binding.loginSignupBtn.setOnClickListener {
+            changeActivity(SignUpActivity::class.java)
+        }
     }
 }

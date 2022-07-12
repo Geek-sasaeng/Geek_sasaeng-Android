@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,14 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Retrofit.SignUpIdCheckRequest
-import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Signup.Retrofit.VerifySmsRequest
-import com.example.geeksasaeng.Signup.SignUpIdCheckView
-import com.example.geeksasaeng.Signup.SignUpNickCheckView
+import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepOneBinding
-import com.navercorp.nid.oauth.NidOAuthPreferencesManager.code
 import java.util.regex.Pattern
 
 class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView, SignUpNickCheckView {
@@ -33,27 +28,31 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     }
     override fun initAfterBinding() {
         progressVM.increase()
-        initListener()
+        initTextWatcher()
+        initClickListener()
     }
 
-    private fun initListener() {
-
+    //<텍스트 와쳐>
+    private fun initTextWatcher(){
         //TEXTWACTHER를 이용한 버튼 활성/비활성 작업
         //아이디 TEXTWATCHER
         binding.stepOneIdEt.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // text가 변경된 후 호출
+                // text가 변경되기 전 호출
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // text가 변경되기 전 호출
+                // text가 바뀔 때마다 호출된다.
+
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // text가 바뀔 때마다 호출된다.
+                // text가 변경 된 후 호출
                 var textLength = binding.stepOneIdEt.text.toString().length
                 //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화 시키기
                 binding.stepOneIdCheckBtn.isEnabled = textLength>=6 //6자 이상이면 버튼 활성화 시키기
+                binding.stepOneIdMsgTv.text=""
                 checkingNext()
             }
         })
@@ -63,16 +62,15 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             //TODO: 비밀번호에 한글 안쳐지게 막아야할 듯?
             //TODO: 일단 TEXT바뀔때마다 VALIDATION검사하게했는데 , IOS는 TEXT입력 완료했을 때만 검사하기로 해두었대
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // text가 변경된 후 호출
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // text가 변경되기 전 호출
             }
 
-            override fun afterTextChanged(s: Editable?) {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // text가 바뀔 때마다 호출된다.
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // text가 변경 된 후 호출
                 // 조건: 숫자, 영어, 특수문자의 조합(하나 이상 포함), 공백 포함 불가
                 val pwRegex = """^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$)[A-Za-z\d!@#$%^+\-=]{8,}$"""
                 val pwPattern = Pattern.compile(pwRegex)
@@ -86,6 +84,22 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOnePwMsgTv.text = "문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
                 }
                 Log.d("pw", binding.stepOnePasswordEt.text.toString()+"는 조건 :"+macher.matches().toString())
+
+
+                //비밀번호확인 부분도 수정 필요함
+                if (binding.stepOneCheckPasswordEt.text.toString()!=""){ // 비밀번호확인칸에 뭐가 써져있으면
+                    //TODO: 아래랑 코드 중복이긴한데,, 함수를 만들어야할까??
+                    if(binding.stepOnePasswordEt.text.toString()!=binding.stepOneCheckPasswordEt.text.toString()){ //일치하지 않으면,
+                        binding.stepOneCheckPwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                        binding.stepOneCheckPwMsgTv.text = "비밀번호를 다시 확인해주세요"
+                        binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
+                    }else{ // 비밀번호 일치하면,
+                        binding.stepOneCheckPwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+                        binding.stepOneCheckPwMsgTv.text = "비밀번호가 일치합니다"
+                        binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
+                    }
+                }
+
                 checkingNext()
             }
         })
@@ -137,8 +151,10 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 }else{ //조건에 맞는 닉네임이 들어오면 안내문 숨기기
                     binding.stepOneNicknameMsgTv.visibility = View.INVISIBLE
                 }
+
                 //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기
                 binding.stepOneNicknameBtn.isEnabled = macher.matches()
+                binding.stepOneNicknameMsgTv.text=""
                 checkingNext()
             }
 
@@ -148,7 +164,11 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             }
 
         })
+    }
 
+
+    //<클릭리스너>
+    private fun initClickListener() {
 
         //아이디 중복확인 버튼
         binding.stepOneIdCheckBtn.setOnClickListener {
@@ -158,7 +178,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             val signUpIdCheckRequest= SignUpIdCheckRequest(userId)
             signUpService.signUpIdCheckSender(signUpIdCheckRequest) //★아이디 중복확인하기
             Log.d("CheckId", "아이디 중복확인 리퀘스트 보냄")
-            checkingNext()
         }
 
         //닉네임 중복확인 버튼
@@ -168,7 +187,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             val signUpNickCheckRequest= SignUpNickCheckRequest(userNick)
             signUpService.signUpNickCheckSender(signUpNickCheckRequest) //★아이디 중복확인하기
             Log.d("CheckNick", "닉네임 중복확인 리퀘스트 보냄")
-            checkingNext()
         }
 
         binding.stepOneNextBtn.setOnClickListener {
@@ -203,8 +221,10 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             "CheckId",
             binding.stepOneIdMsgTv.text.toString() + "/" + binding.stepOneIdMsgTv.visibility.toString()
         )
+        checkingNext()
 
     }
+
     override fun onSignUpIdCheckFailure(code: Int) {
         when(code){
             2603->{ //존재하는 아이디일 경우
@@ -226,7 +246,11 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
         binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
         /*binding.stepOneNicknameMsgTv.text = message*/
         binding.stepOneNicknameMsgTv.text = "사용 가능한 닉네임입니다"
-        binding.stepOneNicknameMsgTv.visibility = View.VISIBLE // 보이게 만들기
+        if(binding.stepOneNicknameMsgTv.visibility==View.INVISIBLE){
+            binding.stepOneNicknameMsgTv.visibility = View.VISIBLE // 보이게 만들기
+        }
+        checkingNext()
+
     }
 
     override fun onSignUpNickCheckFailure(code: Int) {
@@ -235,7 +259,9 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 Log.d("CheckNick", "중복된 닉네임입니다")
                 binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                 binding.stepOneNicknameMsgTv.text = "중복된 닉네임입니다"
-                binding.stepOneNicknameMsgTv.visibility = View.VISIBLE
+                if(binding.stepOneNicknameMsgTv.visibility==View.INVISIBLE){
+                    binding.stepOneNicknameMsgTv.visibility = View.VISIBLE // 보이게 만들기
+                }
             }
             4000->{ //서버오류
                 Log.d("CheckNick", "4000-서버오류입니다.")
@@ -250,17 +276,18 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 (binding.stepOnePwMsgTv.text.toString() == "사용 가능한 비밀번호입니다")&&
                 (binding.stepOneCheckPwMsgTv.text.toString() == "비밀번호가 일치합니다") &&
                 (binding.stepOneNicknameMsgTv.text.toString() == "사용 가능한 닉네임입니다")
+        Log.d("Nextable", check.toString())
+        Log.d("Nextable", binding.stepOneIdMsgTv.text.toString()+"/"+binding.stepOnePwMsgTv.text.toString()+"/"+binding.stepOneCheckPwMsgTv.text.toString()+"/"+binding.stepOneNicknameMsgTv.text.toString())
 
-
-        if(check){
-            Log.d("checkingNext",check.toString())
+        if(check){ //다음으로 넘어갈 수 있으면
+            Log.d("checkingNext: ok",check.toString())
             binding.stepOneNextBtn.isEnabled=true
-            binding.stepOneNextBtn.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.main))
+            binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
         }else{
-            Log.d("checkingNext",check.toString())
+            Log.d("checkingNext: nk",check.toString())
             binding.stepOneNextBtn.isEnabled=false
-            binding.stepOneNextBtn.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.gray_0))
+            binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
         }
     }

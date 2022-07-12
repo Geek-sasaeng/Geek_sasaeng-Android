@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Signup
+package com.example.geeksasaeng.Signup.Retrofit
 
 import com.example.geeksasaeng.Signup.Retrofit.SignUpSmsResult
 import com.example.geeksasaeng.Signup.Retrofit.VerifySmsResult
@@ -6,6 +6,16 @@ import com.example.geeksasaeng.Signup.Retrofit.VerifySmsResult
 interface SignUpView {
     fun onSignUpSuccess()
     fun onSignUpFailure()
+}
+
+interface SignUpEmailView {
+    fun onSignUpEmailSuccess(message: String)
+    fun onSignUpEmailFailure(code : Int, message : String)
+}
+
+interface VerifyEmailView {
+    fun onVerifyEmailSuccess(message: String)
+    fun onVerifyEmailFailure(code: Int, message: String)
 }
 
 //아이디 중복확인

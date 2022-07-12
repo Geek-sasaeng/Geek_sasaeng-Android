@@ -1,25 +1,48 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpEmailCheck
+import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
+import com.example.geeksasaeng.util.getUuid
 
-class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate) {
+class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 
     var checkPassword: String? = ""
     var loginId: String? = ""
     var nickname: String? = ""
     var password: String? = ""
+    var email: String? = ""
+    var university: String? = ""
+
+    var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
+
+    var uuid: String? = null
+
+    private lateinit var signUpService : SignupDataService
 
     private val progressVM: ProgressViewModel by activityViewModels()
 
+    var verifyBtnClick: Int = 0
+
     override fun initAfterBinding() {
+        Log.d("EMAIL-RESPONSE", "StepTwoFragment : InitAfterBinding")
+
         progressVM.increase()
 
         checkPassword = arguments?.getString("checkPassword")
@@ -27,33 +50,128 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         nickname = arguments?.getString("nickname")
         password = arguments?.getString("password")
 
+        signUpService = SignupDataService() //서비스 객체 생성
+        signUpService.setSignUpEmailView(this@StepTwoFragment)
+
+//        val dialog = DialogSignUpEmailCheck()
+//        dialog.show(parentFragmentManager, "CustomDialog")
+//
+//        // 1.5초 뒤에 Dialog 자동 종료
+//        Handler().postDelayed({
+//            dialog.dismiss()
+//        }, 1500)
+
+        initSpinner()
+        initTextChangedListener()
         initClickListener()
     }
 
+    //스피너 관련 작업
+    private fun initSpinner(){
+        val spinnerAdapter = UniversitySpinnerAdapter(requireContext(), universityList)
+        binding.stepTwoSchoolSp.adapter = spinnerAdapter
+        binding.stepTwoSchoolSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                // 축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
+                val image: ImageView = view!!.findViewById(R.id.university_arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+
+                universityList[0] = universityList[position] // items[0]은 현재 선택된 아이템 저장용
+                val textName: TextView = view!!.findViewById(R.id.spinner_university_text)
+                textName.text = universityList[position]
+                university = textName.text.toString()
+
+                if (university == "자신의 학교를 선택해주세요") {
+                    university = null
+                }
+
+                // 임의로 넣어놓은 부분!!
+                // binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
+                if (university == "가천대학교")
+                    binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
+                else if (university == "나천대학교")
+                    binding.stepTwoEmail2Et.setText("@nachon.ac.kr")
+                else if (university == "다천대학교")
+                    binding.stepTwoEmail2Et.setText("@dachon.ac.kr")
+                else if (university == "라천대학교")
+                    binding.stepTwoEmail2Et.setText("@rachon.ac.kr")
+                else if (university == "마천대학교")
+                    binding.stepTwoEmail2Et.setText("@machon.ac.kr")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
+    }
+
+    private fun initTextChangedListener() {
+        binding.stepTwoEmailEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                if (university != null && binding.stepTwoEmailEt.text.isNotEmpty()) {
+                    binding.stepTwoEmailCheckBtnX.visibility = View.GONE
+                    binding.stepTwoEmailCheckBtnO.visibility = View.VISIBLE
+//                    binding.stepTwoEmailCheckBtn.isClickable = true;
+//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.signup_btn);
+//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#29ABE2"))
+                } else {
+                    binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
+                    binding.stepTwoEmailCheckBtnO.visibility = View.GONE
+//                    binding.stepTwoEmailCheckBtn.isClickable = false;
+//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
+//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+
+        binding.stepTwoEmail2Et.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                if (binding.stepTwoEmail2Et.text.isNotEmpty() && binding.stepTwoEmailEt.text.isNotEmpty()) {
+                    binding.stepTwoEmailCheckBtnX.visibility = View.GONE
+                    binding.stepTwoEmailCheckBtnO.visibility = View.VISIBLE
+//                    binding.stepTwoEmailCheckBtn.isClickable = true;
+//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.signup_btn);
+//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#29ABE2"))
+                } else {
+                    binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
+                    binding.stepTwoEmailCheckBtnO.visibility = View.GONE
+//                    binding.stepTwoEmailCheckBtn.isClickable = false;
+//                    binding.stepTwoEmailCheckBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
+//                    binding.stepTwoEmailCheckBtn.setTextColor(Color.parseColor("#A8A8A8"))
+                }
+            }
+        })
+    }
+
     private fun initClickListener() {
-
         // 이메일 인증 전송 버튼
-        binding.stepTwoEmailCheckBtn.setOnClickListener {
-            val dialog = DialogSignUpEmailCheck()
-            dialog.show(parentFragmentManager, "CustomDialog")
-
-            // 1.5초 뒤에 Dialog 자동 종료
-            Handler().postDelayed({
-                dialog.dismiss()
-            }, 1500)
+        binding.stepTwoEmailCheckBtnO.setOnClickListener {
+            Log.d("EMAIL-RESPONSE", "인증번호 전송 버튼 클릭")
+            sendEmail()
         }
 
         binding.stepTwoNextBtn.setOnClickListener {
-            val transaction: FragmentTransaction =
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
+            val transaction: FragmentTransaction = (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
             val bundle = Bundle()
             bundle.putString("checkPassword", checkPassword)
             bundle.putString("loginId", loginId)
             bundle.putString("nickname", nickname)
             bundle.putString("password", password)
-            bundle.putString("email", binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString())
-            bundle.putString("universityName", binding.stepTwoSchoolEt.text.toString())
+
+            email = binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString()
+            // university = binding.stepTwoSchoolEt.text.toString()
+
+            bundle.putString("email", email)
+            // bundle.putString("universityName", university)
 
             val stepThreeFragment = StepThreeFragment()
             stepThreeFragment.arguments = bundle
@@ -67,6 +185,34 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
             transaction.replace(R.id.sign_up_vp, stepThreeFragment)
             transaction.commit()
+        }
+    }
+
+    private fun sendEmail() {
+        email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
+        val uuid = getUuid().toString()
+        Log.d("EMAIL-RESPONSE", "EMAIL = ${email} / UNIVERSITY = ${university} / UUID = ${uuid}")
+        val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
+        signUpService.signUpEmailSender(signUpEmailRequest)
+    }
+
+    override fun onSignUpEmailSuccess(message: String) {
+        Log.d("EMAIL-RESPONSE", message)
+        showToast("SUCCESS")
+        binding.stepTwoNextBtn.isClickable = true;
+        binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
+        binding.stepTwoNextBtn.setTextColor(Color.parseColor("#ffffff"))
+        verifyBtnClick = 1
+    }
+
+    override fun onSignUpEmailFailure(code: Int, message: String) {
+        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
+        verifyBtnClick = -1
+
+        when(code){
+            2803 -> showToast(message)
+            2804 -> showToast(message)
+            2400 -> showToast(message)
         }
     }
 }
