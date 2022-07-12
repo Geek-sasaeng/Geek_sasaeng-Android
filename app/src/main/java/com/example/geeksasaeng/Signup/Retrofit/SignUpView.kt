@@ -3,16 +3,19 @@ package com.example.geeksasaeng.Signup.Retrofit
 import com.example.geeksasaeng.Signup.Retrofit.SignUpSmsResult
 import com.example.geeksasaeng.Signup.Retrofit.VerifySmsResult
 
+//회원가입
 interface SignUpView {
     fun onSignUpSuccess()
-    fun onSignUpFailure()
+    fun onSignUpFailure(code:Int)
 }
 
+//이메일 전송
 interface SignUpEmailView {
     fun onSignUpEmailSuccess(message: String)
     fun onSignUpEmailFailure(code : Int, message : String)
 }
 
+//이메일 인증 확인
 interface VerifyEmailView {
     fun onVerifyEmailSuccess(message: String)
     fun onVerifyEmailFailure(code: Int, message: String)

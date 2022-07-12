@@ -56,9 +56,9 @@ class SignupDataService() {
 
     //회원가입
     fun signUp(user: Signup) {
-        val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)
+        /*val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)*/
 
-        signUpService?.signup(user)?.enqueue(object : Callback<SignUpResponse> {
+        SignupDataService?.signup(user)?.enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -67,9 +67,10 @@ class SignupDataService() {
                     val signUpResponse: SignUpResponse = response.body()!!
 
                     when (signUpResponse.code) {
-                        1000 -> signUpView.onSignUpSuccess()
+                        1000 -> signUpView.onSignUpSuccess() //회원가입 성공
                         else -> {
-                            signUpView.onSignUpFailure()
+                            //회원가입 실패할 경우
+                            signUpView.onSignUpFailure(signUpResponse.code)
                         }
                     }
                 }
