@@ -245,6 +245,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     override fun onSignUpFailure(code:Int) {
+        Log.d("signup", "회원가입에 실패하였습니다.")
         when(code){
             2006-> Log.d("signup", "중복되는 유저 아이디입니다")
             2007-> Log.d("signup", "중복되는 유저 이메일입니다")
