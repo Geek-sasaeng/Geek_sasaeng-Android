@@ -158,6 +158,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
             sendEmail()
         }
 
+        //다음버튼
         binding.stepTwoNextBtn.setOnClickListener {
             val transaction: FragmentTransaction = (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
