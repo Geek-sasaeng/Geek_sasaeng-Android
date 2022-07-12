@@ -86,8 +86,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             }
 
             login(false)
-            changeActivity(MainActivity::class.java)
-            /*changeActivity(DormitoryActivity::class.java)*/ //TODO:기숙사 선택용
+            /*changeActivity(MainActivity::class.java)*/
+            changeActivity(DormitoryActivity::class.java) //TODO:기숙사 선택 액티비티 보는용 (TEST용)
         }
 
         binding.loginNaverBtn.setOnClickListener {
