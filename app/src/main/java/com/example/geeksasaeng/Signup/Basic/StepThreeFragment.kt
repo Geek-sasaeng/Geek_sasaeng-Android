@@ -55,7 +55,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     private fun initClickListener() {
-        binding.stepThreeSendBtn.setOnClickListener {
+
+        //재전송버튼ㅎ
+       binding.stepThreeSendBtn.setOnClickListener {
             resetTimer()
             startTimer()
 
