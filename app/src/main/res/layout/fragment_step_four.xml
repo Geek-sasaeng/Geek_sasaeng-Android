@@ -180,7 +180,7 @@
         android:layout_height="50dp"
         android:backgroundTint="@color/main"
         android:background="@drawable/round_border"
-        android:text="시작하기"
+        android:text="다음"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

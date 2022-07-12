@@ -27,6 +27,7 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
     override fun onStart() {
         super.onStart()
+        signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpView(this)
     }
 

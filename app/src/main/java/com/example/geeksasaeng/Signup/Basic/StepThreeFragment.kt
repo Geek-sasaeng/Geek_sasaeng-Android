@@ -31,7 +31,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     private lateinit var signUpService : SignupDataService
 
-    private var time = 5000
+    private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
 
     var verifyCheck = 0
@@ -101,10 +101,10 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     // 타이머 작동
     private fun startTimer() {
-        timerTask = timer(period = 10) {
-            val timeForm = DecimalFormat("00")
-            val min = timeForm.format(time / 1000)
-            val sec = timeForm.format(time / 100)
+        timerTask = timer(period = 1000) { //1초가 주기
+            val timeForm = DecimalFormat("00") //0을 넣은 곳은 빈자리일 경우, 0으로 채워준다.
+            val min = timeForm.format(time / 60000) //전체시간 나누기 60초
+            val sec = timeForm.format((time % 60000) / 1000)
 
             activity?.runOnUiThread {
                 binding.stepThreeCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
@@ -113,7 +113,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
                     timerTask?.cancel()
             }
 
-            time--
+            time -= 1000 //1초씩 줄이기
         }
     }
 
@@ -121,7 +121,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     private fun resetTimer() {
         timerTask?.cancel()
 
-        time = 5000
+        time = 300000
         binding.stepThreeCheckMsgTv.text = "05분 00초 남았어요"
     }
 
