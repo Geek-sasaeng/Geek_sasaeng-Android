@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import com.example.geeksasaeng.R
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,23 +29,24 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) :
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
             val rootView: View = LayoutInflater.from(context)
-                .inflate(R.layout.item_spinner, viewGroup, false)
+                .inflate(R.layout.item_delivery_people_spinner, viewGroup, false)
             val textName: TextView = rootView.findViewById(R.id.spinner_text)
             val image: ImageView = rootView.findViewById(R.id.arrow_iv)
-
+            //TODO:일단 이게 맞나 싶긴 한데,,
             if (i==0){ //젤 상단 아이템
                 textName.setText(spinnerList!![i])
                 image.setImageResource(R.drawable.ic_spinner_down)
+                /*textName.setTextColor(R.color.main)*/
                 textName.setTextColor(ContextCompat.getColor(context, R.color.main)) //젤 상단 main색으로 바꾸기
             }else{ //나머지 아이템들
                 textName.setText(spinnerList!![i])
-                image.visibility = View.INVISIBLE //화살표 안보이게
+                image.visibility = View.INVISIBLE
 
                 //색상설정
-                if(textName.text==spinnerList!![0]){ //선택된 아이템이랑 같은 아이템이면,
-                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_3))
-                }else{ //선택된 아이템이랑 다른 아이템들
-                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_1))
+                if(textName.text==spinnerList!![0]){
+                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_0))
+                }else{
+                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_2))
                 }
             }
 

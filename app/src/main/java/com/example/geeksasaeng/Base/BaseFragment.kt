@@ -12,6 +12,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
 ) : Fragment() {
     private var _binding: VB? = null
+    // 자꾸 왜 여기서 오류가 날까..........
     protected val binding get() = _binding!!
 
     override fun onCreateView(

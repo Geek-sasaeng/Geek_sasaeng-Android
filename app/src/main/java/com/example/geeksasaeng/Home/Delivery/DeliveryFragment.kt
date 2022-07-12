@@ -62,7 +62,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
         }
 
-
         deliveryArray.apply {
             add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
             add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
@@ -236,7 +235,4 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         super.onDestroy()
         thread.interrupt() //쓰레드 중지
     }
-
-
-
 }

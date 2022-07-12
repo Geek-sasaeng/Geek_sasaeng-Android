@@ -20,25 +20,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/step_two_school_et"
+    <Spinner
+        android:id="@+id/step_two_school_sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="입력하세요"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_1"
-        android:backgroundTint="@color/gray_1"
-        android:fontFamily="@font/spoqa_medium"
-        android:inputType="textPassword"
-        android:textSize="15sp"
-        android:paddingLeft="13dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="20dp"
+        android:layout_height="40dp"
+        android:background="@drawable/round_border_button_gray1"
+        android:popupBackground="@drawable/round_border_button_gray1"
+        tools:listitem="@layout/item_signup_university_spinner"
+        android:elevation="0dp"
+        android:spinnerMode="dropdown"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="27dp"
         android:layout_marginRight="27dp"
         app:layout_constraintTop_toBottomOf="@id/step_two_school_tv"
         app:layout_constraintStart_toStartOf="parent" />
+
+<!--    <EditText-->
+<!--        android:id="@+id/step_two_school_et"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="입력하세요"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textColorHint="@color/gray_1"-->
+<!--        android:backgroundTint="@color/gray_1"-->
+<!--        android:fontFamily="@font/spoqa_medium"-->
+<!--        android:textSize="15sp"-->
+<!--        android:paddingLeft="13dp"-->
+<!--        android:paddingRight="10dp"-->
+<!--        android:paddingBottom="20dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginLeft="27dp"-->
+<!--        android:layout_marginRight="27dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/step_two_school_tv"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
     <!--이메일 입력-->
     <TextView
@@ -52,8 +66,7 @@
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_two_school_et"
-        />
+        app:layout_constraintTop_toBottomOf="@id/step_two_school_sp" />
 
     <EditText
         android:id="@+id/step_two_email_et"
@@ -64,7 +77,6 @@
         android:textColorHint="@color/gray_1"
         android:backgroundTint="@color/gray_1"
         android:fontFamily="@font/spoqa_medium"
-        android:inputType="textPassword"
         android:textSize="15sp"
         android:paddingLeft="13dp"
         android:paddingRight="10dp"

@@ -2,10 +2,7 @@ package com.example.geeksasaeng.Login.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.Data.Login
-import com.example.geeksasaeng.Data.Signup
-import com.example.geeksasaeng.Login.LoginView
 import com.example.geeksasaeng.NetworkModule
-import com.example.geeksasaeng.Signup.SignUpView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,12 +27,12 @@ class LoginDataService() {
 
                 if (response.isSuccessful && response.code() == 200) {
                     val loginResponse: LoginResponse = response.body()!!
+                    Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : loginResponse.code = " + loginResponse.code)
 
                     when (loginResponse.code) {
                         1000 -> loginView.onLoginSuccess(loginResponse.code, loginResponse.result!!)
-                        else -> {
-                            loginView.onLoginFailure()
-                        }
+                        // 2011 : Password 틀림 | 2400 : ID 존재 X
+                        2011, 2400 -> loginView.onLoginFailure(loginResponse.code, loginResponse.message)
                     }
                 }
             }
