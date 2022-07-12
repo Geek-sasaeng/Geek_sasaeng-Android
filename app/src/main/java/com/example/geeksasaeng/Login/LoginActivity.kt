@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,8 +25,7 @@ import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
-class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView,
-    LoginView {
+class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
     var checkPassword: String = ""
     var email: String = ""
@@ -43,16 +43,23 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private var autoLoginEditor: SharedPreferences.Editor? = null
     private var getAutoLogin: SharedPreferences? = null
 
+    private lateinit var signUpService : SignupDataService
+
     var autoJwt: String? = null
     var autoLoginid: String? = null
     var autoPassword: String? = null
+
+    override fun onStart() {
+        super.onStart()
+        signUpService = SignupDataService() //서비스 객체 생성
+        signUpService.setSignUpView(this)
+    }
 
     override fun initAfterBinding() {
         getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
         autoJwt = getAutoLogin?.getString("jwt", null).toString()
         autoLoginid = getAutoLogin?.getString("loginid", null).toString()
         autoPassword = getAutoLogin?.getString("password", null).toString()
-4
         Log.d("LOGIN-RESPONSE", "AUTO ID = " + autoLoginid + " / AUTO PWD = " + autoPassword)
 
         if (autoLoginid != null && autoPassword != null) {
@@ -156,14 +163,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
     }
 
-    override fun onSignUpSuccess() {
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpSuccess : Signup Check")
-        startActivity(Intent(this, LoginActivity::class.java))
-    }
-
-    override fun onSignUpFailure() {
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-onSignUpFailure : Signup Check")
-    }
 
     private fun setTextChangedListener() {
         binding.loginIdEt.addTextChangedListener(object : TextWatcher {
@@ -242,4 +241,21 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             changeActivity(SignUpActivity::class.java)
         }
     }
+
+    //회원가입 성공/실패
+    override fun onSignUpSuccess() {
+        Log.d("signup", "회원가입에 성공하였습니다.")
+    }
+
+    override fun onSignUpFailure(code:Int) {
+        when(code){
+            2006-> Log.d("signup", "중복되는 유저 아이디입니다")
+            2007-> Log.d("signup", "중복되는 유저 이메일입니다")
+            2008-> Log.d("signup", "존재하지 않는 학교 이름입니다")
+            2201-> Log.d("signup", "회원 정보동의 status가 Y가 아닙니다.")
+            2205-> Log.d("signup", "존재하지 않는 회원 id 입니다.")
+            4000-> Log.d("signup", "서버 오류입니다.")
+        }
+    }
+
 }

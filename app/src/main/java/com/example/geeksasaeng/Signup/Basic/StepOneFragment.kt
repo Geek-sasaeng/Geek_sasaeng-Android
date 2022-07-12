@@ -49,6 +49,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
             override fun afterTextChanged(s: Editable?) {
                 // text가 변경 된 후 호출
+                // TODO: 닉네임 한글 막아주기
                 var textLength = binding.stepOneIdEt.text.toString().length
                 //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화 시키기
                 binding.stepOneIdCheckBtn.isEnabled = textLength>=6 //6자 이상이면 버튼 활성화 시키기
@@ -189,9 +190,8 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             Log.d("CheckNick", "닉네임 중복확인 리퀘스트 보냄")
         }
 
+        //다음 버튼
         binding.stepOneNextBtn.setOnClickListener {
-
-            binding.stepOneNextBtn
             val bundle = Bundle()
             bundle.putString("checkPassword", binding.stepOneCheckPasswordEt.text.toString())
             bundle.putString("loginId", binding.stepOneIdEt.text.toString())
@@ -286,7 +286,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
         }else{
             Log.d("checkingNext: nk",check.toString())
-            binding.stepOneNextBtn.isEnabled=false
+            /*binding.stepOneNextBtn.isEnabled=false*/ //디버깅용: 활성화 해제 안해놓음
             binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
         }
