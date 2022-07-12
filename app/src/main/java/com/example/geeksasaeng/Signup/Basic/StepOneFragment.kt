@@ -10,20 +10,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Retrofit.SignUpIdCheckRequest
-import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Signup.Retrofit.VerifySmsRequest
-import com.example.geeksasaeng.Signup.SignUpIdCheckView
-import com.example.geeksasaeng.Signup.SignUpNickCheckView
+import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepOneBinding
-import com.navercorp.nid.oauth.NidOAuthPreferencesManager.code
 import java.util.regex.Pattern
 
 class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView, SignUpNickCheckView {
 
     private val progressVM: ProgressViewModel by activityViewModels()
     private lateinit var signUpService : SignupDataService //아이디, 닉네임 중복확인용
+
+    private var step1Check: Int = 0
 
     override fun onStart() {
         super.onStart()
@@ -37,7 +33,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     }
 
     private fun initListener() {
-
         //TEXTWACTHER를 이용한 버튼 활성/비활성 작업
         //아이디 TEXTWATCHER
         binding.stepOneIdEt.addTextChangedListener(object :TextWatcher{
@@ -53,7 +48,10 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 // text가 바뀔 때마다 호출된다.
                 var textLength = binding.stepOneIdEt.text.toString().length
                 //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화 시키기
-                binding.stepOneIdCheckBtn.isEnabled = textLength>=6 //6자이 이상이면 버튼 활성화 시키기
+                if (textLength >= 6) { //6자이 이상이면 버튼 활성화 시키기
+                    binding.stepOneIdCheckBtn.isEnabled = true
+                    step1Check++
+                }
             }
         })
 
@@ -63,7 +61,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             //TODO: 일단 TEXT바뀔때마다 VALIDATION검사하게했는데 , IOS는 TEXT입력 완료했을 때만 검사하기로 해두었대
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // text가 변경된 후 호출
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -80,6 +77,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 if(macher.matches()){ //조건이 맞으면
                     binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
                     binding.stepOnePwMsgTv.text = "사용가능한 비밀번호입니다"
+                    step1Check++
                 }else{ //조건이 맞지 않으면
                     binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepOnePwMsgTv.text = "문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
@@ -107,6 +105,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
                 }else{ // 비밀번호 일치하면,
                     binding.stepOneCheckPwMsgTv.visibility = View.INVISIBLE // 비밀번호 밑에 안내창 안 보이게하기
+                    step1Check++
                 }
             }
         })
@@ -131,13 +130,18 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepOneNicknameMsgTv.text = "3-15자 영문 혹인 한글로 입력해주세요"
                 }
+
                 //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기
-                binding.stepOneNicknameBtn.isEnabled = macher.matches()
+                if (macher.matches()) {
+                    binding.stepOneNicknameBtn.isEnabled = true
+                    step1Check++
+                } else {
+                    binding.stepOneNicknameBtn.isEnabled = false
+                }
 
             }
 
         })
-
 
         //아이디 중복확인 버튼
         binding.stepOneIdCheckBtn.setOnClickListener {
@@ -187,6 +191,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             binding.stepOneIdMsgTv.text.toString() + "/" + binding.stepOneIdMsgTv.visibility.toString()
         )
     }
+
     override fun onSignUpIdCheckFailure(code: Int) {
         when(code){
             2603->{ //존재하는 아이디일 경우
