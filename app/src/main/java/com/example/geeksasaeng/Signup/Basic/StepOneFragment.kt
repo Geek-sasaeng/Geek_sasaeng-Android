@@ -127,11 +127,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 }
 
                 //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기
-                if (macher.matches()) {
-                    binding.stepOneNicknameBtn.isEnabled = true
-                } else {
-                    binding.stepOneNicknameBtn.isEnabled = false
-                }
+                binding.stepOneNicknameBtn.isEnabled = macher.matches()
 
             }
 
@@ -169,8 +165,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             Log.d("SignupData", bundle.toString())
 
             (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                // .replace(R.id.sign_up_vp, stepTwoFragment).commit()
-                .replace(R.id.sign_up_vp, StepThreeFragment()).commit()
+                .replace(R.id.sign_up_vp, stepTwoFragment).commit()
         }
     }
 

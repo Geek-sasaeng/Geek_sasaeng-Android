@@ -40,7 +40,7 @@
         android:id="@+id/step_two_email_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="27dp"
         android:layout_marginTop="30dp"
         android:text="이메일 입력"
         android:textSize="18sp"

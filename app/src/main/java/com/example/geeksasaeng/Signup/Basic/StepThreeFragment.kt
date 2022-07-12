@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -57,6 +58,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         binding.stepThreeSendBtn.setOnClickListener {
             resetTimer()
             startTimer()
+
+            binding.stepThreeCheckMsgTv.visibility = View.VISIBLE
+            binding.stepThreeResultMsgTv.visibility = View.GONE
         }
 
         binding.stepThreeNextBtn.setOnClickListener {
@@ -89,8 +93,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
                 transaction.replace(R.id.sign_up_vp, stepFourFragment)
                 transaction.commit()
-            } else {
-
             }
         }
     }
@@ -136,10 +138,10 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
         Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Message = $message")
 
-        showToast("code = ${code} / message = ${message}")
-
-        binding.stepThreeCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
-        binding.stepThreeCheckMsgTv.text = "인증번호가 틀렸습니다"
+        binding.stepThreeCheckMsgTv.visibility = View.GONE
+        binding.stepThreeResultMsgTv.visibility = View.VISIBLE
+        binding.stepThreeResultMsgTv.text = "인증번호가 틀렸습니다"
+        binding.stepThreeResultMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
 
         verifyCheck = -1
 
