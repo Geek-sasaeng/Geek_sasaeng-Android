@@ -169,7 +169,8 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             Log.d("SignupData", bundle.toString())
 
             (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepTwoFragment).commit()
+                // .replace(R.id.sign_up_vp, stepTwoFragment).commit()
+                .replace(R.id.sign_up_vp, StepThreeFragment()).commit()
         }
     }
 
