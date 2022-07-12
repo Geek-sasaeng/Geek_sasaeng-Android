@@ -48,6 +48,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
 
+        showToast(binding.stepTwoSchoolSp.selectedItem.toString())
+
         initSpinner()
         initClickListener()
     }
@@ -119,11 +121,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun sendEmail() {
         email = binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString()
 
-        // val signUpEmailRequest = SignUpEmailRequest(email, university, getUuid().toString())
         val uuid = getUuid().toString()
-        // val signUpEmailRequest = SignUpEmailRequest("wlals2987" + "@" + "gachon.ac.kr", "Gachon University", uuid)
-        val signUpEmailRequest = SignUpEmailRequest("wlals2987@gachon.ac.kr", "가천대학교", uuid)
-        Log.d("EMAIL-RESPONSE", "wlals2987@gachon.ac.kr 가천대학교 uuid = $uuid")
+        val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 

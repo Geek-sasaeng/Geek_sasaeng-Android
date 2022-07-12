@@ -19,8 +19,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     private val progressVM: ProgressViewModel by activityViewModels()
     private lateinit var signUpService : SignupDataService //아이디, 닉네임 중복확인용
 
-    private var step1Check: Int = 0
-
     override fun onStart() {
         super.onStart()
         signUpService = SignupDataService() // 서비스 객체 생성
@@ -50,7 +48,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화 시키기
                 if (textLength >= 6) { //6자이 이상이면 버튼 활성화 시키기
                     binding.stepOneIdCheckBtn.isEnabled = true
-                    step1Check++
                 }
             }
         })
@@ -77,7 +74,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 if(macher.matches()){ //조건이 맞으면
                     binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
                     binding.stepOnePwMsgTv.text = "사용가능한 비밀번호입니다"
-                    step1Check++
                 }else{ //조건이 맞지 않으면
                     binding.stepOnePwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepOnePwMsgTv.text = "문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
@@ -105,7 +101,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE // 비밀번호 밑에 안내창 보이게하기
                 }else{ // 비밀번호 일치하면,
                     binding.stepOneCheckPwMsgTv.visibility = View.INVISIBLE // 비밀번호 밑에 안내창 안 보이게하기
-                    step1Check++
                 }
             }
         })
@@ -134,7 +129,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기
                 if (macher.matches()) {
                     binding.stepOneNicknameBtn.isEnabled = true
-                    step1Check++
                 } else {
                     binding.stepOneNicknameBtn.isEnabled = false
                 }
