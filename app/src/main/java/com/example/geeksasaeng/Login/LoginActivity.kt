@@ -213,28 +213,30 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginNaverBtn.setOnClickListener {
-            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+            changeActivity(SignUpNaverActivity::class.java)
 
-            val oauthLoginCallback = object : OAuthLoginCallback {
-                override fun onSuccess() {
-                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
-                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
-                    removeSP()
-                    saveSP(NaverIdLoginSDK.getAccessToken().toString())
-                    changeActivity(SignUpNaverActivity::class.java)
-                }
-                override fun onFailure(httpStatus: Int, message: String) {
-                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
-                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                    removeSP()
-                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
-                }
-                override fun onError(errorCode: Int, message: String) {
-                    onFailure(errorCode, message)
-                }
-            }
-
-            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+//            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+//
+//            val oauthLoginCallback = object : OAuthLoginCallback {
+//                override fun onSuccess() {
+//                    // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+//                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+//                    removeSP()
+//                    saveSP(NaverIdLoginSDK.getAccessToken().toString())
+//                    changeActivity(SignUpNaverActivity::class.java)
+//                }
+//                override fun onFailure(httpStatus: Int, message: String) {
+//                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+//                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+//                    removeSP()
+//                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
+//                }
+//                override fun onError(errorCode: Int, message: String) {
+//                    onFailure(errorCode, message)
+//                }
+//            }
+//
+//            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
         }
 
         binding.loginSignupBtn.setOnClickListener {
@@ -257,5 +259,4 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             4000-> Log.d("signup", "서버 오류입니다.")
         }
     }
-
 }

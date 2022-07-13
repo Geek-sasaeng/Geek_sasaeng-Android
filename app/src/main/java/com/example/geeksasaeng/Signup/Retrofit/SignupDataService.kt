@@ -91,7 +91,7 @@ class SignupDataService() {
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
 
                     when (emailResponse.code) {
-                        2802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
+                        1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
                         // 2803 : 유효하지 않은 인증번호 | 2804 : 이메일 인증 최대 10회 오류 | 2805 : 재시도
                         2803, 2804, 2805 -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
                     }

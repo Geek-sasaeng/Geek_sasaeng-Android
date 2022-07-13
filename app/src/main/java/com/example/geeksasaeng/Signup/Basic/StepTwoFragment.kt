@@ -32,8 +32,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
     var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
 
-    var uuid: String? = null
-
     private lateinit var signUpService : SignupDataService
 
     private val progressVM: ProgressViewModel by activityViewModels()

@@ -26,6 +26,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
         signUpService.setSignUpIdCheckView(this@StepOneFragment)//아이디 중복확인 뷰 연결
         signUpService.setSignUpNickCheckView(this@StepOneFragment)//닉네임 중복확인 뷰 연결
     }
+
     override fun initAfterBinding() {
         progressVM.increase()
         initTextWatcher()
@@ -133,7 +134,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             }
         })
 
-        //닉네임 TEXTWATCHER
+        // 닉네임 TEXTWATCHER
         binding.stepOneNicknameEt.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // text가 변경되기 전 호출
@@ -250,7 +251,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             binding.stepOneNicknameMsgTv.visibility = View.VISIBLE // 보이게 만들기
         }
         checkingNext()
-
     }
 
     override fun onSignUpNickCheckFailure(code: Int) {
@@ -269,9 +269,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
         }
     }
 
-    private fun checkingNext()
-    {
-
+    private fun checkingNext() {
         var check = (binding.stepOneIdMsgTv.text.toString()=="사용 가능한 아이디입니다")&&
                 (binding.stepOnePwMsgTv.text.toString() == "사용 가능한 비밀번호입니다")&&
                 (binding.stepOneCheckPwMsgTv.text.toString() == "비밀번호가 일치합니다") &&
