@@ -23,6 +23,8 @@ import java.util.regex.Pattern
 
 class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentStepNaverOneBinding::inflate), SignUpNickCheckView, SignUpEmailView {
 
+    var loginId: String? = ""
+    var phoneNumber: String? = ""
     var nickname: String? = ""
     var university: String? = ""
     var email: String? = ""
@@ -43,6 +45,11 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     override fun initAfterBinding() {
         progressVM.increase()
+
+        loginId = arguments?.getString("loginId")
+        phoneNumber = arguments?.getString("phoneNumber")
+
+        Log.d("NAVER-LOGIN", "loginid = ${loginId} / phoneNumber = ${phoneNumber}")
 
         initSpinner()
         initTextChangedListener()
