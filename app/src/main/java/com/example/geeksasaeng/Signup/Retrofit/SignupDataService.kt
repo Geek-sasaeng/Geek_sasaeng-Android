@@ -113,7 +113,7 @@ class SignupDataService() {
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
 
                     when (emailResponse.code) {
-                        2800 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
+                        1801 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
                         // ELSE : 유효하지 않은 인증번호
                         else -> verifyEmailView.onVerifyEmailFailure(emailResponse.code, emailResponse.message)
                     }
