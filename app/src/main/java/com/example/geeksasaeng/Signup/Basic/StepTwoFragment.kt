@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -10,18 +9,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpEmailCheck
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
-import com.example.geeksasaeng.databinding.ToastMsgSignupBinding
 import com.example.geeksasaeng.util.getUuid
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
@@ -53,14 +47,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
-
-//        val dialog = DialogSignUpEmailCheck()
-//        dialog.show(parentFragmentManager, "CustomDialog")
-//
-//        // 1.5초 뒤에 Dialog 자동 종료
-//        Handler().postDelayed({
-//            dialog.dismiss()
-//        }, 1500)
 
         initSpinner()
         initTextChangedListener()
