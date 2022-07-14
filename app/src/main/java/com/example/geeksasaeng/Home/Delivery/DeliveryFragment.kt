@@ -41,6 +41,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initBanner()
         //필터(spinner) 작업
         initSpinner()
+        initRadioBtn()
 
 
         //루나 코드
@@ -123,6 +124,22 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("deliveryPartyList", "실패")
     }
 
+    private fun initRadioBtn(){
+        binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
+            binding.deliveryTimeRg.check(checkedId)
+            Log.d("radio",checkedId.toString() +" 선택됨")
+            when(checkedId){
+                R.id.delivery_rb1->Log.d("radio","아침 선택됨")
+                R.id.delivery_rb2->Log.d("radio","점심 선택됨")
+                R.id.delivery_rb3->Log.d("radio","저녁 선택됨")
+                R.id.delivery_rb4->Log.d("radio","야식 선택됨")
+                else->{
+
+                }
+            }
+        }
+    }
+
     //배너 작업
     private fun initBanner(){
 
@@ -153,7 +170,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                         ViewPager2.SCROLL_STATE_IDLE ->{
                             flag=1
                             currentPosition = binding.deliveryBannerVp.currentItem+1
-                            Log.d("banner", currentPosition.toString())
                         }
                         //뷰페이저 움직이는 중
                         ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
