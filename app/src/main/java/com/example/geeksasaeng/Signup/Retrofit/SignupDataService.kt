@@ -86,6 +86,8 @@ class SignupDataService() {
     fun signUpEmailSender(signupEmailRequest: SignUpEmailRequest) {
         SignupDataService.signupEmail(signupEmailRequest).enqueue(object : Callback<SignUpEmailResponse> {
             override fun onResponse(call: Call<SignUpEmailResponse>, response: Response<SignUpEmailResponse>) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.code = " + response.code())
+
                 if (response.isSuccessful && response.code() == 200) {
                     val emailResponse: SignUpEmailResponse = response.body()!!
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
@@ -94,6 +96,7 @@ class SignupDataService() {
                         1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
                         // 2803 : 유효하지 않은 인증번호 | 2804 : 이메일 인증 최대 10회 오류 | 2805 : 재시도
                         2803, 2804, 2805 -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
+                        else -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
                     }
                 }
             }

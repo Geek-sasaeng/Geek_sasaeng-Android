@@ -202,6 +202,9 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             binding.stepNaverOneNicknameFailTv.visibility = View.GONE
         }
 
+        // 테스트용
+        // binding.stepNaverOneNextBtn.isEnabled = true;
+
         checkingNext()
     }
 
@@ -222,12 +225,13 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     private fun sendEmail() {
         email = binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString()
         val uuid = getUuid().toString()
-        Log.d("EMAIL-RESPONSE", "EMAIL = ${email} / UNIVERSITY = ${universityName} / UUID = ${uuid}")
+        Log.d("EMAIL-RESPONSE", "STEP-NAVER-ONE-SEND-EMAIL : EMAIL = ${email} / UNIVERSITY = ${universityName} / UUID = ${uuid}")
         val signUpEmailRequest = SignUpEmailRequest(email, universityName, uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 
     override fun onSignUpEmailSuccess(message: String) {
+        Log.d("EMAIL-RESPONSE", "SUCCESS")
         Log.d("EMAIL-RESPONSE", message)
         // showToast("SUCCESS")
         //이메일이 성공적으로 진행되었을때 버튼 활성화
@@ -238,13 +242,15 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     }
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
+        Log.d("EMAIL-RESPONSE", "FAILED")
+        Log.d("EMAIL-RESPONSE", message)
         verifyBtnClick = 1
+        showToast(message)
 
         when (code) {
             2803 -> showToast(message)
             2804 -> showToast(message)
-            2400 -> showToast(message)
+            2805 -> showToast(message)
         }
     }
 
