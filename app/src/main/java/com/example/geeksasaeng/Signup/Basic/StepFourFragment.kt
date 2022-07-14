@@ -206,8 +206,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                     binding.stepFourPhoneCheckBtn.isEnabled = false
                 }
             }
-
-            time -= 1000 //1초씩 줄이기
+            if(time!=0) //time이 0이 아니라면
+                time -= 1000 //1초씩 줄이기
         }
     }
 
