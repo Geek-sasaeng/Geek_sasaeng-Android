@@ -188,8 +188,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
         //아이디 중복확인 버튼
         binding.stepOneIdBtnO.setOnClickListener {
-            Toast.makeText(activity, "ID-CHECK-BTN", Toast.LENGTH_SHORT).show()
-
             val userId = binding.stepOneIdEt.text.toString() //사용자가 입력한 아이디 가져오기
             val signUpIdCheckRequest= SignUpIdCheckRequest(userId)
             signUpService.signUpIdCheckSender(signUpIdCheckRequest) //★아이디 중복확인하기
@@ -198,7 +196,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
         //닉네임 중복확인 버튼
         binding.stepOneNicknameBtnO.setOnClickListener {
-            Toast.makeText(activity, "NICKNAME-CHECK-BTN", Toast.LENGTH_LONG).show()
             val userNick = binding.stepOneNicknameEt.text.toString() //사용자가 입력한 닉네임 가져오기
             val signUpNickCheckRequest= SignUpNickCheckRequest(userNick)
             signUpService.signUpNickCheckSender(signUpNickCheckRequest) //★아이디 중복확인하기
