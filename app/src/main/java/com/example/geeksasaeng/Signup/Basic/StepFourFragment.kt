@@ -59,7 +59,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     }
 
-    private fun initTextWatcher(){
+    private fun initTextWatcher() {
         //TEXTWACTHER를 이용한 버튼 활성/비활성 작업
 
         //인증번호 전송 버튼 관련 - 휴대폰 et
@@ -76,10 +76,16 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 // text가 변경된 후 호출
                 val phonepattern = Pattern.compile("^[0-9]{11}\$") //패턴 생성 (숫자로 이루어진 11자리를 조건으로 둠)
                 val macher = phonepattern.matcher(binding.stepFourPhoneEt.text.toString())
-                //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화 시키기
-                binding.stepFourPhoneSendBtn.isEnabled = macher.matches()
-                binding.stepFourPhoneReSendBtn.isEnabled = macher.matches()
-                Log.d("btnEnable", macher.matches().toString())
+
+                //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화
+                if (macher.matches()) {
+                    binding.stepFourPhoneReSendBtnO.visibility = View.VISIBLE
+                    binding.stepFourPhoneReSendBtnX.visibility = View.GONE
+                } else {
+                    binding.stepFourPhoneReSendBtnO.visibility = View.GONE
+                    binding.stepFourPhoneReSendBtnX.visibility = View.VISIBLE
+                }
+
                 checkingNext() // 휴대폰 번호 바꾸면 다시 다음버튼 활성화/비활성화 조건 체크 위함
             }
 
@@ -100,9 +106,12 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 if (time != 0) { // 인증시간이 만료되지 않았다면 조건 검사하기
                     val codepattern = Pattern.compile("^[0-9]{6}\$") //패턴 생성 (숫자로 이루어진 6자리를 조건으로 둠)
                     val macher = codepattern.matcher(binding.stepFourCheckEt.text.toString())
-                    //조건이 맞으면 확인버튼 활성화, 안맞으면 비활성화 시키기
-                    binding.stepFourPhoneCheckBtn.isEnabled = macher.matches()
-                    Log.d("btnEnable", "확인버튼 : " + macher.matches().toString())
+
+                    // 조건이 맞으면 확인버튼 활성화, 안맞으면 비활성화 시키기
+//                    if (macher.matches()) {
+//                        binding.stepFourPhoneCheckBtnO.visibility = View.VISIBLE
+//                        binding.stepFourPhoneCheckBtnX.visibility = View.GONE
+//                    }
                 }
             }
 
@@ -112,34 +121,34 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     private fun initClickListener() {
         //인증번호 전송 버튼
-        binding.stepFourPhoneSendBtn.setOnClickListener {
+        binding.stepFourPhoneReSendBtnO.setOnClickListener {
             binding.stepFourCheckMsgTv.visibility = View.VISIBLE //몇초 남았어요 보이게 만들기
             startTimer() //타이머시작
 
-            //인증번호 전송버튼은 감추고, 재전송 하기 버튼 보이게 하기
-            binding.stepFourPhoneSendBtn.visibility = View.INVISIBLE
-            binding.stepFourPhoneReSendBtn.visibility = View.VISIBLE
+            binding.stepFourPhoneReSendBtnO.text = "재전송 하기"
+            binding.stepFourPhoneReSendBtnX.text = "재전송 하기"
+
+            binding.stepFourPhoneCheckBtnO.visibility = View.VISIBLE
+            binding.stepFourPhoneCheckBtnX.visibility = View.GONE
+
+            if (binding.stepFourPhoneReSendBtnO.text == "재전송 하기") {
+                //10초 이내에 재전송시 10초 지나고 가능, 하루에 최대 5번까지 가능
+                //TODO: 하루에 최대 5번까지 가능하게 만들어야해
+                if(time<4900){ //10초가 지났으면
+                    resetTimer()
+                    startTimer()
+                    sendSms() //인증문자 보내는 작업
+                }else{
+                    showToast("잠시 후에 다시 시도해주세요")
+                }
+            }
 
             sendSms() //인증문자 보내는 작업
 
         }
 
-        //재전송 하기 버튼
-        binding.stepFourPhoneReSendBtn.setOnClickListener {
-            //10초 이내에 재전송시 10초 지나고 가능, 하루에 최대 5번까지 가능
-            //TODO: 하루에 최대 5번까지 가능하게 만들어야해
-            if(time<4900){ //10초가 지났으면
-                resetTimer()
-                startTimer()
-                sendSms() //인증문자 보내는 작업
-            }else{
-                showToast("잠시 후에 다시 시도해주세요")
-            }
-        }
-
-
         //인증번호 확인 버튼
-        binding.stepFourPhoneCheckBtn.setOnClickListener {
+        binding.stepFourPhoneCheckBtnO.setOnClickListener {
             //인증번호 확인 작업
             val code = binding.stepFourCheckEt.text.toString() //사용자가 입력한 인증번호 가져오기
             val verifySmsRequest= VerifySmsRequest(phoneNumber!!, code)
@@ -203,7 +212,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                     binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepFourCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
                     // 인증번호 입력 시간이 만료 되었으므로 버튼 비활성화 시킴
-                    binding.stepFourPhoneCheckBtn.isEnabled = false
+                    binding.stepFourPhoneCheckBtnO.visibility = View.GONE
+                    binding.stepFourPhoneCheckBtnX.visibility = View.VISIBLE
                 }
             }
 
@@ -256,6 +266,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         when(code){
             2013-> {
                 Log.d("sms", "인증 번호가 틀렸습니다.")
+                binding.stepFourFailMsgTv.visibility = View.VISIBLE
                 binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                 binding.stepFourCheckMsgTv.text = "인증 번호가 틀렸습니다."
                 //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기

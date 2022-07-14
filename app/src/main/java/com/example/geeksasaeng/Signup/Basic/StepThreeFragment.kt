@@ -64,6 +64,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
             // 이메일 번호 인증
             verifyEmail()
 
+            // 디버깅용
+            verifyCheck = 1
+
             if (verifyCheck == 1) {
                 timerTask?.cancel()
 
