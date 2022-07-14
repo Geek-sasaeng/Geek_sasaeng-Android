@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bg_gradient.xml" value="0.1345" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_chat.xml" value="0.165" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_community.xml" value="0.165" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_home.xml" value="0.1345" />
@@ -47,7 +48,7 @@
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_phone_skip.xml" value="0.22" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_banner.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_chatting.xml" value="0.17916666666666667" />
-        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.12" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_helper.xml" value="0.17447916666666666" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.12236286919831224" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.14583333333333334" />
