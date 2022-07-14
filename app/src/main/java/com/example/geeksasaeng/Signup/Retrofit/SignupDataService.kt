@@ -175,7 +175,7 @@ class SignupDataService() {
                     val resp: SignUpIdCheckResponse = response.body()!!
 
                     when (resp.code) {
-                        2604-> {
+                        1601 -> {
                             signUpIdCheckView.onSignUpIdCheckSuccess(resp.message)
                         }
                         else -> signUpIdCheckView.onSignUpIdCheckFailure(resp.code)

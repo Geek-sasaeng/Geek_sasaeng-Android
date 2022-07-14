@@ -175,7 +175,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun signupSocial() {
         val signupDataService = SignupDataService()
         signupDataService.setSignUpView(this)
-        signupDataService.signUp(getSignupUser())
+        signupDataService.signUpSocial(getSignupUser())
 
         Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
     }
@@ -225,7 +225,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         binding.loginLoginBtn.setOnClickListener {
             login(false)
-            // changeActivity(MainActivity::class.java)
+            changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {
