@@ -1,11 +1,8 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.ApplicationClass.Companion.retrofit
-import com.example.geeksasaeng.Data.EmailCheck
+import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Data.Signup
-import com.example.geeksasaeng.NetworkModule
-import com.example.geeksasaeng.Signup.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

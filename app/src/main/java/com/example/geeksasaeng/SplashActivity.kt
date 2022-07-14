@@ -2,10 +2,7 @@ package com.example.geeksasaeng
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
 

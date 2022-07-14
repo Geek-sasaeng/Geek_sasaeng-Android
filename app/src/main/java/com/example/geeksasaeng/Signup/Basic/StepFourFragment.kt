@@ -9,13 +9,13 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
-import com.example.geeksasaeng.util.getUuid
+import com.example.geeksasaeng.Utils.getUuid
 import java.text.DecimalFormat
 import java.util.*
 import java.util.regex.Pattern

@@ -1,7 +1,6 @@
-package com.example.geeksasaeng.util
+package com.example.geeksasaeng.Utils
 
-import com.example.geeksasaeng.ApplicationClass.Companion.mSharedPreferences
-import com.google.gson.Gson
+import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
 
 fun removeUuid(){
     val editor = mSharedPreferences.edit()

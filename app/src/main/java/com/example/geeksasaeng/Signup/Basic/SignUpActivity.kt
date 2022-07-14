@@ -3,7 +3,7 @@ package com.example.geeksasaeng.Signup.Basic
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 

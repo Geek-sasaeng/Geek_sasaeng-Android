@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Base
+package com.example.geeksasaeng.Utils
 
 import android.os.Bundle
 import android.util.Log

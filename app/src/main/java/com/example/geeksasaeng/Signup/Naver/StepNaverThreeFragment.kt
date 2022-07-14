@@ -2,9 +2,8 @@ package com.example.geeksasaeng.Signup.Naver
 
 import android.content.Intent
 import android.util.Log
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.databinding.FragmentStepNaverThreeBinding
 

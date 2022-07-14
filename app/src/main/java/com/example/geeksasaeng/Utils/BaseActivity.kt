@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Base
+package com.example.geeksasaeng.Utils
 
 import android.content.Intent
 import android.os.Bundle

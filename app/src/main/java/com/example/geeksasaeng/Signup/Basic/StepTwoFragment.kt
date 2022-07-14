@@ -11,12 +11,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
+import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
-import com.example.geeksasaeng.util.getUuid
+import com.example.geeksasaeng.Utils.getUuid
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 

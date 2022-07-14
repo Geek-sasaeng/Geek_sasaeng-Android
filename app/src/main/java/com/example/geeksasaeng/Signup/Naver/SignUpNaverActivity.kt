@@ -1,13 +1,11 @@
 package com.example.geeksasaeng.Signup.Naver
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Base.BaseActivity
-import com.example.geeksasaeng.Login.LoginActivity
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivitySignUpNaverBinding
 

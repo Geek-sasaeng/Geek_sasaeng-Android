@@ -1,8 +1,6 @@
 package com.example.geeksasaeng
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityDormitoryBinding
 
 class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormitoryBinding::inflate) {

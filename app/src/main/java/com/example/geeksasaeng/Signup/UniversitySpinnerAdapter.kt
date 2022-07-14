@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Signup.Basic
+package com.example.geeksasaeng.Signup
 
 import com.example.geeksasaeng.R
 import android.content.Context

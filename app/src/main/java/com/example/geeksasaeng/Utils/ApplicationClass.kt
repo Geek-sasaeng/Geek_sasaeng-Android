@@ -1,10 +1,8 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Utils
 
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.geeksasaeng.util.getUuid
-import com.example.geeksasaeng.util.saveUuid
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*

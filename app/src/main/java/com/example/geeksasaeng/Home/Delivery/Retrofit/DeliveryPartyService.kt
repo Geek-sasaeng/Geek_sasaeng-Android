@@ -1,10 +1,7 @@
-package com.example.geeksasaeng.Home.Delivery
+package com.example.geeksasaeng.Home.Delivery.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyInterface
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyListResponse
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyView
-import com.example.geeksasaeng.NetworkModule
+import com.example.geeksasaeng.Utils.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

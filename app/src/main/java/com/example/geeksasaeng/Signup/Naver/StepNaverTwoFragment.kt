@@ -1,19 +1,18 @@
 package com.example.geeksasaeng.Signup.Naver
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepNaverTwoBinding
-import com.example.geeksasaeng.util.getUuid
+import com.example.geeksasaeng.Utils.getUuid
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.concurrent.timer

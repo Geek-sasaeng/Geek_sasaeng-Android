@@ -1,4 +1,4 @@
-package com.example.geeksasaeng
+package com.example.geeksasaeng.Utils
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
