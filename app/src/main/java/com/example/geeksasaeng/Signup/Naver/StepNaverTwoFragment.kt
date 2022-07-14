@@ -18,8 +18,10 @@ import kotlin.concurrent.timer
 
 class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentStepNaverTwoBinding::inflate), SignUpEmailView, VerifyEmailView {
 
-    var nickname: String? = ""
     var email: String? = ""
+    var loginId: String? = ""
+    var nickname: String? = ""
+    var phoneNumber: String? = ""
     var universityName: String? = ""
 
     private val progressVM: ProgressNaverViewModel by activityViewModels()
@@ -36,9 +38,13 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         
         startTimer()
 
-        nickname = arguments?.getString("nickname")
-        universityName = arguments?.getString("universityName")
         email = arguments?.getString("email")
+        loginId = arguments?.getString("loginId")
+        nickname = arguments?.getString("nickname")
+        phoneNumber = arguments?.getString("phoneNumber")
+        universityName = arguments?.getString("universityName")
+
+        Log.d("NAVER-LOGIN", "STEP-NAVER-TWO-1 : loginId = $loginId / phoneNumber = $phoneNumber")
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepNaverTwoFragment)
@@ -66,21 +72,18 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
                 val transaction: FragmentTransaction = (context as SignUpNaverActivity).supportFragmentManager.beginTransaction()
 
                 val bundle = Bundle()
-                bundle.putString("nickname", nickname)
                 bundle.putString("email", email)
+                bundle.putString("loginId", loginId)
+                bundle.putString("nickname", nickname)
+                bundle.putString("phoneNumber", phoneNumber)
                 bundle.putString("universityName", universityName)
+
+                Log.d("NAVER-LOGIN", "STEP-NAVER-TWO-2 : loginId = $loginId / phoneNumber = $phoneNumber")
 
                 val stepNaverThreeFragment = StepNaverThreeFragment()
                 stepNaverThreeFragment.arguments = bundle
 
-                Log.d("SignupData", bundle.toString())
-
-                (context as SignUpNaverActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.sign_up_vp, stepNaverThreeFragment).commit()
-
-                stepNaverThreeFragment.arguments = bundle
-
-                transaction.replace(R.id.sign_up_vp, stepNaverThreeFragment)
+                transaction.replace(R.id.sign_up_naver_vp, stepNaverThreeFragment)
                 transaction.commit()
             }
         }

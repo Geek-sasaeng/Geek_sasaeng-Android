@@ -23,6 +23,8 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
         loginId = intent.getStringExtra("loginId")
         phoneNumber = intent.getStringExtra("phoneNumber")
 
+        Log.d("NAVER-LOGIN", "SIGNUP-NAVER : loginId = $loginId / phone = $phoneNumber")
+
         val transaction: FragmentTransaction = this@SignUpNaverActivity.supportFragmentManager.beginTransaction()
 
         val bundle = Bundle()
@@ -30,13 +32,6 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
         bundle.putString("phoneNumber", phoneNumber)
 
         val stepNaverOneFragment = StepNaverOneFragment()
-        stepNaverOneFragment.arguments = bundle
-
-        Log.d("SignupData", bundle.toString())
-
-        this@SignUpNaverActivity.supportFragmentManager.beginTransaction()
-            .replace(R.id.sign_up_vp, stepNaverOneFragment).commit()
-
         stepNaverOneFragment.arguments = bundle
 
         transaction.replace(R.id.sign_up_naver_vp, stepNaverOneFragment)

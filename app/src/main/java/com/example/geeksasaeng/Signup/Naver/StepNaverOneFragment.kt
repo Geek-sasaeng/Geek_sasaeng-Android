@@ -26,7 +26,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     var loginId: String? = ""
     var phoneNumber: String? = ""
     var nickname: String? = ""
-    var university: String? = ""
+    var universityName: String? = ""
     var email: String? = ""
 
     var verifyBtnClick: Int = 0
@@ -75,22 +75,23 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
                 universityList[0] = universityList[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_university_text)
                 textName.text = universityList[position]
-                university = textName.text.toString()
+                universityName = textName.text.toString()
 
-                if (university == "자신의 학교를 선택해주세요") {
-                    university = null
+                if (universityName == "자신의 학교를 선택해주세요") {
+                    universityName = null
                 }
 
                 // 임의로 넣어놓은 부분!!
-                if (university == "가천대학교")
+                if (universityName == "가천대학교") {
                     binding.stepNaverOneEmail2Et.setText("@gachon.ac.kr")
-                else if (university == "나천대학교")
+                }
+                else if (universityName == "나천대학교")
                     binding.stepNaverOneEmail2Et.setText("@nachon.ac.kr")
-                else if (university == "다천대학교")
+                else if (universityName == "다천대학교")
                     binding.stepNaverOneEmail2Et.setText("@dachon.ac.kr")
-                else if (university == "라천대학교")
+                else if (universityName == "라천대학교")
                     binding.stepNaverOneEmail2Et.setText("@rachon.ac.kr")
-                else if (university == "마천대학교")
+                else if (universityName == "마천대학교")
                     binding.stepNaverOneEmail2Et.setText("@machon.ac.kr")
             }
 
@@ -133,7 +134,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
                 checkingNext()
             }
             override fun afterTextChanged(editable: Editable) {
-                if (university != null && binding.stepNaverOneEmailEt.text.isNotEmpty()) {
+                if (universityName != null && binding.stepNaverOneEmailEt.text.isNotEmpty()) {
                     binding.stepNaverOneEmailCheckBtnX.visibility = View.GONE
                     binding.stepNaverOneEmailCheckBtnO.visibility = View.VISIBLE
                 } else {
@@ -176,9 +177,13 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
         binding.stepNaverOneNextBtn.setOnClickListener {
             val bundle = Bundle()
+            bundle.putString("loginId", loginId)
+            bundle.putString("phoneNumber", phoneNumber)
             bundle.putString("nickname", binding.stepNaverOneNicknameEt.text.toString())
-            bundle.putString("universityName", university)
+            bundle.putString("universityName", universityName)
             bundle.putString("email", binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString())
+
+            Log.d("NAVER-LOGIN", "STEP-NAVER-ONE : loginId = $loginId / phoneNumber = $phoneNumber")
 
             val stepNaverTwoFragment = StepNaverTwoFragment()
             stepNaverTwoFragment.arguments = bundle
@@ -217,8 +222,8 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     private fun sendEmail() {
         email = binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString()
         val uuid = getUuid().toString()
-        Log.d("EMAIL-RESPONSE", "EMAIL = ${email} / UNIVERSITY = ${university} / UUID = ${uuid}")
-        val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
+        Log.d("EMAIL-RESPONSE", "EMAIL = ${email} / UNIVERSITY = ${universityName} / UUID = ${uuid}")
+        val signUpEmailRequest = SignUpEmailRequest(email, universityName, uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 

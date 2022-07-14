@@ -241,7 +241,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                     loginId = response.profile?.email.toString()
                     phoneNumber = response.profile?.mobile.toString()
 
-                    Log.d("NAVER-LOGIN", "id = ${response.profile?.email} / phone = ${response.profile?.mobile}")
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : BTN-CLICK1 : id = ${response.profile?.email} / phone = ${response.profile?.mobile}")
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : BTN-CLICK2 : id = ${loginId} / phone = ${phoneNumber}")
 
                     Toast.makeText(this@LoginActivity, "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
                 }
@@ -266,11 +267,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                     saveSP(NaverIdLoginSDK.getAccessToken().toString())
 
                     val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
-                    intent.putExtra("loginId", loginId)
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
+                    intent.putExtra("loginId", loginId.toString())
                     intent.putExtra("phoneNumber", phoneNumber)
                     startActivity(intent)
 
-                    changeActivity(SignUpNaverActivity::class.java)
+                    // changeActivity(SignUpNaverActivity::class.java).........................................
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
