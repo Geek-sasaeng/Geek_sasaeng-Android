@@ -63,21 +63,21 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         deliveryArray.apply {
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, false, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 1, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", false, false, 3, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", false, false, 4, 5, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, false, 4, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, false, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 1, 4))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", false, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", false, false, 4, 5))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 6))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, false, 4, 6))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
         }
 
         // 배달 파티 리스트 받아오기
@@ -108,9 +108,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     true,
                     true,
                     currentMatching,
-                    maxMatching,
-                    R.drawable.ic_default_profile,
-                    "test"
+                    maxMatching
+                   /* R.drawable.ic_default_profile,
+                    "test"*/
                 )
             )
         }

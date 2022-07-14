@@ -28,6 +28,7 @@ class ApplicationClass: Application() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        //SharedPreference
         mSharedPreferences = applicationContext.getSharedPreferences(TAG, Context.MODE_PRIVATE)
         if(getUuid()==null){ //uuid가 존재하지 않으면,
             val uuid = UUID.randomUUID().toString() //uuid 생성

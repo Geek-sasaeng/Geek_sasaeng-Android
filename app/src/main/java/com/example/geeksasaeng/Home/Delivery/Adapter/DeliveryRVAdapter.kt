@@ -69,8 +69,8 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<Delivery>) : Recycle
                 binding.deliveryItemMemberNumber.setTextColor(Color.parseColor("#A8A8A8"))
             }
 
-            binding.deliveryHostProfile.setImageResource(delivery.hostProfile)
-            binding.deliveryHostName.text = delivery.hostName
+//            binding.deliveryHostProfile.setImageResource(delivery.hostProfile)
+//            binding.deliveryHostName.text = delivery.hostName
         }
     }
 }
