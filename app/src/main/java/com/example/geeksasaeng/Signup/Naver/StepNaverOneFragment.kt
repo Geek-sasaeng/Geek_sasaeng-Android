@@ -203,7 +203,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
         }
 
         // 테스트용
-        // binding.stepNaverOneNextBtn.isEnabled = true;
+        binding.stepNaverOneNextBtn.isEnabled = true;
 
         checkingNext()
     }

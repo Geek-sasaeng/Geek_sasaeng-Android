@@ -7,8 +7,14 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
+    // <회원가입>
+    // 일반 회원가입
     @POST("/members")
     fun signup(@Body user: Signup): Call<SignUpResponse>
+
+    // 네이버 회원가입
+    @POST("/members/social")
+    fun signupSocial(@Body user: Signup): Call<SignUpResponse>
 
     // <이메일 인증>
     // 이메일 전송

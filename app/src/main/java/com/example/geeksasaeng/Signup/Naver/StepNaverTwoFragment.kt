@@ -66,6 +66,9 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
             // 이메일 번호 인증
             verifyEmail()
 
+            // 테스트용
+            verifyCheck = 1
+
             if (verifyCheck == 1) {
                 timerTask?.cancel()
 

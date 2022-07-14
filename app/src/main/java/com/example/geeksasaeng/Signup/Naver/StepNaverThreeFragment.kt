@@ -27,7 +27,7 @@ class StepNaverThreeFragment : BaseFragment<FragmentStepNaverThreeBinding>(Fragm
         phoneNumber = arguments?.getString("phoneNumber")
         universityName = arguments?.getString("universityName")
 
-        Log.d("NAVER-LOGIN", "STEP-NAVER-THREE-1 : loginId = $loginId / phoneNumber = $phoneNumber")
+        Log.d("NAVER-LOGIN", "STEP-NAVER-THREE-1 : email = $email / loginId = $loginId / nickname = $nickname / phoneNumber = $phoneNumber / universityName = $universityName")
 
         initClickListener()
     }
@@ -42,10 +42,8 @@ class StepNaverThreeFragment : BaseFragment<FragmentStepNaverThreeBinding>(Fragm
             intent.putExtra("nickname", nickname)
             intent.putExtra("phoneNumber", phoneNumber)
             intent.putExtra("universityName", universityName)
-
-            Log.d("NAVER-LOGIN", "STEP-NAVER-THREE-2 : loginId = $loginId / phoneNumber = $phoneNumber")
-
-            // startActivity(intent)
+            intent.putExtra("status", "social")
+            startActivity(intent)
         }
     }
 }
