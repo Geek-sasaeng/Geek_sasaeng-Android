@@ -8,17 +8,14 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Retrofit.SignUpEmailRequest
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Signup.Retrofit.VerifyEmailRequest
-import com.example.geeksasaeng.Signup.Retrofit.VerifyEmailView
+import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
 import com.example.geeksasaeng.util.getUuid
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.concurrent.timer
 
-class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate), VerifyEmailView {
+class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate), VerifyEmailView, SignUpEmailView {
 
     var checkPassword: String? = ""
     var loginId: String? = ""
@@ -50,17 +47,15 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepThreeFragment)
+        signUpService.setSignUpEmailView(this@StepThreeFragment)
 
         initClickListener()
     }
 
     private fun initClickListener() {
-
         // 재전송버튼
-       binding.stepThreeSendBtn.setOnClickListener {
-            resetTimer()
-            startTimer()
-
+        binding.stepThreeSendBtn.setOnClickListener {
+            sendEmail()
             binding.stepThreeCheckMsgTv.visibility = View.VISIBLE
             binding.stepThreeResultMsgTv.visibility = View.GONE
         }
@@ -151,9 +146,31 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
         verifyCheck = -1
 
-//        when(code){
-//            // 2801 : 유효하지 않은 인증번호
-//            2801 -> showToast(message)
-//        }
+        when(code){
+            // 2801 : 유효하지 않은 인증번호
+            2801 -> showToast(message)
+        }
+    }
+
+    private fun sendEmail() {
+        val uuid = getUuid().toString()
+        val signUpEmailRequest = SignUpEmailRequest(email, universityName, uuid)
+        signUpService.signUpEmailSender(signUpEmailRequest)
+    }
+
+    override fun onSignUpEmailSuccess(message: String) {
+        showToast("전송이 완료되었습니다")
+        resetTimer()
+        startTimer()
+    }
+
+    override fun onSignUpEmailFailure(code: Int, message: String) {
+        showToast("전송에 실패했습니다")
+
+        when(code){
+            2803 -> showToast(message)
+            2804 -> showToast(message)
+            2400 -> showToast(message)
+        }
     }
 }
