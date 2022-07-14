@@ -13,6 +13,7 @@ import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.example.geeksasaeng.util.getUuid
 import java.text.DecimalFormat
@@ -240,14 +241,17 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     //sms인증문자 보내기 성공/실패
     override fun onSignUpSmsSuccess(message: String) {
         Log.d("sms",message)
+
+        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+
         checkingNext() // 다음버튼 활성화 여부 결정
     }
 
     override fun onSignUpSmsFailure(code: Int) {
         when(code){
-            2015->{
-                Log.d("sms","일일 최대 전송 횟수를 초과했습니다.")
-                showToast("일일 최대 전송 횟수를 초과했습니다.") //TODO:커스텀 토스트 메세지로 바꾸기
+            2015 -> {
+                Log.d("sms","일일 최대 전송 횟수를 초과했습니다")
+                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
             }
             2016->Log.d("sms","이메일 인증을 하지 못한 유저입니다. 이메일 인증을 해주세요.")
             4001->Log.d("sms","SMS API 연동 오류입니다.")

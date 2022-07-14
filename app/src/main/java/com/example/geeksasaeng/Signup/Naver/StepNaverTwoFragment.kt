@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepNaverTwoBinding
 import com.example.geeksasaeng.util.getUuid
 import java.text.DecimalFormat
@@ -156,7 +158,8 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        showToast("전송이 완료되었습니다")
+        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+
         resetTimer()
         startTimer()
     }
@@ -166,8 +169,12 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
 
         when(code){
             2803 -> showToast(message)
-            2804 -> showToast(message)
-            2400 -> showToast(message)
+            2804 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            }
+            2805 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+            }
         }
     }
 }

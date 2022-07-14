@@ -15,8 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Basic.UniversitySpinnerAdapter
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.databinding.FragmentStepNaverOneBinding
 import com.example.geeksasaeng.util.getUuid
 import java.util.regex.Pattern
@@ -233,6 +235,9 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     override fun onSignUpEmailSuccess(message: String) {
         Log.d("EMAIL-RESPONSE", "SUCCESS")
         Log.d("EMAIL-RESPONSE", message)
+
+        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+
         // showToast("SUCCESS")
         //이메일이 성공적으로 진행되었을때 버튼 활성화
         binding.stepNaverOneNextBtn.isEnabled = true;
@@ -249,8 +254,12 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
         when (code) {
             2803 -> showToast(message)
-            2804 -> showToast(message)
-            2805 -> showToast(message)
+            2804 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            }
+            2805 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+            }
         }
     }
 
