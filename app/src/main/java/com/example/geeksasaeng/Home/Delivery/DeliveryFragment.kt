@@ -37,14 +37,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun initAfterBinding() {
 
-        //배너작업
-        initBanner()
-        //필터(spinner) 작업
-        initSpinner()
-        initRadioBtn()
+        initBanner() //배너작업
+        initSpinner() //필터(spinner) 작업
+        initRadioBtn() //필터(radiobutton) 작업
 
-
-        //루나 코드
         // 어댑터 설정
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
@@ -59,6 +55,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
+            Log.d("floating","플로팅버튼 클릭됨")
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
         }
