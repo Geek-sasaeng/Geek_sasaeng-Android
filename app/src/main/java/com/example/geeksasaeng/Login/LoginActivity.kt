@@ -1,13 +1,17 @@
 package com.example.geeksasaeng.Login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.os.AsyncTask
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Data.Signup
@@ -18,6 +22,7 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
+import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment
 import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
@@ -26,6 +31,13 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.nhn.android.naverlogin.OAuthLogin
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
@@ -37,7 +49,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var password: String = ""
     var phoneNumber: String = ""
     var universityName: String = ""
-    var status: String? = ""
 
     private var OAUTH_CLIENT_ID: String = "czrW_igO4TDdAeE5WhGW"
     private var OAUTH_CLIENT_SECRET = "syoXsVLKN1"
@@ -79,10 +90,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             phoneNumber = intent?.getStringExtra("phoneNumber").toString()
             universityName = intent?.getStringExtra("universityName").toString()
 
-            if (intent?.getStringExtra("status") == "social")
-                signupSocial()
-            else
-                signup()
+            signup()
         }
 
         setTextChangedListener()
@@ -172,13 +180,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
     }
 
-    private fun signupSocial() {
-        val signupDataService = SignupDataService()
-        signupDataService.setSignUpView(this)
-        signupDataService.signUpSocial(getSignupUser())
-
-        Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
-    }
 
     private fun setTextChangedListener() {
         binding.loginIdEt.addTextChangedListener(object : TextWatcher {
@@ -225,11 +226,15 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         binding.loginLoginBtn.setOnClickListener {
             login(false)
-            changeActivity(MainActivity::class.java)
+            // changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {
+            changeActivity(SignUpNaverActivity::class.java)
+
             NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+            var naverToken :String? = ""
 
             val profileCallback = object : NidProfileCallback<NidProfileResponse> {
                 override fun onSuccess(response: NidProfileResponse) {
@@ -240,12 +245,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                     Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : BTN-CLICK2 : id = ${loginId} / phone = ${phoneNumber}")
 
                     Toast.makeText(this@LoginActivity, "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
-                    Log.d("NAVER-LOGIN", "1 LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
-                    intent.putExtra("loginId", loginId)
-                    intent.putExtra("phoneNumber", phoneNumber)
-                    startActivity(intent)
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -262,10 +261,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 override fun onSuccess() {
                     // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                     // Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
-
+                    //로그인 유저 정보 가져오기
                     NidOAuthLogin().callProfileApi(profileCallback)
                     removeSP()
                     saveSP(NaverIdLoginSDK.getAccessToken().toString())
+
+                    val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
+                    intent.putExtra("loginId", loginId.toString())
+                    intent.putExtra("phoneNumber", phoneNumber)
+                    startActivity(intent)
+                    // changeActivity(SignUpNaverActivity::class.java).........................................
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -289,12 +295,10 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     //회원가입 성공/실패
     override fun onSignUpSuccess() {
-        Log.d("SIGNUP-RESPONSE", "SIGNUP $status : 회원가입에 성공하였습니다.")
+        Log.d("signup", "회원가입에 성공하였습니다.")
     }
 
     override fun onSignUpFailure(code:Int) {
-        Log.d("SIGNUP-RESPONSE", "SIGNUP $status : 회원가입에 실패하였습니다.")
-        
         when(code){
             2006-> Log.d("signup", "중복되는 유저 아이디입니다")
             2007-> Log.d("signup", "중복되는 유저 이메일입니다")
@@ -310,4 +314,5 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
      * authenticate() 메서드를 이용한 로그인 */
     private fun startNaverLogin(){
     }
+
 }

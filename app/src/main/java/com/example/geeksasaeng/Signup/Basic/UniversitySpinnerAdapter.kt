@@ -36,6 +36,7 @@ class UniversitySpinnerAdapter(context: Context, spinnerList: Array<String>?) : 
 
         if (i == 0) { // 제일 상단 아이템
             textName.setText("자신의 학교를 선택해주세요")
+            textName.setTextColor(ContextCompat.getColor(context, R.color.gray_1))
             image.setImageResource(R.drawable.ic_spinner_down)
         } else if (spinnerList!![i].length == 1) { // 자음 아이템 (한 글자인 것을 통해 판단)
             textName.setText(spinnerList!![i])
