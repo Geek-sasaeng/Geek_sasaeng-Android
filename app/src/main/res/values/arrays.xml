@@ -8,6 +8,7 @@
         <item>6명 이하</item>
         <item>8명 이하</item>
         <item>10명 이하</item>
+        <item>인원 선택</item>
     </string-array>
 
     <string-array name= "home_dropdown2">
