@@ -5,14 +5,20 @@
       <map>
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_chat.xml" value="0.165" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_community.xml" value="0.165" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_home.xml" value="0.1345" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_next.xml" value="0.165" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_profile.xml" value="0.1345" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/bottom_navi_report.xml" value="0.165" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_back.xml" value="0.1225" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_background_logo.xml" value="0.1" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_chat.xml" value="0.1345" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_community.xml" value="0.1635" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_floating_btn.xml" value="0.1605" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_home.xml" value="0.1635" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_profile.xml" value="0.165" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_report.xml" value="0.1345" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_search.xml" value="0.1345" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_sort.xml" value="0.1345" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_spinner_down.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_spinner_up.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/round_background_border.xml" value="0.159" />
