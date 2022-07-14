@@ -69,7 +69,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             phoneNumber = intent?.getStringExtra("phoneNumber").toString()
             universityName = intent?.getStringExtra("universityName").toString()
 
-            signup() //회원가입 진행
+            signup() //위의 정보를 바탕으로 회원가입 진행
         }
 
         setTextChangedListener()
@@ -113,7 +113,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun removeSP() {
         val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
         val editor = spf.edit()
-
         editor.clear()
         editor.commit()
     }
@@ -159,7 +158,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
     }
-
 
     private fun setTextChangedListener() {
         binding.loginIdEt.addTextChangedListener(object : TextWatcher {

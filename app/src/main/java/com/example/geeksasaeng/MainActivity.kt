@@ -37,5 +37,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             false
         }
+
+        binding.mainBottomNavi.itemIconTintList = null
     }
+
+
 }
