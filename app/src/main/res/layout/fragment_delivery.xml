@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_floating_btn"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/main"
         android:layout_marginRight="18dp"
         android:layout_marginBottom="18dp"
         app:borderWidth="0dp"
