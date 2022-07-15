@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Login
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.text.Editable
@@ -19,7 +20,6 @@ import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Retrofit.SignUpRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.SignUpView
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -210,8 +210,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun initClickListener() {
 
         binding.loginLoginBtn.setOnClickListener {
-            login(false)
-            // changeActivity(MainActivity::class.java)
+            // login(false)
+            changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {
