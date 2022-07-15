@@ -1,14 +1,12 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
-import com.example.geeksasaeng.Data.EmailCheck
-import com.example.geeksasaeng.Data.Signup
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
     @POST("/members")
-    fun signup(@Body user: Signup): Call<SignUpResponse>
+    fun signup(@Body user: SignUpRequest): Call<SignUpResponse>
 
     // <이메일 인증>
     // 이메일 전송

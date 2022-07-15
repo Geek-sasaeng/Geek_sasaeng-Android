@@ -37,13 +37,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun initAfterBinding() {
 
-        //배너작업
-        initBanner()
-        //필터(spinner) 작업
-        initSpinner()
+        initBanner() //배너작업
+        initSpinner() //필터(spinner) 작업
+        initRadioBtn() //필터(radiobutton) 작업
 
-
-        //루나 코드
         // 어댑터 설정
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
@@ -58,26 +55,27 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
+            Log.d("floating","플로팅버튼 클릭됨")
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
         }
 
         deliveryArray.apply {
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, false, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 1, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", false, false, 3, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", false, false, 4, 5, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 2, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, false, 4, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4, R.drawable.ic_default_profile, "네오"))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2, R.drawable.ic_default_profile, "네오"))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, false, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 1, 4))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", false, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", false, false, 4, 5))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 6))
+            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, false, 4, 6))
+            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6))
+            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4))
+            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
         }
 
         // 배달 파티 리스트 받아오기
@@ -108,9 +106,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     true,
                     true,
                     currentMatching,
-                    maxMatching,
-                    R.drawable.ic_default_profile,
-                    "test"
+                    maxMatching
+                   /* R.drawable.ic_default_profile,
+                    "test"*/
                 )
             )
         }
@@ -121,6 +119,22 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun deliveryPartyListFailure(message: String) {
         Log.d("deliveryPartyList", "실패")
+    }
+
+    private fun initRadioBtn(){
+        binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
+            binding.deliveryTimeRg.check(checkedId)
+            Log.d("radio",checkedId.toString() +" 선택됨")
+            when(checkedId){
+                R.id.delivery_rb1->Log.d("radio","아침 선택됨")
+                R.id.delivery_rb2->Log.d("radio","점심 선택됨")
+                R.id.delivery_rb3->Log.d("radio","저녁 선택됨")
+                R.id.delivery_rb4->Log.d("radio","야식 선택됨")
+                else->{
+
+                }
+            }
+        }
     }
 
     //배너 작업
@@ -153,7 +167,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                         ViewPager2.SCROLL_STATE_IDLE ->{
                             flag=1
                             currentPosition = binding.deliveryBannerVp.currentItem+1
-                            Log.d("banner", currentPosition.toString())
                         }
                         //뷰페이저 움직이는 중
                         ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
@@ -194,6 +207,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         //어댑터
         val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
         binding.deliveryPeopleSpinner.adapter = spinnerAdapter
+        binding.deliveryPeopleSpinner.setSelection(items.size-1) //마지막아이템을 스피너 초기값으로 설정해준다.
+
         //이벤트 처리
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -207,7 +222,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
-
                 items[0]=items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]

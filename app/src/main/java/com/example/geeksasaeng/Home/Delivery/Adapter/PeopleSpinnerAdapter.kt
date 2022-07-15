@@ -16,8 +16,8 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) :
         private val context: Context
         private val spinnerList: Array<String>?
         override fun getCount(): Int {
-            return spinnerList?.size ?: 0
-        }
+            return (spinnerList?.size ?: 0 ) - 1
+        } //마지막 아이템은 힌트용으로 사용할 것이므로 getCount에서 1을 빼준다.
 
         override fun getItem(i: Int): Any {
             return spinnerList!![i]
@@ -43,10 +43,10 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) :
                 image.visibility = View.INVISIBLE
 
                 //색상설정
-                if(textName.text==spinnerList!![0]){
-                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_0))
-                }else{
-                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_2))
+                if(textName.text==spinnerList!![0]){ //현재선택되어있는애는
+                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_3))
+                }else{ //나머지 애들은
+                    textName.setTextColor(ContextCompat.getColor(context, R.color.gray_1))
                 }
             }
 
