@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogNumLayoutBinding
 
 class DialogNum: DialogFragment() {
@@ -27,10 +28,20 @@ class DialogNum: DialogFragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        val width = resources.getDimensionPixelSize(R.dimen.popup_width)
+        val height = resources.getDimensionPixelSize(R.dimen.popup_height)
+        dialog?.window?.setLayout(width,height)
+    }
+
+
     private fun initNumberPicker(){
+        val numArray = arrayOf("1명","2명","3명","4명","5명","6명","7명","8명","9명","10명")
         binding.numDialogPicker.minValue = 1
         binding.numDialogPicker.maxValue = 10
         binding.numDialogPicker.wrapSelectorWheel = false
+        binding.numDialogPicker.displayedValues = numArray
 
     }
 

@@ -1,7 +1,9 @@
 package com.example.geeksasaeng.Home.CreateParty
 
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentCreatePartyBinding
 
 
@@ -22,6 +24,21 @@ class CreatePartyFragment : BaseFragment<FragmentCreatePartyBinding>(FragmentCre
 
     private fun initClickListener(){
 
+        //같이 먹고 싶어요 체크버튼 클릭시
+        binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){ //체크를 하면
+                binding.createPartyTogetherTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+            }else{ //체크 해제하면
+                binding.createPartyTogetherTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
+            }
+        }
+
+        binding.createPartyTogetherTv.setOnClickListener {
+            binding.createPartyTogetherCheckBtn.isChecked = !binding.createPartyTogetherCheckBtn.isChecked
+            //체크되어있었으면 해제, 안체크 되어있었으면 체크 시키기
+        }
+
+        //주문예정시간 tv 클릭시
         binding.createPartyDate2Tv.setOnClickListener {
             Log.d("click","클릭됨")
 
@@ -31,10 +48,9 @@ class CreatePartyFragment : BaseFragment<FragmentCreatePartyBinding>(FragmentCre
 
             val dialog = DialogDt()
             dialog.show(parentFragmentManager, "CustomDialog")
-
         }
+
+
     }
-
-
 
 }

@@ -17,11 +17,19 @@ class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormito
 
         binding.domitoryHiTv.text = "${name}님,\n환영합니다"
         initDormPicker()
+        initClickListener()
     }
 
     private fun initDormPicker(){
         binding.domitoryPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            
+        }
+    }
 
+    private fun initClickListener(){
+        // 시작하기 버튼 클릭 시
+        binding.dormitoryStartBtn.setOnClickListener {
+            changeActivity(MainActivity::class.java)
         }
     }
     

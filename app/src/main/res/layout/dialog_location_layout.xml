@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/location_dialog_back_btn"
@@ -16,46 +16,40 @@
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
 
         <TextView
             android:id="@+id/location_dialog_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="수령 장소"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/location_dialog_back_btn"
             app:layout_constraintBottom_toBottomOf="@id/location_dialog_back_btn"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="80dp"
             />
 
-        <TextView
-            android:id="@+id/location_dialog_search_tv"
+
+        <EditText
+            android:id="@+id/location_dialog_search_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="입력하세요"
+            android:textColor="@color/gray_1"
+            android:textSize="15sp"
+            android:fontFamily="@font/spoqa_regular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/location_dialog_search_btn"
             app:layout_constraintTop_toBottomOf="@id/location_dialog_title_tv"
+            android:paddingStart="2dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"/>
 
-        <View
-            android:id="@+id/location_dialog_search_underscore_view"
-            android:layout_width="0dp"
-            android:layout_height="1px"
-            android:layout_marginTop="8dp"
-            android:background="#a8a8a8"
-            app:layout_constraintStart_toStartOf="@+id/location_dialog_search_tv"
-            app:layout_constraintTop_toBottomOf="@+id/location_dialog_search_tv"
-            app:layout_constraintEnd_toEndOf="@id/location_dialog_search_tv"/>
 
         <ImageView
             android:id="@+id/location_dialog_search_btn"
@@ -63,9 +57,9 @@
             android:layout_height="20dp"
             android:src="@drawable/ic_search"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/location_dialog_search_tv"
-            app:layout_constraintTop_toTopOf="@id/location_dialog_search_tv"
-            app:layout_constraintBottom_toBottomOf="@id/location_dialog_search_tv"
+            app:layout_constraintStart_toEndOf="@id/location_dialog_search_et"
+            app:layout_constraintTop_toTopOf="@id/location_dialog_search_et"
+            app:layout_constraintBottom_toBottomOf="@id/location_dialog_search_et"
             android:layout_marginEnd="20dp"
             />
 
@@ -74,53 +68,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="주소"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_dialog_search_underscore_view"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="13sp"
+            android:paddingStart="10dp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/gray_2"
+            app:layout_constraintStart_toStartOf="@id/location_dialog_search_et"
+            app:layout_constraintTop_toBottomOf="@id/location_dialog_search_et"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:id="@+id/location_dialog_loc_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="어쩌구시 어쩌구동"
-            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/top"
+            android:layout_marginStart="22dp"
             app:layout_constraintStart_toEndOf="@id/location_dialog_loc_title_tv"
             app:layout_constraintTop_toTopOf="@id/location_dialog_loc_title_tv"
             app:layout_constraintBottom_toBottomOf="@id/location_dialog_loc_title_tv"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            />
 
 
         <!--지도로 교체 필요-->
-        <ImageView
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="140dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="9dp"
             android:layout_marginBottom="10dp"
+            android:background="@drawable/round_border"
+            android:backgroundTint="@color/gray_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_dialog_loc_title_tv"
             app:layout_constraintBottom_toTopOf="@id/location_dialog_next_btn"/>
 
 
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/location_dialog_next_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:backgroundTint="@color/main"
             android:background="@drawable/round_border"
             android:text="완료"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@id/location_dialog_indicator"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginTop="40dp"
             />
 
         <TextView
@@ -128,7 +132,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4/4"
+            android:textSize="13sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/gray_1"
             app:layout_constraintTop_toBottomOf="@id/location_dialog_next_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
