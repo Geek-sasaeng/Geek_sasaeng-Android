@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Delivery
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -54,11 +55,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
-        binding.deliveryFloatingBtn.setOnClickListener {
-            Log.d("floating","플로팅버튼 클릭됨")
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-        }
 
         deliveryArray.apply {
             add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4))
