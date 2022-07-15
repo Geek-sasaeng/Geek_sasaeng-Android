@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Data.Delivery
@@ -22,13 +23,14 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryPartyView {
-    private var deliveryArray = ArrayList<Delivery>()
+    private var deliveryArray = ArrayList<Delivery?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryPartyService
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
+    var isLoading = false
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -42,41 +44,38 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
 
+        deliveryArray.apply {
+            add(Delivery("3시간 48분 남았어요", "1", true, true, 2, 4))
+            add(Delivery("13시간 48분 남았어요", "2", true, true, 1, 2))
+            add(Delivery("3시간 48분 남았어요", "3", true, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "4", true, false, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "5", false, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "6", false, true, 1, 4))
+            add(Delivery("13시간 48분 남았어요", "7", false, false, 3, 4))
+            add(Delivery("3시간 48분 남았어요", "8", false, false, 4, 5))
+            add(Delivery("3시간 48분 남았어요", "9", true, true, 2, 4))
+            add(Delivery("3시간 48분 남았어요", "10", true, true, 1, 2))
+        }
+
         // 어댑터 설정
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
-        // 어댑터 클릭 이벤트 설정
-        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
-            override fun onItemClick(v: View, data: Delivery, pos : Int) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-            }
-        })
+//        // 어댑터 클릭 이벤트 설정
+//        DeliveryRVAdapter_new.setOnItemClickListener(object : DeliveryRVAdapter_ver1.OnItemClickListener{
+//            override fun onItemClick(v: View, data: Delivery, pos : Int) {
+//                activity?.supportFragmentManager?.beginTransaction()
+//                    ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
+//            }
+//        })
 
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+
+        initScrollListener()
 
         binding.deliveryFloatingBtn.setOnClickListener {
             Log.d("floating","플로팅버튼 클릭됨")
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-        }
-
-        deliveryArray.apply {
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 2, 4))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, true, 1, 2))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, false, 3, 4))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, false, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", false, true, 1, 4))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", false, false, 3, 4))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", false, false, 4, 5))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 6))
-            add(Delivery("13시간 48분 남았어요", "중식 같이 먹어요 같이 먹자", true, false, 4, 6))
-            add(Delivery("3시간 48분 남았어요", "왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕왕", true, true, 5, 6))
-            add(Delivery("3시간 48분 남았어요", "나는 중식이 먹고 싶은데~", true, true, 1, 4))
-            add(Delivery("3시간 48분 남았어요", "중식 같이 먹어요", true, true, 1, 2))
         }
 
         // 배달 파티 리스트 받아오기
@@ -90,6 +89,45 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
         }
+    }
+
+    // 무한 스크롤 관련
+    private fun initScrollListener() {
+        binding.deliveryRv!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
+                        loadMore()
+                        isLoading = true
+                    }
+                }
+            }
+        })
+    }
+
+    private fun loadMore() {
+        deliveryArray.add(null)
+        deliveryAdapter!!.notifyItemInserted(deliveryArray.size - 1)
+        val handler = Handler()
+        handler.postDelayed({
+            deliveryArray.removeAt(deliveryArray.size - 1)
+            val scrollPosition = deliveryArray.size
+            deliveryAdapter!!.notifyItemRemoved(scrollPosition)
+            var currentSize = scrollPosition
+            val nextLimit = currentSize + 10
+            while (currentSize - 1 < nextLimit) {
+                deliveryArray.add(Delivery("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
+                currentSize++
+            }
+            deliveryAdapter!!.notifyDataSetChanged()
+            isLoading = false
+        }, 2000)
     }
 
     // 파티 목록 받아오기
@@ -115,8 +153,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
         deliveryAdapter.notifyDataSetChanged()
     }
-
-
 
     override fun deliveryPartyListFailure(message: String) {
         Log.d("deliveryPartyList", "실패")
