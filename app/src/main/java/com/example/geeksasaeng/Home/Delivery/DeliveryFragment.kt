@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Data.Delivery
@@ -43,6 +44,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
+        initTopScrollListener() // 상단 스크롤 작업
 
         deliveryArray.apply {
             add(Delivery("3시간 48분 남았어요", "1", true, true, 2, 4))
@@ -91,6 +93,16 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
     }
 
+    // 상단 스크롤 관련
+    private fun initTopScrollListener() {
+        binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
+            val handler = Handler()
+            handler.postDelayed({
+            }, 2000)
+            binding.deliverySwipe.isRefreshing = false
+        })
+    }
+    
     // 무한 스크롤 관련
     private fun initScrollListener() {
         binding.deliveryRv!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -186,7 +198,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
 
-
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
@@ -211,7 +222,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 }
             })
         }
-
     }
 
     //3초마다 페이지 넘기는 기능
@@ -265,21 +275,18 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        flag=1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
+        flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 
     override fun onPause() {
         super.onPause()
-        flag=0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
+        flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
     override fun onDestroy() {
