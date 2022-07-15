@@ -52,12 +52,13 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtra("checkPassword", checkPassword)
+            intent.putExtra("email", email)
+            intent.putExtra("informationAgreeStatus", "Y") // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
             intent.putExtra("loginId", loginId)
             intent.putExtra("nickname", nickname)
             intent.putExtra("password", password)
-            intent.putExtra("email", email)
-            intent.putExtra("universityName", universityName)
             intent.putExtra("phoneNumber", phoneNumber)
+            intent.putExtra("universityName", universityName)
 
             startActivity(intent)
         }

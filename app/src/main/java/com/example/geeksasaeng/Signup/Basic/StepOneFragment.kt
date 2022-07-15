@@ -14,6 +14,13 @@ import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.databinding.FragmentStepOneBinding
 import java.util.regex.Pattern
 
+
+/*
+    <validaition 관련>
+    id랑 Nick validation은 버튼 눌렀을때, (버튼 활성화는 글자수만 채우면 활성화되게 해둠)
+    비밀번호는 실시간 validation으로 구현해둠
+ */
+
 class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView, SignUpNickCheckView {
 
     private val progressVM: ProgressViewModel by activityViewModels()
@@ -35,6 +42,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     //<텍스트 와쳐>
     private fun initTextWatcher(){
         //TEXTWACTHER를 이용한 버튼 활성/비활성 작업
+
         //아이디 TEXTWATCHER
         binding.stepOneIdEt.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -149,8 +157,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // text가 바뀔 때마다 호출
-                val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
-                val macher = nickPattern.matcher(binding.stepOneNicknameEt.text.toString()) //사용자가 입력한 닉네임과 패턴 비교
 
                 if(!macher.matches()){ //조건식에 맞지 않는 닉네임이 들어온다면
                     Log.d("Nick", "조건에 맞지 않는 닉네임 들어옴")
@@ -175,7 +181,8 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
             override fun afterTextChanged(s: Editable?) {
                 // text가 변경된 후 호출
-
+                binding.stepOneNicknameBtn.isEnabled = binding.stepOneNicknameEt.text.length>=3 //3자리이상이면 중복확인 버튼 활성화
+                binding.stepOneNicknameMsgTv.text=""
             }
 
         })
@@ -186,6 +193,22 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     private fun initClickListener() {
 
         //아이디 중복확인 버튼
+        binding.stepOneIdCheckBtn.setOnClickListener {
+            Toast.makeText(activity, "ID-CHECK-BTN", Toast.LENGTH_SHORT).show()
+            val idPattern = Pattern.compile("^(?=.*[a-zA-Z])[0-9a-zA-Z]{6,20}\$") //패턴 생성 (영문(필수),숫자로 이루어진 6자리를 조건으로 둠)
+            val macher = idPattern.matcher(binding.stepOneIdEt.text.toString())
+            //TODO: 조건 안맞을 때는 따로 안내메세지는 안 필요한가?
+            if(macher.matches()){//id조건이 맞을 때만 닉네임 중복확인 해주기
+                val userId = binding.stepOneIdEt.text.toString() //사용자가 입력한 아이디 가져오기
+                val signUpIdCheckRequest= SignUpIdCheckRequest(userId)
+                signUpService.signUpIdCheckSender(signUpIdCheckRequest) //★아이디 중복확인하기
+                Log.d("CheckId", "아이디 중복확인 리퀘스트 보냄")
+            }else{
+                binding.stepOneIdMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                binding.stepOneIdMsgTv.text = "6-20자 영문+숫자로 입력해주세요"
+                binding.stepOneIdMsgTv.visibility = View.VISIBLE // 보이게 만들기
+            }
+
         binding.stepOneIdBtnO.setOnClickListener {
             val userId = binding.stepOneIdEt.text.toString() //사용자가 입력한 아이디 가져오기
             val signUpIdCheckRequest= SignUpIdCheckRequest(userId)
@@ -199,6 +222,20 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             val signUpNickCheckRequest= SignUpNickCheckRequest(userNick)
             signUpService.signUpNickCheckSender(signUpNickCheckRequest) //★아이디 중복확인하기
             Log.d("CheckNick", "닉네임 중복확인 리퀘스트 보냄")
+        binding.stepOneNicknameBtn.setOnClickListener {
+            val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
+            val macher = nickPattern.matcher(binding.stepOneNicknameEt.text.toString()) //사용자가 입력한 닉네임과 패턴 비교
+
+            if(macher.matches()){ //조건식에 맞는 닉네임이 들어온다면
+                val userNick = binding.stepOneNicknameEt.text.toString() //사용자가 입력한 닉네임 가져오기
+                val signUpNickCheckRequest= SignUpNickCheckRequest(userNick)
+                signUpService.signUpNickCheckSender(signUpNickCheckRequest) //★닉네임 중복확인하기
+            }else{
+                Log.d("Nick", "조건에 맞지 않는 닉네임 들어옴")
+                binding.stepOneNicknameMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+                binding.stepOneNicknameMsgTv.text = "3-15자 영문 혹은 한글로 입력해주세요"
+                binding.stepOneNicknameMsgTv.visibility = View.VISIBLE
+            }
         }
 
         //다음 버튼

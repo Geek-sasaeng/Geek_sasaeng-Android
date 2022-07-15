@@ -11,4 +11,9 @@
         <item name="android:fontFamily">@font/spoqa_medium</item>
     </style>
 
+    <style name="Widget.BottomNavigationView"
+        parent= "Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/spoqa_medium</item>
+    </style>
+
 </resources>

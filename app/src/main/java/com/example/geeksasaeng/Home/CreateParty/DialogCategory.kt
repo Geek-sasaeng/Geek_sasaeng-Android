@@ -48,7 +48,7 @@ class DialogCategory : DialogFragment() {
         }
 
         //라디오버튼들은 담은 라디오그룹 이벤트 처리(라디오그룹 2열) => 중복 체크 안되게 처리
-        binding.categoryDialogRg1.setOnCheckedChangeListener { group, checkedId ->
+        binding.categoryDialogRg1.setOnCheckedChangeListener { _, checkedId ->
             if(checkedId!=-1){
                 Log.d("click_Category1", "click_Category1")
                 binding.categoryDialogRg2.clearCheck() // 2번째열의 check는 지워주기
@@ -56,7 +56,7 @@ class DialogCategory : DialogFragment() {
             }
         }
 
-        binding.categoryDialogRg2.setOnCheckedChangeListener { group, checkedId ->
+        binding.categoryDialogRg2.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != -1) {
                 //초기화
                 Log.d("click_Category2", "click_Category2")

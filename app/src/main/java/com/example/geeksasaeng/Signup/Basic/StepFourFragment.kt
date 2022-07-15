@@ -32,7 +32,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     var phoneNumber: String? = ""
 
     private val progressVM: ProgressViewModel by activityViewModels()
-    private var time = 5000
+    private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
 
     private lateinit var signUpService :SignupDataService
@@ -198,10 +198,10 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     // 타이머 작동
     private fun startTimer() {
-        timerTask = timer(period = 10) {
-            val timeForm = DecimalFormat("00")
-            val min = timeForm.format(time / 1000)
-            val sec = timeForm.format(time / 100)
+        timerTask = timer(period = 1000) { //1초가 주기
+            val timeForm = DecimalFormat("00") //0을 넣은 곳은 빈자리일 경우, 0으로 채워준다.
+            val min = timeForm.format(time / 60000) //전체시간 나누기 60초
+            val sec = timeForm.format((time % 60000) / 1000)
 
             activity?.runOnUiThread {
                 binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
@@ -217,8 +217,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                     binding.stepFourPhoneCheckBtnX.visibility = View.VISIBLE
                 }
             }
-
-            time--
+            if(time!=0) //time이 0이 아니라면
+                time -= 1000 //1초씩 줄이기
         }
     }
 
@@ -226,7 +226,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     private fun resetTimer() {
         timerTask?.cancel()
 
-        time = 5000
+        time = 300000
         binding.stepFourCheckMsgTv.text = "05분 00초 남았어요"
     }
 

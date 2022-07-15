@@ -29,7 +29,7 @@
 
     <Spinner
         android:id="@+id/delivery_people_spinner"
-        android:layout_width="95dp"
+        android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_marginLeft="15dp"
         android:background="@drawable/spinner_outline_unclicked"
@@ -41,17 +41,84 @@
         app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
         app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
 
-    <Spinner
-        android:id="@+id/delivery_time_spinner"
-        android:layout_width="80dp"
+
+    <!--아침,점심,저녁,야식 선택-->
+    <LinearLayout
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginLeft="7dp"
-        android:background="#e3e3e3"
-        app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
-        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner" />
+        app:layout_constraintTop_toTopOf="@id/delivery_people_spinner"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_people_spinner"
+        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner">
+
+        <RadioGroup
+            android:id="@+id/delivery_time_rg"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/delivery_rb1"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="아침"
+                android:layout_marginEnd="8dp"/>
+
+            <RadioButton
+                android:id="@+id/delivery_rb2"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="점심"
+                android:layout_marginEnd="8dp"/>
+
+           <RadioButton
+               android:id="@+id/delivery_rb3"
+               android:paddingVertical="7dp"
+               android:paddingHorizontal="10dp"
+               android:button="@null"
+               android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               android:background="@drawable/spinner_outline_unclicked"
+               android:textColor="@drawable/selector_time_radiobtn_text"
+               android:fontFamily="@font/spoqa_medium"
+                android:text="저녁"
+               android:layout_marginEnd="8dp"/>
+
+            <RadioButton
+                android:id="@+id/delivery_rb4"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="11sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="야식"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:overScrollMode="never"
         android:id="@+id/delivery_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -61,13 +128,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/bg_gradient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clickable="false"
+        />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/delivery_floating_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_floating_btn"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/main"
         android:layout_marginRight="18dp"
         android:layout_marginBottom="18dp"
         app:borderWidth="0dp"

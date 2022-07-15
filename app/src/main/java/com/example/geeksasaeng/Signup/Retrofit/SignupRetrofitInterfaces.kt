@@ -1,7 +1,5 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
-import com.example.geeksasaeng.Data.EmailCheck
-import com.example.geeksasaeng.Data.Signup
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -10,7 +8,7 @@ interface SignupRetrofitInterfaces {
     // <회원가입>
     // 일반 회원가입
     @POST("/members")
-    fun signup(@Body user: Signup): Call<SignUpResponse>
+    fun signup(@Body user: SignUpRequest): Call<SignUpResponse>
 
     // 네이버 회원가입
     @POST("/members/social")

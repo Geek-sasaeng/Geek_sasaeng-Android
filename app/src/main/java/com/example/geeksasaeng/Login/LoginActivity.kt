@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Login
 
 import android.app.Activity
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.text.Editable
@@ -10,7 +9,6 @@ import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Data.Login
-import com.example.geeksasaeng.Data.Signup
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView
@@ -18,6 +16,8 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
+import com.example.geeksasaeng.Signup.Retrofit.SignUpRequest
+import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
@@ -33,6 +33,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var checkPassword: String = ""
     var email: String = ""
     var loginId: String = ""
+    var informationAgreeStatus: String = "" //약관동의
     var nickname: String = ""
     var password: String = ""
     var phoneNumber: String = ""
@@ -52,12 +53,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var autoLoginid: String? = null
     var autoPassword: String? = null
 
-    override fun onStart() {
-        super.onStart()
-        signUpService = SignupDataService() //서비스 객체 생성
-        signUpService.setSignUpView(this)
-    }
-
     override fun initAfterBinding() {
         getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
         autoJwt = getAutoLogin?.getString("jwt", null).toString()
@@ -72,13 +67,14 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()
             email = intent?.getStringExtra("email").toString()
+            informationAgreeStatus = intent?.getStringExtra("informationAgreeStatus").toString() //약관동의 정보
             loginId = intent?.getStringExtra("loginId").toString()
             nickname = intent?.getStringExtra("nickname").toString()
             password = intent?.getStringExtra("password").toString()
             phoneNumber = intent?.getStringExtra("phoneNumber").toString()
             universityName = intent?.getStringExtra("universityName").toString()
 
-            signup()
+            signup() //위의 정보를 바탕으로 회원가입 진행
         }
 
         setTextChangedListener()
@@ -122,7 +118,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun removeSP() {
         val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
         val editor = spf.edit()
-
         editor.clear()
         editor.commit()
     }
@@ -155,19 +150,21 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
-    private fun getSignupUser(): Signup {
-        Log.d("SIGNUP-RESPONSE", Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName).toString())
-        return Signup(checkPassword, email, loginId, nickname, password, phoneNumber, universityName)
+    //회원가입하려는 유저를 SignUpRequest형태로 돌려주는 함수
+    private fun getSignupUser(): SignUpRequest {
+        //TODO: 일단은 약관동의에 다 "Y"로 넣어둠 (StepFive의 StepFiveStartBtn 클릭리스너 부분 참조)
+        Log.d("SIGNUP-RESPONSE", SignUpRequest(checkPassword, email, informationAgreeStatus, loginId, nickname, password, phoneNumber, universityName).toString())
+        return SignUpRequest(checkPassword, email, informationAgreeStatus, loginId, nickname, password, phoneNumber, universityName)
     }
 
+    //회원가입하는 함수
     private fun signup() {
-        val signupDataService = SignupDataService()
-        signupDataService.setSignUpView(this)
-        signupDataService.signUp(getSignupUser())
+        val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
+        signupDataService.setSignUpView(this) // 뷰연결
+        signupDataService.signUpSender(getSignupUser()) //★회원가입 진행
 
         Log.d("SIGNUP-RESPONSE", "LoginActivity-signup : Signup Check")
     }
-
 
     private fun setTextChangedListener() {
         binding.loginIdEt.addTextChangedListener(object : TextWatcher {
@@ -287,6 +284,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     override fun onSignUpFailure(code:Int) {
+        Log.d("signup", "회원가입에 실패하였습니다.")
         when(code){
             2006-> Log.d("signup", "중복되는 유저 아이디입니다")
             2007-> Log.d("signup", "중복되는 유저 이메일입니다")

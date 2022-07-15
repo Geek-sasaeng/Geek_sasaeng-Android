@@ -1,6 +1,8 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
+import com.example.geeksasaeng.ApplicationClass.Companion.retrofit
+import com.example.geeksasaeng.Signup.*
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Data.Signup
 import retrofit2.Call
@@ -9,7 +11,8 @@ import retrofit2.Response
 
 class SignupDataService() {
 
-    lateinit var signup: Signup
+    /*lateinit var signup: SignUpRequest //원래는 lateinit var signup: Signup이었음*/
+    //어디에 쓰이는지 모르겠네? 주석처리해둠
 
     //뷰 객체 생성
     private lateinit var signUpView: SignUpView
@@ -52,10 +55,10 @@ class SignupDataService() {
     }
 
     //회원가입
-    fun signUp(user: Signup) {
+    fun signUpSender(user: SignUpRequest) {
         /*val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)*/
 
-        SignupDataService?.signup(user)?.enqueue(object : Callback<SignUpResponse> {
+        SignupDataService.signup(user).enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -100,6 +103,7 @@ class SignupDataService() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                 //실패처리
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
