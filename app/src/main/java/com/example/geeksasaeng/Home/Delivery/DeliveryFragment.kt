@@ -11,19 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Data.Delivery
-import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.Retrofit.*
-import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
-    private var deliveryArray = ArrayList<Delivery?>()
+    private var deliveryArray = ArrayList<DeliveryResult?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
@@ -80,11 +77,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
         deliveryService.setDeliveryView(this)
-        /*deliveryService.getDeliveryPartyList(1)*/
-
-//        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-//        binding.deliveryRv.adapter = deliveryAdapter
-//        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
@@ -138,7 +130,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var currentSize = scrollPosition
             val nextLimit = currentSize + 10
             while (currentSize - 1 < nextLimit) {
-                deliveryArray.add(Delivery("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
+                // deliveryArray.add(DeliveryResult("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
                 currentSize++
             }
             deliveryAdapter!!.notifyDataSetChanged()
@@ -158,32 +150,38 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-GET")
     }
 
-    override fun deliverySuccess() {
+    override fun deliverySuccess(response: DeliveryResponse) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-SUCCESS")
-    }
+        Log.d("DELIVERY-RESPONSE", "RESPONSE-BODY = $response")
 
-//    override fun deliveryPartyListSuccess(listResponse: DeliveryPartyListResponse) {
-//        val result = listResponse.result
-//        for(i in result.indices) {
-//            val title = result[i].title
-//            val orderTime = result[i].orderTime
-//            val currentMatching = result[i].currentMatching
-//            val maxMatching = result[i].maxMatching
-//            deliveryArray.add(
-//                Delivery(
-//                    orderTime,
-//                    title,
-//                    true,
-//                    true,
-//                    currentMatching,
-//                    maxMatching
-//                   /* R.drawable.ic_default_profile,
-//                    "test"*/
-//                )
-//            )
-//        }
-//        deliveryAdapter.notifyDataSetChanged()
-//    }
+        val result = response.result
+
+        for (i in 0..9) {
+            Log.d("DELIVERY-RESPONSE", i.toString())
+            var chief = result?.get(i)?.chief
+            var content = result?.get(i)?.content
+            var currentMatching = result?.get(i)?.currentMatching
+            var foodCategory = result?.get(i)?.foodCategory
+            var id = result?.get(i)?.id
+            var location = result?.get(i)?.location
+            var matchingStatus = result?.get(i)?.matchingStatus
+            var maxMatching = result?.get(i)?.maxMatching
+            var orderTime = result?.get(i)?.orderTime
+            var title = result?.get(i)?.title
+
+            Log.d("DELIVERY-RESPONSE", "RESULT = ${result?.get(i)}")
+            Log.d("DELIVERY-RESPONSE", "CHIEF = ${result?.get(i)?.chief}")
+
+            deliveryArray.add(
+                DeliveryResult(chief, content, currentMatching, foodCategory, id, location, matchingStatus, maxMatching, orderTime, title)
+            )
+
+            deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+            binding.deliveryRv.adapter = deliveryAdapter
+            binding.deliveryRv.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        }
+    }
 
     override fun deliveryFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")

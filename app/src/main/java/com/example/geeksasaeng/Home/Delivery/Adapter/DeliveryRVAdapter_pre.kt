@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Data.Delivery
+import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.databinding.ItemDeliveryBinding
 
-class DeliveryRVAdapter_pre(private var deliveryList: ArrayList<Delivery>) : RecyclerView.Adapter<DeliveryRVAdapter_pre.ViewHolder>() {
+class DeliveryRVAdapter_pre(private var deliveryList: ArrayList<DeliveryResult>) : RecyclerView.Adapter<DeliveryRVAdapter_pre.ViewHolder>() {
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener{
-        fun onItemClick(v:View, data: Delivery, pos : Int)
+        fun onItemClick(v:View, data: DeliveryResult, pos : Int)
     }
     private var listener : OnItemClickListener? = null
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -31,7 +31,7 @@ class DeliveryRVAdapter_pre(private var deliveryList: ArrayList<Delivery>) : Rec
     override fun getItemCount(): Int = deliveryList.size
 
     inner class ViewHolder(val binding: ItemDeliveryBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind (delivery: Delivery) {
+        fun bind (delivery: DeliveryResult) {
 //            binding.deliveryItemTime.text = delivery.time
 //            binding.deliveryItemTitle.text = delivery.title
 //            // 파티 클릭하면 상세 페이지로 이동
