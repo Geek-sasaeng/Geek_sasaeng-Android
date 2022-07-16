@@ -4,6 +4,7 @@ import android.app.ActionBar
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -19,8 +20,10 @@ import java.util.*
 
 class DialogDt : DialogFragment() {
     lateinit var binding: DialogDtLayoutBinding
+    private var dialogDtNextClickListener: DialogDtNextClickListener? =null
     var dateString = ""
     var timeString = ""
+    var orderNow : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +76,22 @@ class DialogDt : DialogFragment() {
         DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
     }*/
 
+    //frag->Activity 정보전달용 코드 시작
+    interface DialogDtNextClickListener{
+        fun onDtClicked(text:String, orderNow:Boolean)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogDtNextClickListener = activity as DialogDtNextClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        dialogDtNextClickListener = null
+    }
+    //frag->Activity 정보전달용 코드 끝
+
     private fun initClickListener(){
         binding.dateDialogDateTv.setOnClickListener { //날짜 정보
             //DatePickerApplicationClass
@@ -101,8 +120,10 @@ class DialogDt : DialogFragment() {
         binding.dateDialogImmediateCheckBtn.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
                 binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+                orderNow = true
             }else{
                 binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
+                orderNow = false
             }
         }
 
@@ -119,15 +140,21 @@ class DialogDt : DialogFragment() {
                 Log.d("dialog", dateString)
                 Log.d("dialog", timeString)
 
-                val myFragment = CreatePartyFragment()
+                //frag->frag 정보전달
+                /*val myFragment = CreatePartyFragment()
                 var args = Bundle()
                 args.putString("DateDialog", dateString + "  " +timeString)
-                myFragment.arguments = args
+                myFragment.arguments = args*/
 
                 /*val fragmentTransaction = parentFragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.myframe, myFragment, "counter")
                 fragmentTransaction.commit()*/
 
+                //frag-> activity 정보전달
+                dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
+
+
+                //다음 다이얼로그 띄우기
                 val dialogNum = DialogNum()
                 dialogNum.show(parentFragmentManager, "CustomDialog")
 
