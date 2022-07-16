@@ -12,21 +12,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Data.Delivery
+import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyListResponse
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyService
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryPartyView
+import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
-
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryPartyView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
     private var deliveryArray = ArrayList<Delivery?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
-    private lateinit var deliveryService: DeliveryPartyService
+    private lateinit var deliveryService: DeliveryService
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
@@ -40,28 +39,28 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
-
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
 
-        deliveryArray.apply {
-            add(Delivery("3시간 48분 남았어요", "1", true, true, 2, 4))
-            add(Delivery("13시간 48분 남았어요", "2", true, true, 1, 2))
-            add(Delivery("3시간 48분 남았어요", "3", true, false, 3, 4))
-            add(Delivery("3시간 48분 남았어요", "4", true, false, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "5", false, true, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "6", false, true, 1, 4))
-            add(Delivery("13시간 48분 남았어요", "7", false, false, 3, 4))
-            add(Delivery("3시간 48분 남았어요", "8", false, false, 4, 5))
-            add(Delivery("3시간 48분 남았어요", "9", true, true, 2, 4))
-            add(Delivery("3시간 48분 남았어요", "10", true, true, 1, 2))
-        }
+//        deliveryArray.apply {
+//            add(Delivery("3시간 48분 남았어요", "1", true, true, 2, 4))
+//            add(Delivery("13시간 48분 남았어요", "2", true, true, 1, 2))
+//            add(Delivery("3시간 48분 남았어요", "3", true, false, 3, 4))
+//            add(Delivery("3시간 48분 남았어요", "4", true, false, 2, 4))
+//            add(Delivery("3시간 48분 남았어요", "5", false, true, 2, 4))
+//            add(Delivery("3시간 48분 남았어요", "6", false, true, 1, 4))
+//            add(Delivery("13시간 48분 남았어요", "7", false, false, 3, 4))
+//            add(Delivery("3시간 48분 남았어요", "8", false, false, 4, 5))
+//            add(Delivery("3시간 48분 남았어요", "9", true, true, 2, 4))
+//            add(Delivery("3시간 48분 남았어요", "10", true, true, 1, 2))
+//        }
 
         // 어댑터 설정
-        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-        binding.deliveryRv.adapter = deliveryAdapter
+//        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+//        binding.deliveryRv.adapter = deliveryAdapter
+
 //        // 어댑터 클릭 이벤트 설정
 //        DeliveryRVAdapter_new.setOnItemClickListener(object : DeliveryRVAdapter_ver1.OnItemClickListener{
 //            override fun onItemClick(v: View, data: Delivery, pos : Int) {
@@ -70,9 +69,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 //            }
 //        })
 
-        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-
-        initScrollListener()
+//        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
             Log.d("floating","플로팅버튼 클릭됨")
@@ -81,16 +78,23 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         // 배달 파티 리스트 받아오기
-        deliveryService = DeliveryPartyService()
-        deliveryService.setDeliveryListView(this)
+        deliveryService = DeliveryService()
+        deliveryService.setDeliveryView(this)
         /*deliveryService.getDeliveryPartyList(1)*/
-        binding.deliveryRv.adapter = deliveryAdapter
-        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+
+//        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+//        binding.deliveryRv.adapter = deliveryAdapter
+//        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
         }
+
+        // 테스트
+        getDeliveryAllList(1, 0)
+
+        initScrollListener()
     }
 
     // 상단 스크롤 관련
@@ -142,32 +146,47 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }, 2000)
     }
 
-    // 파티 목록 받아오기
-    override fun deliveryPartyListSuccess(listResponse: DeliveryPartyListResponse) {
-        val result = listResponse.result
-        for(i in result.indices) {
-            val title = result[i].title
-            val orderTime = result[i].orderTime
-            val currentMatching = result[i].currentMatching
-            val maxMatching = result[i].maxMatching
-            deliveryArray.add(
-                Delivery(
-                    orderTime,
-                    title,
-                    true,
-                    true,
-                    currentMatching,
-                    maxMatching
-                   /* R.drawable.ic_default_profile,
-                    "test"*/
-                )
-            )
-        }
-        deliveryAdapter.notifyDataSetChanged()
+    // 배달 목록 가져오기
+    private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
+        // 테스트
+        // var dormitoryId = 0
+
+        val deliveryDataService = DeliveryService()
+        deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
+        deliveryDataService.setDeliveryView(this)
+
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-GET")
     }
 
-    override fun deliveryPartyListFailure(message: String) {
-        Log.d("deliveryPartyList", "실패")
+    override fun deliverySuccess() {
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-SUCCESS")
+    }
+
+//    override fun deliveryPartyListSuccess(listResponse: DeliveryPartyListResponse) {
+//        val result = listResponse.result
+//        for(i in result.indices) {
+//            val title = result[i].title
+//            val orderTime = result[i].orderTime
+//            val currentMatching = result[i].currentMatching
+//            val maxMatching = result[i].maxMatching
+//            deliveryArray.add(
+//                Delivery(
+//                    orderTime,
+//                    title,
+//                    true,
+//                    true,
+//                    currentMatching,
+//                    maxMatching
+//                   /* R.drawable.ic_default_profile,
+//                    "test"*/
+//                )
+//            )
+//        }
+//        deliveryAdapter.notifyDataSetChanged()
+//    }
+
+    override fun deliveryFailure(code: Int, message: String) {
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
     }
 
     private fun initRadioBtn(){
@@ -188,7 +207,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     //배너 작업
     private fun initBanner(){
-
         deliveryBannerAdapter = BannerVPAdapter(this)
         //일단은 더미데이터 넣어둠
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
