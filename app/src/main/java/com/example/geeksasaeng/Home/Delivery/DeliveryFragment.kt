@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Base.BaseFragment
 import com.example.geeksasaeng.Data.Delivery
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -82,8 +83,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
+            //fragment->fragment로의 전환
+            /*activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()*/
+
+            //fragment->activity로의 전환
+            val intent = Intent(context, CreatePartyActivity::class.java)
+            startActivity(intent)
         }
     }
 
