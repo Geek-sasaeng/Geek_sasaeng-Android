@@ -1,17 +1,20 @@
 package com.example.geeksasaeng.Home.CreateParty
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
-
+import net.daum.mf.map.api.MapView
+import java.security.MessageDigest
 
 class DialogLocation: DialogFragment() {
 
@@ -27,6 +30,7 @@ class DialogLocation: DialogFragment() {
     {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        ininKakaoMap()
         initClickListener()
         return binding.root
     }
@@ -53,6 +57,11 @@ class DialogLocation: DialogFragment() {
         dialogLocationNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
+
+    private fun ininKakaoMap(){
+        val mapView = MapView(activity)
+        binding.locationDialogKakaoMapView.addView(mapView)
+    }
 
     private fun initClickListener(){
         //다음버튼

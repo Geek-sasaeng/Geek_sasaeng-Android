@@ -94,7 +94,8 @@
 
 
         <!--지도로 교체 필요-->
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/location_dialog_kakaoMap_view"
             android:layout_width="0dp"
             android:layout_height="140dp"
             android:layout_marginStart="20dp"
@@ -102,13 +103,10 @@
             android:layout_marginTop="9dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/round_border"
-            android:backgroundTint="@color/gray_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_dialog_loc_title_tv"
             app:layout_constraintBottom_toTopOf="@id/location_dialog_next_btn"/>
-
-
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/location_dialog_next_btn"
