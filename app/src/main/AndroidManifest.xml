@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.geeksasaeng">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".ApplicationClass"
@@ -18,11 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Geeksasaeng"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".DormitoryActivity"
+            android:name=".Home.CreateParty.CreatePartyActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,22 +34,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".DormitoryActivity"
             android:exported="false" />
-
         <activity android:name=".Login.LoginActivity" />
-<!--        <activity
+        <!--
+        <activity
             android:name=".Signup.DialogSignUpPhoneSkip"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />-->
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        -->
         <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
 
+        <!--카카오맵 APP KEY 추가-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="11a3f6b9176965b9b649bef686ad6f91" />
+            android:value="${kakaoNativeAppKey}"
+            />
+
     </application>
 
 </manifest>
