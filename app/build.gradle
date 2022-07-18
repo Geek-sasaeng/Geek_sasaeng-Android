@@ -27,7 +27,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["kakaoNativeAppKey"] = kakao_native_app_key
+        // manifestPlaceholders["kakaoNativeAppKey"] = kakao_native_app_key
         /*manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]*/
         /*buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵*/
     }
@@ -76,4 +76,7 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    // Infinity Scroll
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }

@@ -5,8 +5,14 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
+    // <회원가입>
+    // 일반 회원가입
     @POST("/members")
     fun signup(@Body user: SignUpRequest): Call<SignUpResponse>
+
+    // 네이버 회원가입
+    @POST("/members/social")
+    fun signupSocial(@Body user: SignUpRequest): Call<SignUpResponse>
 
     // <이메일 인증>
     // 이메일 전송
@@ -24,9 +30,7 @@ interface SignupRetrofitInterfaces {
 
     //<닉네임 중복 확인>
     @POST("/members/nickname-duplicated")
-    fun signupNickCheck(
-        @Body nickName : SignUpNickCheckRequest
-    ): Call<SignUpNickCheckResponse>
+    fun signupNickCheck(@Body nickName : SignUpNickCheckRequest): Call<SignUpNickCheckResponse>
 
     // <문자 인증>
     //sms보내기

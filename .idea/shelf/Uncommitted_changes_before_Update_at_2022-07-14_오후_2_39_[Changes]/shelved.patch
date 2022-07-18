@@ -1,0 +1,252 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07__12_31__Default_Changelist_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07__12_31__Default_Changelist_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07__12_31__Default_Changelist_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07__12_31__Default_Changelist_.xml	(revision 23a08de3cb22913ca8d45c40d7d62c349489e484)
++++ /dev/null	(revision 23a08de3cb22913ca8d45c40d7d62c349489e484)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]" date="1657121565952" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2022-07-07 오전 12:31 [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2022-07-07_오전_12_31_[Default_Changelist]/shelved.patch	(revision 23a08de3cb22913ca8d45c40d7d62c349489e484)
++++ /dev/null	(revision 23a08de3cb22913ca8d45c40d7d62c349489e484)
+@@ -1,233 +0,0 @@
+-Index: app/src/main/java/com/example/geeksasaeng/Signup/StepOneFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.os.Bundle\r\nimport android.os.Handler\r\nimport android.os.Looper\r\nimport android.util.Log\r\nimport android.widget.Toast\r\nimport androidx.lifecycle.ViewModelProvider\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.SignUpActivity\r\nimport com.example.geeksasaeng.databinding.FragmentStepOneBinding\r\nimport kotlinx.coroutines.delay\r\nimport java.lang.Thread.sleep\r\n\r\nclass StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate) {\r\n\r\n    private lateinit var progressVM: ProgressViewModel\r\n\r\n    override fun initAfterBinding() {\r\n        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)\r\n\r\n        progressVM.increase()\r\n        Log.d(\"PROGRESS-STATUS\", \"ONE = \" + progressVM.currentPro.value.toString())\r\n\r\n        initClickListener()\r\n    }\r\n\r\n    private fun initClickListener() {\r\n        binding.stepOneIdCheckTv.setOnClickListener {\r\n            Toast.makeText(activity, \"ID-CHECK-BTN\", Toast.LENGTH_SHORT).show()\r\n        }\r\n\r\n        binding.stepOneNicknameBtn.setOnClickListener {\r\n            Toast.makeText(activity, \"NICKNAME-CHECK-BTN\", Toast.LENGTH_LONG).show()\r\n        }\r\n\r\n        binding.stepOneNextBtn.setOnClickListener {\r\n            val bundle = Bundle()\r\n            bundle.putString(\"checkPassword\", binding.stepOneCheckPasswordEt.text.toString())\r\n            bundle.putString(\"loginId\", binding.stepOneIdEt.text.toString())\r\n            bundle.putString(\"nickname\", binding.stepOneNicknameEt.text.toString())\r\n            bundle.putString(\"password\", binding.stepOnePasswordEt.text.toString())\r\n\r\n            val stepTwoFragment = StepTwoFragment()\r\n            stepTwoFragment.arguments = bundle\r\n\r\n            Log.d(\"SignupData\", bundle.toString())\r\n\r\n            (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n                .replace(R.id.sign_up_vp, stepTwoFragment).commit()\r\n        }\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/StepOneFragment.kt b/app/src/main/java/com/example/geeksasaeng/Signup/StepOneFragment.kt
+---- a/app/src/main/java/com/example/geeksasaeng/Signup/StepOneFragment.kt	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/java/com/example/geeksasaeng/Signup/StepOneFragment.kt	(date 1657120808073)
+-@@ -5,6 +5,7 @@
+- import android.os.Looper
+- import android.util.Log
+- import android.widget.Toast
+-+import androidx.fragment.app.activityViewModels
+- import androidx.lifecycle.ViewModelProvider
+- import com.example.geeksasaeng.Base.BaseFragment
+- import com.example.geeksasaeng.R
+-@@ -15,13 +16,10 @@
+- 
+- class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate) {
+- 
+--    private lateinit var progressVM: ProgressViewModel
+-+    private val progressVM: ProgressViewModel by activityViewModels()
+- 
+-     override fun initAfterBinding() {
+--        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
+--
+-         progressVM.increase()
+--        Log.d("PROGRESS-STATUS", "ONE = " + progressVM.currentPro.value.toString())
+- 
+-         initClickListener()
+-     }
+-Index: app/src/main/res/layout/activity_sign_up.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:fitsSystemWindows=\"true\"\r\n    android:background=\"@color/white\">\r\n\r\n    <ProgressBar\r\n        android:id=\"@+id/sign_up_progressbar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        style=\"@style/Widget.AppCompat.ProgressBar.Horizontal\"\r\n        android:max=\"6\"\r\n        android:backgroundTint=\"@color/main\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintBottom_toTopOf=\"@id/sign_up_vp\"\r\n        android:layout_marginStart=\"26dp\"\r\n        android:layout_marginEnd=\"26dp\"\r\n        android:layout_marginTop=\"20dp\" />\r\n\r\n    <FrameLayout\r\n        android:id=\"@+id/sign_up_vp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/sign_up_progressbar\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/activity_sign_up.xml b/app/src/main/res/layout/activity_sign_up.xml
+---- a/app/src/main/res/layout/activity_sign_up.xml	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/res/layout/activity_sign_up.xml	(date 1657121380064)
+-@@ -12,7 +12,7 @@
+-         android:layout_width="match_parent"
+-         android:layout_height="wrap_content"
+-         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+--        android:max="6"
+-+        android:max="5"
+-         android:backgroundTint="@color/main"
+-         app:layout_constraintStart_toStartOf="parent"
+-         app:layout_constraintEnd_toEndOf="parent"
+-@@ -22,6 +22,12 @@
+-         android:layout_marginEnd="26dp"
+-         android:layout_marginTop="20dp" />
+- 
+-+    <ImageView
+-+        android:layout_width="36dp"
+-+        android:layout_height="22dp"
+-+        android:src="@drawable/ic_logo_bottom"
+-+
+-+
+-     <FrameLayout
+-         android:id="@+id/sign_up_vp"
+-         android:layout_width="match_parent"
+-Index: app/src/main/java/com/example/geeksasaeng/Signup/StepFiveFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.Login.LoginActivity\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.SignUpActivity\r\nimport com.example.geeksasaeng.databinding.FragmentStepFiveBinding\r\nimport com.example.geeksasaeng.databinding.FragmentStepThreeBinding\r\nimport java.text.DecimalFormat\r\nimport java.util.*\r\nimport kotlin.concurrent.timer\r\n\r\nclass StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveBinding::inflate) {\r\n\r\n    var checkPassword: String? = \"\"\r\n    var loginId: String? = \"\"\r\n    var nickname: String? = \"\"\r\n    var password: String? = \"\"\r\n    var email: String? = \"\"\r\n    var universityName: String? = \"\"\r\n    var phoneNumber: String? = \"\"\r\n\r\n    override fun initAfterBinding() {\r\n        checkPassword = arguments?.getString(\"checkPassword\")\r\n        loginId = arguments?.getString(\"loginId\")\r\n        nickname = arguments?.getString(\"nickname\")\r\n        password = arguments?.getString(\"password\")\r\n        email = arguments?.getString(\"email\")\r\n        universityName = arguments?.getString(\"universityName\")\r\n        phoneNumber = arguments?.getString(\"phoneNumber\")\r\n\r\n        initClickListener()\r\n    }\r\n\r\n    private fun initClickListener() {\r\n        binding.stepFiveStartBtn.setOnClickListener {\r\n            val transaction: FragmentTransaction =\r\n                (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n\r\n            Log.d(\"SignupData\", \"checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber\")\r\n\r\n            val intent = Intent(activity, LoginActivity::class.java)\r\n            intent.putExtra(\"checkPassword\", checkPassword)\r\n            intent.putExtra(\"loginId\", loginId)\r\n            intent.putExtra(\"nickname\", nickname)\r\n            intent.putExtra(\"password\", password)\r\n            intent.putExtra(\"email\", email)\r\n            intent.putExtra(\"universityName\", universityName)\r\n            intent.putExtra(\"phoneNumber\", phoneNumber)\r\n\r\n            startActivity(intent)\r\n        }\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/StepFiveFragment.kt b/app/src/main/java/com/example/geeksasaeng/Signup/StepFiveFragment.kt
+---- a/app/src/main/java/com/example/geeksasaeng/Signup/StepFiveFragment.kt	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/java/com/example/geeksasaeng/Signup/StepFiveFragment.kt	(date 1657120827125)
+-@@ -4,6 +4,7 @@
+- import android.os.Bundle
+- import android.util.Log
+- import androidx.fragment.app.FragmentTransaction
+-+import androidx.fragment.app.activityViewModels
+- import com.example.geeksasaeng.Base.BaseFragment
+- import com.example.geeksasaeng.Login.LoginActivity
+- import com.example.geeksasaeng.R
+-@@ -24,7 +25,11 @@
+-     var universityName: String? = ""
+-     var phoneNumber: String? = ""
+- 
+-+    private val progressVM: ProgressViewModel by activityViewModels()
+-+
+-     override fun initAfterBinding() {
+-+        progressVM.increase()
+-+
+-         checkPassword = arguments?.getString("checkPassword")
+-         loginId = arguments?.getString("loginId")
+-         nickname = arguments?.getString("nickname")
+-Index: app/src/main/java/com/example/geeksasaeng/Signup/StepFourFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.view.View\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.Login.LoginActivity\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.SignUpActivity\r\nimport com.example.geeksasaeng.databinding.FragmentStepFourBinding\r\nimport java.text.DecimalFormat\r\nimport java.util.*\r\nimport kotlin.concurrent.timer\r\n\r\nclass StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBinding::inflate) {\r\n\r\n    var checkPassword: String? = \"\"\r\n    var loginId: String? = \"\"\r\n    var nickname: String? = \"\"\r\n    var password: String? = \"\"\r\n    var email: String? = \"\"\r\n    var universityName: String? = \"\"\r\n    var phoneNumber: String? = \"\"\r\n\r\n    private var time = 5000\r\n    private var timerTask : Timer? = null\r\n\r\n    override fun initAfterBinding() {\r\n        checkPassword = arguments?.getString(\"checkPassword\")\r\n        loginId = arguments?.getString(\"loginId\")\r\n        nickname = arguments?.getString(\"nickname\")\r\n        password = arguments?.getString(\"password\")\r\n        email = arguments?.getString(\"email\")\r\n        universityName = arguments?.getString(\"universityName\")\r\n\r\n        initClickListener()\r\n    }\r\n\r\n    private fun initClickListener() {\r\n        binding.stepFourPhoneSendBtn.setOnClickListener {\r\n            binding.stepThreeCheckMsgTv.visibility = View.VISIBLE\r\n            startTimer()\r\n            binding.stepFourPhoneSendBtn.isClickable = false\r\n        }\r\n\r\n        binding.stepFourCheckBtn.setOnClickListener {\r\n            resetTimer()\r\n            startTimer()\r\n        }\r\n\r\n        binding.stepFourSkipBtn.setOnClickListener {\r\n            val dialog = DialogSignUpPhoneSkip()\r\n            dialog.show(parentFragmentManager, \"CustomDialog\")\r\n        }\r\n\r\n        binding.stepFourNextBtn.setOnClickListener {\r\n            timerTask?.cancel()\r\n\r\n            phoneNumber = binding.stepFourPhoneEt.text.toString()\r\n\r\n            val transaction: FragmentTransaction =\r\n                (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n\r\n            val bundle = Bundle()\r\n            bundle.putString(\"checkPassword\", checkPassword)\r\n            bundle.putString(\"loginId\", loginId)\r\n            bundle.putString(\"nickname\", nickname)\r\n            bundle.putString(\"password\", password)\r\n            bundle.putString(\"email\", email)\r\n            bundle.putString(\"universityName\", universityName)\r\n            bundle.putString(\"phoneNumber\", phoneNumber)\r\n\r\n            val stepFiveFragment = StepFiveFragment()\r\n            stepFiveFragment.arguments = bundle\r\n\r\n            Log.d(\"SignupData\", bundle.toString())\r\n\r\n            (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n                .replace(R.id.sign_up_vp, stepFiveFragment).commit()\r\n\r\n            stepFiveFragment.arguments = bundle\r\n\r\n            transaction.replace(R.id.sign_up_vp, stepFiveFragment)\r\n            transaction.commit()\r\n        }\r\n    }\r\n\r\n    // 타이머 작동\r\n    private fun startTimer() {\r\n        timerTask = timer(period = 10) {\r\n            val timeForm = DecimalFormat(\"00\")\r\n            val min = timeForm.format(time / 1000)\r\n            val sec = timeForm.format(time / 100)\r\n\r\n            activity?.runOnUiThread {\r\n                binding.stepThreeCheckMsgTv.text = \"${min}분 ${sec}초 남았어요\"\r\n\r\n                if (min == \"00\" && sec == \"00\")\r\n                    timerTask?.cancel()\r\n            }\r\n\r\n            time--\r\n        }\r\n    }\r\n\r\n    // 타이머 초기화\r\n    private fun resetTimer() {\r\n        timerTask?.cancel()\r\n\r\n        time = 5000\r\n        binding.stepThreeCheckMsgTv.text = \"05분 00초 남았어요\"\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/StepFourFragment.kt b/app/src/main/java/com/example/geeksasaeng/Signup/StepFourFragment.kt
+---- a/app/src/main/java/com/example/geeksasaeng/Signup/StepFourFragment.kt	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/java/com/example/geeksasaeng/Signup/StepFourFragment.kt	(date 1657120794478)
+-@@ -5,6 +5,7 @@
+- import android.util.Log
+- import android.view.View
+- import androidx.fragment.app.FragmentTransaction
+-+import androidx.fragment.app.activityViewModels
+- import com.example.geeksasaeng.Base.BaseFragment
+- import com.example.geeksasaeng.Login.LoginActivity
+- import com.example.geeksasaeng.R
+-@@ -24,10 +25,14 @@
+-     var universityName: String? = ""
+-     var phoneNumber: String? = ""
+- 
+-+    private val progressVM: ProgressViewModel by activityViewModels()
+-+
+-     private var time = 5000
+-     private var timerTask : Timer? = null
+- 
+-     override fun initAfterBinding() {
+-+        progressVM.increase()
+-+
+-         checkPassword = arguments?.getString("checkPassword")
+-         loginId = arguments?.getString("loginId")
+-         nickname = arguments?.getString("nickname")
+-Index: app/src/main/java/com/example/geeksasaeng/Signup/StepThreeFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.SignUpActivity\r\nimport com.example.geeksasaeng.databinding.FragmentStepThreeBinding\r\nimport java.text.DecimalFormat\r\nimport java.util.*\r\nimport kotlin.concurrent.timer\r\n\r\nclass StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate) {\r\n\r\n    var checkPassword: String? = \"\"\r\n    var loginId: String? = \"\"\r\n    var nickname: String? = \"\"\r\n    var password: String? = \"\"\r\n    var email: String? = \"\"\r\n    var universityName: String? = \"\"\r\n\r\n    private var time = 5000\r\n    private var timerTask : Timer? = null\r\n\r\n    override fun initAfterBinding() {\r\n        startTimer()\r\n\r\n        checkPassword = arguments?.getString(\"checkPassword\")\r\n        loginId = arguments?.getString(\"loginId\")\r\n        nickname = arguments?.getString(\"nickname\")\r\n        password = arguments?.getString(\"password\")\r\n        email = arguments?.getString(\"email\")\r\n        universityName = arguments?.getString(\"universityName\")\r\n\r\n        initClickListener()\r\n    }\r\n\r\n    private fun initClickListener() {\r\n        binding.stepThreeSendBtn.setOnClickListener {\r\n            resetTimer()\r\n            startTimer()\r\n        }\r\n\r\n        binding.stepThreeNextBtn.setOnClickListener {\r\n            timerTask?.cancel()\r\n\r\n            val transaction: FragmentTransaction =\r\n                (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n\r\n            val bundle = Bundle()\r\n            bundle.putString(\"checkPassword\", checkPassword)\r\n            bundle.putString(\"loginId\", loginId)\r\n            bundle.putString(\"nickname\", nickname)\r\n            bundle.putString(\"password\", password)\r\n            bundle.putString(\"email\", email)\r\n            bundle.putString(\"universityName\", universityName)\r\n\r\n            val stepFourFragment = StepFourFragment()\r\n            stepFourFragment.arguments = bundle\r\n\r\n            Log.d(\"SignupData\", bundle.toString())\r\n\r\n            (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n                .replace(R.id.sign_up_vp, stepFourFragment).commit()\r\n\r\n            stepFourFragment.arguments = bundle\r\n\r\n            transaction.replace(R.id.sign_up_vp, stepFourFragment)\r\n            transaction.commit()\r\n        }\r\n    }\r\n\r\n    // 타이머 작동\r\n    private fun startTimer() {\r\n        timerTask = timer(period = 10) {\r\n            val timeForm = DecimalFormat(\"00\")\r\n            val min = timeForm.format(time / 1000)\r\n            val sec = timeForm.format(time / 100)\r\n\r\n            activity?.runOnUiThread {\r\n                binding.stepThreeCheckMsgTv.text = \"${min}분 ${sec}초 남았어요\"\r\n\r\n                if (min == \"00\" && sec == \"00\")\r\n                    timerTask?.cancel()\r\n            }\r\n\r\n            time--\r\n        }\r\n    }\r\n\r\n    // 타이머 초기화\r\n    private fun resetTimer() {\r\n        timerTask?.cancel()\r\n\r\n        time = 5000\r\n        binding.stepThreeCheckMsgTv.text = \"05분 00초 남았어요\"\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/StepThreeFragment.kt b/app/src/main/java/com/example/geeksasaeng/Signup/StepThreeFragment.kt
+---- a/app/src/main/java/com/example/geeksasaeng/Signup/StepThreeFragment.kt	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/java/com/example/geeksasaeng/Signup/StepThreeFragment.kt	(date 1657120772807)
+-@@ -3,6 +3,7 @@
+- import android.os.Bundle
+- import android.util.Log
+- import androidx.fragment.app.FragmentTransaction
+-+import androidx.fragment.app.activityViewModels
+- import com.example.geeksasaeng.Base.BaseFragment
+- import com.example.geeksasaeng.R
+- import com.example.geeksasaeng.SignUpActivity
+-@@ -20,10 +21,14 @@
+-     var email: String? = ""
+-     var universityName: String? = ""
+- 
+-+    private val progressVM: ProgressViewModel by activityViewModels()
+-+
+-     private var time = 5000
+-     private var timerTask : Timer? = null
+- 
+-     override fun initAfterBinding() {
+-+        progressVM.increase()
+-+        
+-         startTimer()
+- 
+-         checkPassword = arguments?.getString("checkPassword")
+-Index: app/src/main/java/com/example/geeksasaeng/Signup/StepTwoFragment.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.geeksasaeng.Signup\r\n\r\nimport android.os.Bundle\r\nimport android.os.Handler\r\nimport android.util.Log\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport androidx.lifecycle.ViewModelProvider\r\nimport com.example.geeksasaeng.Base.BaseFragment\r\nimport com.example.geeksasaeng.Home.CreateParty.DialogDt\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.SignUpActivity\r\nimport com.example.geeksasaeng.databinding.FragmentStepTwoBinding\r\n\r\nclass StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate) {\r\n\r\n    var checkPassword: String? = \"\"\r\n    var loginId: String? = \"\"\r\n    var nickname: String? = \"\"\r\n    var password: String? = \"\"\r\n\r\n    private lateinit var progressVM: ProgressViewModel\r\n\r\n    override fun initAfterBinding() {\r\n        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)\r\n\r\n        progressVM.increase()\r\n        Log.d(\"PROGRESS-STATUS\", \"TWO = \" + progressVM.currentPro.value.toString())\r\n\r\n        checkPassword = arguments?.getString(\"checkPassword\")\r\n        loginId = arguments?.getString(\"loginId\")\r\n        nickname = arguments?.getString(\"nickname\")\r\n        password = arguments?.getString(\"password\")\r\n\r\n        initClickListener()\r\n    }\r\n\r\n    private fun initClickListener() {\r\n\r\n        // 이메일 인증 전송 버튼\r\n        binding.stepTwoEmailCheckBtn.setOnClickListener {\r\n            val dialog = DialogSignUpEmailCheck()\r\n            dialog.show(parentFragmentManager, \"CustomDialog\")\r\n\r\n            // 1.5초 뒤에 Dialog 자동 종료\r\n            Handler().postDelayed({\r\n                dialog.dismiss()\r\n            }, 1500)\r\n        }\r\n\r\n        binding.stepTwoNextBtn.setOnClickListener {\r\n            val transaction: FragmentTransaction =\r\n                (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n\r\n            val bundle = Bundle()\r\n            bundle.putString(\"checkPassword\", checkPassword)\r\n            bundle.putString(\"loginId\", loginId)\r\n            bundle.putString(\"nickname\", nickname)\r\n            bundle.putString(\"password\", password)\r\n            bundle.putString(\"email\", binding.stepTwoEmailEt.text.toString() + \"@\" + binding.stepTwoEmail2Et.text.toString())\r\n            bundle.putString(\"universityName\", binding.stepTwoSchoolEt.text.toString())\r\n\r\n            val stepThreeFragment = StepThreeFragment()\r\n            stepThreeFragment.arguments = bundle\r\n\r\n            Log.d(\"SignupData\", bundle.toString())\r\n\r\n            (context as SignUpActivity).supportFragmentManager.beginTransaction()\r\n                .replace(R.id.sign_up_vp, stepThreeFragment).commit()\r\n\r\n            stepThreeFragment.arguments = bundle\r\n\r\n            transaction.replace(R.id.sign_up_vp, stepThreeFragment)\r\n            transaction.commit()\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/geeksasaeng/Signup/StepTwoFragment.kt b/app/src/main/java/com/example/geeksasaeng/Signup/StepTwoFragment.kt
+---- a/app/src/main/java/com/example/geeksasaeng/Signup/StepTwoFragment.kt	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/app/src/main/java/com/example/geeksasaeng/Signup/StepTwoFragment.kt	(date 1657120764798)
+-@@ -4,6 +4,7 @@
+- import android.os.Handler
+- import android.util.Log
+- import androidx.fragment.app.FragmentTransaction
+-+import androidx.fragment.app.activityViewModels
+- import androidx.lifecycle.ViewModelProvider
+- import com.example.geeksasaeng.Base.BaseFragment
+- import com.example.geeksasaeng.Home.CreateParty.DialogDt
+-@@ -18,13 +19,10 @@
+-     var nickname: String? = ""
+-     var password: String? = ""
+- 
+--    private lateinit var progressVM: ProgressViewModel
+-+    private val progressVM: ProgressViewModel by activityViewModels()
+- 
+-     override fun initAfterBinding() {
+--        progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
+--
+-         progressVM.increase()
+--        Log.d("PROGRESS-STATUS", "TWO = " + progressVM.currentPro.value.toString())
+- 
+-         checkPassword = arguments?.getString("checkPassword")
+-         loginId = arguments?.getString("loginId")
+-Index: .idea/gradle.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"GRADLE\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"11\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+---- a/.idea/gradle.xml	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/.idea/gradle.xml	(date 1657119432542)
+-@@ -14,6 +14,7 @@
+-             <option value="$PROJECT_DIR$/app" />
+-           </set>
+-         </option>
+-+        <option name="resolveModulePerSourceSet" value="false" />
+-       </GradleProjectSettings>
+-     </option>
+-   </component>
+-Index: .idea/misc.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"DesignSurface\">\r\n    <option name=\"filePathToZoomLevelMap\">\r\n      <map>\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml\" value=\"0.5536458333333333\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_dt_layout.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_location_layout.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_num_layout.xml\" value=\"0.22210614291684078\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_email_check.xml\" value=\"0.67\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_phone_skip.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_four.xml\" value=\"0.45446772124839674\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml\" value=\"0.5536458333333333\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_three.xml\" value=\"0.5\" />\r\n        <entry key=\"..\\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_two.xml\" value=\"0.4252039891205802\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/.idea/misc.xml b/.idea/misc.xml
+---- a/.idea/misc.xml	(revision b964e2019e55db8062c442da71c8a5257d04c1b2)
+-+++ b/.idea/misc.xml	(date 1657120956537)
+-@@ -3,6 +3,10 @@
+-   <component name="DesignSurface">
+-     <option name="filePathToZoomLevelMap">
+-       <map>
+-+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.24947916666666667" />
+-+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.24947916666666667" />
+-+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_fix.xml" value="0.24947916666666667" />
+-+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.24947916666666667" />
+-         <entry key="..\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml" value="0.5536458333333333" />
+-         <entry key="..\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.45446772124839674" />
+-         <entry key="..\:/Users/wlgur/Desktop/JM/Android Project/Geek_sasaeng-Android/app/src/main/res/layout/dialog_dt_layout.xml" value="0.45446772124839674" />

@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -10,16 +9,15 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpEmailCheck
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.example.geeksasaeng.Signup.ToastMsgSignup
+import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
-import com.example.geeksasaeng.util.getUuid
+import com.example.geeksasaeng.Utils.getUuid
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 
@@ -31,8 +29,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     var university: String? = ""
 
     var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
-
-    var uuid: String? = null
 
     private lateinit var signUpService : SignupDataService
 
@@ -52,14 +48,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
-
-//        val dialog = DialogSignUpEmailCheck()
-//        dialog.show(parentFragmentManager, "CustomDialog")
-//
-//        // 1.5초 뒤에 Dialog 자동 종료
-//        Handler().postDelayed({
-//            dialog.dismiss()
-//        }, 1500)
 
         initSpinner()
         initTextChangedListener()
@@ -187,6 +175,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     override fun onSignUpEmailSuccess(message: String) {
         Log.d("EMAIL-RESPONSE", message)
         showToast("SUCCESS")
+
+        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+
         //이메일이 성공적으로 진행되었을때 버튼 활성화
         binding.stepTwoNextBtn.isClickable = true;
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
@@ -200,8 +191,12 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         when(code){
             2803 -> showToast(message)
-            2804 -> showToast(message)
-            2400 -> showToast(message)
+            2804 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            }
+            2805 -> {
+                ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+            }
         }
     }
 }

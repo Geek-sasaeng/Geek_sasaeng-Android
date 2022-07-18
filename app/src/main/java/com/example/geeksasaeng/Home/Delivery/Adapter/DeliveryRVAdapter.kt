@@ -1,76 +1,95 @@
 package com.example.geeksasaeng.Home.Delivery.Adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Data.Delivery
+import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.databinding.ItemDeliveryBinding
 
-class DeliveryRVAdapter(private var deliveryList: ArrayList<Delivery>) : RecyclerView.Adapter<DeliveryRVAdapter.ViewHolder>() {
-    // 클릭 리스너 구현 위한 인터페이스
-    interface OnItemClickListener{
-        fun onItemClick(v:View, data: Delivery, pos : Int)
-    }
-    private var listener : OnItemClickListener? = null
-    fun setOnItemClickListener(listener : OnItemClickListener) {
-        this.listener = listener
-    }
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-        val binding: ItemDeliveryBinding = ItemDeliveryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
+class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(deliveryList[position])
-    }
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
 
-    override fun getItemCount(): Int = deliveryList.size
-
-    inner class ViewHolder(val binding: ItemDeliveryBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind (delivery: Delivery) {
-            binding.deliveryItemTime.text = delivery.time
-            binding.deliveryItemTitle.text = delivery.title
-            // 파티 클릭하면 상세 페이지로 이동
-            val pos = adapterPosition
-            if(pos!= RecyclerView.NO_POSITION)
-            {
-                itemView.setOnClickListener {
-                    listener?.onItemClick(itemView,delivery,pos)
-                }
-            }
-            if (delivery.option1) {
-                binding.deliveryItemOption1.visibility = View.VISIBLE
-
-                if (delivery.option2)
-                    binding.deliveryItemOption2.visibility = View.VISIBLE
-            } else {
-                binding.deliveryItemOption1.text = ""
-                binding.deliveryItemOption1.setPadding(0, 0, 0, 0)
-
-                if (delivery.option2)
-                    binding.deliveryItemOption2.visibility = View.VISIBLE
-            }
-
-
-            binding.deliveryItemMemberNumber.text = delivery.currentMember.toString() + "/" + delivery.totalMember.toString()
-
-            if (delivery.totalMember - delivery.currentMember == 1) {
-                binding.deliveryItemMemberIc.setImageResource(R.drawable.ic_member_blue)
-                binding.deliveryItemMemberNumber.setTextColor(Color.parseColor("#29ABE2"))
-            }
-            else {
-                binding.deliveryItemMemberIc.setImageResource(R.drawable.ic_member_gray)
-                binding.deliveryItemMemberNumber.setTextColor(Color.parseColor("#A8A8A8"))
-            }
-
-//            binding.deliveryHostProfile.setImageResource(delivery.hostProfile)
-//            binding.deliveryHostName.text = delivery.hostName
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_ITEM) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_delivery, parent, false)
+            ItemViewHolder(view)
+        } else {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false)
+            LoadingViewHolder(view)
         }
+    }
+
+    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        if (viewHolder is ItemViewHolder) {
+            populateItemRows(viewHolder, position)
+        } else if (viewHolder is LoadingViewHolder) {
+            showLoadingView(viewHolder, position)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (deliveryList == null) 0 else deliveryList!!.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (deliveryList!![position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+    }
+
+    private inner class ItemViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        // 메인 파티 리스트 부분
+        // Not Use = chief, content, currentMatching, foodCategory, id, location
+        // Use = currentMatching, maxMatching, orderTime, title
+
+        var deliveryItemMemberIc : ImageView
+        var deliveryItemMemberNumber :TextView
+        var deliveryItemTime : TextView
+        var deliveryItemTitle : TextView
+        // var deliveryItemOption1 : TextView
+        // var deliveryItemOption2 : TextView
+
+        init {
+            deliveryItemMemberIc = itemView.findViewById(R.id.delivery_item_member_ic)
+            deliveryItemMemberNumber = itemView.findViewById(R.id.delivery_item_member_number)
+            deliveryItemTime = itemView.findViewById(R.id.delivery_item_time)
+            deliveryItemTitle = itemView.findViewById(R.id.delivery_item_title)
+            // deliveryItemOption1 = itemView.findViewById(R.id.delivery_item_option1)
+            // deliveryItemOption2 = itemView.findViewById(R.id.delivery_item_option2)
+        }
+    }
+
+    private inner class LoadingViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+    }
+
+    private fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) { }
+
+    private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
+        // 메인 파티 리스트 부분
+        // Use = currentMatching, maxMatching, orderTime, title
+
+        val item = deliveryList!![position]
+
+        // (최대 멤버 - 현재 매칭 멤버 = 1)인 상황에는 파란색 아이콘, 아닐 경우 회색 아이콘을 구분하기 위한 부분
+        if (item!!.maxMatching!! - item!!.currentMatching!! == 1) {
+            viewHolder.deliveryItemMemberIc.setImageResource(R.drawable.ic_member_blue)
+        } else {
+            viewHolder.deliveryItemMemberIc.setImageResource(R.drawable.ic_member_gray)
+        }
+
+        viewHolder.deliveryItemMemberNumber.setText(item!!.currentMatching.toString() + "/" + item!!.maxMatching)
+        viewHolder.deliveryItemTime.setText(item!!.orderTime)
+        viewHolder.deliveryItemTitle.setText(item!!.title)
+
+        // viewHolder.deliveryItemOption1.setText("option1")
+        // viewHolder.deliveryItemOption2.setText("option2")
     }
 }

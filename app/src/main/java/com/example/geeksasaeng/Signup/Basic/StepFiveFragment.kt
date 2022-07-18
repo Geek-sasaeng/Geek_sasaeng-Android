@@ -2,12 +2,10 @@ package com.example.geeksasaeng.Signup.Basic
 
 import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
-import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.databinding.FragmentStepFiveBinding
