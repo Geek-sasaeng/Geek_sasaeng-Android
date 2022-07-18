@@ -59,5 +59,4 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
             .replace(id, fragment)
             .commit()
     }
-    //
 }

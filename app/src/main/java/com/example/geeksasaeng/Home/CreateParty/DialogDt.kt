@@ -136,19 +136,7 @@ class DialogDt : DialogFragment() {
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
             //일단 테스트용용
-            if(dateString!=""&&timeString!=""){
-                Log.d("dialog", dateString)
-                Log.d("dialog", timeString)
-
-                //frag->frag 정보전달
-                /*val myFragment = CreatePartyFragment()
-                var args = Bundle()
-                args.putString("DateDialog", dateString + "  " +timeString)
-                myFragment.arguments = args*/
-
-                /*val fragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.myframe, myFragment, "counter")
-                fragmentTransaction.commit()*/
+            if(dateString!=""&&timeString!=""){ // date랑 time 안정해두면,
 
                 //frag-> activity 정보전달
                 dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
