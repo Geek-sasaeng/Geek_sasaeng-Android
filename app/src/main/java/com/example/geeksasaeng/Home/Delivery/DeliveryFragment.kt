@@ -28,6 +28,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
     var isLoading = false
+    var dormitoryId: Int = 1
+    var totalCursor: Int = 0
+    var totalPost: Int = 0
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -40,19 +43,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
-
-//        deliveryArray.apply {
-//            add(Delivery("3시간 48분 남았어요", "1", true, true, 2, 4))
-//            add(Delivery("13시간 48분 남았어요", "2", true, true, 1, 2))
-//            add(Delivery("3시간 48분 남았어요", "3", true, false, 3, 4))
-//            add(Delivery("3시간 48분 남았어요", "4", true, false, 2, 4))
-//            add(Delivery("3시간 48분 남았어요", "5", false, true, 2, 4))
-//            add(Delivery("3시간 48분 남았어요", "6", false, true, 1, 4))
-//            add(Delivery("13시간 48분 남았어요", "7", false, false, 3, 4))
-//            add(Delivery("3시간 48분 남았어요", "8", false, false, 4, 5))
-//            add(Delivery("3시간 48분 남았어요", "9", true, true, 2, 4))
-//            add(Delivery("3시간 48분 남았어요", "10", true, true, 1, 2))
-//        }
 
         // 어댑터 설정
 //        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
@@ -84,9 +74,20 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         // 테스트
-        getDeliveryAllList(1, 0)
+        // Log.d("DELIVERY-RESPONSE", "initAfterBinding1-TOTAL-CURSOR = $totalCursor")
+        Log.d("DELIVERY-RESPONSE", "initAfterBinding : getDeliveryAllList0")
 
-        initScrollListener()
+        if (totalCursor == 0)
+            getDeliveryAllList(dormitoryId, totalCursor)
+
+        if ((totalCursor + 1) * 10 == totalPost) {
+
+        }
+
+        Log.d("DELIVERY-RESPONSE", "TOTAL-CURSOR : $totalCursor  /  TOTAL-POST : $totalPost")
+
+        // Log.d("DELIVERY-RESPONSE", "initAfterBinding2-TOTAL-CURSOR = $totalCursor")
+        // initScrollListener()
     }
 
     // 상단 스크롤 관련
@@ -127,12 +128,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             deliveryArray.removeAt(deliveryArray.size - 1)
             val scrollPosition = deliveryArray.size
             deliveryAdapter!!.notifyItemRemoved(scrollPosition)
-            var currentSize = scrollPosition
-            val nextLimit = currentSize + 10
-            while (currentSize - 1 < nextLimit) {
-                // deliveryArray.add(DeliveryResult("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
-                currentSize++
-            }
+//            var currentSize = scrollPosition
+//            val nextLimit = currentSize + 10
+//            while (currentSize - 1 < nextLimit) {
+//                // deliveryArray.add(DeliveryResult("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
+//            }
+            Log.d("DELIVERY-RESPONSE", "initAfterBinding : loadMore")
+            getDeliveryAllList(dormitoryId, totalCursor)
             deliveryAdapter!!.notifyDataSetChanged()
             isLoading = false
         }, 2000)
@@ -140,24 +142,23 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
+        Log.d("DELIVERY-RESPONSE", "getDeliveryAllList")
         // 테스트
         // var dormitoryId = 0
-
         val deliveryDataService = DeliveryService()
         deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
-
-        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-GET")
+        totalCursor = totalCursor + 1
+        totalPost = totalPost + 10
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
-        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-SUCCESS")
-        Log.d("DELIVERY-RESPONSE", "RESPONSE-BODY = $response")
-
+        Log.d("DELIVERY-REPSONSE", "SUCCESS")
         val result = response.result
+        val size = result!!.size
+        Log.d("DELIVERY-RESPONSE", "size = $size")
 
-        for (i in 0..9) {
-            Log.d("DELIVERY-RESPONSE", i.toString())
+        for (i in 0 until result!!.size) {
             var chief = result?.get(i)?.chief
             var content = result?.get(i)?.content
             var currentMatching = result?.get(i)?.currentMatching
@@ -168,29 +169,27 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var maxMatching = result?.get(i)?.maxMatching
             var orderTime = result?.get(i)?.orderTime
             var title = result?.get(i)?.title
-
-            Log.d("DELIVERY-RESPONSE", "RESULT = ${result?.get(i)}")
-            Log.d("DELIVERY-RESPONSE", "CHIEF = ${result?.get(i)?.chief}")
+            var hashTags = result?.get(i)?.hashTags
 
             deliveryArray.add(
-                DeliveryResult(chief, content, currentMatching, foodCategory, id, location, matchingStatus, maxMatching, orderTime, title)
+                DeliveryResult(chief, content, currentMatching, foodCategory, id, location, matchingStatus, maxMatching, orderTime, title, hashTags!!)
             )
 
             deliveryAdapter = DeliveryRVAdapter(deliveryArray)
             binding.deliveryRv.adapter = deliveryAdapter
-            binding.deliveryRv.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
 
     override fun deliveryFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
+        totalCursor--
     }
 
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
-            Log.d("radio",checkedId.toString() +" 선택됨")
+            Log.d("radio", "$checkedId 선택됨")
             when(checkedId){
                 R.id.delivery_rb1->Log.d("radio","아침 선택됨")
                 R.id.delivery_rb2->Log.d("radio","점심 선택됨")

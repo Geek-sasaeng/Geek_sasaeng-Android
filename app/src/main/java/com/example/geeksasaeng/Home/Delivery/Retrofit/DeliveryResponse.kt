@@ -20,7 +20,8 @@ data class DeliveryResult (
     @SerializedName("matchingStatus") var matchingStatus: String? = "",
     @SerializedName("maxMatching") var maxMatching: Int? = 0,
     @SerializedName("orderTime") var orderTime: String? = "",
-    @SerializedName("title") var title: String? = ""
+    @SerializedName("title") var title: String? = "",
+    @SerializedName("hashTags") var hashTags: Array<String?> = arrayOf()
 //    var option1: Boolean? = false,
 //    var option2: Boolean? = false,
 )

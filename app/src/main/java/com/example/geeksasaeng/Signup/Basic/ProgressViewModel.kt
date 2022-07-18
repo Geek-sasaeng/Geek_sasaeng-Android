@@ -19,5 +19,4 @@ class ProgressViewModel: ViewModel() {
     fun decrease() {
         currentPro.value = currentPro.value!! - 1
     }
-
 }
