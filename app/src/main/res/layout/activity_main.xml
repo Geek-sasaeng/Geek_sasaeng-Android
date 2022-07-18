@@ -19,7 +19,7 @@
         android:paddingVertical="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F8F8F8"
+        android:background="@color/line"
         app:itemRippleColor="@null"
         app:itemTextColor="@color/gray_3"
         app:layout_constraintStart_toStartOf="parent"

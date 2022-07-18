@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="false">
+        <layer-list>
+            <item android:drawable="@drawable/ic_check_gray" android:top="5dp" android:start="5dp" android:end="5dp" android:bottom="5dp"/>
+            <item android:drawable="@drawable/ic_circle_gray"/>
+        </layer-list>
+    </item>
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:drawable="@drawable/ic_circle_blue"/>
+            <item android:drawable="@drawable/ic_check_white" android:top="5dp" android:start="5dp" android:end="5dp" android:bottom="5dp"/>
+            <!--layter-list에서  각 드로어블은 나열된 순서대로 그려진다-->
+        </layer-list>
+    </item>
+</selector>

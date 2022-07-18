@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Delivery
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Data.Delivery
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -58,19 +62,19 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
 //        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
-        binding.deliveryFloatingBtn.setOnClickListener {
-            Log.d("floating","플로팅버튼 클릭됨")
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-        }
 
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()
+            //fragment->fragment로의 전환
+            /*activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()*/
+
+            //fragment->activity로의 전환
+            val intent = Intent(context, CreatePartyActivity::class.java)
+            startActivity(intent)
         }
 
         // 테스트
@@ -99,7 +103,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             binding.deliverySwipe.isRefreshing = false
         })
     }
-    
+
     // 무한 스크롤 관련
     private fun initScrollListener() {
         binding.deliveryRv!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -189,7 +193,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
-            Log.d("radio", "$checkedId 선택됨")
+            Log.d("radio",checkedId.toString() +" 선택됨")
             when(checkedId){
                 R.id.delivery_rb1->Log.d("radio","아침 선택됨")
                 R.id.delivery_rb2->Log.d("radio","점심 선택됨")
