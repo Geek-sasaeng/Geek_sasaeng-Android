@@ -13,7 +13,7 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
 
         handler.postDelayed({
             // 테스트
-            /*changeActivity(MainActivity::class.java)*/
+            // changeActivity(MainActivity::class.java)
             changeActivity(LoginActivity::class.java)
             finish()
         }, 1500)

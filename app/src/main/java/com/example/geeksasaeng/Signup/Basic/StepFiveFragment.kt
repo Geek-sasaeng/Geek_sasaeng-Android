@@ -45,15 +45,11 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
     private fun initClickListener() {
         binding.stepFiveStartBtn.setOnClickListener {
-            val transaction: FragmentTransaction =
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
-
-            Log.d("SignupData", "checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber")
-
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtra("checkPassword", checkPassword)
             intent.putExtra("email", email)
-            intent.putExtra("informationAgreeStatus", "Y") // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
+            // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
+            intent.putExtra("informationAgreeStatus", "Y")
             intent.putExtra("loginId", loginId)
             intent.putExtra("nickname", nickname)
             intent.putExtra("password", password)
@@ -64,20 +60,12 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
         }
     }
 
-
     //회원가입 성공/실패
     override fun onSignUpSuccess() {
         Log.d("signup", "회원가입에 성공하였습니다.")
     }
 
-    override fun onSignUpFailure(code:Int) {
-        when(code){
-            2006-> Log.d("signup", "중복되는 유저 아이디입니다")
-            2007-> Log.d("signup", "중복되는 유저 이메일입니다")
-            2008-> Log.d("signup", "존재하지 않는 학교 이름입니다")
-            2201-> Log.d("signup", "회원 정보동의 status가 Y가 아닙니다.")
-            2205-> Log.d("signup", "존재하지 않는 회원 id 입니다.")
-            4000-> Log.d("signup", "서버 오류입니다.")
-        }
+    override fun onSignUpFailure(message:String) {
+        showToast(message)
     }
 }

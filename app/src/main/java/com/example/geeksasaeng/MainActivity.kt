@@ -63,6 +63,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBottomNavi.itemIconTintList = null
     }
-
-
 }

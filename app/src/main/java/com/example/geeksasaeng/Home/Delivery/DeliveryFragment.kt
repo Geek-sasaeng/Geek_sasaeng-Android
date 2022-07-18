@@ -59,7 +59,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
 //        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
-
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
         deliveryService.setDeliveryView(this)

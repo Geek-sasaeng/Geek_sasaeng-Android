@@ -49,14 +49,11 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
-    //luna
     fun changeActivity(activity: Class<*>) {
         startActivity(Intent(this, activity))
     }
 
     fun setFragment(id: Int, fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(id, fragment)
-            .commit()
+        supportFragmentManager.beginTransaction().replace(id, fragment).commit()
     }
 }

@@ -5,7 +5,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
-    // <회원가입>
     // 일반 회원가입
     @POST("/members")
     fun signup(@Body user: SignUpRequest): Call<SignUpResponse>
@@ -22,18 +21,19 @@ interface SignupRetrofitInterfaces {
     // 이메일 인증 확인
     @POST("/members/email/check")
     fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<VerifyEmailResponse>
-    //<아이디 중복 확인>
+
+    // 아이디 중복 확인
     @POST("/members/id-duplicated")
     fun signupIdCheck(
         @Body loginId : SignUpIdCheckRequest
     ): Call<SignUpIdCheckResponse>
 
-    //<닉네임 중복 확인>
+    // 닉네임 중복 확인
     @POST("/members/nickname-duplicated")
     fun signupNickCheck(@Body nickName : SignUpNickCheckRequest): Call<SignUpNickCheckResponse>
 
     // <문자 인증>
-    //sms보내기
+    // sms보내기
     @POST("/sms")
     fun signupSms(@Body recipientPhoneNumber: SignUpSmsRequest): Call<SignUpSmsResponse>
 

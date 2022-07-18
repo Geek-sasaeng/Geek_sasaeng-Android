@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Signup.Naver
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
@@ -45,8 +44,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         phoneNumber = arguments?.getString("phoneNumber")
         universityName = arguments?.getString("universityName")
 
-        Log.d("NAVER-LOGIN", "STEP-NAVER-TWO-1 : loginId = $loginId / phoneNumber = $phoneNumber")
-
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepNaverTwoFragment)
         signUpService.setSignUpEmailView(this@StepNaverTwoFragment)
@@ -67,9 +64,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
             // 이메일 번호 인증
             verifyEmail()
 
-            // 테스트용
-            verifyCheck = 1
-
             if (verifyCheck == 1) {
                 timerTask?.cancel()
 
@@ -81,8 +75,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
                 bundle.putString("nickname", nickname)
                 bundle.putString("phoneNumber", phoneNumber)
                 bundle.putString("universityName", universityName)
-
-                Log.d("NAVER-LOGIN", "STEP-NAVER-TWO-2 : loginId = $loginId / phoneNumber = $phoneNumber")
 
                 val stepNaverThreeFragment = StepNaverThreeFragment()
                 stepNaverThreeFragment.arguments = bundle
@@ -125,11 +117,12 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onVerifyEmailSuccess(message: String) {
-//        Log.d("EMAIL-RESPONSE", "Success = " + message)
         verifyCheck = 1
     }
 
-    override fun onVerifyEmailFailure(code: Int, message: String) {
+    override fun onVerifyEmailFailure(message: String) {
+        showToast(message)
+
         if (verifyCheck == 0) {
             binding.stepNaverTwoCheckMsgTv.visibility = View.GONE
             binding.stepNaverTwoResultMsgTv.visibility = View.VISIBLE
@@ -143,11 +136,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         }
 
         verifyCheck = -1
-
-        when(code){
-            // 2801 : 유효하지 않은 인증번호
-            2801 -> showToast(message)
-        }
     }
 
     private fun sendEmail() {
@@ -164,8 +152,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
-        showToast("전송에 실패했습니다")
-
         when(code){
             2803 -> showToast(message)
             2804 -> {

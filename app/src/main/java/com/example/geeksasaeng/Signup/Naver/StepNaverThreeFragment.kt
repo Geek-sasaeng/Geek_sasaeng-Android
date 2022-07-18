@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Signup.Naver
 
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
@@ -26,15 +25,11 @@ class StepNaverThreeFragment : BaseFragment<FragmentStepNaverThreeBinding>(Fragm
         phoneNumber = arguments?.getString("phoneNumber")
         universityName = arguments?.getString("universityName")
 
-        Log.d("NAVER-LOGIN", "STEP-NAVER-THREE-1 : email = $email / loginId = $loginId / nickname = $nickname / phoneNumber = $phoneNumber / universityName = $universityName")
-
         initClickListener()
     }
 
     private fun initClickListener() {
         binding.stepNaverThreeStartBtn.setOnClickListener {
-            Log.d("NAVER-LOGIN", "email = $email / loginId = $loginId / nickname = $nickname / phoneNumber = $phoneNumber / universityName = $universityName")
-
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtra("email", email)
             intent.putExtra("loginId", loginId)

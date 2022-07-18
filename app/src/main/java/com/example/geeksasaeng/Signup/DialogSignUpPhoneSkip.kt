@@ -10,7 +10,6 @@ import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 
-
 class DialogSignUpPhoneSkip: DialogFragment() {
 
     lateinit var binding: DialogSignupPhoneSkipBinding

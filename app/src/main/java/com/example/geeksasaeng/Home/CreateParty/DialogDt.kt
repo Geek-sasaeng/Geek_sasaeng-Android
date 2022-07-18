@@ -57,25 +57,6 @@ class DialogDt : DialogFragment() {
         dialog?.window?.setLayout(width,height)
     }
 
-    //최초에만 실행시키기 위해??
-/*    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val cal = Calendar.getInstance()   //캘린더뷰 만들기
-        //TimePicker
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            timeString = "${hourOfDay}시 ${minute}분"
-            binding.dateDialogTimeTv.text = timeString
-        }
-        TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
-        //DatePicker
-        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            dateString = "${month+1}월 ${dayOfMonth}일"
-            Log.d("dialog", dateString)
-            binding.dateDialogDateTv.text = dateString
-        }
-        DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
-    }*/
-
     //frag->Activity 정보전달용 코드 시작
     interface DialogDtNextClickListener{
         fun onDtClicked(text:String, orderNow:Boolean)
@@ -136,7 +117,19 @@ class DialogDt : DialogFragment() {
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
             //일단 테스트용용
-            if(dateString!=""&&timeString!=""){ // date랑 time 안정해두면,
+            if(dateString!=""&&timeString!=""){
+                Log.d("dialog", dateString)
+                Log.d("dialog", timeString)
+
+                //frag->frag 정보전달
+                /*val myFragment = CreatePartyFragment()
+                var args = Bundle()
+                args.putString("DateDialog", dateString + "  " +timeString)
+                myFragment.arguments = args*/
+
+                /*val fragmentTransaction = parentFragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.myframe, myFragment, "counter")
+                fragmentTransaction.commit()*/
 
                 //frag-> activity 정보전달
                 dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
