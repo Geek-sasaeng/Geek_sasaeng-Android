@@ -20,8 +20,7 @@ class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : Recycler
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_delivery, parent, false)
             ItemViewHolder(view)
         } else {
-            val view =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false)
             LoadingViewHolder(view)
         }
     }

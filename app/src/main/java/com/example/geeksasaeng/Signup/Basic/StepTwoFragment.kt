@@ -37,8 +37,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     var verifyBtnClick: Int = 0
 
     override fun initAfterBinding() {
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment : InitAfterBinding")
-
         progressVM.increase()
 
         checkPassword = arguments?.getString("checkPassword")
@@ -59,12 +57,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         val spinnerAdapter = UniversitySpinnerAdapter(requireContext(), universityList)
         binding.stepTwoSchoolSp.adapter = spinnerAdapter
         binding.stepTwoSchoolSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // 축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.university_arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
@@ -80,6 +73,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                 }
 
                 // 임의로 넣어놓은 부분!!
+                // TODO: 나중에 학교 리스트 API 연결하기
                 if (university == "가천대학교")
                     binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
                 else if (university == "나천대학교")
@@ -129,7 +123,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun initClickListener() {
         // 이메일 인증 전송 버튼
         binding.stepTwoEmailCheckBtnO.setOnClickListener {
-            Log.d("EMAIL-RESPONSE", "인증번호 전송 버튼 클릭")
             sendEmail()
         }
 
@@ -167,7 +160,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun sendEmail() {
         email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
         val uuid = getUuid().toString()
-        Log.d("EMAIL-RESPONSE", "EMAIL = ${email} / UNIVERSITY = ${university} / UUID = ${uuid}")
         val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
@@ -186,17 +178,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
-        Log.d("EMAIL-RESPONSE", "StepTwoFragment : onSignUpEmailFailure : Fail Code = $code")
+        showToast(message)
         verifyBtnClick = -1
-
-        when(code){
-            2803 -> showToast(message)
-            2804 -> {
-                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
-            }
-            2805 -> {
-                ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
-            }
-        }
     }
 }

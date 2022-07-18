@@ -22,17 +22,13 @@ class LoginDataService() {
 
         loginService?.login(user)?.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : response.code = " + response.code())
-                Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
-
                 if (response.isSuccessful && response.code() == 200) {
                     val loginResponse: LoginResponse = response.body()!!
-                    Log.d("LOGIN-RESPONSE", "LoginDataService-onResponse : loginResponse.code = " + loginResponse.code)
 
                     when (loginResponse.code) {
                         1000 -> loginView.onLoginSuccess(loginResponse.code, loginResponse.result!!)
-                        // 2011 : Password 틀림 | 2400 : ID 존재 X
-                        2011, 2400 -> loginView.onLoginFailure(loginResponse.code, loginResponse.message)
+                        4000 -> Log.d("LOGIN", "서버 오류")
+                        else -> loginView.onLoginFailure(loginResponse.message)
                     }
                 }
             }

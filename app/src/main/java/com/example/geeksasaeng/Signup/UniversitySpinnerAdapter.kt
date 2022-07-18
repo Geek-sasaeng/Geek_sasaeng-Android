@@ -44,7 +44,6 @@ class UniversitySpinnerAdapter(context: Context, spinnerList: Array<String>?) : 
             textName.setTextColor(ContextCompat.getColor(context, R.color.gray_2))
             textName.setTextSize(Dimension.SP, 12F)
             view?.isEnabled = false
-            Log.d("SPINNER-TEST", spinnerList!![i])
         } else { // 학교 아이템
             textName.setText(spinnerList!![i])
             image.visibility = View.INVISIBLE

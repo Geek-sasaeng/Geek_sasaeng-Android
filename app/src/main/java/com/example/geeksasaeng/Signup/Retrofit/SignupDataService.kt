@@ -8,9 +8,6 @@ import retrofit2.Response
 
 class SignupDataService() {
 
-    /*lateinit var signup: SignUpRequest //원래는 lateinit var signup: Signup이었음*/
-    //어디에 쓰이는지 모르겠네? 주석처리해둠
-
     //뷰 객체 생성
     private lateinit var signUpView: SignUpView
     private lateinit var signUpIdCheckView : SignUpIdCheckView
@@ -53,27 +50,19 @@ class SignupDataService() {
 
     //회원가입
     fun signUpSender(user: SignUpRequest) {
-        /*val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)*/
-
         SignupDataService.signup(user).enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
 
                 if (response.isSuccessful && response.code() == 200) {
                     val signUpResponse: SignUpResponse = response.body()!!
 
                     when (signUpResponse.code) {
                         1000 -> signUpView.onSignUpSuccess() //회원가입 성공
-                        else -> {
-                            //회원가입 실패할 경우
-                            signUpView.onSignUpFailure(signUpResponse.code)
-                        }
+                        else -> signUpView.onSignUpFailure(signUpResponse.message)
                     }
                 }
             }
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-                //실패처리
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
             }
         })
@@ -81,8 +70,6 @@ class SignupDataService() {
 
     // 네이버 회원가입
     fun signUpSocial(user: SignUpRequest) {
-        /*val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)*/
-
         SignupDataService?.signupSocial(user)?.enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
@@ -93,16 +80,12 @@ class SignupDataService() {
 
                     when (signUpResponse.code) {
                         1000 -> signUpView.onSignUpSuccess() //회원가입 성공
-                        else -> {
-                            //회원가입 실패할 경우
-                            signUpView.onSignUpFailure(signUpResponse.code)
-                        }
+                        else -> signUpView.onSignUpFailure(signUpResponse.message)
                     }
                 }
             }
 
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-                //실패처리
                 Log.d("SIGNUP-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
             }
         })
@@ -120,14 +103,11 @@ class SignupDataService() {
 
                     when (emailResponse.code) {
                         1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
-                        // 2803 : 유효하지 않은 인증번호 | 2804 : 이메일 인증 최대 10회 오류 | 2805 : 재시도
-                        2803, 2804, 2805 -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
                         else -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
                     }
                 }
             }
             override fun onFailure(call: Call<SignUpEmailResponse>, t: Throwable) {
-                //실패처리
                 Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
             }
         })
@@ -143,13 +123,11 @@ class SignupDataService() {
 
                     when (emailResponse.code) {
                         1801 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
-                        // ELSE : 유효하지 않은 인증번호
-                        else -> verifyEmailView.onVerifyEmailFailure(emailResponse.code, emailResponse.message)
+                        else -> verifyEmailView.onVerifyEmailFailure(emailResponse.message)
                     }
                 }
             }
             override fun onFailure(call: Call<VerifyEmailResponse>, t: Throwable) {
-                //실패처리
                 Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
             }
         })
@@ -157,73 +135,43 @@ class SignupDataService() {
 
     // 아이디 중복확인
     fun signUpIdCheckSender(loginId: SignUpIdCheckRequest){
-        SignupDataService.signupIdCheck(loginId).enqueue(object:
-            Callback<SignUpIdCheckResponse>{
-            override fun onResponse(
-                call: Call<SignUpIdCheckResponse>,
-                response: Response<SignUpIdCheckResponse>
-            ) {
-
-                Log.d("CheckId", "response: " +response.toString())
-                val resp: SignUpIdCheckResponse = response.body()!!
-                Log.d("CheckId", "resp: " +resp.toString())
-                Log.d("CheckId", response.code().toString()+"발생함")
-
+        SignupDataService.signupIdCheck(loginId).enqueue(object: Callback<SignUpIdCheckResponse>{
+            override fun onResponse(call: Call<SignUpIdCheckResponse>, response: Response<SignUpIdCheckResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: SignUpIdCheckResponse = response.body()!!
 
                     when (resp.code) {
-                        1601 -> {
-                            signUpIdCheckView.onSignUpIdCheckSuccess(resp.message)
-                        }
-                        else -> signUpIdCheckView.onSignUpIdCheckFailure(resp.code)
+                        1601 -> signUpIdCheckView.onSignUpIdCheckSuccess(resp.message)
+                        4000 -> Log.d("ID", "서버 오류")
+                        else -> signUpIdCheckView.onSignUpIdCheckFailure(resp.message)
                     }
                 }
             }
-            //통신 실패
             override fun onFailure(call: Call<SignUpIdCheckResponse>, t: Throwable) {
                 Log.d("SignUpIdCheckSender", "SignupDataService-onFailure : SignUpIdCheckSmsFailed", t)
             }
-
-        }
-        )
+        })
     }
-
 
     // 닉네임 중복확인
     fun signUpNickCheckSender(signUpNickRequest: SignUpNickCheckRequest){
-        SignupDataService.signupNickCheck(signUpNickRequest).enqueue(object:
-            Callback<SignUpNickCheckResponse>{
-            override fun onResponse(
-                call: Call<SignUpNickCheckResponse>,
-                response: Response<SignUpNickCheckResponse>
-            ) {
-                Log.d("CheckNick", "response: " +response.toString())
-                val resp: SignUpNickCheckResponse = response.body()!!
-                Log.d("CheckNick", "resp: " +resp.toString())
-                Log.d("CheckNick", response.code().toString()+"발생함")
-
+        SignupDataService.signupNickCheck(signUpNickRequest).enqueue(object: Callback<SignUpNickCheckResponse>{
+            override fun onResponse(call: Call<SignUpNickCheckResponse>, response: Response<SignUpNickCheckResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: SignUpNickCheckResponse = response.body()!!
 
                     when (resp.code) {
-                        1202-> {
-                            signUpNickCheckView.onSignUpNickCheckSuccess(resp.message)
-                        }
-                        else -> signUpNickCheckView.onSignUpNickCheckFailure(resp.code)
+                        1202-> signUpNickCheckView.onSignUpNickCheckSuccess(resp.message)
+                        4000 -> Log.d("NICKNAME", "서버 오류")
+                        else -> signUpNickCheckView.onSignUpNickCheckFailure(resp.message)
                     }
                 }
             }
-            //통신 실패
             override fun onFailure(call: Call<SignUpNickCheckResponse>, t: Throwable) {
                 TODO("Not yet implemented")
             }
-
-        }
-        )
+        })
     }
-
-
 
     // sms 보내기
     fun signUpSmsSender(recipientPhoneNumber: SignUpSmsRequest) {
@@ -232,53 +180,35 @@ class SignupDataService() {
             override fun onResponse(call: Call<SignUpSmsResponse>, response: Response<SignUpSmsResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("sms-response", response.toString())
-                    Log.d("sms-resp", resp.toString())
 
                     when (resp.code) {
-                        1001 -> {
-                            signUpSmsView.onSignUpSmsSuccess(resp.message)
-                        }
-                        else -> signUpSmsView.onSignUpSmsFailure(resp.code)
+                        1001 -> signUpSmsView.onSignUpSmsSuccess(resp.message)
+                        else -> signUpSmsView.onSignUpSmsFailure(resp.message)
                     }
                 }
             }
-
-            //통신자체가 안되면
             override fun onFailure(call: Call<SignUpSmsResponse>, t: Throwable) {
-                /*Log.d("hi",t.toString())*/
                 Log.d("SignUpSmsSender-RESP", "SignupDataService-onFailure : SignUpSmsFailed", t)
             }
-        }
-        )
+        })
     }
 
     // sms 인증확인
     fun verifySmsSender(verifySmsRequest: VerifySmsRequest) {
-        SignupDataService.verifySms(verifySmsRequest).enqueue(object:
-            Callback<VerifySmsResponse>{
-            override fun onResponse(
-                call: Call<VerifySmsResponse>,
-                response: Response<VerifySmsResponse>
-            ) {
-
-                //TODO: 200이 OK던데 이게 성공이야? 1002:SMS인증에 성공했습니다. 이게 성공이야??
+        SignupDataService.verifySms(verifySmsRequest).enqueue(object: Callback<VerifySmsResponse>{
+            override fun onResponse(call: Call<VerifySmsResponse>, response: Response<VerifySmsResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("success", response.toString())
 
                     when (resp.code) {
                         1002 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
-                        else -> verifySmsView.onVerifySmsFailure(resp.code)
+                        else -> verifySmsView.onVerifySmsFailure(resp.message)
                     }
                 }
             }
-
-            //통신자체가 안되면
             override fun onFailure(call: Call<VerifySmsResponse>, t: Throwable) {
-                /*Log.d("hi",t.toString())*/
+                Log.d("SignUpSmsSender-RESP", "SignupDataService-onFailure : SignUpSmsFailed", t)
             }
-        }
-        )
+        })
     }
 }

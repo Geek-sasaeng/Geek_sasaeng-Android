@@ -134,7 +134,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
             if (binding.stepFourPhoneReSendBtnO.text == "재전송 하기") {
                 //10초 이내에 재전송시 10초 지나고 가능, 하루에 최대 5번까지 가능
-                //TODO: 하루에 최대 5번까지 가능하게 만들어야해
+                // TODO: 하루에 최대 5번까지 가능하게 만들어야해
                 if(time<4900){ //10초가 지났으면
                     resetTimer()
                     startTimer()
@@ -168,8 +168,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
             phoneNumber = binding.stepFourPhoneEt.text.toString()
 
-            val transaction: FragmentTransaction =
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
+            val transaction: FragmentTransaction = (context as SignUpActivity).supportFragmentManager.beginTransaction()
 
             val bundle = Bundle()
             bundle.putString("checkPassword", checkPassword)
@@ -183,10 +182,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             val stepFiveFragment = StepFiveFragment()
             stepFiveFragment.arguments = bundle
 
-            Log.d("SignupData", bundle.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepFiveFragment).commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepFiveFragment).commit()
 
             stepFiveFragment.arguments = bundle
 
@@ -194,7 +190,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             transaction.commit()
         }
     }
-
 
     // 타이머 작동
     private fun startTimer() {
@@ -208,7 +203,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                 binding.stepFourCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
 
                 if (min == "00" && sec == "00"){
-                    Log.d("time", time.toString())
                     timerTask?.cancel()
                     binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepFourCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
@@ -217,7 +211,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
                     binding.stepFourPhoneCheckBtnX.visibility = View.VISIBLE
                 }
             }
-            if(time!=0) //time이 0이 아니라면
+            if (time != 0) //time이 0이 아니라면
                 time -= 1000 //1초씩 줄이기
         }
     }
@@ -238,48 +232,33 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
     }
 
-    //sms인증문자 보내기 성공/실패
+    // sms인증문자 보내기 성공/실패
     override fun onSignUpSmsSuccess(message: String) {
-        Log.d("sms",message)
-
         ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
-
         checkingNext() // 다음버튼 활성화 여부 결정
     }
 
-    override fun onSignUpSmsFailure(code: Int) {
-        when(code){
-            2015 -> {
-                Log.d("sms","일일 최대 전송 횟수를 초과했습니다")
-                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
-            }
-            2016->Log.d("sms","이메일 인증을 하지 못한 유저입니다. 이메일 인증을 해주세요.")
-            4001->Log.d("sms","SMS API 연동 오류입니다.")
-            4002->Log.d("sms","SMS API 연동 준비 오류입니다.")
-        }
+    override fun onSignUpSmsFailure(message: String) {
+        showToast(message)
     }
 
-    //sms인증번호 확인 성공/실패
+    // sms인증번호 확인 성공/실패
     override fun onVerifySmsSuccess(result: VerifySmsResult) {
         //인증번호가 맞은 경우
-        Log.d("sms","SMS 인증에 성공했습니다.")
         binding.stepFourCheckMsgTv.text = "성공적으로 인증이 완료되었습니다"
     }
 
-    override fun onVerifySmsFailure(code: Int) {
-        when(code){
-            2013-> {
-                Log.d("sms", "인증 번호가 틀렸습니다.")
-                binding.stepFourFailMsgTv.visibility = View.VISIBLE
-                binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
-                binding.stepFourCheckMsgTv.text = "인증 번호가 틀렸습니다."
-                //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기
-            }
-        }
+    override fun onVerifySmsFailure(message: String) {
+        showToast(message)
+        //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기
+        binding.stepFourFailMsgTv.visibility = View.VISIBLE
+        binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+        binding.stepFourCheckMsgTv.text = "인증 번호가 틀렸습니다."
     }
 
     private fun checkingNext(){
         var check : Boolean = (binding.stepFourCheckMsgTv.text.toString() == "성공적으로 인증이 완료되었습니다")
+
         if(check){
             binding.stepFourNextBtn.isEnabled=true
             binding.stepFourNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
