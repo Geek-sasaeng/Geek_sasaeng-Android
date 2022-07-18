@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
@@ -120,7 +119,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         changeActivity(MainActivity::class.java)
     }
 
-    override fun onLoginFailure(code: Int, message: String) {
+    override fun onLoginFailure(message: String) {
         // 2011 : 비밀번호가 틀립니다
         // 2012 : 탈퇴한 회원
         // 2400 : 존재하지 않는 아이디
@@ -242,7 +241,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         Log.d("signup", "회원가입에 성공하였습니다.")
     }
 
-    override fun onSignUpFailure(code:Int, message: String) {
+    override fun onSignUpFailure(message: String) {
         // 2006 : 중복되는 유저 아이디
         // 2007 : 중복되는 유저 이메일
         // 2008 : 존재하지 않는 학교 이름
