@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
 import net.daum.mf.map.api.MapView

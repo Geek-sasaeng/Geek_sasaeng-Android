@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Base.BaseFragment
-import com.example.geeksasaeng.Data.Delivery
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyFragment
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
