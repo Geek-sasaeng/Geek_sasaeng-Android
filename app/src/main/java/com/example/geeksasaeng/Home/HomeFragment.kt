@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Home
 
-import com.example.geeksasaeng.Base.BaseFragment
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

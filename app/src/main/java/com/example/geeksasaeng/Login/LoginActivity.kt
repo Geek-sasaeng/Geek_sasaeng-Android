@@ -1,13 +1,14 @@
 package com.example.geeksasaeng.Login
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
-import com.example.geeksasaeng.Base.BaseActivity
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Data.Login
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
 import com.example.geeksasaeng.Login.Retrofit.LoginResult
@@ -21,7 +22,11 @@ import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
+
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
@@ -138,9 +143,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     override fun onLoginFailure(code: Int, message: String) {
         Log.d("LOGIN-RESPONSE", "LoginActivity-onLoginFailure : Fail Code = $code")
 
-        if (code == 2011) showToast(message)
-        else if (code == 2012) showToast(message)
-        else if (code == 2400) showToast(message)
+        when (code) {
+            2011 -> showToast(message)
+            2012 -> showToast(message)
+            2400 -> showToast(message)
+        }
     }
 
     //회원가입하려는 유저를 SignUpRequest형태로 돌려주는 함수
@@ -203,26 +210,59 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun initClickListener() {
 
         binding.loginLoginBtn.setOnClickListener {
-            login(false)
-            // changeActivity(MainActivity::class.java)
+            // login(false)
+            changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {
+            changeActivity(SignUpNaverActivity::class.java)
+
             NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+            var naverToken :String? = ""
+
+            val profileCallback = object : NidProfileCallback<NidProfileResponse> {
+                override fun onSuccess(response: NidProfileResponse) {
+                    loginId = response.profile?.email.toString()
+                    phoneNumber = response.profile?.mobile.toString()
+
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : BTN-CLICK1 : id = ${response.profile?.email} / phone = ${response.profile?.mobile}")
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : BTN-CLICK2 : id = ${loginId} / phone = ${phoneNumber}")
+
+                    Toast.makeText(this@LoginActivity, "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    Toast.makeText(this@LoginActivity, "errorCode: ${errorCode}\n" +
+                            "errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
 
             val oauthLoginCallback = object : OAuthLoginCallback {
                 override fun onSuccess() {
                     // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
-                    Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    // Log.d("NAVER-LOGIN", "SUCCESS : " + NaverIdLoginSDK.getAccessToken() + " " + NaverIdLoginSDK.getRefreshToken() + " " + NaverIdLoginSDK.getExpiresAt().toString() + " " + NaverIdLoginSDK.getTokenType() + " " + NaverIdLoginSDK.getState().toString())
+                    //로그인 유저 정보 가져오기
+                    NidOAuthLogin().callProfileApi(profileCallback)
                     removeSP()
                     saveSP(NaverIdLoginSDK.getAccessToken().toString())
-                    changeActivity(SignUpNaverActivity::class.java)
+
+                    val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
+                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
+                    intent.putExtra("loginId", loginId.toString())
+                    intent.putExtra("phoneNumber", phoneNumber)
+                    startActivity(intent)
+                    // changeActivity(SignUpNaverActivity::class.java).........................................
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                     val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
                     removeSP()
-                    Log.d("NAVER-LOGIN", "FAILED : " + errorCode + " " + errorDescription)
+                    Log.d("NAVER-LOGIN", "FAILED : $errorCode $errorDescription")
                 }
                 override fun onError(errorCode: Int, message: String) {
                     onFailure(errorCode, message)
@@ -230,6 +270,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             }
 
             NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+            Log.d("NAVER-LOGIN", "NaverIdLoginSDK = ${NaverIdLoginSDK.authenticate(this, oauthLoginCallback).toString()}")
         }
 
         binding.loginSignupBtn.setOnClickListener {
@@ -252,6 +293,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             2205-> Log.d("signup", "존재하지 않는 회원 id 입니다.")
             4000-> Log.d("signup", "서버 오류입니다.")
         }
+    }
+
+    /**
+     * 로그인
+     * authenticate() 메서드를 이용한 로그인 */
+    private fun startNaverLogin(){
     }
 
 }

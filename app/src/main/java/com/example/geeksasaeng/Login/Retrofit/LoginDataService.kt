@@ -2,7 +2,7 @@ package com.example.geeksasaeng.Login.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.Data.Login
-import com.example.geeksasaeng.NetworkModule
+import com.example.geeksasaeng.Utils.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

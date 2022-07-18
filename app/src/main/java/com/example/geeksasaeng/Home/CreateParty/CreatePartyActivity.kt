@@ -3,8 +3,8 @@ package com.example.geeksasaeng.Home.CreateParty
 import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 
 
@@ -83,5 +83,4 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyPlace2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyPlace2Tv.text = loc
     }
-
 }

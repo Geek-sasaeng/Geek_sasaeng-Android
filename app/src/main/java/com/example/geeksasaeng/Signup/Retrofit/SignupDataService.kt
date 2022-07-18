@@ -1,8 +1,7 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.ApplicationClass.Companion.retrofit
-import com.example.geeksasaeng.Signup.*
+import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,6 +72,34 @@ class SignupDataService() {
                     }
                 }
             }
+            override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                //실패처리
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
+            }
+        })
+    }
+
+    // 네이버 회원가입
+    fun signUpSocial(user: SignUpRequest) {
+        /*val signUpService = NetworkModule?.getInstance()?.create(SignupRetrofitInterfaces::class.java)*/
+
+        SignupDataService?.signupSocial(user)?.enqueue(object : Callback<SignUpResponse> {
+            override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val signUpResponse: SignUpResponse = response.body()!!
+
+                    when (signUpResponse.code) {
+                        1000 -> signUpView.onSignUpSuccess() //회원가입 성공
+                        else -> {
+                            //회원가입 실패할 경우
+                            signUpView.onSignUpFailure(signUpResponse.code)
+                        }
+                    }
+                }
+            }
 
             override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                 //실패처리
@@ -85,14 +112,17 @@ class SignupDataService() {
     fun signUpEmailSender(signupEmailRequest: SignUpEmailRequest) {
         SignupDataService.signupEmail(signupEmailRequest).enqueue(object : Callback<SignUpEmailResponse> {
             override fun onResponse(call: Call<SignUpEmailResponse>, response: Response<SignUpEmailResponse>) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.code = " + response.code())
+
                 if (response.isSuccessful && response.code() == 200) {
                     val emailResponse: SignUpEmailResponse = response.body()!!
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
 
                     when (emailResponse.code) {
-                        2802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
+                        1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
                         // 2803 : 유효하지 않은 인증번호 | 2804 : 이메일 인증 최대 10회 오류 | 2805 : 재시도
                         2803, 2804, 2805 -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
+                        else -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
                     }
                 }
             }
@@ -112,7 +142,7 @@ class SignupDataService() {
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
 
                     when (emailResponse.code) {
-                        2800 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
+                        1801 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
                         // ELSE : 유효하지 않은 인증번호
                         else -> verifyEmailView.onVerifyEmailFailure(emailResponse.code, emailResponse.message)
                     }
@@ -143,7 +173,7 @@ class SignupDataService() {
                     val resp: SignUpIdCheckResponse = response.body()!!
 
                     when (resp.code) {
-                        2604-> {
+                        1601 -> {
                             signUpIdCheckView.onSignUpIdCheckSuccess(resp.message)
                         }
                         else -> signUpIdCheckView.onSignUpIdCheckFailure(resp.code)

@@ -1,10 +1,10 @@
 package com.example.geeksasaeng
 
+import com.example.geeksasaeng.Utils.BaseActivity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import com.example.geeksasaeng.Base.BaseActivity
 import com.example.geeksasaeng.Chatting.ChattingFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment

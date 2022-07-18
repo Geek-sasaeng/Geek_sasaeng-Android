@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/step_four_phone"
         android:layout_width="match_parent"
@@ -43,44 +42,44 @@
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
             android:paddingBottom="20dp"
-            android:layout_marginRight="14dp"
+            android:layout_marginRight="160dp"
             android:layout_marginLeft="27dp"
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_four_phone_send_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_four_phone_send_btn"
+            android:id="@+id/step_four_phone_reSend_btn_o"
             android:layout_width="125dp"
             android:layout_height="53dp"
             android:textSize="15sp"
             android:text="인증번호 전송"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/selector_button"
-            android:textColor="@drawable/selector_button_text"
+            android:background="@drawable/signup_btn"
+            android:textColor="@color/main"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
-            android:enabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/step_four_phone_reSend_btn"
-            android:layout_width="125dp"
-            android:layout_height="53dp"
-            android:textSize="15sp"
-            android:text="재전송 하기"
-            android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/selector_button"
-            android:textColor="@drawable/selector_button_text"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="27dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"/>
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:id="@+id/step_four_phone_reSend_btn_x"
+            android:layout_width="116dp"
+            android:layout_height="46dp"
+            android:textSize="15sp"
+            android:text="인증번호 전송"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/round_border_button_gray0"
+            android:textColor="@color/gray_2"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.Button.Borderless" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -123,28 +122,44 @@
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
             android:paddingBottom="20dp"
-            android:layout_marginRight="14dp"
+            android:layout_marginRight="160dp"
             android:layout_marginLeft="27dp"
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/step_four_phone_check_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_four_phone_check_btn"
+            android:id="@+id/step_four_phone_check_btn_o"
             android:layout_width="125dp"
             android:layout_height="53dp"
             android:textSize="15sp"
             android:text="확인"
             android:fontFamily="@font/spoqa_medium"
-            android:background="@drawable/selector_button"
-            android:textColor="@drawable/selector_button_text"
+            android:background="@drawable/signup_btn"
+            android:textColor="@color/main"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="27dp"
-            android:enabled="false"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:id="@+id/step_four_phone_check_btn_x"
+            android:layout_width="116dp"
+            android:layout_height="46dp"
+            android:textSize="15sp"
+            android:text="확인"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/round_border_button_gray0"
+            android:textColor="@color/gray_2"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.Button.Borderless" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -159,6 +174,19 @@
         android:layout_marginStart="40dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/step_four_check"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/step_four_fail_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증번호가 틀렸습니다"
+        android:textColor="@color/error"
+        android:textSize="13dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="40dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/step_four_check_msg_tv"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
