@@ -16,6 +16,7 @@ class ProgressNaverViewModel: ViewModel() {
         Log.d("PROGRESS-STATUS", "CURRENTPRO = " + currentPro.value.toString())
     }
 
+    // TODO: 회원가입 Dialog 뒤로가기 부분에서 사용!!
     fun decrease() {
         currentPro.value = currentPro.value!! - 1
     }

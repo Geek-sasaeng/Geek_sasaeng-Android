@@ -64,9 +64,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
             // 이메일 번호 인증
             verifyEmail()
 
-            // 디버깅용
-            verifyCheck = 1
-
             if (verifyCheck == 1) {
                 timerTask?.cancel()
 
@@ -84,10 +81,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
                 val stepFourFragment = StepFourFragment()
                 stepFourFragment.arguments = bundle
 
-                Log.d("SignupData", bundle.toString())
-
-                (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.sign_up_vp, stepFourFragment).commit()
+                (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepFourFragment).commit()
 
                 stepFourFragment.arguments = bundle
 
@@ -117,7 +111,7 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
                 }
             }
 
-            if(time!=0) //time이 0이 아니라면
+            if (time != 0) // time이 0이 아니라면
                 time -= 1000 //1초씩 줄이기
         }
     }
@@ -131,35 +125,27 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     private fun verifyEmail() {
-        val verifyEmailRequest = VerifyEmailRequest("wlals2987@gachon.ac.kr", binding.stepThreeCheckEt.text.toString())
-        Log.d("EMAIL-RESPONSE", "wlals2987@gachon.ac.kr " + binding.stepThreeCheckEt.text.toString())
+        val verifyEmailRequest = VerifyEmailRequest(email.toString(), binding.stepThreeCheckEt.text.toString())
         signUpService.verifyEmailSender(verifyEmailRequest)
     }
 
     override fun onVerifyEmailSuccess(message: String) {
-        // Log.d("EMAIL-RESPONSE", "Success = " + message)
         verifyCheck = 1
     }
 
-    override fun onVerifyEmailFailure(code: Int, message: String) {
+    override fun onVerifyEmailFailure(message: String) {
         if (verifyCheck == 0) {
             binding.stepThreeCheckMsgTv.visibility = View.GONE
             binding.stepThreeResultMsgTv.visibility = View.VISIBLE
             binding.stepThreeResultMsgTv.text = "인증번호가 틀렸습니다"
             binding.stepThreeResultMsgTv.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.error
-                )
+                ContextCompat.getColor(requireContext(), R.color.error)
             )
         }
 
         verifyCheck = -1
 
-        when(code){
-            // 2801 : 유효하지 않은 인증번호
-            2801 -> showToast(message)
-        }
+        showToast(message)
     }
 
     private fun sendEmail() {
@@ -175,12 +161,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
-        showToast("전송에 실패했습니다")
-
-        when(code){
-            2803 -> showToast(message)
-            2804 -> showToast(message)
-            2400 -> showToast(message)
-        }
+        showToast(message)
     }
 }

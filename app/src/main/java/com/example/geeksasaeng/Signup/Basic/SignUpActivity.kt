@@ -1,6 +1,5 @@
 package com.example.geeksasaeng.Signup.Basic
 
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Utils.BaseActivity
@@ -19,15 +18,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
             .commit()
 
         progressVM.currentPro.observe(this, Observer {
-            Log.d("PROGRESS-STATUS", "SIGNUP-PROGRESS = ${progressVM.currentPro.value.toString()}")
-
             binding.signUpProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
         })
-
-        initClickListener()
-    }
-
-    private fun initClickListener() {
-
     }
 }

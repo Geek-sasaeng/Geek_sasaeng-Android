@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Signup.Naver
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,13 +16,10 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
     var phoneNumber: String? = ""
 
     override fun initAfterBinding() {
-
         progressVM = ViewModelProvider(this).get(ProgressNaverViewModel::class.java)
 
         loginId = intent.getStringExtra("loginId")
         phoneNumber = intent.getStringExtra("phoneNumber")
-
-        Log.d("NAVER-LOGIN", "SIGNUP-NAVER : loginId = $loginId / phone = $phoneNumber")
 
         val transaction: FragmentTransaction = this@SignUpNaverActivity.supportFragmentManager.beginTransaction()
 
@@ -38,15 +34,7 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
         transaction.commit()
 
         progressVM.currentPro.observe(this, Observer {
-            Log.d("PROGRESS-STATUS", "SIGNUP-PROGRESS = ${progressVM.currentPro.value.toString()}")
-
             binding.signUpNaverProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
         })
-
-        initClickListener()
-    }
-
-    private fun initClickListener() {
-
     }
 }
