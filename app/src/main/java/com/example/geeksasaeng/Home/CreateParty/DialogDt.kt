@@ -121,7 +121,7 @@ class DialogDt : DialogFragment() {
             //frag-> activity 정보전달
             dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
 
-            
+
             //다음 다이얼로그 띄우기
             val dialogNum = DialogNum()
             dialogNum.show(parentFragmentManager, "CustomDialog")

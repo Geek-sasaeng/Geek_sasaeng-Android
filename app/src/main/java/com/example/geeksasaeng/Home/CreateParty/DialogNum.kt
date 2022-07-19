@@ -16,7 +16,7 @@ class DialogNum: DialogFragment() {
 
     lateinit var binding: DialogNumLayoutBinding
     private var dialogNumNextClickListener: DialogNumNextClickListener? =null
-    var numString = ""
+    var numString = "2"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
