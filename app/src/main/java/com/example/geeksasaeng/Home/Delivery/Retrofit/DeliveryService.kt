@@ -22,9 +22,6 @@ class DeliveryService {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val deliveryResponse: DeliveryResponse = response.body()!!
-                    Log.d("DELIVERY-RESPONSE", "DELIVERY-SERVICE-DORMITORY-ID : ${dormitoryId}")
-                    Log.d("DELIVERY-RESPONSE", "DELIVERY-SERVICE-CURSOR : $cursor")
-
                     when (deliveryResponse.code) {
                         1000 -> deliveryView.deliverySuccess(response.body()!!)
                         else -> deliveryView.deliveryFailure(deliveryResponse.code, deliveryResponse.message)

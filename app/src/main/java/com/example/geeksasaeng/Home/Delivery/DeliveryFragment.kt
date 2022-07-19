@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.Retrofit.*
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
@@ -39,6 +39,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        binding.deliveryProgressCover.visibility = View.GONE
+
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
@@ -63,11 +65,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            //fragment->fragment로의 전환
-            /*activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()*/
-
-            //fragment->activity로의 전환
             val intent = Intent(context, CreatePartyActivity::class.java)
             startActivity(intent)
         }
@@ -85,12 +82,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
+    // TODO: 로딩 중에 스크롤 막기
+    // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
     private fun initMoreLoadPosts() {
+        binding.deliveryProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
             getDeliveryAllList(dormitoryId, totalCursor)
-            Log.d("DELAY-TEST", "END")
             isLoading = false
+            binding.deliveryProgressCover.visibility = View.GONE
         }, 2000)
     }
 
@@ -104,6 +104,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
+    // 하단 스크롤 관련
+    // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)
     private fun initScrollListener() {
         binding.deliveryRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -115,8 +117,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         initMoreLoadPosts()
                         isLoading = true
-                        showToast("LOADING")
-                        // getDeliveryAllList(1, totalCursor)
                     }
                 }
             }
