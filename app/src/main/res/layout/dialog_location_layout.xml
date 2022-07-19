@@ -92,8 +92,6 @@
             app:layout_constraintBottom_toBottomOf="@id/location_dialog_loc_title_tv"
             />
 
-
-        <!--지도로 교체 필요-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/location_dialog_kakaoMap_view"
             android:layout_width="0dp"
