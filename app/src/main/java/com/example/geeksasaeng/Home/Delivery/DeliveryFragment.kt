@@ -74,19 +74,24 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         if (totalCursor == 0)
             initLoadPosts()
-        else
-            initMoreLoadPosts()
+
+        initScrollListener()
+    }
+
+    // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
+    private fun initLoadPosts() {
+        totalCursor = 0
+        getDeliveryAllList(1, totalCursor)
     }
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
     private fun initMoreLoadPosts() {
-
-    }
-
-    // 리사이클러뷰에 최초로 넣어줄 데이터를 load 한다
-    private fun initLoadPosts() {
-        totalCursor = 0
-        getDeliveryAllList(1, totalCursor)
+        val handler = Handler()
+        handler.postDelayed({
+            getDeliveryAllList(dormitoryId, totalCursor)
+            Log.d("DELAY-TEST", "END")
+            isLoading = false
+        }, 2000)
     }
 
     // 상단 스크롤 관련
@@ -96,6 +101,25 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initAdapter()
             initLoadPosts()
             binding.deliverySwipe.isRefreshing = false
+        })
+    }
+
+    private fun initScrollListener() {
+        binding.deliveryRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = binding.deliveryRv.layoutManager
+
+                if (!isLoading) {
+                    if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
+                        initMoreLoadPosts()
+                        isLoading = true
+                        showToast("LOADING")
+                        // getDeliveryAllList(1, totalCursor)
+                    }
+                }
+            }
         })
     }
 
