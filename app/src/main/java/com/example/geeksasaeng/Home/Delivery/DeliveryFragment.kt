@@ -31,7 +31,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
-    var totalPost: Int = 0
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -73,21 +72,20 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             startActivity(intent)
         }
 
-        // 테스트
-        // Log.d("DELIVERY-RESPONSE", "initAfterBinding1-TOTAL-CURSOR = $totalCursor")
-        Log.d("DELIVERY-RESPONSE", "initAfterBinding : getDeliveryAllList0")
-
         if (totalCursor == 0)
-            getDeliveryAllList(dormitoryId, totalCursor)
+            initLoadPosts()
+        else
+            initMoreLoadPosts()
+    }
 
-        if ((totalCursor + 1) * 10 == totalPost) {
+    // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
+    private fun initMoreLoadPosts() {
 
-        }
+    }
 
-        Log.d("DELIVERY-RESPONSE", "TOTAL-CURSOR : $totalCursor  /  TOTAL-POST : $totalPost")
-
-        // Log.d("DELIVERY-RESPONSE", "initAfterBinding2-TOTAL-CURSOR = $totalCursor")
-        // initScrollListener()
+    // 리사이클러뷰에 최초로 넣어줄 데이터를 load 한다
+    private fun initLoadPosts() {
+        getDeliveryAllList(1, 0)
     }
 
     // 상단 스크롤 관련
@@ -100,56 +98,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
-    // 무한 스크롤 관련
-    private fun initScrollListener() {
-        binding.deliveryRv!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-                if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
-                        loadMore()
-                        isLoading = true
-                    }
-                }
-            }
-        })
-    }
-
-    private fun loadMore() {
-        deliveryArray.add(null)
-        deliveryAdapter!!.notifyItemInserted(deliveryArray.size - 1)
-        val handler = Handler()
-        handler.postDelayed({
-            deliveryArray.removeAt(deliveryArray.size - 1)
-            val scrollPosition = deliveryArray.size
-            deliveryAdapter!!.notifyItemRemoved(scrollPosition)
-//            var currentSize = scrollPosition
-//            val nextLimit = currentSize + 10
-//            while (currentSize - 1 < nextLimit) {
-//                // deliveryArray.add(DeliveryResult("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
-//            }
-            Log.d("DELIVERY-RESPONSE", "initAfterBinding : loadMore")
-            getDeliveryAllList(dormitoryId, totalCursor)
-            deliveryAdapter!!.notifyDataSetChanged()
-            isLoading = false
-        }, 2000)
-    }
-
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
-        Log.d("DELIVERY-RESPONSE", "getDeliveryAllList")
-        // 테스트
-        // var dormitoryId = 0
         val deliveryDataService = DeliveryService()
         deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
-        totalCursor = totalCursor + 1
-        totalPost = totalPost + 10
+        totalCursor += 1
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
@@ -159,20 +113,16 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-RESPONSE", "size = $size")
 
         for (i in 0 until result!!.size) {
-            var chief = result?.get(i)?.chief
-            var content = result?.get(i)?.content
             var currentMatching = result?.get(i)?.currentMatching
             var foodCategory = result?.get(i)?.foodCategory
             var id = result?.get(i)?.id
-            var location = result?.get(i)?.location
-            var matchingStatus = result?.get(i)?.matchingStatus
             var maxMatching = result?.get(i)?.maxMatching
             var orderTime = result?.get(i)?.orderTime
             var title = result?.get(i)?.title
             var hashTags = result?.get(i)?.hashTags
 
             deliveryArray.add(
-                DeliveryResult(chief, content, currentMatching, foodCategory, id, location, matchingStatus, maxMatching, orderTime, title, hashTags!!)
+                DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
             )
 
             deliveryAdapter = DeliveryRVAdapter(deliveryArray)

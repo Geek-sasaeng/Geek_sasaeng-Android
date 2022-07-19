@@ -75,11 +75,13 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         val loginDataService = LoginDataService()
         loginDataService.setLoginView(this)
 
-        if (auto) {
-            loginDataService.login(Login(autoLoginid, autoPassword))
-        } else {
-            loginDataService.login(getLoginUser())
-        }
+//        if (auto) {
+//            loginDataService.login(Login(autoLoginid, autoPassword))
+//        } else {
+//            loginDataService.login(getLoginUser())
+//        }
+
+        loginDataService.login(getLoginUser())
     }
 
     private fun getLoginUser(): Login {
@@ -145,12 +147,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
-                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.isEnabled = true;
                     binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
                 } else {
-                    binding.loginLoginBtn.isClickable = false;
-                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.isEnabled = false;
                     binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
@@ -162,12 +163,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (binding.loginIdEt.text.length >= 6 && binding.loginPwdEt.text.length >= 8) {
-                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.isEnabled = true;
                     binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#ffffff"))
                 } else {
-                    binding.loginLoginBtn.isClickable = false;
-                    binding.loginLoginBtn.isClickable = true;
+                    binding.loginLoginBtn.isEnabled = false;
                     binding.loginLoginBtn.setBackgroundResource(R.drawable.round_border_button_gray0);
                     binding.loginLoginBtn.setTextColor(Color.parseColor("#A8A8A8"))
                 }
@@ -177,8 +177,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
-            // login(false)
-            changeActivity(MainActivity::class.java)
+            login(false)
+            // changeActivity(MainActivity::class.java)
         }
 
         binding.loginNaverBtn.setOnClickListener {

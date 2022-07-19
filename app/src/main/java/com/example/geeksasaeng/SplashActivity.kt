@@ -12,9 +12,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         val handler = Handler(Looper.getMainLooper())
 
         handler.postDelayed({
-            // 테스트
-            // changeActivity(MainActivity::class.java)
-            changeActivity(LoginActivity::class.java)
+            // changeActivity(LoginActivity::class.java)
+            changeActivity(MainActivity::class.java)
             finish()
         }, 1500)
     }
