@@ -47,6 +47,7 @@ class DialogCategory : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
+        dialogCategoryNextClickListener?.onCategoryClicked(categoryString)
         dialogCategoryNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝

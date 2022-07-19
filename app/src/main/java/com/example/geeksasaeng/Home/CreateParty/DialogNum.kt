@@ -46,6 +46,8 @@ class DialogNum: DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
+        //frag-> activity 정보전달
+        dialogNumNextClickListener?.onNumClicked(numString+"명")
         dialogNumNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝

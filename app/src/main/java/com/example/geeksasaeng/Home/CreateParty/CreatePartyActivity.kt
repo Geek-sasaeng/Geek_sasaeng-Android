@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.CreateParty
 
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
@@ -26,10 +27,31 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             binding.createPartyTogetherCheckBtn.isChecked = !binding.createPartyTogetherCheckBtn.isChecked
         }
 
-        //주문예정시간 tv 클릭시
+        //주문예정시간 tv 클릭시 (파란색)
+        binding.createPartyDate2ColoredTv.setOnClickListener {
+            // activity에서 커스텀 다이얼로그 띄우는 코드
+            DialogDt().show(supportFragmentManager, "CustomDialog")
+        }
+
+        //주문예정시간 tv 클릭시 (파란색)
         binding.createPartyDate2Tv.setOnClickListener {
             // activity에서 커스텀 다이얼로그 띄우는 코드
             DialogDt().show(supportFragmentManager, "CustomDialog")
+        }
+
+        //매칭 인원 tv
+        binding.createPartyNumber2Tv.setOnClickListener {
+            DialogNum().show(supportFragmentManager, "CustomDialog")
+        }
+
+        //카테고리 tv
+        binding.createPartyCategory2Tv.setOnClickListener {
+            DialogCategory().show(supportFragmentManager, "CustomDialog")
+        }
+
+        //수령장소 tv
+        binding.createPartyLocation2Tv.setOnClickListener {
+            DialogLocation().show(supportFragmentManager, "CustomDialog")
         }
 
     }
@@ -39,6 +61,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         //사용자가 선택한 날짜 표시
         binding.createPartyDate2Tv.setTextColor(ContextCompat.getColor(this, R.color.black))
         binding.createPartyDate2Tv.text = dt
+
+        //파란색 버튼 없애고 회색버튼으로 띄우기
+        binding.createPartyDate2Tv.visibility = View.VISIBLE
+        binding.createPartyDate2ColoredTv.visibility = View.INVISIBLE
+
         if(orderNow){ //매칭시 바로 주문 여부에 따라서 색 변경해주기
             binding.createPartyImmediateTv.setTextColor(ContextCompat.getColor(this,R.color.main))
         }else{
@@ -61,7 +88,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     override fun onLocationClicked(loc: String) {
         //사용자가 선택한 위치 표시
-        binding.createPartyPlace2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
-        binding.createPartyPlace2Tv.text = loc
+        binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
+        binding.createPartyLocation2Tv.text = loc
     }
 }

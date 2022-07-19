@@ -166,12 +166,34 @@
                 android:padding="7dp"
                 android:paddingStart="15dp"
                 android:textColor="@color/gray_1"
+                android:textSize="13sp"
                 android:fontFamily="@font/spoqa_regular"
                 android:text="05월 05일 23시 00분"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_date_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/create_party_date_tv"
                 app:layout_constraintTop_toTopOf="@id/create_party_date_tv" />
+
+            <!--파란색 활성화되어있어있는 버튼-->
+            <TextView
+                android:id="@+id/create_party_date2_colored_tv"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:background="@drawable/signup_btn"
+                android:clickable="true"
+                android:paddingStart="20dp"
+                android:textColor="@color/main"
+                android:textSize="13sp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="05월 05일 23시 00분"
+                android:gravity="center_vertical"
+                android:layout_marginStart="-6dp"
+                android:layout_marginEnd="-6dp"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_date2_tv"
+                app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
+                app:layout_constraintTop_toTopOf="@id/create_party_date2_tv" />
 
             <!--매칭 시 바로 주문-->
             <TextView
@@ -209,6 +231,7 @@
                 android:padding="7dp"
                 android:text="0/0"
                 android:paddingStart="15dp"
+                android:textSize="13sp"
                 android:textColor="@color/gray_1"
                 android:fontFamily="@font/spoqa_regular"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_number_tv"
@@ -239,6 +262,7 @@
                 android:text="한식"
                 android:paddingStart="15dp"
                 android:textColor="@color/gray_1"
+                android:textSize="13sp"
                 android:fontFamily="@font/spoqa_regular"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_category_tv"
                 app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
@@ -247,7 +271,7 @@
 
             <!--수령장소 선택-->
             <TextView
-                android:id="@+id/create_party_place_tv"
+                android:id="@+id/create_party_location_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -259,7 +283,7 @@
                 app:layout_constraintTop_toBottomOf="@id/create_party_category_tv" />
 
             <TextView
-                android:id="@+id/create_party_place2_tv"
+                android:id="@+id/create_party_location2_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/gray_0"
@@ -267,12 +291,13 @@
                 android:padding="7dp"
                 android:text="제 1기숙사 후문"
                 android:paddingStart="15dp"
+                android:textSize="13sp"
                 android:textColor="@color/gray_1"
                 android:fontFamily="@font/spoqa_regular"
-                app:layout_constraintBottom_toBottomOf="@id/create_party_place_tv"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_location_tv"
                 app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
                 app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
-                app:layout_constraintTop_toTopOf="@id/create_party_place_tv" />
+                app:layout_constraintTop_toTopOf="@id/create_party_location_tv" />
 
 
             <TextView
@@ -281,9 +306,9 @@
                 android:layout_marginTop="15dp"
                 android:backgroundTint="@color/gray_0"
                 android:background="@drawable/round_border"
-                app:layout_constraintStart_toStartOf="@id/create_party_place_tv"
-                app:layout_constraintEnd_toEndOf="@id/create_party_place2_tv"
-                app:layout_constraintTop_toBottomOf="@id/create_party_place2_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_location_tv"
+                app:layout_constraintEnd_toEndOf="@id/create_party_location2_tv"
+                app:layout_constraintTop_toBottomOf="@id/create_party_location2_tv"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="20dp"/>
 

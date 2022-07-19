@@ -69,6 +69,8 @@ class DialogDt : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
+        //frag-> activity 정보전달
+        dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
         dialogDtNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -116,36 +118,16 @@ class DialogDt : DialogFragment() {
 
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
-            //일단 테스트용용
-            if(dateString!=""&&timeString!=""){
-                Log.d("dialog", dateString)
-                Log.d("dialog", timeString)
+            //frag-> activity 정보전달
+            dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
 
-                //frag->frag 정보전달
-                /*val myFragment = CreatePartyFragment()
-                var args = Bundle()
-                args.putString("DateDialog", dateString + "  " +timeString)
-                myFragment.arguments = args*/
+            //다음 다이얼로그 띄우기
+            val dialogNum = DialogNum()
+            dialogNum.show(parentFragmentManager, "CustomDialog")
 
-                /*val fragmentTransaction = parentFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.myframe, myFragment, "counter")
-                fragmentTransaction.commit()*/
-
-                //frag-> activity 정보전달
-                dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
-
-
-                //다음 다이얼로그 띄우기
-                val dialogNum = DialogNum()
-                dialogNum.show(parentFragmentManager, "CustomDialog")
-
-                //자기는 종료
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.remove(this)?.commit()
-
-            }else{
-                Toast.makeText(requireContext(), "시간을 지정해주세요", Toast.LENGTH_SHORT).show()
-            }
+            //자기는 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
         }
     }
 
