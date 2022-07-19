@@ -85,15 +85,16 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 load 한다
     private fun initLoadPosts() {
-        getDeliveryAllList(1, 0)
+        totalCursor = 0
+        getDeliveryAllList(1, totalCursor)
     }
 
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            val handler = Handler()
-            handler.postDelayed({
-            }, 2000)
+            deliveryArray.clear()
+            initAdapter()
+            initLoadPosts()
             binding.deliverySwipe.isRefreshing = false
         })
     }
@@ -104,6 +105,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
         totalCursor += 1
+    }
+
+    // Adapter 설정
+    private fun initAdapter() {
+        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+        binding.deliveryRv.adapter = deliveryAdapter
+        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
@@ -125,9 +133,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
             )
 
-            deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-            binding.deliveryRv.adapter = deliveryAdapter
-            binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            initAdapter()
         }
     }
 
