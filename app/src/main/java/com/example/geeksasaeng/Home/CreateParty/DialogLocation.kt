@@ -183,8 +183,8 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
         binding.locationDialogBackBtn.setOnClickListener {
             //이전 다이얼로그 실행
-            val dialogCategory = DialogCategory()
-            dialogCategory.show(parentFragmentManager, "CustomDialog")
+            val dialogLink = DialogLink()
+            dialogLink.show(parentFragmentManager, "CustomDialog")
 
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()

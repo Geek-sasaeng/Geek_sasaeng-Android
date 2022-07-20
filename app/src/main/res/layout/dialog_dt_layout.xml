@@ -31,8 +31,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/date_dialog_title_tv"
-            android:layout_marginTop="58dp"
-            android:text="10월 18일"
+            android:layout_marginTop="90dp"
+            android:text="7월 1일"
             android:textSize="32sp"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="@color/top"/>
@@ -51,39 +51,6 @@
             android:textColor="@color/top"/>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/date_dialog_immediate_btn_iv"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_height="25dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/date_dialog_time_tv">
-
-            <CheckBox
-                android:id="@+id/date_dialog_immediate_check_btn"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:button="@android:color/transparent"
-                android:background="@drawable/selector_checkbox" />
-
-
-            <TextView
-                android:id="@+id/date_dialog_immediate_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/spoqa_medium"
-                android:textSize="13sp"
-                app:layout_constraintTop_toTopOf="@id/date_dialog_immediate_check_btn"
-                app:layout_constraintBottom_toBottomOf="@id/date_dialog_immediate_check_btn"
-                app:layout_constraintStart_toEndOf="@id/date_dialog_immediate_check_btn"
-                android:text="매칭 시 바로 주문"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/date_dialog_next_btn"
@@ -95,7 +62,6 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:fontFamily="@font/spoqa_bold"
-            app:layout_constraintTop_toBottomOf="@id/date_dialog_immediate_btn_iv"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +75,7 @@
             android:id="@+id/location_dialog_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1/4"
+            android:text="1/5"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="@color/gray_1"

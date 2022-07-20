@@ -59,8 +59,8 @@ class DialogCategory : DialogFragment() {
             //frag-> activity 정보전달
             dialogCategoryNextClickListener?.onCategoryClicked(categoryString)
             //다음 다이얼로그 띄우기
-            val dialogLocation = DialogLocation()
-            dialogLocation.show(parentFragmentManager, "CustomDialog")
+            val dialogLink = DialogLink()
+            dialogLink.show(parentFragmentManager, "CustomDialog")
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }

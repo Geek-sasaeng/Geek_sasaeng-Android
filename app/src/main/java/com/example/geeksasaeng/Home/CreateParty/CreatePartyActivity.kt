@@ -7,7 +7,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 
-class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLocation.DialogLocationNextClickListener {
+class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
     override fun initAfterBinding() {
         initClickListener()
     }
@@ -57,7 +57,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     //다이얼로그에서 next버튼 클릭시 값 받아오기
-    override fun onDtClicked(dt: String, orderNow:Boolean) {
+    override fun onDtClicked(dt: String) {
         //사용자가 선택한 날짜 표시
         binding.createPartyDate2Tv.setTextColor(ContextCompat.getColor(this, R.color.black))
         binding.createPartyDate2Tv.text = dt
@@ -66,11 +66,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyDate2Tv.visibility = View.VISIBLE
         binding.createPartyDate2ColoredTv.visibility = View.INVISIBLE
 
-        if(orderNow){ //매칭시 바로 주문 여부에 따라서 색 변경해주기
-            binding.createPartyImmediateTv.setTextColor(ContextCompat.getColor(this,R.color.main))
-        }else{
-            binding.createPartyImmediateTv.setTextColor(ContextCompat.getColor(this,R.color.gray_1))
-        }
 
     }
 
@@ -84,6 +79,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         //사용자가 선택한 카테고리 표시
         binding.createPartyCategory2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyCategory2Tv.text = category
+    }
+
+    override fun onLinkClicked(link: String) {
+        //사용자가 선택한 식당 링크 표시
     }
 
     override fun onLocationClicked(loc: String) {

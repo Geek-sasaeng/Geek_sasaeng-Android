@@ -47,13 +47,12 @@
             app:layout_constraintBottom_toTopOf="@id/category_dialog_next_btn"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp">
+            android:paddingHorizontal="20dp">
 
 
             <RadioGroup
                 android:id="@+id/category_dialog_rg1"
-                android:layout_width="wrap_content"
+                android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -62,10 +61,10 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
                     android:paddingVertical="8dp"
                     android:text="한식"
                     android:textSize="14sp"
@@ -77,10 +76,10 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
                     android:paddingVertical="8dp"
                     android:text="중식"
                     android:textSize="14sp"
@@ -92,10 +91,10 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
                     android:paddingVertical="8dp"
                     android:text="분식"
                     android:textSize="14sp"
@@ -107,10 +106,11 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
                     android:text="회/돈까스"
                     android:textSize="14sp"
@@ -122,10 +122,11 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
                     android:text="디저트/음료"/>
 
@@ -134,7 +135,7 @@
             <RadioGroup
                 android:layout_marginStart="8dp"
                 android:id="@+id/category_dialog_rg2"
-                android:layout_width="wrap_content"
+                android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -143,10 +144,10 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
                     android:paddingVertical="8dp"
                     android:text="양식"
                     android:textSize="14sp"
@@ -158,10 +159,11 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
                     android:text="일식"
                     android:textSize="14sp"
@@ -173,10 +175,11 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
                     android:text="치킨/피자"
                     android:textSize="14sp"
@@ -188,12 +191,13 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
-                    android:text="패스트 푸트"
+                    android:text="패스트 푸드"
                     android:textSize="14sp"
                     android:fontFamily="@font/spoqa_medium"
                     android:layout_marginBottom="7dp"/>
@@ -203,10 +207,11 @@
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:paddingHorizontal="30dp"
+
                     android:paddingVertical="8dp"
                     android:text="기타"
                     android:textSize="14sp"
@@ -242,7 +247,7 @@
             android:id="@+id/category_dialog_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3/4"
+            android:text="3/5"
             android:textSize="13sp"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="@color/gray_1"

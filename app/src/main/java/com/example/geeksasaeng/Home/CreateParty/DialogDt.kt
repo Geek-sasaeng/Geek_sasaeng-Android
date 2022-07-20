@@ -59,7 +59,7 @@ class DialogDt : DialogFragment() {
 
     //frag->Activity 정보전달용 코드 시작
     interface DialogDtNextClickListener{
-        fun onDtClicked(text:String, orderNow:Boolean)
+        fun onDtClicked(text:String)
     }
 
     override fun onAttach(context: Context) {
@@ -70,7 +70,7 @@ class DialogDt : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         //frag-> activity 정보전달
-        dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
+        dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString)
         dialogDtNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -99,27 +99,11 @@ class DialogDt : DialogFragment() {
 
         }
 
-        //체크버튼
-        binding.dateDialogImmediateCheckBtn.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
-                orderNow = true
-            }else{
-                binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
-                orderNow = false
-            }
-        }
-
-        //텍스트뷰 클릭해도
-        binding.dateDialogImmediateTv.setOnClickListener {
-            //체크 해제, 체크 작업 하기 위함
-            binding.dateDialogImmediateCheckBtn.isChecked = !binding.dateDialogImmediateCheckBtn.isChecked
-        }
 
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
             //frag-> activity 정보전달
-            dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
+            dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString)
 
 
             //다음 다이얼로그 띄우기
