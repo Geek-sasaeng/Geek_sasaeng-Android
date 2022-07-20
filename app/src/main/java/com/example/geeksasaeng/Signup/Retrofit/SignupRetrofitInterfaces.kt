@@ -2,6 +2,8 @@ package com.example.geeksasaeng.Signup.Retrofit
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface SignupRetrofitInterfaces {
@@ -15,11 +17,11 @@ interface SignupRetrofitInterfaces {
 
     // <이메일 인증>
     // 이메일 전송
-    @POST("/members/email")
+    @POST("/email")
     fun signupEmail(@Body signupEmailRequest: SignUpEmailRequest): Call<SignUpEmailResponse>
 
     // 이메일 인증 확인
-    @POST("/members/email/check")
+    @POST("/email/check")
     fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<VerifyEmailResponse>
 
     // 아이디 중복 확인

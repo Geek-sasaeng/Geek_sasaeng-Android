@@ -55,9 +55,10 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         email = arguments?.getString("email")
         universityName = arguments?.getString("universityName")
 
+        showToast("check = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName")
+
         initTextWatcher()
         initClickListener()
-
     }
 
     private fun initTextWatcher() {

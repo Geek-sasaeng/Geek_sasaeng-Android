@@ -120,9 +120,10 @@ class SignupDataService() {
                 if (response.isSuccessful && response.code() == 200) {
                     val emailResponse: VerifyEmailResponse = response.body()!!
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
+                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.message = " + emailResponse.message)
 
                     when (emailResponse.code) {
-                        1801 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
+                        1000 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
                         else -> verifyEmailView.onVerifyEmailFailure(emailResponse.message)
                     }
                 }

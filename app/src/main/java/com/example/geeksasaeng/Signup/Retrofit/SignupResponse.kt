@@ -3,7 +3,6 @@ package com.example.geeksasaeng.Signup.Retrofit
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.Body
 
-
 data class SignUpResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -35,7 +34,7 @@ data class SignUpEmailResponse(
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("code") val code: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String?
+    @SerializedName("result") val result: String
 )
 
 data class SignUpEmailRequest (
@@ -49,7 +48,11 @@ data class VerifyEmailResponse(
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("code") val code: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String?
+    @SerializedName("result") val result: VerifyEmailResult?
+)
+
+data class VerifyEmailResult(
+    @SerializedName("emailId") val emailId: Int
 )
 
 data class VerifyEmailRequest(
