@@ -36,7 +36,7 @@ interface SignUpNickCheckView{
 //SMS문자인증 보내기
 interface SignUpSmsView {
     fun onSignUpSmsSuccess(message: String)
-    fun onSignUpSmsFailure(message: String)
+    fun onSignUpSmsFailure(code: Int, message: String)
 }
 
 //SMS문자인증 확인

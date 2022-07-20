@@ -40,6 +40,8 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
         universityName = arguments?.getString("universityName")
         phoneNumber = arguments?.getString("phoneNumber")
 
+        showToast("checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber")
+
         initClickListener()
     }
 

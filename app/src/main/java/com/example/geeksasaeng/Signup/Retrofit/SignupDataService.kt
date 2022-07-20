@@ -91,49 +91,6 @@ class SignupDataService() {
         })
     }
 
-    // email 보내기
-    fun signUpEmailSender(signupEmailRequest: SignUpEmailRequest) {
-        SignupDataService.signupEmail(signupEmailRequest).enqueue(object : Callback<SignUpEmailResponse> {
-            override fun onResponse(call: Call<SignUpEmailResponse>, response: Response<SignUpEmailResponse>) {
-                Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : response.code = " + response.code())
-
-                if (response.isSuccessful && response.code() == 200) {
-                    val emailResponse: SignUpEmailResponse = response.body()!!
-                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
-
-                    when (emailResponse.code) {
-                        1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
-                        else -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
-                    }
-                }
-            }
-            override fun onFailure(call: Call<SignUpEmailResponse>, t: Throwable) {
-                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
-            }
-        })
-    }
-
-    // email 인증확인
-    fun verifyEmailSender(verifyEmailRequest: VerifyEmailRequest) {
-        SignupDataService.verifyEmail(verifyEmailRequest).enqueue(object : Callback<VerifyEmailResponse> {
-            override fun onResponse(call: Call<VerifyEmailResponse>, response: Response<VerifyEmailResponse>) {
-                if (response.isSuccessful && response.code() == 200) {
-                    val emailResponse: VerifyEmailResponse = response.body()!!
-                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.code = " + emailResponse.code)
-                    Log.d("EMAIL-RESPONSE", "EmailDataService-onResponse : emailResponse.message = " + emailResponse.message)
-
-                    when (emailResponse.code) {
-                        1000 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
-                        else -> verifyEmailView.onVerifyEmailFailure(emailResponse.message)
-                    }
-                }
-            }
-            override fun onFailure(call: Call<VerifyEmailResponse>, t: Throwable) {
-                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
-            }
-        })
-    }
-
     // 아이디 중복확인
     fun signUpIdCheckSender(loginId: SignUpIdCheckRequest){
         SignupDataService.signupIdCheck(loginId).enqueue(object: Callback<SignUpIdCheckResponse>{
@@ -174,17 +131,51 @@ class SignupDataService() {
         })
     }
 
+    // email 보내기
+    fun signUpEmailSender(signupEmailRequest: SignUpEmailRequest) {
+        SignupDataService.signupEmail(signupEmailRequest).enqueue(object : Callback<SignUpEmailResponse> {
+            override fun onResponse(call: Call<SignUpEmailResponse>, response: Response<SignUpEmailResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val emailResponse: SignUpEmailResponse = response.body()!!
+                    when (emailResponse.code) {
+                        1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
+                        else -> signUpEmailView.onSignUpEmailFailure(emailResponse.code, emailResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<SignUpEmailResponse>, t: Throwable) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
+            }
+        })
+    }
+
+    // email 인증확인
+    fun verifyEmailSender(verifyEmailRequest: VerifyEmailRequest) {
+        SignupDataService.verifyEmail(verifyEmailRequest).enqueue(object : Callback<VerifyEmailResponse> {
+            override fun onResponse(call: Call<VerifyEmailResponse>, response: Response<VerifyEmailResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val emailResponse: VerifyEmailResponse = response.body()!!
+                    when (emailResponse.code) {
+                        1000 -> verifyEmailView.onVerifyEmailSuccess(emailResponse.message)
+                        else -> verifyEmailView.onVerifyEmailFailure(emailResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<VerifyEmailResponse>, t: Throwable) {
+                Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
+            }
+        })
+    }
+
     // sms 보내기
     fun signUpSmsSender(recipientPhoneNumber: SignUpSmsRequest) {
-        Log.d("sms-body", recipientPhoneNumber.toString())
         SignupDataService.signupSms(recipientPhoneNumber).enqueue(object : Callback<SignUpSmsResponse> {
             override fun onResponse(call: Call<SignUpSmsResponse>, response: Response<SignUpSmsResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-
                     when (resp.code) {
                         1001 -> signUpSmsView.onSignUpSmsSuccess(resp.message)
-                        else -> signUpSmsView.onSignUpSmsFailure(resp.message)
+                        else -> signUpSmsView.onSignUpSmsFailure(resp.code, resp.message)
                     }
                 }
             }
@@ -200,9 +191,8 @@ class SignupDataService() {
             override fun onResponse(call: Call<VerifySmsResponse>, response: Response<VerifySmsResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-
                     when (resp.code) {
-                        1002 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
+                        1000 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
                         else -> verifySmsView.onVerifySmsFailure(resp.message)
                     }
                 }

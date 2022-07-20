@@ -124,7 +124,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         // 이메일 인증 전송 버튼
         binding.stepTwoEmailCheckBtnO.setOnClickListener {
             sendEmail()
-            Log.d("SIGNUP-RESPONSE", "인증번호 전송 버튼을 클릭했습니다")
         }
 
         //다음버튼
@@ -142,25 +141,20 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
             val stepThreeFragment = StepThreeFragment()
             stepThreeFragment.arguments = bundle
-
             (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepThreeFragment).commit()
         }
     }
 
     private fun sendEmail() {
-        Log.d("SIGNUP-RESPONSE", "sendEmail()")
         email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
         val uuid = getUuid().toString()
-        Log.d("SIGNUP-RESPONSE", "uuid = $uuid")
         val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        Log.d("SIGNUP-RESPONSE", "인증번호가 전송되었습니다")
         ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
 
-        //이메일이 성공적으로 진행되었을때 버튼 활성화
         binding.stepTwoNextBtn.isEnabled = true
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
         binding.stepTwoNextBtn.setTextColor(Color.parseColor("#ffffff"))

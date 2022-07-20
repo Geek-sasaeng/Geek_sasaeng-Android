@@ -46,8 +46,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         email = arguments?.getString("email")
         universityName = arguments?.getString("universityName")
 
-        showToast("check = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName")
-
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepThreeFragment)
         signUpService.setSignUpEmailView(this@StepThreeFragment)
@@ -108,9 +106,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     override fun onVerifyEmailSuccess(message: String) {
-        Log.d("SIGNUP-RESPONSE", "이메일 인증 성공")
-        verifyCheck = 1
-
         val bundle = Bundle()
         bundle.putString("checkPassword", checkPassword)
         bundle.putString("loginId", loginId)
@@ -121,13 +116,10 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
         val stepFourFragment = StepFourFragment()
         stepFourFragment.arguments = bundle
-
         (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepFourFragment).commit()
     }
 
     override fun onVerifyEmailFailure(message: String) {
-        Log.d("SIGNUP-RESPONSE", "이메일 인증 실패")
-
         verifyCheck = -1
 
         ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 틀렸습니다", "#80A8A8A8")?.show()

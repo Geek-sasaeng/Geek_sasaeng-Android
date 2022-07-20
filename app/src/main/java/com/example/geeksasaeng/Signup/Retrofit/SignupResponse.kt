@@ -29,37 +29,6 @@ data class SignUpRequest (
     @SerializedName("universityName") var universityName: String,
 )
 
-// email 보내기
-data class SignUpEmailResponse(
-    @SerializedName("isSuccess") val isSuccess : Boolean,
-    @SerializedName("code") val code: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
-)
-
-data class SignUpEmailRequest (
-    @SerializedName("email") var email: String? = "",
-    @SerializedName("university") var university: String? = "",
-    @SerializedName("uuid") var uuid: String? = ""
-)
-
-// email 인증
-data class VerifyEmailResponse(
-    @SerializedName("isSuccess") val isSuccess : Boolean,
-    @SerializedName("code") val code: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("result") val result: VerifyEmailResult?
-)
-
-data class VerifyEmailResult(
-    @SerializedName("emailId") val emailId: Int
-)
-
-data class VerifyEmailRequest(
-    @SerializedName("email") val email : String,
-    @SerializedName("key") val key : String
-)
-
 //아이디 중복 체크
 data class SignUpIdCheckResponse(
     @SerializedName("code") val code: Int,
@@ -92,6 +61,37 @@ data class SignUpNickCheckRequest(
     @SerializedName("nickName") val nickName : String
 )
 
+// email 보내기
+data class SignUpEmailResponse(
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+data class SignUpEmailRequest (
+    @SerializedName("email") var email: String? = "",
+    @SerializedName("university") var university: String? = "",
+    @SerializedName("uuid") var uuid: String? = ""
+)
+
+// email 인증
+data class VerifyEmailResponse(
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("code") val code: Int,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: VerifyEmailResult?
+)
+
+data class VerifyEmailResult(
+    @SerializedName("emailId") val emailId: Int
+)
+
+data class VerifyEmailRequest(
+    @SerializedName("email") val email : String,
+    @SerializedName("key") val key : String
+)
+
 //sms 보내기
 data class SignUpSmsResponse(
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -121,7 +121,7 @@ data class VerifySmsResponse(
 )
 
 data class VerifySmsResult(
-    @SerializedName("statusName") val statusName : String
+    @SerializedName("phoneNumberId") val statusName : String
 )
 
 data class VerifySmsRequest(
