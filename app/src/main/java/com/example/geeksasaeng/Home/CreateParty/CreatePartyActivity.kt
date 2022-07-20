@@ -83,6 +83,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     override fun onLinkClicked(link: String) {
         //사용자가 선택한 식당 링크 표시
+        binding.createPartyLink2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
+        binding.createPartyLink2Tv.text = link
     }
 
     override fun onLocationClicked(loc: String) {

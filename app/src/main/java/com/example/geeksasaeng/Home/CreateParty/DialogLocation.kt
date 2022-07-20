@@ -10,9 +10,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Address
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +26,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
+import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPoint.GeoCoordinate
+import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
+import java.util.*
 
 
 class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
@@ -36,10 +42,12 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSIONS_REQUEST_CODE = 100
+    lateinit var geocoder : Geocoder
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        binding.locationDialogLocTv.isSelected = true
         ininKakaoMap()
         initClickListener()
         return binding.root
@@ -72,13 +80,59 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
         val mapView = MapView(activity)
         binding.locationDialogKakaoMapView.addView(mapView)
         mapView.setMapViewEventListener(this)
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
+/*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
         }else {
             checkRunTimePermission();
+        }*/
+        geocoder = Geocoder(requireContext()) //지오코더 객체 획득
+
+        //서치버튼
+        binding.locationDialogSearchBtn.setOnClickListener {
+            var adr = binding.locationDialogSearchEt.text.toString() // 주소 얻어오기
+            var list = geocoder.getFromLocationName(adr, 10)
+
+            if (list != null) {
+                if (list.size == 0) {
+                    binding.locationDialogLocTv.setText("올바른 주소를 입력해주세요. ")
+                } else {
+                    val address: Address = list[0]
+                    val lat: Double = address.getLatitude() //위도
+                    val lon: Double = address.getLongitude() //경도
+                    Log.d("adr", lat.toString()+"/"+lon.toString())
+                    val mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon)
+                    //마커생성
+                    val marker = MapPOIItem()
+                    marker.itemName = "요기?"
+                    marker.mapPoint = mapPoint
+                    marker.markerType = MapPOIItem.MarkerType.BluePin
+                    marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                    mapView.addPOIItem(marker)
+                    mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
+
+                    //Reverse Geo-Coding
+                    getAddress(address)
+
+                }
+            }
+
+       }
+    }
+
+    //위도 경도로 주소 구하는 Reverse-GeoCoding
+    private fun getAddress(position: Address) {
+        val geoCoder = Geocoder(context, Locale.KOREA)
+        var addr = "주소 오류"
+
+        try {
+            addr = geoCoder.getFromLocation(position.latitude, position.longitude, 1).first().getAddressLine(0)
+            binding.locationDialogLocTv.text = addr
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+    //https://bumjae.tistory.com/54 참조
 
     private fun showDialogForLocationServiceSetting() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
