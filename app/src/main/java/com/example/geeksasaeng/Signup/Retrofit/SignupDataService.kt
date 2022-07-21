@@ -10,6 +10,7 @@ class SignupDataService() {
 
     //뷰 객체 생성
     private lateinit var signUpView: SignUpView
+    private lateinit var signUpSocialView: SignUpSocialView
     private lateinit var signUpIdCheckView : SignUpIdCheckView
     private lateinit var signUpNickCheckView: SignUpNickCheckView
     private lateinit var signUpEmailView: SignUpEmailView
@@ -22,6 +23,10 @@ class SignupDataService() {
     //setView
     fun setSignUpView(signUpView: SignUpView) {
         this.signUpView = signUpView
+    }
+
+    fun setSignUpSocialView(signUpSocialView: SignUpSocialView) {
+        this.signUpSocialView = signUpSocialView
     }
 
     fun setSignUpEmailView(signUpEmailView: SignUpEmailView) {
@@ -52,9 +57,14 @@ class SignupDataService() {
     fun signUpSender(user: SignUpRequest) {
         SignupDataService.signup(user).enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
 
                 if (response.isSuccessful && response.code() == 200) {
                     val signUpResponse: SignUpResponse = response.body()!!
+
+                    Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : code = " + signUpResponse.code)
+                    Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : message = " + signUpResponse.message)
 
                     when (signUpResponse.code) {
                         1000 -> signUpView.onSignUpSuccess() //회원가입 성공
@@ -69,18 +79,18 @@ class SignupDataService() {
     }
 
     // 네이버 회원가입
-    fun signUpSocial(user: SignUpRequest) {
+    fun signUpSocialSender(user: SignUpRequest) {
         SignupDataService?.signupSocial(user)?.enqueue(object : Callback<SignUpResponse> {
             override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
-                Log.d("SIGNUP-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+                Log.d("SIGNUP-SOCIAL-RESPONSE", "SignupDataService-onResponse : response.code = " + response.code())
+                Log.d("SIGNUP-SOCIAL-RESPONSE", "SignupDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
 
                 if (response.isSuccessful && response.code() == 200) {
-                    val signUpResponse: SignUpResponse = response.body()!!
+                    val signUpSocialResponse: SignUpResponse = response.body()!!
 
-                    when (signUpResponse.code) {
-                        1000 -> signUpView.onSignUpSuccess() //회원가입 성공
-                        else -> signUpView.onSignUpFailure(signUpResponse.message)
+                    when (signUpSocialResponse.code) {
+                        1000 -> signUpSocialView.onSignUpSocialSuccess() //회원가입 성공
+                        else -> signUpSocialView.onSignUpSocialFailure(signUpSocialResponse.message)
                     }
                 }
             }

@@ -9,9 +9,11 @@ import com.example.geeksasaeng.databinding.ActivitySignUpBinding
 class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {
 
     private lateinit var progressVM: ProgressViewModel
+    private lateinit var signUpVM: SignUpViewModel
 
     override fun initAfterBinding() {
         progressVM = ViewModelProvider(this).get(ProgressViewModel::class.java)
+        signUpVM = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.sign_up_vp, StepOneFragment())

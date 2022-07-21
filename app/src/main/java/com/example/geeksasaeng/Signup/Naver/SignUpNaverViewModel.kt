@@ -1,10 +1,10 @@
-package com.example.geeksasaeng.Signup.Basic
+package com.example.geeksasaeng.Signup.Naver
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SignUpViewModel: ViewModel() {
+class SignUpNaverViewModel: ViewModel() {
     var checkPassword: MutableLiveData<String?> = MutableLiveData<String?>()
     var loginId: MutableLiveData<String?> = MutableLiveData<String?>()
     var nickname: MutableLiveData<String?> = MutableLiveData<String?>()
@@ -13,14 +13,18 @@ class SignUpViewModel: ViewModel() {
     var emailId: MutableLiveData<Int?> = MutableLiveData<Int?>()
     var universityName: MutableLiveData<String?> = MutableLiveData<String?>()
     var phoneNumber: MutableLiveData<String?> = MutableLiveData<String?>()
-    var phoneNumberId: MutableLiveData<Int?> = MutableLiveData<Int?>()
+    var phoneNumberId: MutableLiveData<Int?>? = MutableLiveData<Int?>()
     var informationAgreeStatus: MutableLiveData<String?> = MutableLiveData<String?>()
+
+    init {
+        phoneNumberId = null
+    }
 
     fun setCheckPassword(value: String?) {
         checkPassword.value = value
     }
 
-    fun getCheckPassword(): String? {
+    fun getCheckPassword(): String {
         return checkPassword.value.toString()
     }
 
@@ -44,7 +48,7 @@ class SignUpViewModel: ViewModel() {
         password.value = value
     }
 
-    fun getPassword(): String? {
+    fun getPassword(): String {
         return password.value.toString()
     }
 
@@ -52,7 +56,7 @@ class SignUpViewModel: ViewModel() {
         email.value = value
     }
 
-    fun getEmail() : String? {
+    fun getEmail() : String {
         return email.value.toString()
     }
 
@@ -81,11 +85,11 @@ class SignUpViewModel: ViewModel() {
     }
 
     fun setPhoneNumberId(value: Int?) {
-        phoneNumberId.value = value
+        phoneNumberId!!.value = value
     }
 
-    fun getPhoneNumberId(): Int? {
-        return phoneNumberId.value
+    fun getPhoneNumberId(): Int {
+        return Integer.parseInt(phoneNumberId!!.value.toString())
     }
 
     fun setInformationAgreeStatus(value: String?) {
@@ -98,6 +102,6 @@ class SignUpViewModel: ViewModel() {
 
     fun checkNull() : Boolean {
         return !(checkPassword.value != null && loginId.value != null && nickname.value != null && password.value != null &&
-                emailId.value != null && universityName.value != null && informationAgreeStatus.value != null)
+                emailId.value != null && universityName != null && informationAgreeStatus.value != null)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
@@ -38,6 +40,10 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
+
+//        showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()}" +
+//                "/ password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()}" +
+//                "/ phoneNumber = ${signUpVM.getPhoneNumberId()}")
 
         initSpinner()
         initTextChangedListener()

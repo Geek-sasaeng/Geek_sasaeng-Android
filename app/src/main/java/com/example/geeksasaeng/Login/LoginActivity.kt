@@ -1,88 +1,108 @@
 package com.example.geeksasaeng.Login
 
-import android.app.Activity
 import android.content.*
 import android.text.*
 import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
+import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
+import com.example.geeksasaeng.Signup.Naver.SignUpNaverViewModel
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.google.gson.annotations.SerializedName
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.*
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 
-class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
+class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, SignUpSocialView, LoginView {
 
-    var checkPassword: String = ""
+    var checkPassword: String? = ""
     var emailId: Int? = null
-    var loginId: String = ""
-    var informationAgreeStatus: String = "" //약관동의
-    var nickname: String = ""
-    var password: String = ""
-    var phoneNumber: String = ""
+    var informationAgreeStatus: String? = ""
+    var loginId: String? = ""
+    var nickname: String? = ""
+    var password: String? = ""
+    var phoneNumber: String? = ""
     var phoneNumberId: Int? = null
-    var universityName: String = ""
+    var universityName: String? = ""
 
-    private var OAUTH_CLIENT_ID: String = "czrW_igO4TDdAeE5WhGW"
-    private var OAUTH_CLIENT_SECRET = "syoXsVLKN1"
+    private var OAUTH_CLIENT_ID: String = "Kvyd6swFfWHQJgjWaHr1"
+    private var OAUTH_CLIENT_SECRET = "pq8VgJC5sn"
     private var OAUTH_CLIENT_NAME = "긱사생"
 
     private var autoLogin: SharedPreferences? = null
     private var autoLoginEditor: SharedPreferences.Editor? = null
     private var getAutoLogin: SharedPreferences? = null
 
-    private lateinit var signUpService : SignupDataService
+    private lateinit var signUpNaverVM: SignUpNaverViewModel
 
     var autoJwt: String? = null
     var autoLoginid: String? = null
     var autoPassword: String? = null
 
     override fun initAfterBinding() {
-        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-        autoJwt = getAutoLogin?.getString("jwt", null).toString()
-        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
-        autoPassword = getAutoLogin?.getString("password", null).toString()
+        signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
 
-        if (autoLoginid != null && autoPassword != null) {
-            login(true)
-        }
+        checkPassword = intent.getStringExtra("checkPassword")
+        emailId = intent.getIntExtra("emailId", -1)
+        informationAgreeStatus = intent.getStringExtra("informationAgreeStatus")
+        loginId = intent.getStringExtra("loginId")
+        nickname = intent.getStringExtra("nickname")
+        password = intent.getStringExtra("password")
+        phoneNumberId = intent.getIntExtra("phoneNumberId", -1)
+        universityName = intent.getStringExtra("universityName")
 
-        if (intent != null) {
-            checkPassword = intent?.getStringExtra("checkPassword").toString()
-            emailId = intent?.getIntExtra("email", -1)
-            informationAgreeStatus = intent?.getStringExtra("informationAgreeStatus").toString() //약관동의 정보
-            loginId = intent?.getStringExtra("loginId").toString()
-            nickname = intent?.getStringExtra("nickname").toString()
-            password = intent?.getStringExtra("password").toString()
-            phoneNumberId = intent?.getIntExtra("phoneNumberId", -1)
-            universityName = intent?.getStringExtra("universityName").toString()
+        showToast("checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
+                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
 
-            showToast("check = $checkPassword / emailId = $emailId / info = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / password = $password / phoneNumberId = $phoneNumberId")
-            signup() //위의 정보를 바탕으로 회원가입 진행
-        }
+        Log.d("SIGNUP-RESPONSE", "checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
+                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
+
+        signup()
+
+//        if (signUpVM.checkNull())
+//            // showToast("SignUp")
+//            // signup()
+//        else if (signUpNaverVM.checkNull())
+//            signupSocial()
+
+//        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+//        autoJwt = getAutoLogin?.getString("jwt", null).toString()
+//        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
+//        autoPassword = getAutoLogin?.getString("password", null).toString()
+//
+//        if (autoLoginid != null && autoPassword != null) {
+//            login(true)
+//        }
 
         setTextChangedListener()
         initClickListener()
     }
 
-    private fun login(auto: Boolean) {
-        val loginDataService = LoginDataService()
-        loginDataService.setLoginView(this)
-
+//    private fun login(auto: Boolean) {
+//        val loginDataService = LoginDataService()
+//        loginDataService.setLoginView(this)
+//
 //        if (auto) {
 //            loginDataService.login(Login(autoLoginid, autoPassword))
 //        } else {
 //            loginDataService.login(getLoginUser())
 //        }
+//
+//        loginDataService.login(getLoginUser())
+//    }
 
+    private fun login() {
+        val loginDataService = LoginDataService()
+        loginDataService.setLoginView(this)
         loginDataService.login(getLoginUser())
     }
 
@@ -133,7 +153,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     //회원가입하려는 유저를 SignUpRequest형태로 돌려주는 함수
     private fun getSignupUser(): SignUpRequest {
         // TODO: 일단은 약관동의에 다 "Y"로 넣어둠 (StepFive의 StepFiveStartBtn 클릭리스너 부분 참조)
-        return SignUpRequest(checkPassword, emailId, informationAgreeStatus, loginId, nickname, password, phoneNumberId, universityName)
+        return SignUpRequest(checkPassword.toString(), emailId, informationAgreeStatus.toString(), loginId.toString(), nickname.toString(), password.toString(), phoneNumberId, universityName.toString())
     }
 
     //회원가입하는 함수
@@ -141,6 +161,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
         signupDataService.setSignUpView(this) // 뷰연결
         signupDataService.signUpSender(getSignupUser()) //★회원가입 진행
+    }
+
+    private fun signupSocial() {
+        val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
+        signupDataService.setSignUpView(this) // 뷰연결
+        signupDataService.signUpSocialSender(getSignupUser()) //★회원가입 진행
     }
 
     private fun setTextChangedListener() {
@@ -179,7 +205,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
-            login(false)
+            login()
+            // login(false)
             // changeActivity(MainActivity::class.java)
         }
 
@@ -212,11 +239,10 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                     removeSP()
                     saveSP(NaverIdLoginSDK.getAccessToken().toString())
 
-                    val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
-                    Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
-                    intent.putExtra("loginId", loginId)
-                    intent.putExtra("phoneNumber", phoneNumber)
-                    startActivity(intent)
+                    signUpNaverVM.setLoginId(loginId)
+                    signUpNaverVM.setPhoneNumber(phoneNumber)
+
+                    changeActivity(SignUpNaverActivity::class.java)
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -251,6 +277,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 2201 : 회원 정보 동의 Status가 Y가 아닌 경우
         // 2205 : 존재하지 않는 회원 ID
         // 4000 : 서버 오류
+        showToast("실패 $message")
+        Log.d("signup", "회원가입에 실패하였습니다.\n$message")
+    }
+
+    override fun onSignUpSocialSuccess() {
+        // TODO: 성공하면 나오는 화면 생기면 넣어주기
+        showToast("성공")
+        Log.d("signup", "회원가입에 성공하였습니다.")
+    }
+
+    override fun onSignUpSocialFailure(message: String) {
         showToast("실패 $message")
         Log.d("signup", "회원가입에 실패하였습니다.\n$message")
     }

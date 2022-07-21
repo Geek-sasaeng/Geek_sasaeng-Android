@@ -31,6 +31,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     var verifyBtnClick: Int = 0
 
     private val progressVM: ProgressNaverViewModel by activityViewModels()
+    private val signUpVM: SignUpNaverViewModel by activityViewModels()
     private lateinit var signUpService : SignupDataService // 닉네임 중복확인용
 
     // TODO: 학교 리스트 API 연결

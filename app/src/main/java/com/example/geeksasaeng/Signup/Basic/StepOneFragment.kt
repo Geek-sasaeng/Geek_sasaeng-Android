@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*

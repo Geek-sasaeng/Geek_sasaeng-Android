@@ -9,6 +9,12 @@ interface SignUpView {
     fun onSignUpFailure(message: String)
 }
 
+//소셜 회원가입
+interface SignUpSocialView {
+    fun onSignUpSocialSuccess()
+    fun onSignUpSocialFailure(message: String)
+}
+
 //아이디 중복확인
 interface SignUpIdCheckView{
     fun onSignUpIdCheckSuccess(message: String)

@@ -26,26 +26,25 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
     override fun initAfterBinding() {
         progressVM.increase()
 
-//        showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()} / password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()} / phoneNumber = ${signUpVM.getPhoneNumberId()}")
+        // showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()} / password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()} / phoneNumber = ${signUpVM.getPhoneNumberId()}")
 
         initClickListener()
     }
 
     private fun initClickListener() {
         binding.stepFiveStartBtn.setOnClickListener {
-            val intent = Intent(activity, LoginActivity::class.java)
-//            intent.putExtra("checkPassword", checkPassword)
-//            intent.putExtra("emailId", emailId)
-//            // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
-//            intent.putExtra("informationAgreeStatus", "Y")
-//            intent.putExtra("loginId", loginId)
-//            intent.putExtra("nickname", nickname)
-//            intent.putExtra("password", password)
-//            intent.putExtra("phoneNumberId", phoneNumberId)
-//            intent.putExtra("universityName", universityName)
-
             signUpVM.setInformationAgreeStatus("Y")
 
+            val intent = Intent(activity, LoginActivity::class.java)
+            intent.putExtra("checkPassword", signUpVM.getCheckPassword())
+            intent.putExtra("emailId", signUpVM.getEmailId())
+            // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
+            intent.putExtra("informationAgreeStatus", "Y")
+            intent.putExtra("loginId", signUpVM.getLoginId())
+            intent.putExtra("nickname", signUpVM.getNickname())
+            intent.putExtra("password", signUpVM.getPassword())
+            intent.putExtra("phoneNumberId", signUpVM.getPhoneNumberId())
+            intent.putExtra("universityName", signUpVM.getUniversityName())
             startActivity(intent)
         }
     }
