@@ -3,6 +3,21 @@ package com.example.geeksasaeng.Home.Delivery
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.Body
 
+//광고 commercials
+
+data class DeliveryBannerResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: Array<DeliveryBannerResult>?
+)
+
+data class DeliveryBannerResult(
+    @SerializedName("id") var id :Int,
+    @SerializedName("imgUrl") var imgUrl :String,
+)
+
+//
 data class DeliveryResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,

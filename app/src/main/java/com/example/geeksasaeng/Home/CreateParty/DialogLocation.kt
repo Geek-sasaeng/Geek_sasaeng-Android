@@ -108,6 +108,8 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
                     marker.mapPoint = mapPoint
                     marker.markerType = MapPOIItem.MarkerType.BluePin
                     marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                    marker.isDraggable = true //드래그 가능하게 만들기
+
                     mapView.addPOIItem(marker)
                     mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
 

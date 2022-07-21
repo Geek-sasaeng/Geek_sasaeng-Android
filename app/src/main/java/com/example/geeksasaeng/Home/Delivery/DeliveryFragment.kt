@@ -20,10 +20,10 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryResult?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
-    private lateinit var deliveryService: DeliveryService
+    private lateinit var deliveryService: DeliveryService //서비스 객체
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
@@ -39,7 +39,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         true
     }
 
+
     override fun initAfterBinding() {
+        deliveryService = DeliveryService() //서비스 객체 생성
+        deliveryService.setDeliveryView(this)
+        deliveryService.setDeliveryBannerView(this)
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
@@ -60,9 +64,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 //        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
         // 배달 파티 리스트 받아오기
-        deliveryService = DeliveryService()
-        deliveryService.setDeliveryView(this)
-
         binding.deliveryFloatingBtn.setOnClickListener {
             //fragment->fragment로의 전환
             /*activity?.supportFragmentManager?.beginTransaction()
@@ -204,55 +205,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     //배너 작업
     private fun initBanner(){
-        deliveryBannerAdapter = BannerVPAdapter(this)
-        //일단은 더미데이터 넣어둠
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-
-        binding.deliveryBannerVp.adapter= deliveryBannerAdapter
-        binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
-        binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
-
-        //뷰페이저 넘기는 쓰레드
-        thread.start() //스레드 시작
-
-        binding.deliveryBannerVp.apply {
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageScrollStateChanged(state: Int) {
-                    super.onPageScrollStateChanged(state)
-                    when(state){
-                        //뷰페이저가 멈춰져있을때
-                        //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
-                        ViewPager2.SCROLL_STATE_IDLE ->{
-                            flag=1
-                            currentPosition = binding.deliveryBannerVp.currentItem+1
-                        }
-                        //뷰페이저 움직이는 중
-                        ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
-                    }
-                }
-            })
-        }
-    }
-
-    //3초마다 페이지 넘기는 기능
-    inner class PagerRunnable:Runnable{
-        override fun run() {
-            while(true){
-                try {
-                    Thread.sleep(3000)
-                    if(this@DeliveryFragment.flag==1) {
-                        handler.sendEmptyMessage(0)
-                    }
-                } catch (e : InterruptedException){
-                    Log.d("interupt", "interupt발생")
-                }
-            }
-        }
+        deliveryService.getDeliveryBanner() //광고 불러오기
     }
 
     //페이지 변경하기
@@ -307,5 +260,75 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun onDestroy() {
         super.onDestroy()
         thread.interrupt() //쓰레드 중지
+    }
+
+    override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
+        Log.d("commercial", "광고 불러오기 성공~!")
+        /*for (i in results){
+            Log.d("commercial", i.toString() + "= i값")
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+        }*/
+        deliveryBannerAdapter = BannerVPAdapter(this)
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
+
+/*      deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))*/
+        binding.deliveryBannerVp.adapter= deliveryBannerAdapter
+        binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
+        binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
+
+        //뷰페이저 넘기는 쓰레드
+        thread.start() //스레드 시작
+
+        binding.deliveryBannerVp.apply {
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageScrollStateChanged(state: Int) {
+                    super.onPageScrollStateChanged(state)
+                    when(state){
+                        //뷰페이저가 멈춰져있을때
+                        //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
+                        ViewPager2.SCROLL_STATE_IDLE ->{
+                            flag=1
+                            currentPosition = binding.deliveryBannerVp.currentItem+1
+                        }
+                        //뷰페이저 움직이는 중
+                        ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
+                    }
+                }
+            })
+        }
+    }
+
+    //3초마다 페이지 넘기는 기능
+    inner class PagerRunnable:Runnable{
+        override fun run() {
+            while(true){
+                try {
+                    Thread.sleep(3000)
+                    if(this@DeliveryFragment.flag==1) {
+                        handler.sendEmptyMessage(0)
+                    }
+                } catch (e : InterruptedException){
+                    Log.d("interupt", "interupt발생")
+                }
+            }
+        }
+    }
+
+
+    override fun ondeliveryBannerFailure(message: String) {
+        Log.d("commercial", "광고 불러오기 실패~!")
+        //일단은 더미데이터 넣어둠
+        /*deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
+        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))*/
     }
 }
