@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
-import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
@@ -16,6 +15,7 @@ import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverViewModel
 import com.example.geeksasaeng.Signup.Retrofit.*
+import com.example.geeksasaeng.Utils.*
 import com.google.gson.annotations.SerializedName
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.*
@@ -72,31 +72,9 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         네이버 회원가입 추가해주기
          */
 
-//        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
-//        autoJwt = getAutoLogin?.getString("jwt", null).toString()
-//        autoLoginid = getAutoLogin?.getString("loginid", null).toString()
-//        autoPassword = getAutoLogin?.getString("password", null).toString()
-//
-//        if (autoLoginid != null && autoPassword != null) {
-//            login(true)
-//        }
-
         setTextChangedListener()
         initClickListener()
     }
-
-//    private fun login(auto: Boolean) {
-//        val loginDataService = LoginDataService()
-//        loginDataService.setLoginView(this)
-//
-//        if (auto) {
-//            loginDataService.login(Login(autoLoginid, autoPassword))
-//        } else {
-//            loginDataService.login(getLoginUser())
-//        }
-//
-//        loginDataService.login(getLoginUser())
-//    }
 
     private fun login() {
         val loginDataService = LoginDataService()
@@ -111,32 +89,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         return Login(loginId, password)
     }
 
-    private fun saveSP(jwt: String) {
-        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
-        val editor = spf.edit()
-
-        editor.putString("jwt", jwt)
-        editor?.putString("loginid", binding.loginIdEt.text.toString())
-        editor?.putString("password", binding.loginPwdEt.text.toString())
-
-        editor.apply()
-    }
-
-    private fun removeSP() {
-        val spf = getSharedPreferences("autoLogin" , MODE_PRIVATE)
-        val editor = spf.edit()
-        editor.clear()
-        editor.commit()
-    }
-
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         // 자동 로그인 수정 필요
-        if (binding.loginAutologinCb.isChecked && binding.loginIdEt.text.isNotEmpty() && binding.loginPwdEt.text.isNotEmpty()) {
-            removeSP()
-            saveSP(result.jwt)
-        } else if (!binding.loginAutologinCb.isChecked) {
-            removeSP()
+        if (binding.loginAutologinCb.isChecked) {
+            saveAutoLogin(result.jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
         }
+
         finish()
         changeActivity(MainActivity::class.java)
     }
@@ -234,8 +192,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 override fun onSuccess() {
                     // 로그인 유저 정보 가져오기
                     NidOAuthLogin().callProfileApi(profileCallback)
-                    removeSP()
-                    saveSP(NaverIdLoginSDK.getAccessToken().toString())
+                    // removeSP()
+                    // saveSP(NaverIdLoginSDK.getAccessToken().toString())
 
                     signUpNaverVM.setLoginId(loginId)
                     signUpNaverVM.setPhoneNumber(phoneNumber)
@@ -245,7 +203,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                     val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                    removeSP()
+                    // removeSP()
                     Log.d("NAVER-LOGIN", "FAILED : $errorCode $errorDescription")
                 }
                 override fun onError(errorCode: Int, message: String) {
