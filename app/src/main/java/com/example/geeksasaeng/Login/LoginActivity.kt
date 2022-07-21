@@ -60,19 +60,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         phoneNumberId = intent.getIntExtra("phoneNumberId", -1)
         universityName = intent.getStringExtra("universityName")
 
-        showToast("checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
-                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
+//        showToast("checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
+//                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
 
         Log.d("SIGNUP-RESPONSE", "checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
                 "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
 
         signup()
 
-//        if (signUpVM.checkNull())
-//            // showToast("SignUp")
-//            // signup()
-//        else if (signUpNaverVM.checkNull())
-//            signupSocial()
+        /*
+        네이버 회원가입 추가해주기
+         */
 
 //        getAutoLogin = getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
 //        autoJwt = getAutoLogin?.getString("jwt", null).toString()

@@ -8,22 +8,11 @@ import com.example.geeksasaeng.databinding.FragmentStepNaverThreeBinding
 
 class StepNaverThreeFragment : BaseFragment<FragmentStepNaverThreeBinding>(FragmentStepNaverThreeBinding::inflate) {
 
-    var email: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var phoneNumber: String? = ""
-    var universityName: String? = ""
-
     private val progressVM: ProgressNaverViewModel by activityViewModels()
+    private val signUpNaverVM: SignUpNaverViewModel by activityViewModels()
 
     override fun initAfterBinding() {
         progressVM.increase()
-
-        email = arguments?.getString("email")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        phoneNumber = arguments?.getString("phoneNumber")
-        universityName = arguments?.getString("universityName")
 
         initClickListener()
     }
@@ -31,12 +20,11 @@ class StepNaverThreeFragment : BaseFragment<FragmentStepNaverThreeBinding>(Fragm
     private fun initClickListener() {
         binding.stepNaverThreeStartBtn.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java)
-            intent.putExtra("email", email)
-            intent.putExtra("loginId", loginId)
-            intent.putExtra("nickname", nickname)
-            intent.putExtra("phoneNumber", phoneNumber)
-            intent.putExtra("universityName", universityName)
-            intent.putExtra("status", "social")
+            // TODO: 나중에 토큰 형식으로 바뀌면 수정해주기!!
+            intent.putExtra("emailId", signUpNaverVM.getEmailId())
+            intent.putExtra("loginId", signUpNaverVM.getLoginId())
+            intent.putExtra("nickname", signUpNaverVM.getNickname())
+            intent.putExtra("universityName", signUpNaverVM.getUniversityName())
             startActivity(intent)
         }
     }

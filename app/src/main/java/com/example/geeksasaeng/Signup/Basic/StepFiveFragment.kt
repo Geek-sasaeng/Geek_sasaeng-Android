@@ -25,9 +25,6 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
     override fun initAfterBinding() {
         progressVM.increase()
-
-        // showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()} / password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()} / phoneNumber = ${signUpVM.getPhoneNumberId()}")
-
         initClickListener()
     }
 

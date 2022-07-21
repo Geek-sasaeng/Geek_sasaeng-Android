@@ -86,12 +86,10 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             if (binding.stepFourPhoneReSendBtnO.text == "재전송 하기") {
                 //10초 이내에 재전송시 10초 지나고 가능, 하루에 최대 5번까지 가능
                 // TODO: 하루에 최대 5번까지 가능하게 만들어야해
-                if(time<4900){ //10초가 지났으면
+                if (time < 4900) { //10초가 지났으면
                     resetTimer()
                     startTimer()
                     sendSms() //인증문자 보내는 작업
-                }else{
-                    showToast("잠시 후에 다시 시도해주세요")
                 }
             }
 

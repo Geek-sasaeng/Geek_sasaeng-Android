@@ -95,9 +95,4 @@ class SignUpViewModel: ViewModel() {
     fun getInformationAgreeStatus() : String {
         return informationAgreeStatus.value.toString()
     }
-
-    fun checkNull() : Boolean {
-        return !(checkPassword.value != null && loginId.value != null && nickname.value != null && password.value != null &&
-                emailId.value != null && universityName.value != null && informationAgreeStatus.value != null)
-    }
 }

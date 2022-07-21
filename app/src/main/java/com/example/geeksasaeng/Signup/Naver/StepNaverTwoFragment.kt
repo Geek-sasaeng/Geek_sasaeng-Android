@@ -18,13 +18,8 @@ import kotlin.concurrent.timer
 
 class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentStepNaverTwoBinding::inflate), SignUpEmailView, VerifyEmailView {
 
-    var email: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var phoneNumber: String? = ""
-    var universityName: String? = ""
-
     private val progressVM: ProgressNaverViewModel by activityViewModels()
+    private val signUpNaverVM: SignUpNaverViewModel by activityViewModels()
 
     private lateinit var signUpService : SignupDataService
 
@@ -37,12 +32,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         progressVM.increase()
         
         startTimer()
-
-        email = arguments?.getString("email")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        phoneNumber = arguments?.getString("phoneNumber")
-        universityName = arguments?.getString("universityName")
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepNaverTwoFragment)
@@ -63,25 +52,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         binding.stepNaverTwoNextBtn.setOnClickListener {
             // 이메일 번호 인증
             verifyEmail()
-
-            if (verifyCheck == 1) {
-                timerTask?.cancel()
-
-                val transaction: FragmentTransaction = (context as SignUpNaverActivity).supportFragmentManager.beginTransaction()
-
-                val bundle = Bundle()
-                bundle.putString("email", email)
-                bundle.putString("loginId", loginId)
-                bundle.putString("nickname", nickname)
-                bundle.putString("phoneNumber", phoneNumber)
-                bundle.putString("universityName", universityName)
-
-                val stepNaverThreeFragment = StepNaverThreeFragment()
-                stepNaverThreeFragment.arguments = bundle
-
-                transaction.replace(R.id.sign_up_naver_vp, stepNaverThreeFragment)
-                transaction.commit()
-            }
         }
     }
 
@@ -112,12 +82,12 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     private fun verifyEmail() {
-        val verifyEmailRequest = VerifyEmailRequest(email.toString(), binding.stepNaverTwoCheckEt.text.toString())
+        val verifyEmailRequest = VerifyEmailRequest(signUpNaverVM.getEmail(), binding.stepNaverTwoCheckEt.text.toString())
         signUpService.verifyEmailSender(verifyEmailRequest)
     }
 
     override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
-        verifyCheck = 1
+        (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverThreeFragment()).commit()
     }
 
     override fun onVerifyEmailFailure(message: String) {
@@ -140,7 +110,7 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
 
     private fun sendEmail() {
         val uuid = getUuid().toString()
-        val signUpEmailRequest = SignUpEmailRequest(email, universityName, uuid)
+        val signUpEmailRequest = SignUpEmailRequest(signUpNaverVM.getEmail(), signUpNaverVM.getUniversityName(), uuid)
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 

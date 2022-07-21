@@ -31,7 +31,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     var verifyBtnClick: Int = 0
 
     private val progressVM: ProgressNaverViewModel by activityViewModels()
-    private val signUpVM: SignUpNaverViewModel by activityViewModels()
+    private val signUpNaverVM: SignUpNaverViewModel by activityViewModels()
     private lateinit var signUpService : SignupDataService // 닉네임 중복확인용
 
     // TODO: 학교 리스트 API 연결
@@ -98,7 +98,6 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
         binding.stepNaverOneNicknameEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // text가 바뀔 때마다 호출
                 val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
                 val macher = nickPattern.matcher(binding.stepNaverOneNicknameEt.text.toString()) //사용자가 입력한 닉네임과 패턴 비교
 
@@ -157,18 +156,13 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
         }
 
         binding.stepNaverOneNextBtn.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("loginId", loginId)
-            bundle.putString("phoneNumber", phoneNumber)
-            bundle.putString("nickname", binding.stepNaverOneNicknameEt.text.toString())
-            bundle.putString("universityName", universityName)
-            bundle.putString("email", binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString())
+            signUpNaverVM.setLoginId(loginId)
+            signUpNaverVM.setPhoneNumber(phoneNumber)
+            signUpNaverVM.setNickname(binding.stepNaverOneNicknameEt.text.toString())
+            signUpNaverVM.setUniversityName(universityName)
+            signUpNaverVM.setEmail(binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString())
 
-            val stepNaverTwoFragment = StepNaverTwoFragment()
-            stepNaverTwoFragment.arguments = bundle
-
-            (context as SignUpNaverActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_naver_vp, stepNaverTwoFragment).commit()
+            (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverTwoFragment()).commit()
         }
     }
 

@@ -41,10 +41,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
 
-//        showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()}" +
-//                "/ password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()}" +
-//                "/ phoneNumber = ${signUpVM.getPhoneNumberId()}")
-
         initSpinner()
         initTextChangedListener()
         initClickListener()
