@@ -28,7 +28,7 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_phone_skip.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_banner.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_chatting.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.264" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_helper.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.4" />
@@ -43,8 +43,8 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_three.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_two.xml" value="0.4" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery.xml" value="0.4" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery_people_spinner.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery.xml" value="0.6" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery_people_spinner.xml" value="1.2" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_loading.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_signup_university_spinner.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/toast_msg_signup.xml" value="0.6" />

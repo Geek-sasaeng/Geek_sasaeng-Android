@@ -17,5 +17,5 @@ data class DeliveryResult (
     @SerializedName("maxMatching") var maxMatching: Int? = 0,
     @SerializedName("orderTime") var orderTime: String? = "",
     @SerializedName("title") var title: String? = "",
-    @SerializedName("hashTags") var hashTags: Boolean = false
+    @SerializedName("hasHashTag") var hasHashTag: Boolean? = null
 )

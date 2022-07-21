@@ -151,7 +151,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var maxMatching = result?.get(i)?.maxMatching
             var orderTime = result?.get(i)?.orderTime
             var title = result?.get(i)?.title
-            var hashTags = result?.get(i)?.hashTags
+            var hashTags = result?.get(i)?.hasHashTag
+
+            Log.d("HASHTAGS", hashTags.toString())
 
             deliveryArray.add(
                 DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)

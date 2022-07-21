@@ -29,8 +29,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
                 login()
             } else {
                 changeActivity(LoginActivity::class.java)
+                finish()
             }
-            finish()
         }, 1500)
     }
 
@@ -43,6 +43,7 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         // 자동 로그인 수정 필요
         changeActivity(MainActivity::class.java)
+        finish()
     }
 
     override fun onLoginFailure(message: String) {

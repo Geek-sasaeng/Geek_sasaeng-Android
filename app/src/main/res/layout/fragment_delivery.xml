@@ -29,14 +29,15 @@
 
     <Spinner
         android:id="@+id/delivery_people_spinner"
-        android:layout_width="80dp"
-        android:layout_height="30dp"
+        android:layout_width="100dp"
+        android:layout_height="34dp"
         android:layout_marginLeft="15dp"
         android:background="@drawable/spinner_outline_unclicked"
         android:popupBackground="@drawable/spinner_outline_clicked"
         tools:listitem="@layout/item_delivery_people_spinner"
         android:spinnerMode="dropdown"
         android:entries="@array/home_dropdown1"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
         app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
         app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
@@ -46,7 +47,7 @@
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="34dp"
         app:layout_constraintTop_toTopOf="@id/delivery_people_spinner"
         app:layout_constraintBottom_toBottomOf="@id/delivery_people_spinner"
         app:layout_constraintStart_toEndOf="@id/delivery_people_spinner">
@@ -62,55 +63,59 @@
                 android:paddingVertical="7dp"
                 android:paddingHorizontal="10dp"
                 android:button="@null"
-                android:textSize="11sp"
-                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spinner_outline_unclicked"
                 android:textColor="@drawable/selector_time_radiobtn_text"
                 android:fontFamily="@font/spoqa_medium"
                 android:text="아침"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                android:gravity="center"/>
 
             <RadioButton
                 android:id="@+id/delivery_rb2"
                 android:paddingVertical="7dp"
                 android:paddingHorizontal="10dp"
                 android:button="@null"
-                android:textSize="11sp"
-                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spinner_outline_unclicked"
                 android:textColor="@drawable/selector_time_radiobtn_text"
                 android:fontFamily="@font/spoqa_medium"
                 android:text="점심"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                android:gravity="center"/>
 
            <RadioButton
                android:id="@+id/delivery_rb3"
                android:paddingVertical="7dp"
                android:paddingHorizontal="10dp"
                android:button="@null"
-               android:textSize="11sp"
-                android:layout_width="wrap_content"
+               android:textSize="14sp"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
                android:background="@drawable/spinner_outline_unclicked"
                android:textColor="@drawable/selector_time_radiobtn_text"
                android:fontFamily="@font/spoqa_medium"
                 android:text="저녁"
-               android:layout_marginEnd="8dp"/>
+               android:layout_marginEnd="8dp"
+               android:gravity="center"/>
 
             <RadioButton
                 android:id="@+id/delivery_rb4"
                 android:paddingVertical="7dp"
                 android:paddingHorizontal="10dp"
                 android:button="@null"
-                android:textSize="11sp"
-                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spinner_outline_unclicked"
                 android:textColor="@drawable/selector_time_radiobtn_text"
                 android:fontFamily="@font/spoqa_medium"
-                android:text="야식"/>
+                android:text="야식"
+                android:gravity="center"/>
 
         </RadioGroup>
 
@@ -121,16 +126,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@id/delivery_people_spinner"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/delivery_sort_img">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/delivery_rv"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="13dp"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

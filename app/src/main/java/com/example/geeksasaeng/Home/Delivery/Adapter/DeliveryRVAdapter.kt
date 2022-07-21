@@ -1,11 +1,13 @@
 package com.example.geeksasaeng.Home.Delivery.Adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
@@ -51,6 +53,8 @@ class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : Recycler
         var deliveryItemMemberNumber :TextView
         var deliveryItemTime : TextView
         var deliveryItemTitle : TextView
+        var deliveryItemCategory : TextView
+        var deliveryItemHashTag : TextView
         // var deliveryItemOption1 : TextView
         // var deliveryItemOption2 : TextView
 
@@ -59,8 +63,8 @@ class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : Recycler
             deliveryItemMemberNumber = itemView.findViewById(R.id.delivery_item_member_number)
             deliveryItemTime = itemView.findViewById(R.id.delivery_item_time)
             deliveryItemTitle = itemView.findViewById(R.id.delivery_item_title)
-            // deliveryItemOption1 = itemView.findViewById(R.id.delivery_item_option1)
-            // deliveryItemOption2 = itemView.findViewById(R.id.delivery_item_option2)
+            deliveryItemCategory = itemView.findViewById(R.id.delivery_item_category)
+            deliveryItemHashTag = itemView.findViewById(R.id.delivery_item_hashTag)
         }
     }
 
@@ -87,8 +91,12 @@ class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : Recycler
         viewHolder.deliveryItemMemberNumber.setText(item!!.currentMatching.toString() + "/" + item!!.maxMatching)
         viewHolder.deliveryItemTime.setText(item!!.orderTime)
         viewHolder.deliveryItemTitle.setText(item!!.title)
+        viewHolder.deliveryItemCategory.setText(item!!.foodCategory)
 
-        // viewHolder.deliveryItemOption1.setText("option1")
-        // viewHolder.deliveryItemOption2.setText("option2")
+        if (item!!.hasHashTag!!) {
+            viewHolder.deliveryItemHashTag.setTextColor(Color.parseColor("#636363"))
+        } else if (!item!!.hasHashTag!!) {
+            viewHolder.deliveryItemHashTag.setTextColor(Color.parseColor("#EFEFEF"))
+        }
     }
 }
