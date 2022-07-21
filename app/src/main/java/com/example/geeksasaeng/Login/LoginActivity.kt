@@ -22,12 +22,13 @@ import com.navercorp.nid.profile.data.NidProfileResponse
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, LoginView {
 
     var checkPassword: String = ""
-    var email: String = ""
+    var emailId: Int? = null
     var loginId: String = ""
     var informationAgreeStatus: String = "" //약관동의
     var nickname: String = ""
     var password: String = ""
     var phoneNumber: String = ""
+    var phoneNumberId: Int? = null
     var universityName: String = ""
 
     private var OAUTH_CLIENT_ID: String = "czrW_igO4TDdAeE5WhGW"
@@ -56,14 +57,15 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         if (intent != null) {
             checkPassword = intent?.getStringExtra("checkPassword").toString()
-            email = intent?.getStringExtra("email").toString()
+            emailId = intent?.getIntExtra("email", -1)
             informationAgreeStatus = intent?.getStringExtra("informationAgreeStatus").toString() //약관동의 정보
             loginId = intent?.getStringExtra("loginId").toString()
             nickname = intent?.getStringExtra("nickname").toString()
             password = intent?.getStringExtra("password").toString()
-            phoneNumber = intent?.getStringExtra("phoneNumber").toString()
+            phoneNumberId = intent?.getIntExtra("phoneNumberId", -1)
             universityName = intent?.getStringExtra("universityName").toString()
 
+            showToast("check = $checkPassword / emailId = $emailId / info = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / password = $password / phoneNumberId = $phoneNumberId")
             signup() //위의 정보를 바탕으로 회원가입 진행
         }
 
@@ -131,7 +133,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     //회원가입하려는 유저를 SignUpRequest형태로 돌려주는 함수
     private fun getSignupUser(): SignUpRequest {
         // TODO: 일단은 약관동의에 다 "Y"로 넣어둠 (StepFive의 StepFiveStartBtn 클릭리스너 부분 참조)
-        return SignUpRequest(checkPassword, email, informationAgreeStatus, loginId, nickname, password, phoneNumber, universityName)
+        return SignUpRequest(checkPassword, emailId, informationAgreeStatus, loginId, nickname, password, phoneNumberId, universityName)
     }
 
     //회원가입하는 함수
@@ -212,7 +214,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
                     val intent = Intent(this@LoginActivity, SignUpNaverActivity::class.java)
                     Log.d("NAVER-LOGIN", "LOGIN-ACTIVITY : LOGIN-CALLBACK : loginId = $loginId / phone = $phoneNumber")
-                    intent.putExtra("loginId", loginId.toString())
+                    intent.putExtra("loginId", loginId)
                     intent.putExtra("phoneNumber", phoneNumber)
                     startActivity(intent)
                 }
@@ -238,6 +240,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     //회원가입 성공/실패
     override fun onSignUpSuccess() {
         // TODO: 성공하면 나오는 화면 생기면 넣어주기
+        showToast("성공")
         Log.d("signup", "회원가입에 성공하였습니다.")
     }
 
@@ -248,6 +251,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 2201 : 회원 정보 동의 Status가 Y가 아닌 경우
         // 2205 : 존재하지 않는 회원 ID
         // 4000 : 서버 오류
+        showToast("실패 $message")
         Log.d("signup", "회원가입에 실패하였습니다.\n$message")
     }
 }

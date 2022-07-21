@@ -18,6 +18,8 @@ import java.util.regex.Pattern
 class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBinding::inflate), SignUpIdCheckView, SignUpNickCheckView {
 
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
+
     private lateinit var signUpService : SignupDataService //아이디, 닉네임 중복확인용
 
     override fun onStart() {
@@ -169,16 +171,12 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
 
         //다음 버튼
         binding.stepOneNextBtn.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("checkPassword", binding.stepOneCheckPasswordEt.text.toString())
-            bundle.putString("loginId", binding.stepOneIdEt.text.toString())
-            bundle.putString("nickname", binding.stepOneNicknameEt.text.toString())
-            bundle.putString("password", binding.stepOnePasswordEt.text.toString())
+            signUpVM.setCheckPassword(binding.stepOneCheckPasswordEt.text.toString())
+            signUpVM.setLoginId(binding.stepOneIdEt.text.toString())
+            signUpVM.setNickname(binding.stepOneIdEt.text.toString())
+            signUpVM.setPassword(binding.stepOnePasswordEt.text.toString())
 
-            val stepTwoFragment = StepTwoFragment()
-            stepTwoFragment.arguments = bundle
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepTwoFragment).commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepTwoFragment()).commit()
         }
     }
 

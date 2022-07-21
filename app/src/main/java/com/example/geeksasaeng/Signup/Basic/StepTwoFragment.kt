@@ -21,10 +21,6 @@ import com.example.geeksasaeng.Utils.getUuid
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
     var email: String? = ""
     var university: String? = ""
 
@@ -33,16 +29,12 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private lateinit var signUpService : SignupDataService
 
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
 
     var verifyBtnClick: Int = 0
 
     override fun initAfterBinding() {
         progressVM.increase()
-
-        checkPassword = arguments?.getString("checkPassword")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        password = arguments?.getString("password")
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
@@ -128,20 +120,10 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         //다음버튼
         binding.stepTwoNextBtn.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
+            signUpVM.setEmail(email)
+            signUpVM.setUniversityName(university)
 
-            email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
-
-            bundle.putString("email", email)
-            bundle.putString("universityName", university)
-
-            val stepThreeFragment = StepThreeFragment()
-            stepThreeFragment.arguments = bundle
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepThreeFragment).commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepThreeFragment()).commit()
         }
     }
 

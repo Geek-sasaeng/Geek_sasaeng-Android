@@ -116,7 +116,7 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         signUpService.verifyEmailSender(verifyEmailRequest)
     }
 
-    override fun onVerifyEmailSuccess(message: String) {
+    override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
         verifyCheck = 1
     }
 

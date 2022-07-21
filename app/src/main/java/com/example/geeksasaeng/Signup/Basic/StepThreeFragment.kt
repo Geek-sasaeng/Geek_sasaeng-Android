@@ -18,14 +18,12 @@ import kotlin.concurrent.timer
 
 class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThreeBinding::inflate), VerifyEmailView, SignUpEmailView {
 
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
     var email: String? = ""
+    var emailId: Int? = null
     var universityName: String? = ""
 
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
 
     private lateinit var signUpService : SignupDataService
 
@@ -36,15 +34,11 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun initAfterBinding() {
         progressVM.increase()
-        
-        startTimer()
 
-        checkPassword = arguments?.getString("checkPassword")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        password = arguments?.getString("password")
-        email = arguments?.getString("email")
-        universityName = arguments?.getString("universityName")
+        email = signUpVM.getEmail()
+        universityName = signUpVM.getUniversityName()
+
+        startTimer()
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepThreeFragment)
@@ -105,18 +99,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         signUpService.verifyEmailSender(verifyEmailRequest)
     }
 
-    override fun onVerifyEmailSuccess(message: String) {
-        val bundle = Bundle()
-        bundle.putString("checkPassword", checkPassword)
-        bundle.putString("loginId", loginId)
-        bundle.putString("nickname", nickname)
-        bundle.putString("password", password)
-        bundle.putString("email", email)
-        bundle.putString("universityName", universityName)
-
-        val stepFourFragment = StepFourFragment()
-        stepFourFragment.arguments = bundle
-        (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepFourFragment).commit()
+    override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
+        signUpVM.setEmailId(result.emailId)
+        (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFourFragment()).commit()
     }
 
     override fun onVerifyEmailFailure(message: String) {

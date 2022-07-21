@@ -12,15 +12,9 @@ import com.example.geeksasaeng.databinding.FragmentStepFiveBinding
 
 class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveBinding::inflate), SignUpView {
 
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
-    var email: String? = ""
-    var universityName: String? = ""
-    var phoneNumber: String? = ""
-
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
+
     private lateinit var signUpService : SignupDataService
 
     override fun onStart() {
@@ -32,15 +26,7 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
     override fun initAfterBinding() {
         progressVM.increase()
 
-        checkPassword = arguments?.getString("checkPassword")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        password = arguments?.getString("password")
-        email = arguments?.getString("email")
-        universityName = arguments?.getString("universityName")
-        phoneNumber = arguments?.getString("phoneNumber")
-
-        showToast("checkPassword = $checkPassword / loginId = $loginId / nickname = $nickname / password = $password / email = $email / universityName = $universityName / phoneNumber = $phoneNumber")
+//        showToast("checkPassword = ${signUpVM.getCheckPassword()} / loginId = ${signUpVM.getLoginId()} / nickname = ${signUpVM.getNickname()} / password = ${signUpVM.getPassword()} / email = ${signUpVM.getEmail()} / universityName = ${signUpVM.getUniversityName()} / phoneNumber = ${signUpVM.getPhoneNumberId()}")
 
         initClickListener()
     }
@@ -48,15 +34,17 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
     private fun initClickListener() {
         binding.stepFiveStartBtn.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java)
-            intent.putExtra("checkPassword", checkPassword)
-            intent.putExtra("email", email)
-            // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
-            intent.putExtra("informationAgreeStatus", "Y")
-            intent.putExtra("loginId", loginId)
-            intent.putExtra("nickname", nickname)
-            intent.putExtra("password", password)
-            intent.putExtra("phoneNumber", phoneNumber)
-            intent.putExtra("universityName", universityName)
+//            intent.putExtra("checkPassword", checkPassword)
+//            intent.putExtra("emailId", emailId)
+//            // TODO: 약관페이지는 디자인이 안나와서 구현X 일단 DEFAULT값으로 Y줌
+//            intent.putExtra("informationAgreeStatus", "Y")
+//            intent.putExtra("loginId", loginId)
+//            intent.putExtra("nickname", nickname)
+//            intent.putExtra("password", password)
+//            intent.putExtra("phoneNumberId", phoneNumberId)
+//            intent.putExtra("universityName", universityName)
+
+            signUpVM.setInformationAgreeStatus("Y")
 
             startActivity(intent)
         }

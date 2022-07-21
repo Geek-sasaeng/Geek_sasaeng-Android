@@ -14,18 +14,18 @@ data class SignUpResult(
     @SerializedName("email") val email: String,
     @SerializedName("loginId") val loginId: String,
     @SerializedName("nickname") val nickname: String,
-    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("phoneNumber") val phoneNumber: String?,
     @SerializedName("universityName") val universityName: String
 )
 
 data class SignUpRequest (
     @SerializedName("checkPassword") var checkPassword: String,
-    @SerializedName("email") var email: String,
+    @SerializedName("emailId") var email: Int?,
     @SerializedName("informationAgreeStatus") var informationAgreeStatus: String, //개인정보 동의
     @SerializedName("loginId") var loginId: String,
     @SerializedName("nickname") var nickname: String,
     @SerializedName("password") var password: String,
-    @SerializedName("phoneNumber") var phoneNumber: String,
+    @SerializedName("phoneNumberId") var phoneNumberId: Int?,
     @SerializedName("universityName") var universityName: String,
 )
 
@@ -121,7 +121,7 @@ data class VerifySmsResponse(
 )
 
 data class VerifySmsResult(
-    @SerializedName("phoneNumberId") val statusName : String
+    @SerializedName("phoneNumberId") val phoneNumberId : Int?
 )
 
 data class VerifySmsRequest(

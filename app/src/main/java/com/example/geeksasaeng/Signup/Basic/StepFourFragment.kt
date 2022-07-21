@@ -23,15 +23,12 @@ import kotlin.concurrent.timer
 
 class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBinding::inflate), SignUpSmsView, VerifySmsView {
 
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
-    var email: String? = ""
-    var universityName: String? = ""
     var phoneNumber: String? = ""
+    var phoneNumberId: Int? = null
 
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
+
     private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
 
@@ -47,13 +44,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     override fun initAfterBinding() {
         progressVM.increase()
 
-        checkPassword = arguments?.getString("checkPassword")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        password = arguments?.getString("password")
-        email = arguments?.getString("email")
-        universityName = arguments?.getString("universityName")
-
         initTextWatcher()
         initClickListener()
     }
@@ -64,7 +54,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                // text가 변경된 후 호출
                 val phonepattern = Pattern.compile("^[0-9]{11}\$") //패턴 생성 (숫자로 이루어진 11자리를 조건으로 둠)
                 val macher = phonepattern.matcher(binding.stepFourPhoneEt.text.toString())
 
@@ -127,19 +116,10 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             timerTask?.cancel()
 
             phoneNumber = binding.stepFourPhoneEt.text.toString()
+            signUpVM.setPhoneNumber(phoneNumber)
+            signUpVM.setPhoneNumberId(phoneNumberId)
 
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
-            bundle.putString("email", email)
-            bundle.putString("universityName", universityName)
-            bundle.putString("phoneNumber", phoneNumber)
-
-            val stepFiveFragment = StepFiveFragment()
-            stepFiveFragment.arguments = bundle
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, stepFiveFragment).commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFiveFragment()).commit()
         }
     }
 
@@ -198,6 +178,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     // sms인증번호 확인 성공/실패
     override fun onVerifySmsSuccess(result: VerifySmsResult) {
         timerTask?.cancel()
+        phoneNumberId = result.phoneNumberId
         binding.stepFourCheckMsgTv.text = "성공적으로 인증이 완료되었습니다"
         checkingNext()
     }
