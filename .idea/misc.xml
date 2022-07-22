@@ -34,11 +34,13 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_chatting.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_delete.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report.xml" value="0.264" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report_no_option.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report_option.xml" value="0.176" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_update.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_helper.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.4431082331174838" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.152" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_market.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_profile.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.24947916666666667" />

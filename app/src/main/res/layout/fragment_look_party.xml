@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/home_dormitory_name_tv"
+            android:id="@+id/look_party_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="파티 보기"
