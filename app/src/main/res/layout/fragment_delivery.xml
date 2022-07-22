@@ -42,84 +42,94 @@
         app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
         app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
 
-    <!--아침,점심,저녁,야식 선택-->
-    <LinearLayout
-        android:layout_marginStart="8dp"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:scrollbars="@null"
+        android:overScrollMode="never"
         app:layout_constraintTop_toTopOf="@id/delivery_people_spinner"
         app:layout_constraintBottom_toBottomOf="@id/delivery_people_spinner"
-        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner">
+        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner"
+        app:layout_constraintEnd_toEndOf="@id/delivery_banner_vp">
 
-        <RadioGroup
-            android:id="@+id/delivery_time_rg"
+        <!--아침,점심,저녁,야식 선택-->
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="34dp">
 
-            <RadioButton
-                android:id="@+id/delivery_rb1"
-                android:paddingVertical="7dp"
-                android:paddingHorizontal="10dp"
-                android:button="@null"
-                android:textSize="14sp"
-                android:layout_width="54dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_outline_unclicked"
-                android:textColor="@drawable/selector_time_radiobtn_text"
-                android:fontFamily="@font/spoqa_medium"
-                android:text="아침"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"/>
+            <RadioGroup
+                android:id="@+id/delivery_time_rg"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/delivery_rb2"
-                android:paddingVertical="7dp"
-                android:paddingHorizontal="10dp"
-                android:button="@null"
-                android:textSize="14sp"
-                android:layout_width="54dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_outline_unclicked"
-                android:textColor="@drawable/selector_time_radiobtn_text"
-                android:fontFamily="@font/spoqa_medium"
-                android:text="점심"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"/>
+                <RadioButton
+                    android:id="@+id/delivery_rb1"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="10dp"
+                    android:button="@null"
+                    android:textSize="14sp"
+                    android:layout_width="54dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="아침"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"/>
 
-           <RadioButton
-               android:id="@+id/delivery_rb3"
-               android:paddingVertical="7dp"
-               android:paddingHorizontal="10dp"
-               android:button="@null"
-               android:textSize="14sp"
-                android:layout_width="54dp"
-                android:layout_height="wrap_content"
-               android:background="@drawable/spinner_outline_unclicked"
-               android:textColor="@drawable/selector_time_radiobtn_text"
-               android:fontFamily="@font/spoqa_medium"
-                android:text="저녁"
-               android:layout_marginEnd="8dp"
-               android:gravity="center"/>
+                <RadioButton
+                    android:id="@+id/delivery_rb2"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="10dp"
+                    android:button="@null"
+                    android:textSize="14sp"
+                    android:layout_width="54dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="점심"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"/>
 
-            <RadioButton
-                android:id="@+id/delivery_rb4"
-                android:paddingVertical="7dp"
-                android:paddingHorizontal="10dp"
-                android:button="@null"
-                android:textSize="14sp"
-                android:layout_width="54dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_outline_unclicked"
-                android:textColor="@drawable/selector_time_radiobtn_text"
-                android:fontFamily="@font/spoqa_medium"
-                android:text="야식"
-                android:gravity="center"/>
+                <RadioButton
+                    android:id="@+id/delivery_rb3"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="10dp"
+                    android:button="@null"
+                    android:textSize="14sp"
+                    android:layout_width="54dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="저녁"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"/>
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/delivery_rb4"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="10dp"
+                    android:button="@null"
+                    android:textSize="14sp"
+                    android:layout_width="54dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="야식"
+                    android:gravity="center"/>
 
-    </LinearLayout>
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/delivery_swipe"

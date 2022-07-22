@@ -45,20 +45,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
-
-        // 어댑터 설정
-//        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-//        binding.deliveryRv.adapter = deliveryAdapter
-
-//        // 어댑터 클릭 이벤트 설정
-//        DeliveryRVAdapter_new.setOnItemClickListener(object : DeliveryRVAdapter_ver1.OnItemClickListener{
-//            override fun onItemClick(v: View, data: Delivery, pos : Int) {
-//                activity?.supportFragmentManager?.beginTransaction()
-//                    ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-//            }
-//        })
-
-//        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        initAdapter()
 
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
@@ -91,7 +78,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             getDeliveryAllList(dormitoryId, totalCursor)
             isLoading = false
             binding.deliveryProgressCover.visibility = View.GONE
-        }, 2000)
+        }, 1200)
     }
 
     // 상단 스크롤 관련
@@ -153,13 +140,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var title = result?.get(i)?.title
             var hashTags = result?.get(i)?.hasHashTag
 
-            Log.d("HASHTAGS", hashTags.toString())
-
             deliveryArray.add(
                 DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
             )
 
-            initAdapter()
+            deliveryAdapter.notifyDataSetChanged()
         }
     }
 
@@ -171,7 +156,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
-            Log.d("radio",checkedId.toString() +" 선택됨")
             when(checkedId){
                 R.id.delivery_rb1->Log.d("radio","아침 선택됨")
                 R.id.delivery_rb2->Log.d("radio","점심 선택됨")
