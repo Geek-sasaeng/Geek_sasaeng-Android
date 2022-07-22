@@ -1,6 +1,5 @@
 package com.example.geeksasaeng.Home.Delivery
 
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,11 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
+import com.example.geeksasaeng.Home.Delivery.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
@@ -52,8 +52,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            val intent = Intent(context, CreatePartyActivity::class.java)
-            startActivity(intent)
+            // 디버깅용
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, LookPartyFragment()).commit()
+            // val intent = Intent(context, CreatePartyActivity::class.java)
+            // startActivity(intent)
         }
 
         if (totalCursor == 0)
@@ -184,7 +187,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
-        thread.start() //스레드 시작
+        if (thread.state == Thread.State.NEW)
+            thread.start() //스레드 시작
 
         binding.deliveryBannerVp.apply {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
