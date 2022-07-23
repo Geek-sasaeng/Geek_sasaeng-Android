@@ -1,16 +1,19 @@
 package com.example.geeksasaeng.Home.CreateParty.Retrofit
 
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface CreatePartyRetrofitInterfaces {
 
     //기숙사 default-location
-    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjoyNn0sImlhdCI6MTY1Nzk0MTQ4NiwiZXhwIjoxNjU4ODMwNTE5fQ.n9HFrLuc97GeWOcKo-ffAj-k5XAvcd7IH0iEuOVzPaQ")
+    @Headers("Authorization:Bearer \${getJwt()}")
     @GET("/{dormitoryId}/default-location")
     fun getDeliveryPartyDefaultLocation(
         @Path("dormitoryId") dormitoryId:CreatePartyDefaultLocRequest
     ): Call<CreatePartyDefaultLocResponse>
+
+    //배달파티 생성하기
+    @POST("/delivery-party")
+    fun createParty(@Body createPartyRequest: CreatePartyRequest) : Call<CreatePartyResponse>
 }

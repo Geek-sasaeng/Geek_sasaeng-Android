@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
@@ -56,11 +57,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            // 디버깅용
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, LookPartyFragment()).commit()
-            // val intent = Intent(context, CreatePartyActivity::class.java)
-            // startActivity(intent)
+            // 디버깅용 - 파티보기
+            /*(context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, LookPartyFragment()).commit()*/
+
+            val intent = Intent(context, CreatePartyActivity::class.java)
+            startActivity(intent)
         }
 
         if (totalCursor == 0)

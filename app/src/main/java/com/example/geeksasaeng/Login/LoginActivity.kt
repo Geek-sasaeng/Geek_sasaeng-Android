@@ -161,7 +161,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
-            Log.d("logintest", "로그인버튼 눌림")
             login()
             /*login(false)
             changeActivity(MainActivity::class.java)*/
