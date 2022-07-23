@@ -1,16 +1,15 @@
-package com.example.geeksasaeng.Home.Delivery.Party
+package com.example.geeksasaeng.Home.Party
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportFragment
+import com.example.geeksasaeng.Home.Party.UpdateParty.PartyUpdateFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.databinding.DialogDeliveryOptionPopupBinding
-import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 
 class DialogDeliveryOptionPopup: DialogFragment() {
 

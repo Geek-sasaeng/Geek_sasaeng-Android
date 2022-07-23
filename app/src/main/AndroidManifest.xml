@@ -20,33 +20,31 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Home.CreateParty.CreatePartyActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".DormitoryActivity"
             android:exported="false" />
         <activity android:name=".Login.LoginActivity" />
-        <!--
-        <activity
-            android:name=".Signup.DialogSignUpPhoneSkip"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        -->
         <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
+        <activity android:name=".Home.Party.ReportParty.DeliveryPartyReportOptionActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".Home.Party.ReportParty.DeliveryPartyReportNoOptionActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <!--카카오맵 APP KEY 추가-->
         <!--<meta-data
