@@ -48,7 +48,8 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     private val PERMISSIONS_REQUEST_CODE = 100
     lateinit var geocoder : Geocoder
     lateinit var mapView : MapView
-    lateinit var mapPoint: MapPoint
+    lateinit var mapPoint: MapPoint // TODO: 디폴트 맵포인트로 설정
+    var locFlag = false // 플래그값
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)
@@ -68,7 +69,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
     //frag->Activity 정보전달용 코드 시작
     interface DialogLocationNextClickListener{
-        fun onLocationClicked(loc:String, mapPoint: MapPoint)
+        fun onLocationClicked(loc:String, mapPoint: MapPoint, locFlag: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -79,11 +80,10 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     override fun onDetach() {
         super.onDetach()
         Log.d("map", "Detached")
-        //frag-> activity 정보전달
-        LocationString = binding.locationDialogLocTv.text.toString()
-        binding.locationDialogKakaoMapView.removeView(mapView)
-        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint)
-
+        //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
+        LocationString = binding.locationDialogLocTv.text.toString() // 지금 현재 정보 (주소: ~~ 기준) 가져오기
+        binding.locationDialogKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
+        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint, locFlag)
         dialogLocationNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -242,7 +242,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     private fun initClickListener(){
         binding.locationDialogNextBtn.setOnClickListener {
             //마지막 페이지이므로 그냥 종료
-
+            locFlag = true // locFlag가 true면 정보를 바꿔주기 위함이다.
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }

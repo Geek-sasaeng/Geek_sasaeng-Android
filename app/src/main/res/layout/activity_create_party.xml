@@ -292,11 +292,12 @@
                 android:id="@+id/create_party_location_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+
                 android:fontFamily="@font/spoqa_medium"
                 android:text="수령 장소"
                 android:textColor="@color/top"
                 android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="@id/create_party_location2_tv"
                 app:layout_constraintStart_toStartOf="@id/create_party_date_tv"
                 app:layout_constraintTop_toBottomOf="@id/create_party_link_tv" />
 
@@ -309,13 +310,13 @@
                 android:padding="7dp"
                 android:text="제 1기숙사 후문"
                 android:paddingStart="15dp"
+                android:layout_marginTop="15dp"
                 android:textSize="13sp"
                 android:textColor="@color/gray_1"
                 android:fontFamily="@font/spoqa_regular"
-                app:layout_constraintBottom_toBottomOf="@id/create_party_location_tv"
                 app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
                 app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
-                app:layout_constraintTop_toTopOf="@id/create_party_location_tv" />
+                app:layout_constraintTop_toBottomOf="@id/create_party_link2_tv" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

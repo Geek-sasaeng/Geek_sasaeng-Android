@@ -26,7 +26,9 @@ class CreatePartyService {
             ) {
                 if (response.isSuccessful && response.code() == 200) {
                     val defaultLocResponse: CreatePartyDefaultLocResponse = response.body()!!
-                    //성공실패 나눠주기
+                    createPartyDefaultLocView.onDefaultLocSuccess(defaultLocResponse.result!!)
+                }else{
+                    createPartyDefaultLocView.onDefaultLocFailure()
                 }
             }
 

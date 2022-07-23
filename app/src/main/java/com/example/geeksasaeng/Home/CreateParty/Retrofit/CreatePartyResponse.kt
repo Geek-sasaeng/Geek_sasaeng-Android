@@ -11,8 +11,8 @@ data class CreatePartyDefaultLocResponse(
 )
 
 data class CreatePartyDefaultLocResult(
-    @SerializedName("latitude") var latitude :Int,
-    @SerializedName("longitude") var longitude :Int
+    @SerializedName("latitude") var latitude :Double,
+    @SerializedName("longitude") var longitude :Double
 )
 
 data class CreatePartyDefaultLocRequest(

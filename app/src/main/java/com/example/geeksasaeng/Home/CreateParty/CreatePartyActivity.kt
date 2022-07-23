@@ -3,6 +3,10 @@ package com.example.geeksasaeng.Home.CreateParty
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocRequest
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
@@ -10,15 +14,21 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
+class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView,
+    DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
 
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint
 
-    override fun onResume() {
-        Log.d("map", "onResume")
-        super.onResume()
-        initKakaoMap()
+    private lateinit var createPartyService: CreatePartyService
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("kakaodefault", "onstart")
+        createPartyService = CreatePartyService() //서비스 객체 생성
+        createPartyService.setCreatePartyDefaultLocView(this)
+        val defaultLocRequest = CreatePartyDefaultLocRequest(1)
+        createPartyService.getDefaultLoc(defaultLocRequest) //★ default 기숙사 위치 불러오는 함수 호출
     }
 
     override fun initAfterBinding() {
@@ -27,6 +37,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyLink2Tv.isEnabled = false
         binding.createPartyLocation2Tv.isEnabled = false
         initClickListener()
+        initKakaoMap()
     }
 
     private fun initKakaoMap(){
@@ -123,12 +134,14 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         }
     }
 
-    override fun onLocationClicked(loc: String, mapPoint: MapPoint) {
+    override fun onLocationClicked(loc: String, mapPoint: MapPoint, locFlag: Boolean) {
         //사용자가 선택한 위치 표시
-        binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
-        binding.createPartyLocation2Tv.text = loc
-        this.mapPoint = mapPoint
-        drawMap(mapPoint)
+        if(locFlag){ // 정보를 바꾸고 싶을때만 바꾸기 위함
+            binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
+            binding.createPartyLocation2Tv.text = loc
+            this.mapPoint = mapPoint
+            drawMap(mapPoint)
+        }
     }
 
     private fun drawMap(mapPoint: MapPoint){
@@ -141,5 +154,15 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         marker.mapPoint = mapPoint
         mapView.addPOIItem(marker)
         mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
+    }
+
+    override fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult) {
+        Log.d("kakaodefault", "defaultLoc 불러오기 성공함")
+        //위도 경도로 MapPoint만들기
+        this.mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude) // default로 맵포인트 설정됨
+    }
+
+    override fun onDefaultLocFailure() {
+        Log.d("kakaodefault", "defaultLoc 불러오기 실패함")
     }
 }

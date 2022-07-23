@@ -84,7 +84,7 @@
             android:id="@+id/location_dialog_loc_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="어쩌구시 어쩌구동"
+            android:text="주소를 입력해주세요"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
