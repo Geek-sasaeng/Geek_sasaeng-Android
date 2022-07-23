@@ -45,6 +45,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".Home.Search.SearchActivity" />
 
         <!--카카오맵 APP KEY 추가-->
         <!--<meta-data
