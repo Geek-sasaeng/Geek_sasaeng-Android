@@ -6,17 +6,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.databinding.ActivitySignUpNaverBinding
 
 class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySignUpNaverBinding::inflate) {
 
     private lateinit var progressVM: ProgressNaverViewModel
+    private lateinit var signUpNaverVM: SignUpNaverViewModel
 
     var loginId: String? = ""
     var phoneNumber: String? = ""
 
     override fun initAfterBinding() {
         progressVM = ViewModelProvider(this).get(ProgressNaverViewModel::class.java)
+        signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
 
         loginId = intent.getStringExtra("loginId")
         phoneNumber = intent.getStringExtra("phoneNumber")

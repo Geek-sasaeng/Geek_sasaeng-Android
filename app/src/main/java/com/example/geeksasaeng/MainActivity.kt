@@ -1,16 +1,11 @@
 package com.example.geeksasaeng
 
-import com.example.geeksasaeng.Utils.BaseActivity
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import com.example.geeksasaeng.Chatting.ChattingFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
+import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
-import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -37,6 +32,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             Log.e("name not found", e.toString())
         }
     }*/
+
+    open interface onKeyBackPressedListener {
+        fun onBackKey()
+    }
+
+    private var mOnKeyBackPressedListener: onKeyBackPressedListener? = null
+
+    fun setOnKeyBackPressedListener(listener: onKeyBackPressedListener?) {
+        mOnKeyBackPressedListener = listener
+    }
+
+    override fun onBackPressed() {
+        if (mOnKeyBackPressedListener != null) {
+            mOnKeyBackPressedListener!!.onBackKey();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private fun setBottomNavi() {
         binding.mainBottomNavi.setOnItemSelectedListener { item ->

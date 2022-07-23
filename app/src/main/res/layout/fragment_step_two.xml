@@ -145,6 +145,7 @@
         android:textColor="@color/gray_2"
         android:textSize="20sp"
         android:fontFamily="@font/spoqa_medium"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

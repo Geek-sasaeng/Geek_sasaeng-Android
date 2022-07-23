@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
@@ -21,10 +23,6 @@ import com.example.geeksasaeng.Utils.getUuid
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 
-    var checkPassword: String? = ""
-    var loginId: String? = ""
-    var nickname: String? = ""
-    var password: String? = ""
     var email: String? = ""
     var university: String? = ""
 
@@ -33,16 +31,12 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private lateinit var signUpService : SignupDataService
 
     private val progressVM: ProgressViewModel by activityViewModels()
+    private val signUpVM: SignUpViewModel by activityViewModels()
 
     var verifyBtnClick: Int = 0
 
     override fun initAfterBinding() {
         progressVM.increase()
-
-        checkPassword = arguments?.getString("checkPassword")
-        loginId = arguments?.getString("loginId")
-        nickname = arguments?.getString("nickname")
-        password = arguments?.getString("password")
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpEmailView(this@StepTwoFragment)
@@ -53,7 +47,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     //스피너 관련 작업
-    private fun initSpinner(){
+    private fun initSpinner() {
         val spinnerAdapter = UniversitySpinnerAdapter(requireContext(), universityList)
         binding.stepTwoSchoolSp.adapter = spinnerAdapter
         binding.stepTwoSchoolSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -128,32 +122,10 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
         //다음버튼
         binding.stepTwoNextBtn.setOnClickListener {
-            val transaction: FragmentTransaction = (context as SignUpActivity).supportFragmentManager.beginTransaction()
+            signUpVM.setEmail(email)
+            signUpVM.setUniversityName(university)
 
-            val bundle = Bundle()
-            bundle.putString("checkPassword", checkPassword)
-            bundle.putString("loginId", loginId)
-            bundle.putString("nickname", nickname)
-            bundle.putString("password", password)
-
-            email = binding.stepTwoEmailEt.text.toString() + "@" + binding.stepTwoEmail2Et.text.toString()
-            // university = binding.stepTwoSchoolEt.text.toString()
-
-            bundle.putString("email", email)
-            // bundle.putString("universityName", university)
-
-            val stepThreeFragment = StepThreeFragment()
-            stepThreeFragment.arguments = bundle
-
-            Log.d("SignupData", bundle.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, stepThreeFragment).commit()
-
-            stepThreeFragment.arguments = bundle
-
-            transaction.replace(R.id.sign_up_vp, stepThreeFragment)
-            transaction.commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepThreeFragment()).commit()
         }
     }
 
@@ -165,20 +137,24 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        Log.d("EMAIL-RESPONSE", message)
-        showToast("SUCCESS")
-
         ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
 
-        //이메일이 성공적으로 진행되었을때 버튼 활성화
-        binding.stepTwoNextBtn.isClickable = true;
+        binding.stepTwoNextBtn.isEnabled = true
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
         binding.stepTwoNextBtn.setTextColor(Color.parseColor("#ffffff"))
+
         verifyBtnClick = 1
     }
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
-        showToast(message)
+        Log.d("SIGNUP-RESPONSE", "실패했습니다")
+        Log.d("SIGNUP-RESPONSE", "CODE = $code")
+
+        when (code) {
+            2803 -> ToastMsgSignup.createToast((activity as SignUpActivity), "유효하지 않은 인증번호입니다", "#80A8A8A8")?.show()
+            2804 -> ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            2805 -> ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+        }
         verifyBtnClick = -1
     }
 }

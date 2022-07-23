@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
+import com.example.geeksasaeng.Home.Delivery.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
@@ -31,7 +32,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
-    var totalPost: Int = 0
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -39,81 +39,77 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         true
     }
 
-
     override fun initAfterBinding() {
         deliveryService = DeliveryService() //서비스 객체 생성
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
+        binding.deliveryProgressCover.visibility = View.GONE
+
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
-
-        // 어댑터 설정
-//        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-//        binding.deliveryRv.adapter = deliveryAdapter
-
-//        // 어댑터 클릭 이벤트 설정
-//        DeliveryRVAdapter_new.setOnItemClickListener(object : DeliveryRVAdapter_ver1.OnItemClickListener{
-//            override fun onItemClick(v: View, data: Delivery, pos : Int) {
-//                activity?.supportFragmentManager?.beginTransaction()
-//                    ?.replace(R.id.main_frm, LookPartyFragment())?.commit()
-//            }
-//        })
-
-//        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        initAdapter()
 
         // 배달 파티 리스트 받아오기
+        deliveryService = DeliveryService()
+        deliveryService.setDeliveryView(this)
+
         binding.deliveryFloatingBtn.setOnClickListener {
-            //fragment->fragment로의 전환
-            /*activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.main_frm, CreatePartyFragment())?.commit()*/
-
-            //fragment->activity로의 전환
-            val intent = Intent(context, CreatePartyActivity::class.java)
-            startActivity(intent)
+            // 디버깅용
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, LookPartyFragment()).commit()
+            // val intent = Intent(context, CreatePartyActivity::class.java)
+            // startActivity(intent)
         }
-
-        // 테스트
-        // Log.d("DELIVERY-RESPONSE", "initAfterBinding1-TOTAL-CURSOR = $totalCursor")
-        Log.d("DELIVERY-RESPONSE", "initAfterBinding : getDeliveryAllList0")
 
         if (totalCursor == 0)
+            initLoadPosts()
+
+        initScrollListener()
+    }
+
+    // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
+    private fun initLoadPosts() {
+        totalCursor = 0
+        getDeliveryAllList(1, totalCursor)
+    }
+
+    // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
+    // TODO: 로딩 중에 스크롤 막기
+    // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
+    private fun initMoreLoadPosts() {
+        binding.deliveryProgressCover.visibility = View.VISIBLE
+        val handler = Handler()
+        handler.postDelayed({
             getDeliveryAllList(dormitoryId, totalCursor)
-
-        if ((totalCursor + 1) * 10 == totalPost) {
-
-        }
-
-        Log.d("DELIVERY-RESPONSE", "TOTAL-CURSOR : $totalCursor  /  TOTAL-POST : $totalPost")
-
-        // Log.d("DELIVERY-RESPONSE", "initAfterBinding2-TOTAL-CURSOR = $totalCursor")
-        // initScrollListener()
+            isLoading = false
+            binding.deliveryProgressCover.visibility = View.GONE
+        }, 1200)
     }
 
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            val handler = Handler()
-            handler.postDelayed({
-            }, 2000)
+            deliveryArray.clear()
+            initAdapter()
+            initLoadPosts()
             binding.deliverySwipe.isRefreshing = false
         })
     }
 
-    // 무한 스크롤 관련
+    // 하단 스크롤 관련
+    // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)
     private fun initScrollListener() {
-        binding.deliveryRv!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-
+        binding.deliveryRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                val layoutManager = binding.deliveryRv.layoutManager
+
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
-                        loadMore()
+                    if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
+                        initMoreLoadPosts()
                         isLoading = true
                     }
                 }
@@ -121,36 +117,19 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
-    private fun loadMore() {
-        deliveryArray.add(null)
-        deliveryAdapter!!.notifyItemInserted(deliveryArray.size - 1)
-        val handler = Handler()
-        handler.postDelayed({
-            deliveryArray.removeAt(deliveryArray.size - 1)
-            val scrollPosition = deliveryArray.size
-            deliveryAdapter!!.notifyItemRemoved(scrollPosition)
-//            var currentSize = scrollPosition
-//            val nextLimit = currentSize + 10
-//            while (currentSize - 1 < nextLimit) {
-//                // deliveryArray.add(DeliveryResult("3시간 48분 남았어요", currentSize.toString(), true, true, 1, 2))
-//            }
-            Log.d("DELIVERY-RESPONSE", "initAfterBinding : loadMore")
-            getDeliveryAllList(dormitoryId, totalCursor)
-            deliveryAdapter!!.notifyDataSetChanged()
-            isLoading = false
-        }, 2000)
-    }
-
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
-        Log.d("DELIVERY-RESPONSE", "getDeliveryAllList")
-        // 테스트
-        // var dormitoryId = 0
         val deliveryDataService = DeliveryService()
         deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
-        totalCursor = totalCursor + 1
-        totalPost = totalPost + 10
+        totalCursor += 1
+    }
+
+    // Adapter 설정
+    private fun initAdapter() {
+        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+        binding.deliveryRv.adapter = deliveryAdapter
+        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
@@ -160,25 +139,19 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-RESPONSE", "size = $size")
 
         for (i in 0 until result!!.size) {
-            var chief = result?.get(i)?.chief
-            var content = result?.get(i)?.content
             var currentMatching = result?.get(i)?.currentMatching
             var foodCategory = result?.get(i)?.foodCategory
             var id = result?.get(i)?.id
-            var location = result?.get(i)?.location
-            var matchingStatus = result?.get(i)?.matchingStatus
             var maxMatching = result?.get(i)?.maxMatching
             var orderTime = result?.get(i)?.orderTime
             var title = result?.get(i)?.title
-            var hashTags = result?.get(i)?.hashTags
+            var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryResult(chief, content, currentMatching, foodCategory, id, location, matchingStatus, maxMatching, orderTime, title, hashTags!!)
+                DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
             )
 
-            deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-            binding.deliveryRv.adapter = deliveryAdapter
-            binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            deliveryAdapter.notifyDataSetChanged()
         }
     }
 
@@ -190,7 +163,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
-            Log.d("radio",checkedId.toString() +" 선택됨")
             when(checkedId){
                 R.id.delivery_rb1->Log.d("radio","아침 선택됨")
                 R.id.delivery_rb2->Log.d("radio","점심 선택됨")
