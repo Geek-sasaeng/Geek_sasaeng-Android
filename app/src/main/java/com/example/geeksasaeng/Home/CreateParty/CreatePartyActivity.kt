@@ -13,6 +13,7 @@ import net.daum.mf.map.api.MapView
 class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
 
     lateinit var mapView : MapView
+    lateinit var mapPoint: MapPoint
 
     override fun onResume() {
         Log.d("map", "onResume")
@@ -113,17 +114,24 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyCategory2Tv.text = category
     }
 
-    override fun onLinkClicked(link: String) {
+    override fun onLinkClicked(link: String, flagNext: Boolean) {
         //사용자가 선택한 식당 링크 표시
         binding.createPartyLink2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyLink2Tv.text = link
-        binding.createPartyKakaoMapLocation.removeView(mapView) // 이제 link에서 다음을 클릭했다는 건 DialogLocation에서 지도 띄워야하니까 파티 생성하기 맵뷰는 삭제해주기
+        if(flagNext){ //링크 다이얼로그 => 위치 다이얼로그로 넘어간 경우에만 맵 삭제
+            binding.createPartyKakaoMapLocation.removeView(mapView) // 이제 link에서 다음을 클릭했다는 건 DialogLocation에서 지도 띄워야하니까 파티 생성하기 맵뷰는 삭제해주기
+        }
     }
 
     override fun onLocationClicked(loc: String, mapPoint: MapPoint) {
         //사용자가 선택한 위치 표시
         binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyLocation2Tv.text = loc
+        this.mapPoint = mapPoint
+        drawMap(mapPoint)
+    }
+
+    private fun drawMap(mapPoint: MapPoint){
         //맵 다시 띄우기
         mapView = MapView(this)
         binding.createPartyKakaoMapLocation.addView(mapView)

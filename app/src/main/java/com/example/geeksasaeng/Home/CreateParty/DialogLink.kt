@@ -14,6 +14,7 @@ import com.example.geeksasaeng.databinding.DialogLinkLayoutBinding
 class DialogLink : DialogFragment() {
     lateinit var binding: DialogLinkLayoutBinding
     private var dialogLinkNextClickListener: DialogLinkNextClickListener? =null
+    var flagNext : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +38,7 @@ class DialogLink : DialogFragment() {
 
     //frag->Activity 정보전달용 코드 시작
     interface DialogLinkNextClickListener{
-        fun onLinkClicked(link:String)
+        fun onLinkClicked(link:String, flagNext:Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -47,8 +48,10 @@ class DialogLink : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        //frag-> activity 정보전달
-        dialogLinkNextClickListener?.onLinkClicked("식당링크")
+        if(flagNext==false){ //다음버튼을 안클릭하고 빠져나오는 경우(다이얼로그 바깥부분 터치시)
+            //frag-> activity 정보전달
+            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
+        }
         dialogLinkNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -57,11 +60,12 @@ class DialogLink : DialogFragment() {
 
         binding.linkDialogNextBtn.setOnClickListener { //다음버튼
 
+            flagNext = true // next버튼 클릭했다고 표시
             //frag-> activity 정보전달
             if (binding.locationDialogSearchEt.text.toString()!=""){
-                dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString())
-            }else{
-                dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요")
+                dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
+            }else{ //아무것도 입력 안했을 때
+                dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
             }
 
             //다음 다이얼로그 띄우기
@@ -87,7 +91,8 @@ class DialogLink : DialogFragment() {
         binding.stepFourSkipBtn.setOnClickListener {
 
             //frag-> activity 정보전달
-            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요")
+            flagNext = true
+            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
 
             //다음 다이얼로그 띄우기
             val dialogLocation = DialogLocation()
