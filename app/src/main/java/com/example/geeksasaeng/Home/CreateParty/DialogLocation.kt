@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +26,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPoint.GeoCoordinate
 import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
+import net.daum.mf.map.gen.KakaoMapLibraryAndroidMeta
+import java.nio.file.Files.find
 import java.util.*
 
 
@@ -43,6 +47,8 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSIONS_REQUEST_CODE = 100
     lateinit var geocoder : Geocoder
+    lateinit var mapView : MapView
+    lateinit var mapPoint: MapPoint
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)
@@ -62,7 +68,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
     //frag->Activity 정보전달용 코드 시작
     interface DialogLocationNextClickListener{
-        fun onLocationClicked(text:String)
+        fun onLocationClicked(loc:String, mapPoint: MapPoint)
     }
 
     override fun onAttach(context: Context) {
@@ -72,12 +78,18 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
     override fun onDetach() {
         super.onDetach()
+        Log.d("map", "Detached")
+        //frag-> activity 정보전달
+        LocationString = binding.locationDialogLocTv.text.toString()
+        binding.locationDialogKakaoMapView.removeView(mapView)
+        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint)
+
         dialogLocationNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
 
     private fun ininKakaoMap(){
-        val mapView = MapView(activity)
+        mapView = MapView(activity)
         binding.locationDialogKakaoMapView.addView(mapView)
         mapView.setMapViewEventListener(this)
 /*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
@@ -101,7 +113,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
                     val lat: Double = address.getLatitude() //위도
                     val lon: Double = address.getLongitude() //경도
                     Log.d("adr", lat.toString()+"/"+lon.toString())
-                    val mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon)
+                    mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon)
                     //마커생성
                     val marker = MapPOIItem()
                     marker.itemName = "요기?"
@@ -229,9 +241,6 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     private fun initClickListener(){
         binding.locationDialogNextBtn.setOnClickListener {
             //마지막 페이지이므로 그냥 종료
-            //frag-> activity 정보전달
-            LocationString = binding.locationDialogSearchEt.text.toString()
-            dialogLocationNextClickListener?.onLocationClicked(LocationString)
 
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
@@ -244,6 +253,15 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+        }
+
+        binding.locationDialogSearchEt.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                binding.locationDialogSearchBtn.performClick()
+                true
+            }else{
+                false
+            }
         }
     }
 

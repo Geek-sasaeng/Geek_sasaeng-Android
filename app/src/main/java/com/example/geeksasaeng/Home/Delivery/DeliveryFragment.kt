@@ -269,6 +269,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
         }*/
         deliveryBannerAdapter = BannerVPAdapter(this)
+        //더미 img url
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
 

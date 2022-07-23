@@ -58,8 +58,11 @@ class DialogLink : DialogFragment() {
         binding.linkDialogNextBtn.setOnClickListener { //다음버튼
 
             //frag-> activity 정보전달
-            dialogLinkNextClickListener?.onLinkClicked("식당링크")
-
+            if (binding.locationDialogSearchEt.text.toString()!=""){
+                dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString())
+            }else{
+                dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요")
+            }
 
             //다음 다이얼로그 띄우기
             val dialogLocation = DialogLocation()
@@ -70,14 +73,27 @@ class DialogLink : DialogFragment() {
                 ?.remove(this)?.commit()
         }
 
-        //뒤로가기 버튼
-        binding.linkDialogBackBtn.setOnClickListener {
+        binding.linkDialogBackBtn.setOnClickListener { //뒤로가기 버튼
 
             //이전 다이얼로그 실행
             val dialogCategory = DialogCategory()
             dialogCategory.show(parentFragmentManager, "CustomDialog")
 
             //자기자신(현 다이얼로그)은 종료 => 종료가 안되는 것 같기두..?
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+        }
+
+        binding.stepFourSkipBtn.setOnClickListener {
+
+            //frag-> activity 정보전달
+            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요")
+
+            //다음 다이얼로그 띄우기
+            val dialogLocation = DialogLocation()
+            dialogLocation.show(parentFragmentManager, "CustomDialog")
+
+            //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this)?.commit()
         }

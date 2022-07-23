@@ -8,7 +8,7 @@ class BannerVPAdapter(fragment:Fragment) :FragmentStateAdapter(fragment) {
 
     private val fragmentlist : ArrayList<Fragment> = ArrayList()
 
-    override fun getItemCount(): Int = fragmentlist.size
+    override fun getItemCount(): Int = Int.MAX_VALUE //무한 스크롤
 
     override fun createFragment(position: Int): Fragment = fragmentlist[position%fragmentlist.size]
 

@@ -42,6 +42,7 @@
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_0"
             android:textSize="15sp"
+            android:inputType="text"
             android:maxLines="1"
             android:fontFamily="@font/spoqa_regular"
             app:layout_constraintStart_toStartOf="parent"
