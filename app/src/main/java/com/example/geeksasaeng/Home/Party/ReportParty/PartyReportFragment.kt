@@ -39,12 +39,12 @@ class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(Frag
     private fun changeActivity(option: Int, reportContent: String) {
         when(option) {
             0 -> {
-                val intent = Intent(activity, DeliveryPartyReportOptionActivity::class.java)
+                val intent = Intent(activity, PartyReportOptionActivity::class.java)
                 intent.putExtra("reportContent", reportContent)
                 startActivity(intent)
             }
             1 -> {
-                val intent = Intent(activity, DeliveryPartyReportNoOptionActivity::class.java)
+                val intent = Intent(activity, PartyReportNoOptionActivity::class.java)
                 intent.putExtra("reportContent", reportContent)
                 startActivity(intent)
             }

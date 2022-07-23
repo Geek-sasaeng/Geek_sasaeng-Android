@@ -41,9 +41,9 @@
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
-        <activity android:name=".Home.Party.ReportParty.DeliveryPartyReportOptionActivity"
+        <activity android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Home.Party.ReportParty.DeliveryPartyReportNoOptionActivity"
+        <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <!--카카오맵 APP KEY 추가-->

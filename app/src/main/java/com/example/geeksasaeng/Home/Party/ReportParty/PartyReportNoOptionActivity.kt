@@ -1,9 +1,9 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
 import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.databinding.ActivityDeliveryPartyReportNoOptionBinding
+import com.example.geeksasaeng.databinding.ActivityPartyReportNoOptionBinding
 
-class DeliveryPartyReportNoOptionActivity: BaseActivity<ActivityDeliveryPartyReportNoOptionBinding>(ActivityDeliveryPartyReportNoOptionBinding::inflate) {
+class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBinding>(ActivityPartyReportNoOptionBinding::inflate) {
     override fun initAfterBinding() {
         initClickListener()
 

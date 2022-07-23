@@ -45,8 +45,9 @@ class DialogDeliveryOptionPopup: DialogFragment() {
         binding.deliveryOptionDeleteTv.setOnClickListener {
             // 삭제하기
             this.dismiss()
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, PartyDeleteFragment()).addToBackStack("partyDelete").commit()
+
+            val dialog = DialogPartyDelete()
+            dialog.show(parentFragmentManager, "DialogPartyDelete")
         }
 
         binding.deliveryOptionReportTv.setOnClickListener {

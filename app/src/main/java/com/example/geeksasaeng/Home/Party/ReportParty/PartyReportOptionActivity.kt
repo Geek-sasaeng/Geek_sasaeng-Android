@@ -5,9 +5,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.databinding.ActivityDeliveryPartyReportOptionBinding
+import com.example.geeksasaeng.databinding.ActivityPartyReportOptionBinding
 
-class DeliveryPartyReportOptionActivity: BaseActivity<ActivityDeliveryPartyReportOptionBinding>(ActivityDeliveryPartyReportOptionBinding::inflate) {
+class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate) {
     override fun initAfterBinding() {
         initClickListener()
 
