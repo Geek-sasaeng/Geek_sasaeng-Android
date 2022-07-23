@@ -38,7 +38,7 @@ import java.nio.file.Files.find
 import java.util.*
 
 
-class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
+class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
     lateinit var binding: DialogLocationLayoutBinding
     private var dialogLocationNextClickListener: DialogLocationNextClickListener? =null
@@ -92,6 +92,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
         mapView = MapView(activity)
         binding.locationDialogKakaoMapView.addView(mapView)
         mapView.setMapViewEventListener(this)
+        mapView.setPOIItemEventListener(this)
 /*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
@@ -113,7 +114,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
                     val lat: Double = address.getLatitude() //위도
                     val lon: Double = address.getLongitude() //경도
                     Log.d("adr", lat.toString()+"/"+lon.toString())
-                    mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon)
+                    this.mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon) // 서치하면 맵포인트 설정됨
                     //마커생성
                     val marker = MapPOIItem()
                     marker.itemName = "요기?"
@@ -298,6 +299,46 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+
+    }
+
+
+    // 마커 아이템 관련 이벤트 메소드
+    override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
+
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(p0: MapView?, p1: MapPOIItem?) {
+
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(
+        p0: MapView?,
+        p1: MapPOIItem?,
+        p2: MapPOIItem.CalloutBalloonButtonType?
+    ) {
+
+    }
+
+    //마커이동시 호출됨
+    override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
+        //!!
+        Log.d("map", "marker이동됨")
+        mapView!!.setMapCenterPoint(p2, true)//지도 중심점 변경
+        this.mapPoint = p2!! // 맵포인트 수정
+
+        //역지오코딩
+        //TODO:getAddress 함수랑 똑같은뎅,,, 코드 refactoring 필요
+        val geoCoder = Geocoder(context, Locale.KOREA)
+        var addr = "주소 오류"
+        val mapPointGeo: GeoCoordinate = p2!!.getMapPointGeoCoord()
+
+        try {
+            addr = geoCoder.getFromLocation(mapPointGeo.latitude, mapPointGeo.longitude, 1).first().getAddressLine(0)
+            binding.locationDialogLocTv.text = addr
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 }
