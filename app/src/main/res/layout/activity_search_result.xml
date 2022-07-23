@@ -5,27 +5,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/delivery_banner_vp"
-        android:layout_width="match_parent"
-        android:layout_height="86dp"
-        android:background="@drawable/round_border"
+    <EditText
+        android:id="@+id/search_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="검색어를 입력하세요"
+        android:textColorHint="@color/gray_0"
+        android:textSize="20sp"
+        android:textColor="@color/top"
+        android:layout_marginTop="29dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:maxLines="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/search_btn"/>
+
+    <ImageView
+        android:id="@+id/search_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_search"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintTop_toTopOf="@id/search_et"
+        app:layout_constraintBottom_toBottomOf="@id/search_et"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/search_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_0"
+        android:layout_marginTop="13dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
-        android:layout_marginTop="20dp" />
+        app:layout_constraintTop_toBottomOf="@id/search_et" />
 
     <ImageView
         android:id='@+id/delivery_sort_img'
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:src="@drawable/ic_sort"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@id/delivery_banner_vp"
-        app:layout_constraintStart_toStartOf="@id/delivery_banner_vp" />
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/search_line"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/delivery_people_spinner"
@@ -46,13 +72,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="28dp"
         android:scrollbars="@null"
         android:overScrollMode="never"
         app:layout_constraintTop_toTopOf="@id/delivery_people_spinner"
         app:layout_constraintBottom_toBottomOf="@id/delivery_people_spinner"
         app:layout_constraintStart_toEndOf="@id/delivery_people_spinner"
-        app:layout_constraintEnd_toEndOf="@id/delivery_banner_vp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!--아침,점심,저녁,야식 선택-->
         <LinearLayout
@@ -131,96 +157,27 @@
 
     </HorizontalScrollView>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/delivery_swipe"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/delivery_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/delivery_sort_img">
+        app:layout_constraintTop_toBottomOf="@id/delivery_sort_img"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/delivery_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="13dp"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:background="@drawable/bg_gradient"
+    <ImageView
+        android:id="@+id/search_back_logo_ic"
+        android:layout_width="72dp"
+        android:layout_height="79dp"
+        android:src="@drawable/ic_logo_search_back"
+        android:layout_marginBottom="164dp"
+        app:tint="#80F8FCFF"
+        android:tintMode="src_atop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:clickable="false"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/delivery_floating_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_floating_btn"
-        android:backgroundTint="@color/main"
-        android:layout_marginRight="18dp"
-        android:layout_marginBottom="18dp"
-        app:borderWidth="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/delivery_progress_cover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#40EFEFEF"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/delivery_swipe"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ProgressBar
-            android:id="@+id/delivery_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--
-    <androidx.cardview.widget.CardView
-        android:id="@+id/delivery_progress_cover"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/delivery_swipe"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ProgressBar
-            android:id="@+id/delivery_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.cardview.widget.CardView>
--->
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

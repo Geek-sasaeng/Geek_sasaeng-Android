@@ -11,17 +11,11 @@ data class DeliveryResponse(
 )
 
 data class DeliveryResult (
-    @SerializedName("chief") var chief: String? = "",
-    @SerializedName("content") var content: String? = "",
     @SerializedName("currentMatching") var currentMatching: Int? = 0,
     @SerializedName("foodCategory") var foodCategory: String? = "",
-    @SerializedName("id") var id: String? = "",
-    @SerializedName("location") var location: String? = "",
-    @SerializedName("matchingStatus") var matchingStatus: String? = "",
+    @SerializedName("id") var id: Int? = 0,
     @SerializedName("maxMatching") var maxMatching: Int? = 0,
     @SerializedName("orderTime") var orderTime: String? = "",
     @SerializedName("title") var title: String? = "",
-    @SerializedName("hashTags") var hashTags: Array<String?> = arrayOf()
-//    var option1: Boolean? = false,
-//    var option2: Boolean? = false,
+    @SerializedName("hasHashTag") var hasHashTag: Boolean? = null
 )

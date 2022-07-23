@@ -17,21 +17,30 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_dormitory.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_search.xml" value="0.264" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_search_Result.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_search_result.xml" value="0.2" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up.xml" value="0.18253968253968253" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_sign_up_naver.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_splash.xml" value="0.12864583333333332" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_category_layout.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_delivery_option_popup.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_dt_layout.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_location_layout.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_num_layout.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_num_layout.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_email_check.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_phone_skip.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_banner.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_chatting.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_delete.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report.xml" value="0.264" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report_no_option.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_report_option.xml" value="0.176" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_delivery_party_update.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_helper.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.4" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.152" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_market.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_profile.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.24947916666666667" />
@@ -40,14 +49,17 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_naver_one.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_naver_three.xml" value="0.1" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_naver_two.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.264" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_three.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_two.xml" value="0.4" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery.xml" value="0.4" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery_people_spinner.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery.xml" value="0.6" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_delivery_people_spinner.xml" value="1.2" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_loading.xml" value="0.20478837109876016" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_ranking_search.xml" value="0.72" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_recent_search.xml" value="1.6" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/item_signup_university_spinner.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/toast_msg_signup.xml" value="0.6" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/menu/delivery_popup_menu.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_back.xml" value="0.1225" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_background_logo.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/ic_spinner_down.xml" value="0.1" />
