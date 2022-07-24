@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="popup_width">300dp</dimen>
+    <dimen name="popup_height">400dp</dimen>
+    <dimen name="party_popup_width">206dp</dimen>
+    <dimen name="party_popup_height">237dp</dimen>
 </resources>

@@ -2,9 +2,32 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="22dp"
-    android:paddingRight="22dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/delivery_item_member_ic"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_member_blue"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delivery_item_member_number" />
+
+    <TextView
+        android:id="@+id/delivery_item_member_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spoqa_medium"
+        android:textColor="@color/main"
+        android:textSize="14sp"
+        android:text="현재 인원/모집 인원"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/delivery_item_member_ic"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_item_member_ic"
+        app:layout_constraintTop_toTopOf="@id/delivery_item_member_ic" />
 
     <TextView
         android:id="@+id/delivery_item_time"
@@ -14,106 +37,60 @@
         android:fontFamily="@font/spoqa_medium"
         android:textSize="14sp"
         android:text="00시간 00분 남았어요"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="19dp"
+        app:layout_constraintTop_toTopOf="@id/delivery_item_member_number"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_item_member_number"
+        app:layout_constraintStart_toEndOf="@id/delivery_item_member_number" />
 
     <TextView
         android:id="@+id/delivery_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:fontFamily="@font/spoqa_medium"
+        android:textSize="16sp"
+        android:fontFamily="@font/spoqa_bold"
         android:text="글 제목"
         android:ellipsize="end"
         android:maxLines="1"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/delivery_item_time"
+        android:layout_marginLeft="22dp"
+        app:layout_constraintTop_toBottomOf="@id/delivery_item_member_ic"
         app:layout_constraintStart_toStartOf="parent" />
-    
-    <ImageView
-        android:id="@+id/delivery_item_member_ic"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/ic_member_blue"
-        android:layout_marginRight="7dp"
-        app:layout_constraintTop_toTopOf="@id/delivery_item_title"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_item_title"
-        app:layout_constraintEnd_toStartOf="@id/delivery_item_member_number" />
 
     <TextView
-        android:id="@+id/delivery_item_member_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/spoqa_medium"
-        android:textColor="@color/main"
-        android:textSize="12sp"
-        android:text="현재 인원/모집 인원"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_item_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/delivery_item_title" />
-
-    <TextView
-        android:id="@+id/delivery_item_option1"
+        android:id="@+id/delivery_item_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_3"
         android:textSize="12sp"
         android:fontFamily="@font/spoqa_medium"
-        android:text="매칭 시 바로 주문"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:visibility="invisible"
-        android:layout_marginTop="20dp"
-        android:paddingRight="45dp"
+        android:text="해시태그"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="28dp"
         app:layout_constraintTop_toBottomOf="@id/delivery_item_title"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/delivery_item_option2"
+        android:id="@+id/delivery_item_hashTag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray_3"
+        android:textColor="@color/gray_0"
         android:textSize="12sp"
         android:fontFamily="@font/spoqa_medium"
         android:text="#같이 먹고 싶어요"
-        android:visibility="invisible"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toEndOf="@id/delivery_item_option1"
+        android:layout_marginStart="107dp"
+        app:layout_constraintTop_toTopOf="@id/delivery_item_category"
+        app:layout_constraintBottom_toBottomOf="@id/delivery_item_category"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/delivery_item_title" />
-
-    <ImageView
-        android:id="@+id/delivery_host_profile"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:src="@drawable/ic_default_profile"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintEnd_toStartOf="@id/delivery_host_name"
-        app:layout_constraintTop_toTopOf="@id/delivery_item_option1"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_item_option1" />
-
-    <TextView
-        android:id="@+id/delivery_host_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="글쓴이"
-        android:textColor="@color/gray_3"
-        app:layout_constraintTop_toTopOf="@id/delivery_host_profile"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_host_profile"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="23dp"
         android:background="@color/gray_0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/delivery_item_option1" />
+        app:layout_constraintTop_toBottomOf="@id/delivery_item_category" />
     
 </androidx.constraintlayout.widget.ConstraintLayout>
