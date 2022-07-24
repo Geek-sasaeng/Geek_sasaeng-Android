@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Home.CreateParty.CreatePartyActivity"
+            android:name="com.example.geeksasaeng.Home.Party.CreateParty.CreatePartyActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

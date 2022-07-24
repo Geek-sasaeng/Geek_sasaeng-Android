@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty
+package com.example.geeksasaeng.Home.Party.CreateParty
 
 import android.content.Context
 import android.graphics.Color

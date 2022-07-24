@@ -24,6 +24,7 @@ class DialogDeliveryOptionPopup: DialogFragment() {
         initListener()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
+        dialog?.window?.setWindowAnimations(R.style.AnimationPopupStyle)
         return binding.root
     }
 

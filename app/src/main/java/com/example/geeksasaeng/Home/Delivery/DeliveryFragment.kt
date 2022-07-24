@@ -13,12 +13,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
-import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
     private var deliveryArray = ArrayList<DeliveryResult?>()
@@ -31,6 +34,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
+    var nowTime: Long = 0
+    var date: Date? = null
+    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -46,6 +52,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
+        // showToast(initTimer())
 
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
@@ -63,6 +70,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
+    }
+
+    private fun initTimer(): String {
+        nowTime = System.currentTimeMillis();
+        date = Date(nowTime)
+        return dateFormat.format(date)
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우

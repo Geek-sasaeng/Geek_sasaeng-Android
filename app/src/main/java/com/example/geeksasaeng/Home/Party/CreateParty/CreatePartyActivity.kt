@@ -1,6 +1,5 @@
-package com.example.geeksasaeng.Home.CreateParty
+package com.example.geeksasaeng.Home.Party.CreateParty
 
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
