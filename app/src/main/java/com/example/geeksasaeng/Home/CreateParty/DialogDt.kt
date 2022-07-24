@@ -14,7 +14,9 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
 import java.util.*
 
@@ -22,8 +24,11 @@ class DialogDt : DialogFragment() {
     lateinit var binding: DialogDtLayoutBinding
     private var dialogDtNextClickListener: DialogDtNextClickListener? =null
     var dateString = ""
+    var dateString2 = ""
     var timeString = ""
-    var orderNow : Boolean = false
+    var timeString2 = ""
+
+    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +38,20 @@ class DialogDt : DialogFragment() {
     {
         binding = DialogDtLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        initData()
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        //사용자가 입력해둔 정보 있으면, 그걸 default값으로 설정해주기 위함 (사용자가 입력해둔 정보 유무는 ViewModel에 저장되어 있는지 여부로 결정)
+        if((createPartyVM.getDate().toString()!="null") && (createPartyVM.getTime().toString()!="null")){
+            Log.d("dialogDT", createPartyVM.getDate().toString()+createPartyVM.getTime().toString())
+            dateString =createPartyVM.getDate().toString()
+            timeString =createPartyVM.getTime().toString()
+            binding.dateDialogDateTv.text = createPartyVM.getDate().toString()
+            binding.dateDialogTimeTv.text = createPartyVM.getTime().toString()
+        }
     }
 
     override fun onResume() {
@@ -57,9 +74,10 @@ class DialogDt : DialogFragment() {
         dialog?.window?.setLayout(width,height)
     }
 
-    //frag->Activity 정보전달용 코드 시작
     interface DialogDtNextClickListener{
-        fun onDtClicked(text:String, orderNow:Boolean)
+        //TODO: 뷰모델 이용하면서 사실 여기서 매개변수로 안넘겨줘도 ACTIVITY에서 값 알 수 있어..
+        //TODO: 근데 이걸 하는 이유는 정보 갱신을 위함.
+        fun onDtClicked(date:String, time:String)
     }
 
     override fun onAttach(context: Context) {
@@ -69,9 +87,10 @@ class DialogDt : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
+        dialogDtNextClickListener?.onDtClicked(dateString, timeString)//frag-> activity 정보전달
+        createPartyVM.setDateTime(dateString2+" "+ timeString2) //TODO:이러면 근데 "" 빈 문자열이 저장될 수 도 있는뎅..
         dialogDtNextClickListener = null
     }
-    //frag->Activity 정보전달용 코드 끝
 
     private fun initClickListener(){
         binding.dateDialogDateTv.setOnClickListener { //날짜 정보
@@ -79,57 +98,38 @@ class DialogDt : DialogFragment() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 dateString = "${month+1}월 ${dayOfMonth}일"
+                dateString2 = "${year}-${month}-${dayOfMonth}"
                 Log.d("dialog", dateString)
                 binding.dateDialogDateTv.text = dateString
+                createPartyVM.setDate(dateString)
             }
             DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(
                 Calendar.DAY_OF_MONTH)).show()
         }
 
         binding.dateDialogTimeTv.setOnClickListener { //시간 정보
-            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+            val cal = Calendar.getInstance()   //캘린더뷰 만들기
             //TimePicker
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 timeString = "${hourOfDay}시 ${minute}분"
+                timeString2 = "${hourOfDay}:${minute}:30" //TODO:임의로 그냥 초는 30초로 해둠.. 상관 없겠징? ㅎㅎ
                 binding.dateDialogTimeTv.text = timeString
+                createPartyVM.setTime(timeString)
             }
             TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
 
         }
 
-        //체크버튼
-        binding.dateDialogImmediateCheckBtn.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
-                orderNow = true
-            }else{
-                binding.dateDialogImmediateTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
-                orderNow = false
-            }
-        }
-
-        //텍스트뷰 클릭해도
-        binding.dateDialogImmediateTv.setOnClickListener {
-            //체크 해제, 체크 작업 하기 위함
-            binding.dateDialogImmediateCheckBtn.isChecked = !binding.dateDialogImmediateCheckBtn.isChecked
-        }
 
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
-            if(dateString!=""&&timeString!=""){
-                //frag-> activity 정보전달
-                dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString, orderNow)
 
-                //다음 다이얼로그 띄우기
-                val dialogNum = DialogNum()
-                dialogNum.show(parentFragmentManager, "CustomDialog")
+            //다음 다이얼로그 띄우기
+            val dialogNum = DialogNum()
+            dialogNum.show(parentFragmentManager, "CustomDialog")
 
-                //자기는 종료
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.remove(this)?.commit()
-
-            }else{
-                Toast.makeText(requireContext(), "시간을 지정해주세요", Toast.LENGTH_SHORT).show()
-            }
+            //자기는 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
         }
     }
 

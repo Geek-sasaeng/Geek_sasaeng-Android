@@ -49,10 +49,9 @@
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
 
         <!--카카오맵 APP KEY 추가-->
-        <!--<meta-data
+        <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="${kakaoNativeAppKey}"
-            />-->
+            android:value="${kakaoNativeAppKey}" />
 
     </application>
 

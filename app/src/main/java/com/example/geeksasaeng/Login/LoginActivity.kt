@@ -162,8 +162,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
             login()
-            // login(false)
-            // changeActivity(MainActivity::class.java)
+            /*login(false)
+            changeActivity(MainActivity::class.java)*/
         }
 
         binding.loginNaverBtn.setOnClickListener {
