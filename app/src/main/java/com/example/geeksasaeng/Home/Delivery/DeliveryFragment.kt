@@ -1,13 +1,11 @@
 package com.example.geeksasaeng.Home.Delivery
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,16 +17,15 @@ import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
+import com.example.geeksasaeng.Home.Party.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
+
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
     private var deliveryArray = ArrayList<DeliveryResult?>()
@@ -68,11 +65,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            // 디버깅용
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, LookPartyFragment()).addToBackStack("lookParty").commit()
-            // val intent = Intent(context, CreatePartyActivity::class.java)
-            // startActivity(intent)
+            val intent = Intent(context, CreatePartyActivity::class.java)
+            startActivity(intent)
         }
 
         if (totalCursor == 0)
@@ -188,6 +182,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         val deliveryDataService = DeliveryService()
         deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
+
         totalCursor += 1
     }
 
@@ -196,13 +191,18 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: DeliveryResult, pos : Int) {
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_frm, LookPartyFragment())?.addToBackStack("lookParty")?.commit()
+            }
+        })
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
         val result = response.result
         val size = result!!.size
-        Log.d("DELIVERY-RESPONSE", "size = $size")
 
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching

@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party
 
+import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.MainActivity
@@ -12,6 +13,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         // 파티 수정하기, 신고하기 Stack에서 제거
         (context as MainActivity).supportFragmentManager.popBackStack("partyUpdate", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         (context as MainActivity).supportFragmentManager.popBackStack("partyReport", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+        val deliveryData: Parcelable? = arguments?.getParcelable("DeliveryData")
     }
 
     private fun initClickListener(){
