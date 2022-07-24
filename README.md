@@ -1,7 +1,7 @@
 # 기숙사 생을 위한 토탈 플랫폼 어플, 긱사생 🏘️
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Swift-v5.0-red?logo=swift" />
+    <img src="https://img.shields.io/badge/Kotlin-v1.6.21-red?logo=Kotlin" />
     <img src="https://img.shields.io/badge/Xcode-v13.4.1-blue?logo=Xcode" />
     <img src="https://img.shields.io/badge/iOS-14.0+-black?logo=android" />  
 
