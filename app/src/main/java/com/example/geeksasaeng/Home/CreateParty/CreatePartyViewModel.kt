@@ -60,7 +60,7 @@ class CreatePartyViewModel: ViewModel() {
     }
 
     fun getMaxMatching() : Int?{
-        return Integer.parseInt(maxMatching.value.toString())
+        return maxMatching.value
     }
 
     fun setCategory(value: String?){

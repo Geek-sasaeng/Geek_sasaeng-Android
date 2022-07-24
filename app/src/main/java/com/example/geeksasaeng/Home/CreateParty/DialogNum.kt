@@ -25,9 +25,19 @@ class DialogNum: DialogFragment() {
     {
         binding = DialogNumLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        initData()
         initNumberPicker()
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        //사용자가 입력해둔 정보 있으면, 그걸 default값으로 설정해주기 위함 (사용자가 입력해둔 정보 유무는 ViewModel에 저장되어 있는지 여부로 결정)
+        Log.d("dialogNum", createPartyVM.getMaxMatching().toString())
+        if(createPartyVM.getMaxMatching().toString()!="null"){
+            numString = createPartyVM.getMaxMatching().toString() //numString값에 원래 저장되어있던 값 지정
+            Log.d("dialogNum", createPartyVM.getMaxMatching()!!.toInt().toString())
+        }
     }
 
     override fun onResume() {
@@ -61,14 +71,12 @@ class DialogNum: DialogFragment() {
         binding.numDialogPicker.maxValue = 10
         binding.numDialogPicker.wrapSelectorWheel = false
         binding.numDialogPicker.displayedValues = numArray
-
+        binding.numDialogPicker.value = numString.toInt() // numberPicker 초기값 설정하기
     }
 
     private fun initClickListener(){
         //다음버튼
         binding.numDialogNextBtn.setOnClickListener {
-            //frag-> activity 정보전달
-            dialogNumNextClickListener?.onNumClicked(numString+"명")
             //다음 다이얼로그 띄우기
             val dialogCategory = DialogCategory()
             dialogCategory.show(parentFragmentManager, "CustomDialog")
@@ -82,6 +90,7 @@ class DialogNum: DialogFragment() {
             //oldVal 변동전 값, newVal이 변동 후의 값
             Log.d("test", "oldVal : ${oldVal}, newVal : $newVal")
             numString = newVal.toString()
+            createPartyVM.setMaxMatching(newVal) // VM에 저장
         }
 
         //뒤로가기 버튼
