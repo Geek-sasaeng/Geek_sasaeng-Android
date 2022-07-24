@@ -14,7 +14,7 @@
         <a href="https://github.com/EunsuSeo01">
           <img src="https://user-images.githubusercontent.com/87434861/176502862-88891bc8-446e-4543-a5f1-5f12b73b5c1c.PNG" width=200/>
           <br>
-          <center>Android Developer-루나/고지만</center>
+          <center>Android Developer-루나/고지민</center>
         </a>
       </td>
       <td>
