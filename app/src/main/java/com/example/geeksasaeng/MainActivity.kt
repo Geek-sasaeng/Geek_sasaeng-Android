@@ -11,12 +11,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun initAfterBinding() {
         setFragment(R.id.main_frm, HomeFragment())
-        /*getAppKeyHash()*/ //카카오맵 해시키 얻는 용
+        //getAppKeyHash() //카카오맵 해시키 얻는 용
         setBottomNavi()
     }
 
-/*    //해시키 얻는 코드드
-   private fun getAppKeyHash() {
+    //해시키 얻는 코드드
+/*   private fun getAppKeyHash() {
         try {
             val info =
                 packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
