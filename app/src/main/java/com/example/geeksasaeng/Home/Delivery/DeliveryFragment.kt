@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -45,6 +46,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        // 모든 fragment stack 제거
+        clearBackStack()
+
         binding.deliveryProgressCover.visibility = View.GONE
 
         initBanner() //배너작업
@@ -61,7 +65,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryFloatingBtn.setOnClickListener {
             // 디버깅용
             (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, LookPartyFragment()).commit()
+                .replace(R.id.main_frm, LookPartyFragment()).addToBackStack("lookParty").commit()
             // val intent = Intent(context, CreatePartyActivity::class.java)
             // startActivity(intent)
         }
@@ -290,5 +294,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun onDestroy() {
         super.onDestroy()
         thread.interrupt() //쓰레드 중지
+    }
+
+    fun clearBackStack() {
+        val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }

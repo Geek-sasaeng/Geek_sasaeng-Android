@@ -50,10 +50,4 @@ class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(Frag
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-//        (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
-//        (context as MainActivity).supportFragmentManager.popBackStack();
-    }
 }

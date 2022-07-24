@@ -33,24 +33,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }*/
 
-    open interface onKeyBackPressedListener {
-        fun onBackKey()
-    }
-
-    private var mOnKeyBackPressedListener: onKeyBackPressedListener? = null
-
-    fun setOnKeyBackPressedListener(listener: onKeyBackPressedListener?) {
-        mOnKeyBackPressedListener = listener
-    }
-
-    override fun onBackPressed() {
-        if (mOnKeyBackPressedListener != null) {
-            mOnKeyBackPressedListener!!.onBackKey();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private fun setBottomNavi() {
         binding.mainBottomNavi.setOnItemSelectedListener { item ->
             when (item.itemId) {

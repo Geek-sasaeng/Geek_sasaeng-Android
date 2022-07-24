@@ -10,10 +10,4 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     override fun initAfterBinding() {
 
     }
-
-    override fun onStop() {
-        super.onStop()
-        (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
-        (context as MainActivity).supportFragmentManager.popBackStack()
-    }
 }
