@@ -42,7 +42,6 @@ import net.daum.mf.map.gen.KakaoMapLibraryAndroidMeta
 import java.nio.file.Files.find
 import java.util.*
 
-
 class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
     MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
@@ -67,8 +66,19 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
         binding.locationDialogLocTv.isSelected = true
         ininKakaoMap()
+        initData() //꼭 카카오맵 뒤에 있어야함
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        if(createPartyVM.getMapPoint().toString()!="null"){ // 이미 입력되어있는 mapPoint가 있으면 띄워주기
+            drawMap(createPartyVM.getMapPoint()!!)
+            setAddress(createPartyVM.getMapPoint()!!)
+        }else { // 디폴트로 맵 그려주기
+            //TODO: DormitoryId는 어디서 얻어오지?
+            createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
+        }
     }
 
     override fun onResume() {
@@ -95,7 +105,11 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
             locFlag = true // locFlag가 true면 정보를 바꿔주기 위함이다.
         }
         LocationString = binding.locationDialogLocTv.text.toString() // 지금 현재 정보 (주소: ~~ 기준) 가져오기
-        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint, locFlag) //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
+
+        //TODO: 사실 얘도 VM에 있어서 인자로 넘겨줄 필요가 없긴한뎅,,,,
+        dialogLocationNextClickListener?.onLocationClicked(LocationString, createPartyVM.getMapPoint()!!, locFlag) //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
+        //지금 맵포인트는 초기에 기숙사 deafult위치 불러올때랑, 검색했을때, 마커옮겼을때 정의되므로, (LocationString, mapPoint, locFlag) 이 매개변수 대신에 VM이용
+
         binding.locationDialogKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
         dialogLocationNextClickListener = null
     }
@@ -104,7 +118,6 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
     private fun ininKakaoMap(){
         createPartyService = CreatePartyService() //서비스 객체 생성
         createPartyService.setCreatePartyDefaultLocView(this)
-        createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
 
         //현위치 트래킹
 /*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
@@ -114,50 +127,15 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
             checkRunTimePermission();
         }*/
         geocoder = Geocoder(requireContext()) //지오코더 객체 획득
-
-        //서치버튼
-        binding.locationDialogSearchBtn.setOnClickListener {
-            //TODO: 서치시 이전 핀 없애주기
-            mapView.removePOIItem(marker) // 원래있던 마커 없애주기
-            var adr = binding.locationDialogSearchEt.text.toString() // 주소 얻어오기
-            var list = geocoder.getFromLocationName(adr, 10)
-
-            if (list != null) {
-                if (list.size == 0) {
-                    binding.locationDialogLocTv.setText("올바른 주소를 입력해주세요. ")
-                } else {
-                    val address: Address = list[0]
-                    val lat: Double = address.getLatitude() //위도
-                    val lon: Double = address.getLongitude() //경도
-                    Log.d("adr", lat.toString()+"/"+lon.toString())
-                    this.mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon) // 서치하면 맵포인트 설정됨
-                    //마커생성
-                    marker = MapPOIItem()
-                    marker.itemName = "요기?"
-                    marker.mapPoint = mapPoint
-                    marker.markerType = MapPOIItem.MarkerType.BluePin
-                    marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-                    marker.isDraggable = true //드래그 가능하게 만들기
-
-                    mapView.addPOIItem(marker)
-                    mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
-
-                    //Reverse Geo-Coding
-                    getAddress(address)
-
-                }
-            }
-
-       }
     }
 
     //위도 경도로 주소 구하는 Reverse-GeoCoding
-    private fun getAddress(position: Address) {
+    private fun setAddress(position: MapPoint) { // tv에 text설정까지 이 함수에서 해준다.
         val geoCoder = Geocoder(context, Locale.KOREA)
         var addr = "주소 오류"
 
         try {
-            addr = geoCoder.getFromLocation(position.latitude, position.longitude, 1).first().getAddressLine(0)
+            addr = geoCoder.getFromLocation(position.mapPointGeoCoord.latitude, position.mapPointGeoCoord.longitude, 1).first().getAddressLine(0)
             binding.locationDialogLocTv.text = addr
         } catch (e: Exception) {
             e.printStackTrace()
@@ -279,6 +257,41 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
                 false
             }
         }
+
+        //서치버튼
+        binding.locationDialogSearchBtn.setOnClickListener {
+            //TODO: 서치시 이전 핀 없애주기
+            mapView.removePOIItem(marker) // 원래있던 마커 없애주기
+            var adr = binding.locationDialogSearchEt.text.toString() // 주소 얻어오기
+            var list = geocoder.getFromLocationName(adr, 10)
+
+            if (list != null) {
+                if (list.size == 0) {
+                    binding.locationDialogLocTv.setText("올바른 주소를 입력해주세요. ")
+                } else {
+                    val address: Address = list[0]
+                    val lat: Double = address.getLatitude() //위도
+                    val lon: Double = address.getLongitude() //경도
+                    Log.d("adr", lat.toString()+"/"+lon.toString())
+                    this.mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon) // 서치하면 맵포인트 설정됨 (mapPoint 이때 정의됨)
+                    createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
+                    //마커생성
+                    marker = MapPOIItem()
+                    marker.itemName = "요기?"
+                    marker.mapPoint = mapPoint
+                    marker.markerType = MapPOIItem.MarkerType.BluePin
+                    marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                    marker.isDraggable = true //드래그 가능하게 만들기
+
+                    mapView.addPOIItem(marker)
+                    mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
+
+                    //Reverse Geo-Coding
+                    setAddress(this.mapPoint)
+
+                }
+            }
+        }
     }
 
     override fun onMapViewInitialized(p0: MapView?) {
@@ -341,32 +354,25 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
         Log.d("map", "marker이동됨")
         mapView!!.setMapCenterPoint(p2, true)//지도 중심점 변경
         this.mapPoint = p2!! // 맵포인트 수정
+        createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
 
         //역지오코딩
-        //TODO:getAddress 함수랑 똑같은뎅,,, 코드 refactoring 필요
-        val geoCoder = Geocoder(context, Locale.KOREA)
-        var addr = "주소 오류"
-        val mapPointGeo: GeoCoordinate = p2!!.getMapPointGeoCoord()
-
-        try {
-            addr = geoCoder.getFromLocation(mapPointGeo.latitude, mapPointGeo.longitude, 1).first().getAddressLine(0)
-            binding.locationDialogLocTv.text = addr
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        setAddress(p2)
 
     }
 
     override fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult) {
         this.mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude) // default로 맵포인트 설정됨
-        drawMap(mapPoint)
+        createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
+        drawMap(mapPoint) // 지도 그리기
+        setAddress(mapPoint) //tv에 주소 띄우기
     }
 
     override fun onDefaultLocFailure() {
     }
 
     private fun drawMap(mapPoint: MapPoint){
-        //맵 다시 띄우기
+        //맵  띄우기
         mapView = MapView(activity)
         binding.locationDialogKakaoMapView.addView(mapView)
         //마커생성

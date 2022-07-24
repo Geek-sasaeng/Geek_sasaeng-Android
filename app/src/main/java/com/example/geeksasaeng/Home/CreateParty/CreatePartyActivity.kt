@@ -108,7 +108,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     override fun onDtClicked(date: String, time: String) {
         //사용자가 선택한 날짜 표시
         binding.createPartyDate2Tv.setTextColor(ContextCompat.getColor(this, R.color.black))
-        binding.createPartyDate2Tv.text = date+ " " + time
+        if(date==""||time==""){ // 정보가 하나라도 부족하면
+            binding.createPartyDate2Tv.text = "주문 예정 시간을 입력해주세요"
+        }else{
+            binding.createPartyDate2Tv.text = date+ " " + time
+        }
 
         //파란색 버튼 없애고 회색버튼으로 띄우기
         binding.createPartyDate2Tv.visibility = View.VISIBLE
@@ -137,13 +141,12 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     override fun onLocationClicked(loc: String, mapPoint: MapPoint, locFlag: Boolean) {
+        //locFlag가 아마 다이얼로그 바깥을 클릭했는지 , 완료로 탈출했는지 여부를 알려주는 걸꺼야
+        //TODO: 내 생각엔 여기선 다이얼로그 바깥 클릭해서 탈출 못하게 하면 안되나?
         //사용자가 선택한 위치 표시
         binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
-        if(locFlag){ // 정보를 바꾸고 싶을때만 바꾸기 위함
-            binding.createPartyLocation2Tv.text = loc
-            this.mapPoint = mapPoint
-        }
-        drawMap(mapPoint)
+        binding.createPartyLocation2Tv.text = loc
+        drawMap(createPartyVM.getMapPoint()!!)
     }
 
     private fun drawMap(mapPoint: MapPoint){

@@ -14,7 +14,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogLinkLayoutBinding
 
 //next랑 다이얼로그 바깥 누를 때만 정보 저장 (onlinkClicked이용해 ACTIVITY에 바로 반영해주기, VM에도 정보 갱신 필요)
-//건너뛰기 누르면 저장 xx
+//건너뛰기 누르면 저장 xx??
 //만약에 식당링크에 '파스타집이야 노원점' 어때요? 배달의민족 앱에서 확인해보세요.  https://baemin.me/yRFZwgPmlJ 이렇게 있었다면,,
 //다시 수정하려고 클릭하면, '파스타집이야 노원점' 어때요? 배달의민족 앱에서 확인해보세요.  https://baemin.me/yRFZwgPmlJ 이게 EDITTEXT에 떠있는 상태라는 건데,,
 //여기서 건너뛰기를 누르면 어떻게 해줘야해?
@@ -67,11 +67,20 @@ class DialogLink : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
+
+        //다음 다이얼로그 띄우기전에 이 작업 필요
         if(binding.locationDialogSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
             dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
             createPartyVM.setStoreUrl(binding.locationDialogSearchEt.text.toString())
-        }else{
+        }else{ //아무것도 없다면
             dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
+            createPartyVM.setStoreUrl(null)
+        }
+
+        if(flagNext){
+            //다음 다이얼로그 띄우기
+            val dialogLocation = DialogLocation()
+            dialogLocation.show(parentFragmentManager, "CustomDialog")
         }
         dialogLinkNextClickListener = null
     }
@@ -82,11 +91,6 @@ class DialogLink : DialogFragment() {
         binding.linkDialogNextBtn.setOnClickListener { //다음버튼
 
             flagNext = true // next버튼 클릭했다고 표시
-
-            //다음 다이얼로그 띄우기
-            val dialogLocation = DialogLocation()
-            dialogLocation.show(parentFragmentManager, "CustomDialog")
-
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this)?.commit()
@@ -103,15 +107,9 @@ class DialogLink : DialogFragment() {
                 ?.remove(this)?.commit()
         }
 
-        binding.stepFourSkipBtn.setOnClickListener {
+        binding.stepFourSkipBtn.setOnClickListener { //건너뛰기 버튼 (수행하는게 다음이랑 똑같다.)
 
-            //frag-> activity 정보전달
-            flagNext = true
-
-            //다음 다이얼로그 띄우기
-            val dialogLocation = DialogLocation()
-            dialogLocation.show(parentFragmentManager, "CustomDialog")
-
+            flagNext = true // next버튼 클릭했다고 표시
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this)?.commit()
