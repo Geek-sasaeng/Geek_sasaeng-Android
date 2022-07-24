@@ -19,7 +19,7 @@
       </td>
       <td>
         <a href="https://github.com/lee-june-young">
-          <img src="https://user-images.githubusercontent.com/84059402/180629753-86a11609-d4fb-48b6-9ade-b2195e4cf7b6.PNG" width=200/>
+          <img src= "https://user-images.githubusercontent.com/84059402/180629867-7b01dc6d-446d-4cc5-ac08-c5c9b605779c.png" width=200/>
           <br>
           <center>Android Developer-제로/이준영</center>
         </a>
