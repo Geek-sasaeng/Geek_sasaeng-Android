@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,32 @@ class DialogCategory : DialogFragment() {
     ): View? {
         binding = DialogCategoryLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        initData()
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        Log.d("dialogCate", createPartyVM.getCategory().toString())
+        if(createPartyVM.getCategory().toString()!="null"){
+            categoryString = createPartyVM.getCategory().toString() //categoryString값에 원래 저장되어있던 값 지정
+            Log.d("categoryString", (categoryString=="패스트 푸드").toString()+"/"+categoryString+"//"+"패스트 푸드")
+            
+            //default 체크 작업
+            when(categoryString){
+                "한식"-> binding.categoryRadio1.isChecked = true
+                "중식"-> binding.categoryRadio2.isChecked = true
+                "분식"-> binding.categoryRadio3.isChecked = true
+                "회/돈까스"-> binding.categoryRadio4.isChecked = true
+                "디저트/음료"-> binding.categoryRadio5.isChecked = true
+                "양식"-> binding.categoryRadio6.isChecked = true
+                "일식"-> binding.categoryRadio7.isChecked = true
+                "치킨/피자"-> binding.categoryRadio8.isChecked = true
+                "패스트 푸드"-> binding.categoryRadio9.isChecked = true
+                "기타"-> binding.categoryRadio10.isChecked = true
+                else->{}
+            }
+        }
     }
 
     override fun onResume() {
@@ -50,7 +75,9 @@ class DialogCategory : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        dialogCategoryNextClickListener?.onCategoryClicked(categoryString)
+        if(categoryString!=""){ // 입력된 정보가 있으면
+            dialogCategoryNextClickListener?.onCategoryClicked(categoryString)
+        }
         dialogCategoryNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -59,8 +86,6 @@ class DialogCategory : DialogFragment() {
 
         //다음버튼
         binding.categoryDialogNextBtn.setOnClickListener{
-            //frag-> activity 정보전달
-            dialogCategoryNextClickListener?.onCategoryClicked(categoryString)
             //다음 다이얼로그 띄우기
             val dialogLink = DialogLink()
             dialogLink.show(parentFragmentManager, "CustomDialog")
@@ -94,6 +119,7 @@ class DialogCategory : DialogFragment() {
                 R.id.category_radio_5 -> categoryString= "디저트/음료"
                 else-> {}
             }
+            createPartyVM.setCategory(categoryString)
         }
 
         binding.categoryDialogRg2.setOnCheckedChangeListener { group, checkedId ->
@@ -105,10 +131,11 @@ class DialogCategory : DialogFragment() {
                 R.id.category_radio_6 -> categoryString= "양식"
                 R.id.category_radio_7 -> categoryString= "일식"
                 R.id.category_radio_8 -> categoryString= "치킨/피자"
-                R.id.category_radio_9 -> categoryString= "패스트 푸트"
+                R.id.category_radio_9 -> categoryString= "패스트 푸드"
                 R.id.category_radio_10 -> categoryString= "기타"
                 else-> {}
             }
+            createPartyVM.setCategory(categoryString)
         }
     }
 }
