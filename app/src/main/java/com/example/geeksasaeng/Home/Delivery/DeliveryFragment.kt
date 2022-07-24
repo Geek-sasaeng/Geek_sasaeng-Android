@@ -4,7 +4,10 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,15 +17,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
-import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView {
     private var deliveryArray = ArrayList<DeliveryResult?>()
@@ -56,7 +62,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
-        // showToast(initTimer())
 
         // 배달 파티 리스트 받아오기
         deliveryService = DeliveryService()
@@ -76,10 +81,58 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initScrollListener()
     }
 
-    private fun initTimer(): String {
+    // 오늘 날짜 계산
+    private fun calculateToday(): String {
         nowTime = System.currentTimeMillis();
         date = Date(nowTime)
         return dateFormat.format(date)
+    }
+
+    // 남은 시간 계산
+    // TODO: 흠... 실시간으로 해야하는데 흠...
+    private fun calculateTime(orderTime: String): String {
+        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
+        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
+        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
+        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
+        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
+
+        var currentTime = calculateToday()
+        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
+        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
+        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
+        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
+        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+
+        var today = Calendar.getInstance().apply {
+            set(Calendar.YEAR, todayYear)
+            set(Calendar.MONTH, todayMonth)
+            set(Calendar.DAY_OF_MONTH, todayDay)
+        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
+
+        var order = Calendar.getInstance().apply {
+            set(Calendar.YEAR, orderYear)
+            set(Calendar.MONTH, orderMonth)
+            set(Calendar.DAY_OF_MONTH, orderDay)
+        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
+
+        var remainTime = order - today
+
+        if (remainTime <= 0) {
+            return "끝끝"
+        }
+
+        var day = remainTime / (24*60*60*1000)
+        var sec = (remainTime % (24*60*60*1000)) / 1000
+        var hour = sec / 3600
+        var minute = (sec % 3600) / 60
+
+        return if (day > 0)
+            "${day}일 ${hour}시간 ${minute}분 남았어요"
+        else if (hour > 0)
+            "${hour}시간 ${minute}분 남았어요"
+        else
+            "${minute}분 남았어요"
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -161,7 +214,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
+                DeliveryResult(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()
