@@ -25,6 +25,10 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.airbnb.lottie.model.Marker
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
@@ -38,7 +42,8 @@ import java.nio.file.Files.find
 import java.util.*
 
 
-class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
+class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
+    MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
     lateinit var binding: DialogLocationLayoutBinding
     private var dialogLocationNextClickListener: DialogLocationNextClickListener? =null
@@ -50,6 +55,9 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint // TODO: 디폴트 맵포인트로 설정
     var locFlag = false // 플래그값
+    lateinit var marker : MapPOIItem
+
+    private lateinit var createPartyService: CreatePartyService
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)
@@ -79,20 +87,23 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
     override fun onDetach() {
         super.onDetach()
-        Log.d("map", "Detached")
-        //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
+        Log.d("location", binding.locationDialogLocTv.text.toString()+"Detached")
+        if(binding.locationDialogLocTv.text!="주소를 입력해주세요"&&binding.locationDialogLocTv.text!="올바른 주소를 입력해주세요. "){
+            locFlag = true // locFlag가 true면 정보를 바꿔주기 위함이다.
+        }
         LocationString = binding.locationDialogLocTv.text.toString() // 지금 현재 정보 (주소: ~~ 기준) 가져오기
+        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint, locFlag) //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
         binding.locationDialogKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
-        dialogLocationNextClickListener?.onLocationClicked(LocationString, mapPoint, locFlag)
         dialogLocationNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
 
     private fun ininKakaoMap(){
-        mapView = MapView(activity)
-        binding.locationDialogKakaoMapView.addView(mapView)
-        mapView.setMapViewEventListener(this)
-        mapView.setPOIItemEventListener(this)
+        createPartyService = CreatePartyService() //서비스 객체 생성
+        createPartyService.setCreatePartyDefaultLocView(this)
+        createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
+
+        //현위치 트래킹
 /*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
@@ -103,6 +114,8 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
 
         //서치버튼
         binding.locationDialogSearchBtn.setOnClickListener {
+            //TODO: 서치시 이전 핀 없애주기
+            mapView.removePOIItem(marker) // 원래있던 마커 없애주기
             var adr = binding.locationDialogSearchEt.text.toString() // 주소 얻어오기
             var list = geocoder.getFromLocationName(adr, 10)
 
@@ -116,7 +129,7 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
                     Log.d("adr", lat.toString()+"/"+lon.toString())
                     this.mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon) // 서치하면 맵포인트 설정됨
                     //마커생성
-                    val marker = MapPOIItem()
+                    marker = MapPOIItem()
                     marker.itemName = "요기?"
                     marker.mapPoint = mapPoint
                     marker.markerType = MapPOIItem.MarkerType.BluePin
@@ -242,7 +255,6 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
     private fun initClickListener(){
         binding.locationDialogNextBtn.setOnClickListener {
             //마지막 페이지이므로 그냥 종료
-            locFlag = true // locFlag가 true면 정보를 바꿔주기 위함이다.
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
@@ -340,5 +352,28 @@ class DialogLocation: DialogFragment(), MapView.CurrentLocationEventListener, Ma
             e.printStackTrace()
         }
 
+    }
+
+    override fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult) {
+        this.mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude) // default로 맵포인트 설정됨
+        drawMap(mapPoint)
+    }
+
+    override fun onDefaultLocFailure() {
+    }
+
+    private fun drawMap(mapPoint: MapPoint){
+        //맵 다시 띄우기
+        mapView = MapView(activity)
+        binding.locationDialogKakaoMapView.addView(mapView)
+        //마커생성
+        marker = MapPOIItem()
+        marker.itemName = "요기?"
+        marker.mapPoint = mapPoint
+        marker.isDraggable = true //드래그 가능하게 만들기
+        mapView.addPOIItem(marker)
+        mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
+        mapView.setMapViewEventListener(this)
+        mapView.setPOIItemEventListener(this)
     }
 }

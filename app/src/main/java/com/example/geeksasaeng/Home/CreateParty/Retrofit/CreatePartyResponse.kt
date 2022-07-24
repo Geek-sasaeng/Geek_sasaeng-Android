@@ -16,10 +16,6 @@ data class CreatePartyDefaultLocResult(
     @SerializedName("longitude") var longitude :Double
 )
 
-data class CreatePartyDefaultLocRequest(
-    @SerializedName("dormitoryId") val dormitoryId : Int
-)
-
 //파티 생성하기
 data class CreatePartyResponse(
     @SerializedName("code") val code: Int,

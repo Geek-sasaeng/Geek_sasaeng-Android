@@ -1,11 +1,14 @@
 package com.example.geeksasaeng.Home.CreateParty.Retrofit
 
+import android.location.Address
+import android.location.Geocoder
 import android.util.Log
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class CreatePartyService {
     //뷰 객체 생성
@@ -23,23 +26,24 @@ class CreatePartyService {
         this.createPartyView = createPartyView
     }
 
-    fun getDefaultLoc( defaultLocRequest :CreatePartyDefaultLocRequest) {
-        createPartyDataService.getDeliveryPartyDefaultLocation(defaultLocRequest).enqueue(object :
+    fun getDefaultLoc( dormitoryId : Int) {
+        createPartyDataService.getDeliveryPartyDefaultLocation(dormitoryId).enqueue(object :
             Callback<CreatePartyDefaultLocResponse> {
             override fun onResponse(
                 call: Call<CreatePartyDefaultLocResponse>,
                 response: Response<CreatePartyDefaultLocResponse>
             ) {
                 Log.d("kakaodefault", response.toString())
+                Log.d("kakaodefault", response.body()?.message.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: CreatePartyDefaultLocResponse = response.body()!!
-                    Log.d("kakaodefault- response", resp.toString())
+                    Log.d("kakaodefault", resp.toString())
                     createPartyDefaultLocView.onDefaultLocSuccess(resp.result!!)
                 }
             }
 
             override fun onFailure(call: Call<CreatePartyDefaultLocResponse>, t: Throwable) {
-
+                Log.d("kakaodefault", "onFailure 호출됨")
             }
         })
     }

@@ -23,7 +23,6 @@ class DialogDt : DialogFragment() {
     private var dialogDtNextClickListener: DialogDtNextClickListener? =null
     var dateString = ""
     var timeString = ""
-    var orderNow : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +58,7 @@ class DialogDt : DialogFragment() {
 
     //frag->Activity 정보전달용 코드 시작
     interface DialogDtNextClickListener{
-        fun onDtClicked(text:String)
+        fun onDtClicked(date:String, time:String)
     }
 
     override fun onAttach(context: Context) {
@@ -70,7 +69,7 @@ class DialogDt : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         //frag-> activity 정보전달
-        dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString)
+        dialogDtNextClickListener?.onDtClicked(dateString, timeString)
         dialogDtNextClickListener = null
     }
     //frag->Activity 정보전달용 코드 끝
@@ -103,7 +102,7 @@ class DialogDt : DialogFragment() {
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
             //frag-> activity 정보전달
-            dialogDtNextClickListener?.onDtClicked(dateString+ " " + timeString)
+            dialogDtNextClickListener?.onDtClicked(dateString, timeString)
 
 
             //다음 다이얼로그 띄우기
