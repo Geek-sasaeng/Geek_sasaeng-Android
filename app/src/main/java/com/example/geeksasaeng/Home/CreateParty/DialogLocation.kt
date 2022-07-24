@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.airbnb.lottie.model.Marker
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
@@ -58,6 +59,8 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
     lateinit var marker : MapPOIItem
 
     private lateinit var createPartyService: CreatePartyService
+
+    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutBinding.inflate(inflater, container, false)

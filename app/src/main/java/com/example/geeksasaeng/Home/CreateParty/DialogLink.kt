@@ -4,17 +4,29 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogLinkLayoutBinding
+
+//next랑 다이얼로그 바깥 누를 때만 정보 저장 (onlinkClicked이용해 ACTIVITY에 바로 반영해주기, VM에도 정보 갱신 필요)
+//건너뛰기 누르면 저장 xx
+//만약에 식당링크에 '파스타집이야 노원점' 어때요? 배달의민족 앱에서 확인해보세요.  https://baemin.me/yRFZwgPmlJ 이렇게 있었다면,,
+//다시 수정하려고 클릭하면, '파스타집이야 노원점' 어때요? 배달의민족 앱에서 확인해보세요.  https://baemin.me/yRFZwgPmlJ 이게 EDITTEXT에 떠있는 상태라는 건데,,
+//여기서 건너뛰기를 누르면 어떻게 해줘야해?
+//여기서 수정하던 안하던 NEXT버튼이나 다이얼로그 바깥 부분 클릭하면 현재 EDITTEXT의 값으로 해주면 될것 같은데
+
 
 class DialogLink : DialogFragment() {
     lateinit var binding: DialogLinkLayoutBinding
     private var dialogLinkNextClickListener: DialogLinkNextClickListener? =null
     var flagNext : Boolean = false
+
+    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,13 +55,18 @@ class DialogLink : DialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if(createPartyVM.getStoreUrl()!=null){ // 이미 입력되어있는 url이 있으면 띄워주기
+            binding.locationDialogSearchEt.text = createPartyVM.getStoreUrl() as Editable
+        }
         dialogLinkNextClickListener = activity as DialogLinkNextClickListener
     }
 
     override fun onDetach() {
         super.onDetach()
-        if(flagNext==false){ //다음버튼을 안클릭하고 빠져나오는 경우(다이얼로그 바깥부분 터치시)
-            //frag-> activity 정보전달
+        if(binding.locationDialogSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
+            dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
+            createPartyVM.setStoreUrl(binding.locationDialogSearchEt.text.toString())
+        }else{
             dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
         }
         dialogLinkNextClickListener = null
@@ -61,12 +78,6 @@ class DialogLink : DialogFragment() {
         binding.linkDialogNextBtn.setOnClickListener { //다음버튼
 
             flagNext = true // next버튼 클릭했다고 표시
-            //frag-> activity 정보전달
-            if (binding.locationDialogSearchEt.text.toString()!=""){
-                dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
-            }else{ //아무것도 입력 안했을 때
-                dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
-            }
 
             //다음 다이얼로그 띄우기
             val dialogLocation = DialogLocation()

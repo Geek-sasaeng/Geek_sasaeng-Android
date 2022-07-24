@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
@@ -28,8 +30,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     lateinit var date: String
 
     private lateinit var createPartyService: CreatePartyService
+    private lateinit var createPartyVM: CreatePartyViewModel
 
     override fun initAfterBinding() {
+        createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
         binding.createPartyNumber2Tv.isEnabled = false
         binding.createPartyCategory2Tv.isEnabled = false
         binding.createPartyLink2Tv.isEnabled = false
@@ -104,7 +108,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     override fun onDtClicked(date: String, time: String) {
         //사용자가 선택한 날짜 표시
         binding.createPartyDate2Tv.setTextColor(ContextCompat.getColor(this, R.color.black))
-        binding.createPartyDate2Tv.text = date+ time
+        binding.createPartyDate2Tv.text = date+ " " + time
 
         //파란색 버튼 없애고 회색버튼으로 띄우기
         binding.createPartyDate2Tv.visibility = View.VISIBLE

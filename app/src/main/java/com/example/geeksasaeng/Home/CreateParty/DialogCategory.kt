@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogCategoryLayoutBinding
 
@@ -15,6 +16,8 @@ class DialogCategory : DialogFragment() {
     lateinit var binding: DialogCategoryLayoutBinding
     private var dialogCategoryNextClickListener: DialogCategoryNextClickListener? =null
     var categoryString = ""
+
+    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
