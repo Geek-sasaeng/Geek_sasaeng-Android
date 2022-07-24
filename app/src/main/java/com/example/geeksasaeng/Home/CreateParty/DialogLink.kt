@@ -36,8 +36,15 @@ class DialogLink : DialogFragment() {
     {
         binding = DialogLinkLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌
+        initData()
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        if(createPartyVM.getStoreUrl().toString()!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
+            binding.locationDialogSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
+        }
     }
 
     override fun onResume() {
@@ -55,9 +62,6 @@ class DialogLink : DialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(createPartyVM.getStoreUrl()!=null){ // 이미 입력되어있는 url이 있으면 띄워주기
-            binding.locationDialogSearchEt.text = createPartyVM.getStoreUrl() as Editable
-        }
         dialogLinkNextClickListener = activity as DialogLinkNextClickListener
     }
 
@@ -103,7 +107,6 @@ class DialogLink : DialogFragment() {
 
             //frag-> activity 정보전달
             flagNext = true
-            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
 
             //다음 다이얼로그 띄우기
             val dialogLocation = DialogLocation()

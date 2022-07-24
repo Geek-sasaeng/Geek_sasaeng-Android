@@ -127,7 +127,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyCategory2Tv.text = category
     }
 
-    override fun onLinkClicked(link: String, flagNext: Boolean) {
+    override fun onLinkClicked(link: String, flagNext: Boolean) { //flagNext는 카카오 지도 때문에 이용
         //사용자가 선택한 식당 링크 표시
         binding.createPartyLink2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyLink2Tv.text = link
