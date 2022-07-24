@@ -12,8 +12,8 @@ import java.util.*
 
 class CreatePartyService {
     //뷰 객체 생성
-    private lateinit var createPartyDefaultLocView: CreatePartyDefaultLocView
-    private lateinit var createPartyView: CreatePartyView
+    private lateinit var createPartyDefaultLocView: CreatePartyDefaultLocView //기숙사 deafult위치 불러오기
+    private lateinit var createPartyView: CreatePartyView // 파티 생성하기 등록
 
     private val createPartyDataService = retrofit.create(CreatePartyRetrofitInterfaces::class.java)
 
@@ -26,6 +26,7 @@ class CreatePartyService {
         this.createPartyView = createPartyView
     }
 
+    //기숙사 위치 정보
     fun getDefaultLoc( dormitoryId : Int) {
         createPartyDataService.getDeliveryPartyDefaultLocation(dormitoryId).enqueue(object :
             Callback<CreatePartyDefaultLocResponse> {
@@ -48,14 +49,18 @@ class CreatePartyService {
         })
     }
 
+    //파티 생성하기
     fun createPartySender(createPartyRequest: CreatePartyRequest){
+        Log.d("jjang", "파티 생성하기 sender 실행됨")
         createPartyDataService.createParty(createPartyRequest).enqueue(object:
         Callback<CreatePartyResponse>{
             override fun onResponse(
                 call: Call<CreatePartyResponse>,
                 response: Response<CreatePartyResponse>
             ) {
+                Log.d("jjang", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
+                    Log.d("jjang", "진입완료")
                     val resp: CreatePartyResponse = response.body()!!
                     when (resp.code) {
                         1000 -> createPartyView.onCreatePartySuccess()
@@ -65,7 +70,7 @@ class CreatePartyService {
             }
 
             override fun onFailure(call: Call<CreatePartyResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("jjang", "파티 생성하기 onFailure"+t.toString())
             }
 
         })

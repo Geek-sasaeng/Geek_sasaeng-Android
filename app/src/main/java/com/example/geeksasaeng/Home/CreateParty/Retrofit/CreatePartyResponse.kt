@@ -43,8 +43,8 @@ data class CreatePartyResult(
 
 data class CreatePartyRequest (
     @SerializedName("content") val content: String,
-    @SerializedName("dormitory") val dormitory: String,
-    @SerializedName("foodCategory") val foodCategory: String,
+    @SerializedName("dormitory") val dormitory: Int,
+    @SerializedName("foodCategory") val foodCategory: Int,
     @SerializedName("hashTag") val hashTag: Boolean,
     @SerializedName("latitude") val latitude: Double,
     @SerializedName("longitude") val longitude: Double,

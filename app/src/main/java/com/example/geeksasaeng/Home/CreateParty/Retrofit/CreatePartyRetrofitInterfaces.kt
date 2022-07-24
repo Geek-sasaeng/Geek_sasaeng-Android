@@ -14,6 +14,7 @@ interface CreatePartyRetrofitInterfaces {
     ): Call<CreatePartyDefaultLocResponse>
 
     //배달파티 생성하기
+    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjoyNn0sImlhdCI6MTY1Nzk0MTQ4NiwiZXhwIjoxNjU4ODMwNTE5fQ.n9HFrLuc97GeWOcKo-ffAj-k5XAvcd7IH0iEuOVzPaQ")
     @POST("/delivery-party")
     fun createParty(@Body createPartyRequest: CreatePartyRequest) : Call<CreatePartyResponse>
 }

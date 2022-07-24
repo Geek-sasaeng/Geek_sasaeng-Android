@@ -113,10 +113,10 @@ class DialogCategory : DialogFragment() {
             }
             when(checkedId){
                 R.id.category_radio_1 -> categoryString= "한식"
-                R.id.category_radio_2 -> categoryString= "중식"
-                R.id.category_radio_3 -> categoryString= "분식"
-                R.id.category_radio_4 -> categoryString= "회/돈까스"
-                R.id.category_radio_5 -> categoryString= "디저트/음료"
+                R.id.category_radio_3 -> categoryString= "중식"
+                R.id.category_radio_5 -> categoryString= "분식"
+                R.id.category_radio_7 -> categoryString= "회/돈까스"
+                R.id.category_radio_9 -> categoryString= "디저트/음료"
                 else-> {}
             }
             createPartyVM.setCategory(categoryString)
@@ -128,10 +128,10 @@ class DialogCategory : DialogFragment() {
                 binding.categoryDialogRg2.check(checkedId)
             }
             when(checkedId){
-                R.id.category_radio_6 -> categoryString= "양식"
-                R.id.category_radio_7 -> categoryString= "일식"
-                R.id.category_radio_8 -> categoryString= "치킨/피자"
-                R.id.category_radio_9 -> categoryString= "패스트 푸드"
+                R.id.category_radio_2 -> categoryString= "양식"
+                R.id.category_radio_4 -> categoryString= "일식"
+                R.id.category_radio_6 -> categoryString= "치킨/피자"
+                R.id.category_radio_8 -> categoryString= "패스트 푸드"
                 R.id.category_radio_10 -> categoryString= "기타"
                 else-> {}
             }

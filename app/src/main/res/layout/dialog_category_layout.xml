@@ -72,7 +72,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_2"
+                    android:id="@+id/category_radio_3"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -87,7 +87,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_3"
+                    android:id="@+id/category_radio_5"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -102,7 +102,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_4"
+                    android:id="@+id/category_radio_7"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -118,7 +118,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_5"
+                    android:id="@+id/category_radio_9"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -140,7 +140,7 @@
                 android:orientation="vertical">
 
                 <RadioButton
-                    android:id="@+id/category_radio_6"
+                    android:id="@+id/category_radio_2"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -155,7 +155,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_7"
+                    android:id="@+id/category_radio_4"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -171,7 +171,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_8"
+                    android:id="@+id/category_radio_6"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -187,7 +187,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_9"
+                    android:id="@+id/category_radio_8"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"

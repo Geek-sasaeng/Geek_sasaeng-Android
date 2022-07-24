@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyView
+import com.example.geeksasaeng.Home.CreateParty.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
@@ -20,17 +17,16 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.util.*
 
-class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView,
+//TODO: 여기서는 잘하면 CreatePartyDefaultLocView 이거 없이도 가능할지도? 7.30-31에 이 부분 다시 봐보기
+class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView,
     DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
 
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint
-    var isNotFirstClick : Boolean = false // 첫 클릭
-    lateinit var time: String //TODO: 얘네들 PARSING해서 얻을 수 있어도 좋을 듯
-    lateinit var date: String
 
     private lateinit var createPartyService: CreatePartyService
     private lateinit var createPartyVM: CreatePartyViewModel
+
 
     override fun initAfterBinding() {
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
@@ -38,20 +34,32 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyCategory2Tv.isEnabled = false
         binding.createPartyLink2Tv.isEnabled = false
         binding.createPartyLocation2Tv.isEnabled = false
+        createPartyService = CreatePartyService() //서비스 객체 생성
+        createPartyService.setCreatePartyDefaultLocView(this)
+        createPartyService.setCreatePartyView(this)
         initClickListener()
         initKakaoMap()
     }
 
     private fun initKakaoMap(){
         Log.d("kakaodefault", "onstart")
-        createPartyService = CreatePartyService() //서비스 객체 생성
-        createPartyService.setCreatePartyDefaultLocView(this)
         createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출
     }
 
     private fun initClickListener(){
-        //같이 먹고 싶어요 체크버튼 클릭시
-        binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+
+        binding.createPartyRegisterBtnTv.setOnClickListener { //등록버튼 클릭시
+            //TODO: "2022-07-26 16:29:30" => 이 시간형식은 어떻게 구할까..
+
+            //TODO: 제목이랑 콘텐츠 안쓰면 오류나는듯?
+            Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+ 1+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+  createPartyVM.getDateTime().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
+            val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), 1, createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
+                createPartyVM.getMaxMatching()!!, createPartyVM.getDateTime().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
+            createPartyService.createPartySender(createPartyRequest) //★파티 등록하기
+        }
+
+        binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { //같이 먹고 싶어요 체크버튼 클릭시
+                buttonView, isChecked ->
             if (isChecked) {
                 binding.createPartyTogetherTv.setTextColor(ContextCompat.getColor(this, R.color.main))
             } else {
@@ -186,5 +194,14 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    // 파티 등록하기 성공/실패
+    override fun onCreatePartySuccess() {
+        Log.d("jjang", "성공")
+    }
+
+    override fun onCreatePartyFailure(message: String) {
+        Log.d("jjang",message)
     }
 }

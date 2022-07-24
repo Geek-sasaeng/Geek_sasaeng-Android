@@ -24,7 +24,9 @@ class DialogDt : DialogFragment() {
     lateinit var binding: DialogDtLayoutBinding
     private var dialogDtNextClickListener: DialogDtNextClickListener? =null
     var dateString = ""
+    var dateString2 = ""
     var timeString = ""
+    var timeString2 = ""
 
     private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
@@ -85,8 +87,8 @@ class DialogDt : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        //frag-> activity 정보전달
-        dialogDtNextClickListener?.onDtClicked(dateString, timeString)
+        dialogDtNextClickListener?.onDtClicked(dateString, timeString)//frag-> activity 정보전달
+        createPartyVM.setDateTime(dateString2+" "+ timeString2) //TODO:이러면 근데 "" 빈 문자열이 저장될 수 도 있는뎅..
         dialogDtNextClickListener = null
     }
 
@@ -96,6 +98,7 @@ class DialogDt : DialogFragment() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 dateString = "${month+1}월 ${dayOfMonth}일"
+                dateString2 = "${year}-${month}-${dayOfMonth}"
                 Log.d("dialog", dateString)
                 binding.dateDialogDateTv.text = dateString
                 createPartyVM.setDate(dateString)
@@ -109,6 +112,7 @@ class DialogDt : DialogFragment() {
             //TimePicker
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 timeString = "${hourOfDay}시 ${minute}분"
+                timeString2 = "${hourOfDay}:${minute}:30" //TODO:임의로 그냥 초는 30초로 해둠.. 상관 없겠징? ㅎㅎ
                 binding.dateDialogTimeTv.text = timeString
                 createPartyVM.setTime(timeString)
             }
