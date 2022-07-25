@@ -9,3 +9,8 @@ interface PartyDetailView {
     fun partyDetailSuccess(result: PartyDetailResult)
     fun partyDetailFailure(code: Int, message: String)
 }
+
+interface PartyDeleteView {
+    fun partyDeleteViewSuccess(code: Int)
+    fun partyDeleteViewFailure(message: String)
+}

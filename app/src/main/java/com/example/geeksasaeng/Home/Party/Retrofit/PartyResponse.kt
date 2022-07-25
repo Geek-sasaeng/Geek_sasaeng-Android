@@ -30,3 +30,15 @@ data class PartyDetailResult(
     @SerializedName("title") val title: String,
     @SerializedName("updatedAt") val updatedAt: String,
 )
+
+data class PartyDeleteResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: PartyDeleteResult?
+)
+
+data class PartyDeleteResult(
+    @SerializedName("deliveryPartyId") val deliveryPartyId: Int,
+    @SerializedName("status") val status: String
+)

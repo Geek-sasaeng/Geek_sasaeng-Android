@@ -13,10 +13,14 @@ class PartyDataService {
 
     //뷰 객체 생성
     private lateinit var partyDetailView: PartyDetailView
+    private lateinit var partyDeleteView: PartyDeleteView
 
     //setView
-    fun setPartyDetailView(partyDetailView: PartyDetailView){
+    fun setPartyDetailView(partyDetailView: PartyDetailView) {
         this.partyDetailView = partyDetailView
+    }
+    fun setPartyDeleteView(partyDeleteView: PartyDeleteView) {
+        this.partyDeleteView = partyDeleteView
     }
 
     //파티보기 상세조회
@@ -41,6 +45,32 @@ class PartyDataService {
             }
             override fun onFailure(call: Call<PartyDetailResponse>, t: Throwable) {
                 Log.d("PARTY-DETAIL-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
+            }
+        })
+    }
+
+    // 파티 삭제하기
+    fun partyDeleteSender(partyId: Int) {
+        val partyDeleteService = NetworkModule.getInstance()?.create(PartyRetrofitInterface::class.java)
+        partyDeleteService?.sendDeleteDeliveryParty(partyId)?.enqueue(object : Callback<PartyDeleteResponse> {
+            override fun onResponse(call: Call<PartyDeleteResponse>, response: Response<PartyDeleteResponse>) {
+                Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
+                Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val partyDetailResponse: PartyDeleteResponse = response.body()!!
+
+                    Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : code = " + partyDetailResponse.code)
+                    Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : message = " + partyDetailResponse.message)
+
+                    when (partyDetailResponse.code) {
+                        1000 -> partyDeleteView.partyDeleteViewSuccess(partyDetailResponse.code)
+                        else -> partyDeleteView.partyDeleteViewFailure(partyDetailResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<PartyDeleteResponse>, t: Throwable) {
+                Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
             }
         })
     }

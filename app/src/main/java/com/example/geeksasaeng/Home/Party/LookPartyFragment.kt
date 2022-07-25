@@ -1,20 +1,19 @@
 package com.example.geeksasaeng.Home.Party
 
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
-import android.os.Parcelable
 import android.view.View
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResponse
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResult
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailView
-import com.example.geeksasaeng.Login.LoginActivity
-import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Utils.removeAutoLogin
+import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
+
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
 
@@ -45,10 +44,23 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         }
 
         binding.lookPartyOptionBtn.setOnClickListener {
-            if (authorStatus == true)
-                DialogDeliveryOptionMyPopup().show(parentFragmentManager, "DeliveryPartySelfOption")
-            else if (authorStatus == false)
-                DialogDeliveryOptionOtherPopup().show(parentFragmentManager, "DeliveryPartyOtherOption")
+            val bundle = Bundle()
+            bundle.putInt("partyId", deliveryItemId!!)
+
+            var dialogFragment = DialogFragment()
+            var dialogTag = String()
+
+            if (authorStatus == true) {
+                dialogFragment = DialogDeliveryOptionMyPopup()
+                dialogTag = "DeliveryPartyMyOption"
+            }
+            else if (authorStatus == false) {
+                dialogFragment = DialogDeliveryOptionOtherPopup()
+                dialogTag = "DeliveryPartyOtherOption"
+            }
+
+            dialogFragment.setArguments(bundle)
+            dialogFragment.show(parentFragmentManager, dialogTag)
         }
     }
 
