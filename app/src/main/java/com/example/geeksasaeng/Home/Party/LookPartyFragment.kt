@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Party
 
 import android.net.Uri
+import android.os.Handler
 import android.os.Parcelable
 import android.view.View
 import androidx.fragment.app.FragmentManager
@@ -8,9 +9,11 @@ import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResponse
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResult
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailView
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
@@ -20,13 +23,18 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     override fun initAfterBinding() {
         initClickListener()
 
+        binding.lookPartyProgressBar.visibility = View.VISIBLE
+
         // 파티 수정하기, 신고하기 Stack에서 제거
         (context as MainActivity).supportFragmentManager.popBackStack("partyUpdate", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         (context as MainActivity).supportFragmentManager.popBackStack("partyReport", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
 
-        initDeliveryPartyData()
+        val handler = Handler()
+        handler.postDelayed({
+            initDeliveryPartyData()
+        }, 200)
     }
 
     private fun initClickListener(){
@@ -48,6 +56,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     }
 
     override fun partyDetailSuccess(result: PartyDetailResult) {
+        binding.lookPartyWhite.visibility = View.GONE
+        binding.lookPartyProgressBar.visibility = View.GONE
+
         if (result?.chiefProfileImgUrl != null)
             binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))
         else // TODO: 기본 이미지 넣을 예정
