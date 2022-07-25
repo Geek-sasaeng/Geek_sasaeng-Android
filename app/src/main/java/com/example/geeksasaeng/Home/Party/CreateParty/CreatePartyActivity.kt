@@ -201,7 +201,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     // 파티 등록하기 성공/실패
     override fun onCreatePartySuccess() {
-        Log.d("jjang", "성공")
+        Log.d("jjang", "파티 생성 성공(서버로 정보 보냄)")
     }
 
     override fun onCreatePartyFailure(message: String) {

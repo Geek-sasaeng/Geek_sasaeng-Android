@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DialogDt : DialogFragment() {
@@ -96,7 +97,19 @@ class DialogDt : DialogFragment() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 dateString = "${month+1}월 ${dayOfMonth}일"
-                dateString2 = "${year}-${month}-${dayOfMonth}"
+
+                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
+                var sMonth : String = (month+1).toString()
+                var sDay : String = dayOfMonth.toString()
+                if(month.toString().length==1){
+                    sMonth = "0"+ sMonth
+                }
+                if(dayOfMonth.toString().length==1){
+                    sDay = "0"+sDay
+                }
+                dateString2 = "${year}-" + sMonth + "-" + sDay
+
+
                 Log.d("dialog", dateString)
                 binding.dateDialogDateTv.text = dateString
                 createPartyVM.setDate(dateString)
@@ -110,7 +123,19 @@ class DialogDt : DialogFragment() {
             //TimePicker
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 timeString = "${hourOfDay}시 ${minute}분"
-                timeString2 = "${hourOfDay}:${minute}:30" //TODO:임의로 그냥 초는 30초로 해둠.. 상관 없겠징? ㅎㅎ
+
+                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
+                var sHour : String = hourOfDay.toString()
+                var sMinute : String = minute.toString()
+                if(minute.toString().length==1){
+                    sMinute = "0"+ sMinute
+                }
+                if(hourOfDay.toString().length==1){
+                    sHour = "0"+sHour
+                }
+                timeString2 = sHour+":"+sMinute+":00" //TODO:임의로 그냥 초는 00초로 해두기로 함
+
+
                 binding.dateDialogTimeTv.text = timeString
                 createPartyVM.setTime(timeString)
             }
