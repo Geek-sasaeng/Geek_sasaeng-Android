@@ -47,9 +47,14 @@ class DialogDt : DialogFragment() {
         if((createPartyVM.getDate().toString()!="null") && (createPartyVM.getTime().toString()!="null")){
             Log.d("dialogDT", createPartyVM.getDate().toString()+createPartyVM.getTime().toString())
             dateString =createPartyVM.getDate().toString()
+            dateString2 =createPartyVM.getDate().toString()
             timeString =createPartyVM.getTime().toString()
+            timeString2 =createPartyVM.getTime().toString()
             binding.dateDialogDateTv.text = createPartyVM.getDate().toString()
             binding.dateDialogTimeTv.text = createPartyVM.getTime().toString()
+        }else{ //최초 실행시
+            binding.dateDialogDateTv.text = getCurrentDate()
+            binding.dateDialogTimeTv.text = getCurrentTime()
         }
     }
 
@@ -87,8 +92,17 @@ class DialogDt : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         dialogDtNextClickListener?.onDtClicked(dateString, timeString)//frag-> activity 정보전달
-        createPartyVM.setDateTime(dateString2+" "+ timeString2) //TODO:이러면 근데 "" 빈 문자열이 저장될 수 도 있는뎅..
         dialogDtNextClickListener = null
+    }
+
+    fun getCurrentDate(): String{
+        val formatter = SimpleDateFormat("MM월 dd일", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun getCurrentTime(): String{
+        val formatter = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 
     private fun initClickListener(){
@@ -113,6 +127,7 @@ class DialogDt : DialogFragment() {
                 Log.d("dialog", dateString)
                 binding.dateDialogDateTv.text = dateString
                 createPartyVM.setDate(dateString)
+                createPartyVM.setDate2(dateString2)
             }
             DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(
                 Calendar.DAY_OF_MONTH)).show()
@@ -138,6 +153,7 @@ class DialogDt : DialogFragment() {
 
                 binding.dateDialogTimeTv.text = timeString
                 createPartyVM.setTime(timeString)
+                createPartyVM.setTime2(timeString2)
             }
             TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
 
