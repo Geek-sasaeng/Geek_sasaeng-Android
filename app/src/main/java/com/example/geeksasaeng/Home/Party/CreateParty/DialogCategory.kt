@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
+import com.example.geeksasaeng.Home.CreateParty.DialogLink
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogCategoryLayoutBinding
 

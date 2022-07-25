@@ -27,6 +27,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.airbnb.lottie.model.Marker
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
+import com.example.geeksasaeng.Home.CreateParty.DialogLink
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService

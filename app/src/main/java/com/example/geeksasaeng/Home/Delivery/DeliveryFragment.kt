@@ -16,9 +16,9 @@ import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryBannerView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
-import com.example.geeksasaeng.Home.Party.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
@@ -334,7 +334,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
-        thread.start() //스레드 시작
+        if (thread.state == Thread.State.NEW)
+            thread.start() //스레드 시작
 
         binding.deliveryBannerVp.apply {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
