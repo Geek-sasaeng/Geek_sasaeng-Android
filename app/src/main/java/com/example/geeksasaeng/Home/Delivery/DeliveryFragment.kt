@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Delivery
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -22,6 +24,7 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
@@ -197,7 +200,18 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
             override fun onItemClick(data: DeliveryResult, pos : Int) {
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_frm, LookPartyFragment())?.addToBackStack("lookParty")?.commit()
+                var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
+
+                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+                val bundle = Bundle()
+                bundle.putString("deliveryItemId", deliveryItemId)
+
+                val lookPartyFragment = LookPartyFragment()
+                lookPartyFragment.arguments = bundle
+
+                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+                transaction.commit()
             }
         })
     }

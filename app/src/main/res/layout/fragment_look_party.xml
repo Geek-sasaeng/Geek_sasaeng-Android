@@ -101,12 +101,13 @@
                 app:layout_constraintBottom_toBottomOf="@id/look_host_name" />
 
             <TextView
-                android:id="@+id/look_option2"
+                android:id="@+id/look_hash_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_2"
                 android:text="같이 먹고 싶어요"
                 android:layout_marginTop="22dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/look_host_profile"
                 app:layout_constraintTop_toBottomOf="@id/look_host_profile" />
 
@@ -122,7 +123,7 @@
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 app:layout_constraintStart_toStartOf="@id/look_host_profile"
-                app:layout_constraintTop_toBottomOf="@id/look_option2" />
+                app:layout_constraintTop_toBottomOf="@id/look_hash_tag" />
 
             <TextView
                 android:id="@+id/look_content"

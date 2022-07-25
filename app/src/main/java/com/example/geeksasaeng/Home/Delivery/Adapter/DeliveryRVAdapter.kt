@@ -102,4 +102,8 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryResult?>) : 
             viewHolder.deliveryItemHashTag.setTextColor(Color.parseColor("#EFEFEF"))
         }
     }
+
+    fun getDeliveryItemId(position: Int): Int? {
+        return deliveryList[position]?.id
+    }
 }
