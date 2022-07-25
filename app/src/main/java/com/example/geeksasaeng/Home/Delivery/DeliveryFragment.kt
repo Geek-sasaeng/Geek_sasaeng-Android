@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,12 +16,17 @@ import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
-import com.example.geeksasaeng.Home.Delivery.Party.LookPartyFragment
-import com.example.geeksasaeng.Home.Delivery.Retrofit.*
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryBannerView
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
+import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryResult?>()
@@ -33,6 +39,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
+    var nowTime: Long = 0
+    var date: Date? = null
+    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -41,6 +50,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        // 모든 fragment stack 제거
+        clearBackStack()
+
         deliveryService = DeliveryService() //서비스 객체 생성
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
@@ -57,10 +69,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
-            // 디버깅용 - 파티보기
-            /*(context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, LookPartyFragment()).commit()*/
-
             val intent = Intent(context, CreatePartyActivity::class.java)
             startActivity(intent)
         }
@@ -69,6 +77,60 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
+    }
+
+    // 오늘 날짜 계산
+    private fun calculateToday(): String {
+        nowTime = System.currentTimeMillis();
+        date = Date(nowTime)
+        return dateFormat.format(date)
+    }
+
+    // 남은 시간 계산
+    // TODO: 흠... 실시간으로 해야하는데 흠...
+    private fun calculateTime(orderTime: String): String {
+        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
+        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
+        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
+        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
+        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
+
+        var currentTime = calculateToday()
+        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
+        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
+        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
+        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
+        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+
+        var today = Calendar.getInstance().apply {
+            set(Calendar.YEAR, todayYear)
+            set(Calendar.MONTH, todayMonth)
+            set(Calendar.DAY_OF_MONTH, todayDay)
+        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
+
+        var order = Calendar.getInstance().apply {
+            set(Calendar.YEAR, orderYear)
+            set(Calendar.MONTH, orderMonth)
+            set(Calendar.DAY_OF_MONTH, orderDay)
+        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
+
+        var remainTime = order - today
+
+        if (remainTime <= 0) {
+            return "끝끝"
+        }
+
+        var day = remainTime / (24*60*60*1000)
+        var sec = (remainTime % (24*60*60*1000)) / 1000
+        var hour = sec / 3600
+        var minute = (sec % 3600) / 60
+
+        return if (day > 0)
+            "${day}일 ${hour}시간 ${minute}분 남았어요"
+        else if (hour > 0)
+            "${hour}시간 ${minute}분 남았어요"
+        else
+            "${minute}분 남았어요"
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -132,13 +194,18 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: DeliveryResult, pos : Int) {
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_frm, LookPartyFragment())?.addToBackStack("lookParty")?.commit()
+            }
+        })
     }
 
     override fun deliverySuccess(response: DeliveryResponse) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
         val result = response.result
         val size = result!!.size
-        Log.d("DELIVERY-RESPONSE", "size = $size")
 
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching
@@ -150,7 +217,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryResult(currentMatching, foodCategory, id, maxMatching, orderTime, title, hashTags)
+                DeliveryResult(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()
@@ -236,6 +303,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         thread.interrupt() //쓰레드 중지
     }
 
+    fun clearBackStack() {
+        val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         Log.d("commercial", "광고 불러오기 성공~!")
         /*for (i in results){
@@ -262,7 +334,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
-        thread.start() //스레드 시작
+        if (thread.state == Thread.State.NEW)
+            thread.start() //스레드 시작
 
         binding.deliveryBannerVp.apply {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

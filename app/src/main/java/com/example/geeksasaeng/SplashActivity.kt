@@ -24,10 +24,13 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         loginId = getLoginId()
         password = getPassword()
 
+        Log.d("Splash-Response", getJwt() + " "  + getLoginId() + " " + getPassword())
+
         handler.postDelayed({
-            if (jwt != null && loginId != null && password != null) {
+            if (loginId != null && password != null) {
                 login()
             } else {
+                removeAutoLogin()
                 changeActivity(LoginActivity::class.java)
                 finish()
             }
@@ -50,6 +53,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         // 2011 : 비밀번호가 틀립니다
         // 2012 : 탈퇴한 회원
         // 2400 : 존재하지 않는 아이디
+        Log.d("Splash-Response", "fail")
+        removeAutoLogin()
         changeActivity(LoginActivity::class.java)
     }
 

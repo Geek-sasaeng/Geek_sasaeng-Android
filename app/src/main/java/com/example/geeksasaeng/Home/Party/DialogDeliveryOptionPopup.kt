@@ -1,16 +1,15 @@
-package com.example.geeksasaeng.Home.Delivery.Party
+package com.example.geeksasaeng.Home.Party
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportFragment
+import com.example.geeksasaeng.Home.Party.UpdateParty.PartyUpdateFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.databinding.DialogDeliveryOptionPopupBinding
-import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 
 class DialogDeliveryOptionPopup: DialogFragment() {
 
@@ -25,6 +24,7 @@ class DialogDeliveryOptionPopup: DialogFragment() {
         initListener()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
+        dialog?.window?.setWindowAnimations(R.style.AnimationPopupStyle)
         return binding.root
     }
 
@@ -46,8 +46,9 @@ class DialogDeliveryOptionPopup: DialogFragment() {
         binding.deliveryOptionDeleteTv.setOnClickListener {
             // 삭제하기
             this.dismiss()
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, PartyDeleteFragment()).addToBackStack("partyDelete").commit()
+
+            val dialog = DialogPartyDelete()
+            dialog.show(parentFragmentManager, "DialogPartyDelete")
         }
 
         binding.deliveryOptionReportTv.setOnClickListener {

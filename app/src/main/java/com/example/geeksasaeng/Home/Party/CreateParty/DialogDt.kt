@@ -1,12 +1,9 @@
-package com.example.geeksasaeng.Home.CreateParty
+package com.example.geeksasaeng.Home.Party.CreateParty
 
-import android.app.ActionBar
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
