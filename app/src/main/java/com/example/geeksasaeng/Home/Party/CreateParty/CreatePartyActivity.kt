@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogNum
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
@@ -105,6 +106,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     private fun initClickListener(){
 
+        binding.createPartyBackBtnIv.setOnClickListener {
+            startActivityWithClear(MainActivity::class.java)
+        }
+
         binding.createPartyRegisterBtnTv.setOnClickListener { //등록버튼 클릭시
             //TODO: "2022-07-26 16:29:30" => 이 시간형식은 어떻게 구할까..
 
@@ -113,6 +118,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
                 val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), 1, createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
                     createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
                 createPartyService.createPartySender(createPartyRequest) //★파티 등록하기
+                startActivityWithClear(MainActivity::class.java)
             }
         }
 

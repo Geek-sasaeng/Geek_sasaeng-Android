@@ -33,10 +33,6 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun startNextActivity(activity: Class<*>?) {
-        val intent = Intent(this, activity)
-        startActivity(intent)
-    }
 
     fun startActivityWithClear(activity: Class<*>?) {
         val intent = Intent(this, activity)
