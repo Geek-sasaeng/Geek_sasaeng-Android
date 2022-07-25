@@ -50,8 +50,8 @@ class CreatePartyService {
     }
 
     //파티 생성하기
-    fun createPartySender(createPartyRequest: CreatePartyRequest){
-        createPartyDataService.createParty(createPartyRequest).enqueue(object:
+    fun createPartySender(dormitoryId: Int, createPartyRequest: CreatePartyRequest){
+        createPartyDataService.createParty(dormitoryId, createPartyRequest).enqueue(object:
         Callback<CreatePartyResponse>{
             override fun onResponse(
                 call: Call<CreatePartyResponse>,
