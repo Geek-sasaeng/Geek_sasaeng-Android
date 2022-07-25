@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Geeksasaeng" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/main</item>
+        <item name="colorPrimaryVariant">@color/status_bar</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,8 +13,10 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <!-- Top Status Bar -->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="windowActionBar">false</item>
         <!-- EditText -->
         <item name="colorControlActivated">@color/main</item>
         <item name="android:textSelectHandle">@color/main</item>

@@ -20,38 +20,38 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".Home.CreateParty.CreatePartyActivity"
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.geeksasaeng.Home.Party.CreateParty.CreatePartyActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".DormitoryActivity"
             android:exported="false" />
         <activity android:name=".Login.LoginActivity" />
-        <!--
-        <activity
-            android:name=".Signup.DialogSignUpPhoneSkip"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        -->
         <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
+        <activity android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".Home.Search.SearchActivity" />
+        <activity android:name=".Home.CreateParty.CreatePartyActivity" />
 
         <!--카카오맵 APP KEY 추가-->
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="${kakaoNativeAppKey}" />
+<!--        <meta-data-->
+<!--            android:name="com.kakao.sdk.AppKey"-->
+<!--            android:value="${kakaoNativeAppKey}" />-->
 
     </application>
 
