@@ -19,6 +19,7 @@ import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
 
     var deliveryItemId: Int? = null
+    var authorStatus: Boolean? = null
 
     override fun initAfterBinding() {
         initClickListener()
@@ -44,8 +45,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         }
 
         binding.lookPartyOptionBtn.setOnClickListener {
-            val dialog = DialogDeliveryOptionPopup()
-            dialog.show(parentFragmentManager, "DeliveryPartyOption")
+            if (authorStatus == true)
+                DialogDeliveryOptionMyPopup().show(parentFragmentManager, "DeliveryPartySelfOption")
+            else if (authorStatus == false)
+                DialogDeliveryOptionOtherPopup().show(parentFragmentManager, "DeliveryPartyOtherOption")
         }
     }
 
@@ -58,6 +61,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     override fun partyDetailSuccess(result: PartyDetailResult) {
         binding.lookPartyWhite.visibility = View.GONE
         binding.lookPartyProgressBar.visibility = View.GONE
+
+        authorStatus = result.authorStatus
 
         if (result?.chiefProfileImgUrl != null)
             binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))
