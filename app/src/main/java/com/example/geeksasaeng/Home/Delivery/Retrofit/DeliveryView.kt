@@ -13,3 +13,8 @@ interface DeliveryView {
     fun deliverySuccess(result: DeliveryResult)
     fun deliveryFailure(code: Int, message: String)
 }
+
+interface DeliveryFilterView {
+    fun deliveryFilterSuccess(result: DeliveryResult)
+    fun deliveryFilterFailure(code: Int, message: String)
+}

@@ -22,6 +22,7 @@ import java.util.*
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView, DialogDeliveryOptionMyPopup.PopUpdateClickListener {
 
     var deliveryItemId: Int? = null
+    var status: String? = null
     var authorStatus: Boolean? = null
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
@@ -35,6 +36,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         (context as MainActivity).supportFragmentManager.popBackStack("partyReport", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
+        status = arguments?.getString("status")
 
         val handler = Handler()
         handler.postDelayed({
@@ -42,6 +44,12 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         }, 200)
 
         binding.lookCategoryText.isSelected = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (status == "search")
+            requireActivity().finish()
     }
 
     private fun initClickListener(){
