@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Party.UpdateParty
 
 import android.location.Geocoder
+import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
@@ -8,10 +9,17 @@ import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryPartyUpdateBinding
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 import java.util.*
 
 
-class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(FragmentDeliveryPartyUpdateBinding::inflate), UpdatePartyView {
+class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(FragmentDeliveryPartyUpdateBinding::inflate), UpdatePartyView,
+    DialogDtUpdate.DialogDtUpdateClickListener, DialogNumUpdate.DialogNumUpdateClickListener, DialogCategoryUpdate.DialogCategoryUpdateClickListener{
+
+    lateinit var mapView : MapView
+    lateinit var mapPoint: MapPoint
 
     var authorStatus: Boolean? = null
     var chief: String? = null
@@ -73,6 +81,8 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
         binding.deliveryPartyUpdateLocation2Tv.text = getAddress(latitude, longitude) // 수령장소
         // 카카오맵에 띄우기
+        this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+        drawMap(mapPoint)
     }
 
     private fun initClickListener(){
@@ -91,25 +101,47 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = !binding.deliveryPartyUpdateTogetherCheckBtn.isChecked
         }
 
-        // 여기서 부터 dialog 띄우는 부분ㅇ
+        // 여기서 부터 dialog 띄우는 부분
         binding.deliveryPartyUpdateDate2Tv.setOnClickListener {
-            DialogDtUpdate().show(requireActivity().supportFragmentManager, "CustomDialog")
+            val dialogDtUpdate =  DialogDtUpdate()
+            var bundle = Bundle()
+            bundle.putString("DT", orderTime) // 주문시간 넘겨줌
+            dialogDtUpdate.arguments = bundle // 번들 넘겨주기
+            dialogDtUpdate.show(childFragmentManager, "CustomDialog")
         }
 
         binding.deliveryPartyUpdateNumber2Tv.setOnClickListener {
-            DialogNumUpdate().show(requireActivity().supportFragmentManager, "CustomDialog")
+            val dialogNumUpdate = DialogNumUpdate()
+            var bundle = Bundle()
+            bundle.putString("Num", maxMatching.toString()) // 최대 매칭인원 넘겨줌
+            dialogNumUpdate.arguments = bundle // 번들 넘겨주기
+            dialogNumUpdate.show(childFragmentManager, "CustomDialog")
         }
 
         binding.deliveryPartyUpdateCategory2Tv.setOnClickListener {
-            DialogCategoryUpdate().show(requireActivity().supportFragmentManager, "CustomDialog")
+            val dialogCategoryUpdate =  DialogCategoryUpdate()
+            var bundle = Bundle()
+            bundle.putString("Category", foodCategory) // 카테고리 넘겨줌
+            dialogCategoryUpdate.arguments = bundle // 번들 넘겨주기
+            dialogCategoryUpdate.show(childFragmentManager, "CustomDialog")
         }
 
         binding.deliveryPartyUpdateLink2Tv.setOnClickListener {
-            DialogLinkUpdate().show(requireActivity().supportFragmentManager, "CustomDialog")
+            val dialogLinkUpdate =  DialogLinkUpdate()
+            var bundle = Bundle()
+            bundle.putString("Link", storeUrl) // 식당 링크 넘겨줌
+            dialogLinkUpdate.arguments = bundle // 번들 넘겨주기
+            dialogLinkUpdate.show(childFragmentManager, "CustomDialog")
         }
 
         binding.deliveryPartyUpdateLocation2Tv.setOnClickListener {
-            DialogLocationUpdate().show(requireActivity().supportFragmentManager, "CustomDialog")
+            val dialogLocationUpdate =  DialogLocationUpdate()
+            var bundle = Bundle()
+            bundle.putDouble("latitude", latitude) // 주소 넘겨줌
+            bundle.putDouble("longitude", longitude) // 주소 넘겨줌
+            dialogLocationUpdate.arguments = bundle // 번들 넘겨주기
+            binding.deliveryPartyUpdateKakaoMapLocation.removeView(mapView) // 맵 사용해야하니까 지우기
+            dialogLocationUpdate.show(childFragmentManager, "CustomDialog")
         }
 
     }
@@ -127,11 +159,41 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         return addr
     }
 
+    private fun drawMap(mapPoint: MapPoint){
+        //맵 다시 띄우기
+        mapView = MapView(requireActivity())
+        binding.deliveryPartyUpdateKakaoMapLocation.addView(mapView)
+        //마커생성
+        val marker = MapPOIItem()
+        marker.itemName = "요기?"
+        marker.isShowCalloutBalloonOnTouch = false // 클릭시 말풍선을 보여줄지 여부 (false)
+        marker.mapPoint = mapPoint
+        mapView.addPOIItem(marker)
+        mapView!!.setMapCenterPoint(mapPoint, true)//지도 중심점 변경
+    }
+
     override fun onUpdatePartySuccess() {
         //수정 성공하면, 파티보기로 이동하면서 수정이 완료되었습니다 토스트 메세지 띄워줘야해
     }
 
     override fun onUpdatePartyFailure(message: String) {
         Log.d("updateParty", message)
+    }
+
+
+    // 다이얼로그 닫을 때 호출됨
+    override fun onDtClicked(dt: String) {
+        orderTime = dt
+        binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
+    }
+
+    override fun onNumClicked(num: Int) {
+        maxMatching = num
+        binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
+    }
+
+    override fun onCategoryClicked(category: String) {
+        foodCategory = category
+        binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
     }
 }

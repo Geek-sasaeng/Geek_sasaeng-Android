@@ -139,5 +139,6 @@ class DialogCategory : DialogFragment() {
             }
             createPartyVM.setCategory(categoryString)
         }
+
     }
 }

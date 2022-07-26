@@ -19,6 +19,7 @@ import com.example.geeksasaeng.databinding.DialogCategoryUpdateLayoutBinding
 
 class DialogCategoryUpdate : DialogFragment() {
     lateinit var binding: DialogCategoryUpdateLayoutBinding
+    private var dialogCategoryUpdateClickListener: DialogCategoryUpdateClickListener? =null
     var categoryString = ""
 
 
@@ -34,8 +35,40 @@ class DialogCategoryUpdate : DialogFragment() {
         return binding.root
     }
 
-    private fun initData(){
+    //frag->Activity 정보전달용 코드 시작
+    interface DialogCategoryUpdateClickListener{
+        fun onCategoryClicked(text:String)
+    }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogCategoryUpdateClickListener = requireParentFragment() as DialogCategoryUpdateClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        if(categoryString!=""){ // 입력된 정보가 있으면
+            dialogCategoryUpdateClickListener?.onCategoryClicked(categoryString)
+        }
+        dialogCategoryUpdateClickListener = null
+    }
+    //frag->Activity 정보전달용 코드 끝
+
+    private fun initData(){
+        val category = arguments?.getString("Category")
+        when(category){
+            "한식"-> binding.categoryUpdateRadio1.isChecked = true
+            "중식"-> binding.categoryUpdateRadio3.isChecked = true
+            "분식"-> binding.categoryUpdateRadio5.isChecked = true
+            "회/돈까스"-> binding.categoryUpdateRadio7.isChecked = true
+            "디저트/음료"-> binding.categoryUpdateRadio9.isChecked = true
+            "양식"-> binding.categoryUpdateRadio2.isChecked = true
+            "일식"-> binding.categoryUpdateRadio4.isChecked = true
+            "치킨/피자"-> binding.categoryUpdateRadio6.isChecked = true
+            "패스트 푸드"-> binding.categoryUpdateRadio8.isChecked = true
+            "기타"-> binding.categoryUpdateRadio10.isChecked = true
+            else->{}
+        }
     }
 
     override fun onResume() {
@@ -78,6 +111,15 @@ class DialogCategoryUpdate : DialogFragment() {
                 R.id.category_update_radio_10 -> categoryString= "기타"
                 else-> {}
             }
+        }
+
+        //완료 버튼
+        binding.dialogCategoryUpdateBtn.setOnClickListener {
+            if(categoryString!=""){ // 입력된 정보가 있으면
+                dialogCategoryUpdateClickListener?.onCategoryClicked(categoryString)
+            }
+            parentFragmentManager.beginTransaction()
+                .remove(this).commit()
         }
     }
 }

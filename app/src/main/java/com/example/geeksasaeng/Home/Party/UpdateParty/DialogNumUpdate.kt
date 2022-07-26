@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogNum
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogNumLayoutBinding
 import com.example.geeksasaeng.databinding.DialogNumUpdateLayoutBinding
@@ -18,6 +19,7 @@ import com.example.geeksasaeng.databinding.DialogNumUpdateLayoutBinding
 class DialogNumUpdate: DialogFragment() {
 
     lateinit var binding: DialogNumUpdateLayoutBinding
+    private var dialogNumUpdateClickListener: DialogNumUpdateClickListener? =null
     var numString = "2"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -30,9 +32,26 @@ class DialogNumUpdate: DialogFragment() {
         return binding.root
     }
 
+    //frag->Activity 정보전달용 코드 시작
+    interface DialogNumUpdateClickListener{
+        fun onNumClicked(num:Int)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogNumUpdateClickListener = requireParentFragment() as DialogNumUpdateClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        dialogNumUpdateClickListener = null
+    }
+    //frag->Activity 정보전달용 코드 끝
+
     private fun initData(){
         //사용자가 입력해둔 정보 있으면, 그걸 default값으로 설정해주기 위함 (사용자가 입력해둔 정보 유무는 ViewModel에 저장되어 있는지 여부로 결정)
-
+        val num = arguments?.getString("Num")
+        numString = num!!
     }
 
     override fun onResume() {
@@ -54,12 +73,10 @@ class DialogNumUpdate: DialogFragment() {
     private fun initClickListener(){
         //완료버튼
         binding.dialogNumUpdateBtn.setOnClickListener {
-            //다음 다이얼로그 띄우기
-            val dialogCategory = DialogCategoryUpdate()
-            dialogCategory.show(parentFragmentManager, "CustomDialog")
-            //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
+            //frag-> activity 정보전달
+            dialogNumUpdateClickListener?.onNumClicked(numString.toInt())
+            parentFragmentManager.beginTransaction()
+                .remove(this).commit()
         }
 
         //넘버픽커 값

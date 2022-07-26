@@ -45,7 +45,7 @@ class DialogLink : DialogFragment() {
 
     private fun initData(){
         if(createPartyVM.getStoreUrl().toString()!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
-            binding.locationDialogSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
+            binding.linkDialogSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
         }
     }
 
@@ -71,9 +71,9 @@ class DialogLink : DialogFragment() {
         super.onDetach()
 
         //다음 다이얼로그 띄우기전에 이 작업 필요
-        if(binding.locationDialogSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
-            dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
-            createPartyVM.setStoreUrl(binding.locationDialogSearchEt.text.toString())
+        if(binding.linkDialogSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
+            dialogLinkNextClickListener?.onLinkClicked(binding.linkDialogSearchEt.text.toString(), flagNext)
+            createPartyVM.setStoreUrl(binding.linkDialogSearchEt.text.toString())
         }else{ //아무것도 없다면
             dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
             createPartyVM.setStoreUrl(null)
@@ -109,7 +109,7 @@ class DialogLink : DialogFragment() {
                 ?.remove(this)?.commit()
         }
 
-        binding.stepFourSkipBtn.setOnClickListener { //건너뛰기 버튼 (수행하는게 다음이랑 똑같다.)
+        binding.linkDialogSkipBtn.setOnClickListener { //건너뛰기 버튼 (수행하는게 다음이랑 똑같다.)
 
             flagNext = true // next버튼 클릭했다고 표시
             //자기는 종료

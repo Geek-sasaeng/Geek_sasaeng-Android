@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
+import com.example.geeksasaeng.Home.CreateParty.DialogLink
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
 import com.example.geeksasaeng.R
@@ -19,8 +20,7 @@ import com.example.geeksasaeng.databinding.DialogLinkUpdateLayoutBinding
 
 class DialogLinkUpdate : DialogFragment() {
     lateinit var binding: DialogLinkUpdateLayoutBinding
-    private var dialogLinkNextClickListener: DialogLinkNextClickListener? =null
-    var flagNext : Boolean = false
+    private var dialogLinkUpdateClickListener: DialogLinkUpdateClickListener? =null
 
     private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
@@ -37,9 +37,25 @@ class DialogLinkUpdate : DialogFragment() {
         return binding.root
     }
 
+    //frag->Activity 정보전달용 코드 시작
+    interface DialogLinkUpdateClickListener{
+        fun onLinkClicked(link:String)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogLinkUpdateClickListener = requireParentFragment() as DialogLinkUpdateClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        dialogLinkUpdateClickListener = null
+    }
+    //frag->Activity 정보전달용 코드 끝
+
     private fun initData(){
         if(createPartyVM.getStoreUrl().toString()!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
-            binding.locationDialogSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
+            binding.dialogLinkUpdateSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
         }
     }
 
@@ -51,45 +67,21 @@ class DialogLinkUpdate : DialogFragment() {
         dialog?.window?.setLayout(width,height)
     }
 
-    //frag->Activity 정보전달용 코드 시작
-    interface DialogLinkNextClickListener{
-        fun onLinkClicked(link:String, flagNext:Boolean)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        dialogLinkNextClickListener = activity as DialogLinkNextClickListener
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        //다음 다이얼로그 띄우기전에 이 작업 필요
-        if(binding.locationDialogSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
-            dialogLinkNextClickListener?.onLinkClicked(binding.locationDialogSearchEt.text.toString(), flagNext)
-            createPartyVM.setStoreUrl(binding.locationDialogSearchEt.text.toString())
-        }else{ //아무것도 없다면
-            dialogLinkNextClickListener?.onLinkClicked("링크를 입력해주세요", flagNext)
-            createPartyVM.setStoreUrl(null)
-        }
-
-        if(flagNext){
-            //다음 다이얼로그 띄우기
-            val dialogLocation = DialogLocation()
-            dialogLocation.show(parentFragmentManager, "CustomDialog")
-        }
-        dialogLinkNextClickListener = null
-    }
-    //frag->Activity 정보전달용 코드 끝
-
     private fun initClickListener(){
 
-        binding.linkDialogNextBtn.setOnClickListener { //다음버튼
+        binding.dialogLinkUpdateBtn.setOnClickListener { //다음버튼
 
-            flagNext = true // next버튼 클릭했다고 표시
+            //다음 다이얼로그 띄우기전에 이 작업 필요
+            if(binding.dialogLinkUpdateSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
+                dialogLinkUpdateClickListener?.onLinkClicked(binding.dialogLinkUpdateSearchEt.text.toString())
+                createPartyVM.setStoreUrl(binding.dialogLinkUpdateSearchEt.text.toString())
+            }else{ //아무것도 없다면
+                dialogLinkUpdateClickListener?.onLinkClicked("링크를 입력해주세요")
+                createPartyVM.setStoreUrl(null)
+            }
             //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
+            parentFragmentManager.beginTransaction()
+                .remove(this).commit()
         }
 
     }

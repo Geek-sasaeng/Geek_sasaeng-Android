@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/link_dialog_title_tv"
+            android:id="@+id/dialog_link_update_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="식당 링크"
@@ -25,7 +25,7 @@
 
         <!--edittext밑줄 색상은 backgroundTint로 바꿀 수 있음-->
         <EditText
-            android:id="@+id/location_dialog_search_et"
+            android:id="@+id/dialog_link_update_search_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="입력하세요"
@@ -35,7 +35,7 @@
             android:fontFamily="@font/spoqa_regular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/link_dialog_title_tv"
+            app:layout_constraintTop_toBottomOf="@id/dialog_link_update_title_tv"
             android:paddingStart="7dp"
             android:paddingBottom="13dp"
             android:layout_marginEnd="40dp"
@@ -44,7 +44,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/link_dialog_next_btn"
+            android:id="@+id/dialog_link_update_btn"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/main"

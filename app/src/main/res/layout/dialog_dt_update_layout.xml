@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/date_dialog_title_tv"
+            android:id="@+id/dialog_date_update_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="주문 예정 시간"
@@ -29,13 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/date_dialog_title_tv"
-            app:layout_constraintBottom_toTopOf="@id/date_dialog_next_btn"
+            app:layout_constraintTop_toBottomOf="@id/dialog_date_update_title_tv"
+            app:layout_constraintBottom_toTopOf="@id/dialog_date_update_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                android:id="@+id/date_dialog_date_tv"
+                android:id="@+id/dialog_date_update_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="7월 1일"
@@ -44,7 +44,7 @@
                 android:textColor="@color/top"/>
 
             <TextView
-                android:id="@+id/date_dialog_time_tv"
+                android:id="@+id/dialog_date_update_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -59,7 +59,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/date_dialog_next_btn"
+            android:id="@+id/dialog_date_update_btn"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/main"
