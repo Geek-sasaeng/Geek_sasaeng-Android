@@ -20,5 +20,6 @@ interface DeliveryRetrofitInterfaces {
     @GET("/{dormitoryId}/delivery-parties")
     fun getAllDeliveryList(
         @Path("dormitoryId") dormitoryId: Int,
-        @Query("cursor") cursor: Int): Call<DeliveryResponse>
+        @Query("cursor") cursor: Int
+    ): Call<DeliveryResponse>
 }

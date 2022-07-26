@@ -80,6 +80,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         if (totalCursor == 0)
             initLoadPosts()
 
+        Log.d("DELIVERY-FRAGMENT", "TOTAL-CURSOR = $totalCursor")
+        Log.d("DELIVERY-FRAGMENT", "INIT-BINDING")
+
         initScrollListener()
     }
 
@@ -175,16 +178,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
-                Log.d("DELIVERY-SCROLL", deliveryArray.size.toString())
-                Log.d("DELIVERY-SCROLL", (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition().toString())
-
                 if (finalPage == true) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
                     else
                         binding.deliveryBottomView.visibility = View.VISIBLE
                 }
-
 
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
