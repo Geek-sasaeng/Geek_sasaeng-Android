@@ -24,6 +24,6 @@
     </style>
 
     <style name="AnimationPopupStyle">
-        <item name="android:windowEnterAnimation">@anim/dialog_test</item>
+        <item name="android:windowEnterAnimation">@anim/dialog_look_party_popup</item>
     </style>
 </resources>

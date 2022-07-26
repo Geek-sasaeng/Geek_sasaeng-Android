@@ -45,6 +45,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var nowTime: Long = 0
     var date: Date? = null
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+    var finalPage: Boolean? = false
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -174,9 +175,24 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
+                Log.d("DELIVERY-SCROLL", deliveryArray.size.toString())
+                Log.d("DELIVERY-SCROLL", (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition().toString())
+
+                if (finalPage == true) {
+                    if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
+                        binding.deliveryBottomView.visibility = View.INVISIBLE
+                    else
+                        binding.deliveryBottomView.visibility = View.VISIBLE
+                }
+
+
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
-                        initMoreLoadPosts()
+                        if (finalPage == false)
+                            initMoreLoadPosts()
+                        else
+                            binding.deliveryBottomView.visibility = View.INVISIBLE
+
                         isLoading = true
                     }
                 }
@@ -219,7 +235,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliverySuccess(result: DeliveryResult) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
 
-        val finalPage = result.finalPage
+        finalPage = result.finalPage
         val result = result.deliveryPartiesVoList
 
         for (i in 0 until result!!.size) {
