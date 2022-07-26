@@ -43,14 +43,14 @@ class DialogCategory : DialogFragment() {
             //default 체크 작업
             when(categoryString){
                 "한식"-> binding.categoryRadio1.isChecked = true
-                "중식"-> binding.categoryRadio2.isChecked = true
-                "분식"-> binding.categoryRadio3.isChecked = true
-                "회/돈까스"-> binding.categoryRadio4.isChecked = true
-                "디저트/음료"-> binding.categoryRadio5.isChecked = true
-                "양식"-> binding.categoryRadio6.isChecked = true
-                "일식"-> binding.categoryRadio7.isChecked = true
-                "치킨/피자"-> binding.categoryRadio8.isChecked = true
-                "패스트 푸드"-> binding.categoryRadio9.isChecked = true
+                "중식"-> binding.categoryRadio3.isChecked = true
+                "분식"-> binding.categoryRadio5.isChecked = true
+                "회/돈까스"-> binding.categoryRadio7.isChecked = true
+                "디저트/음료"-> binding.categoryRadio9.isChecked = true
+                "양식"-> binding.categoryRadio2.isChecked = true
+                "일식"-> binding.categoryRadio4.isChecked = true
+                "치킨/피자"-> binding.categoryRadio6.isChecked = true
+                "패스트 푸드"-> binding.categoryRadio8.isChecked = true
                 "기타"-> binding.categoryRadio10.isChecked = true
                 else->{}
             }
@@ -139,5 +139,6 @@ class DialogCategory : DialogFragment() {
             }
             createPartyVM.setCategory(categoryString)
         }
+
     }
 }

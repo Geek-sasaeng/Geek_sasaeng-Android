@@ -28,6 +28,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Home.CreateParty.CreatePartyActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -43,7 +46,6 @@
         <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Home.Search.SearchActivity" />
-        <activity android:name=".Home.CreateParty.CreatePartyActivity" />
 
         <!--카카오맵 APP KEY 추가-->
         <meta-data

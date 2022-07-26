@@ -352,7 +352,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-
 /*      deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))

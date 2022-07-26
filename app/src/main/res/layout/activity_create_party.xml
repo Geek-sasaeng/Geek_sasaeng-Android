@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:context=".Home.Party.CreateParty.CreatePartyActivity">
+    tools:context=".Home.CreateParty.CreatePartyActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -110,6 +110,7 @@
                 android:textColorHint="@color/gray_2"
                 android:textColor="@color/top"
                 android:textSize="20sp"
+                android:maxLength="20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/create_party_together_check_btn" />
@@ -127,6 +128,7 @@
                 android:textColorHint="@color/gray_1"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
+                android:maxLength="500"
                 app:layout_constraintEnd_toEndOf="@id/create_party_title_et"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/create_party_title_et"

@@ -50,8 +50,8 @@ class CreatePartyService {
     }
 
     //파티 생성하기
-    fun createPartySender(createPartyRequest: CreatePartyRequest){
-        createPartyDataService.createParty(createPartyRequest).enqueue(object:
+    fun createPartySender(dormitoryId: Int, createPartyRequest: CreatePartyRequest){
+        createPartyDataService.createParty(dormitoryId, createPartyRequest).enqueue(object:
         Callback<CreatePartyResponse>{
             override fun onResponse(
                 call: Call<CreatePartyResponse>,
@@ -61,6 +61,7 @@ class CreatePartyService {
                 if (response.isSuccessful && response.code() == 200) {
                     Log.d("jjang-response", response.toString())
                     val resp: CreatePartyResponse = response.body()!!
+                    Log.d("jjang-resp", resp.toString())
                     when (resp.code) {
                         1000 -> createPartyView.onCreatePartySuccess()
                         else -> createPartyView.onCreatePartyFailure(resp.message)
