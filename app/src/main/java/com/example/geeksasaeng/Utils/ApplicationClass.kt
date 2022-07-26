@@ -10,6 +10,7 @@ import java.util.*
 class ApplicationClass: Application() {
     companion object {
         const val BASE_URL = "https://geeksasaeng.shop"
+        //const val BASE_URL = "http://192.168.1.2:8080"
         const val TAG: String = "geeksasaeng-pref" // Log, SharedPreference
 
         lateinit var retrofit: Retrofit

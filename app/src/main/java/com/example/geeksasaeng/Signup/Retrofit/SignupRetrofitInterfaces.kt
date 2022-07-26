@@ -13,7 +13,7 @@ interface SignupRetrofitInterfaces {
 
     // 네이버 회원가입
     @POST("/members/social")
-    fun signupSocial(@Body user: SignUpRequest): Call<SignUpResponse>
+    fun signupSocial(@Body user: SocialSignUpRequest): Call<SocialSignUpResponse>
 
     // <이메일 인증>
     // 이메일 전송

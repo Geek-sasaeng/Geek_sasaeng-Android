@@ -128,3 +128,27 @@ data class VerifySmsRequest(
     @SerializedName("recipientPhoneNumber") val recipientPhoneNumber : String,
     @SerializedName("verifyRandomNumber") val verifyRandomNumber : String
 )
+
+// 네이버 회원가입
+data class SocialSignUpResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: SocialSignUpResult?
+)
+
+data class SocialSignUpResult(
+    @SerializedName("email") val email: String,
+    @SerializedName("loginId") val loginId: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("phoneNumber") val phoneNumber: String?,
+    @SerializedName("universityName") val universityName: String
+)
+
+data class SocialSignUpRequest (
+    @SerializedName("email") var email: String?,
+    @SerializedName("informationAgreeStatus") var informationAgreeStatus: String, //개인정보 동의
+    @SerializedName("nickname") var nickname: String,
+    @SerializedName("universityName") var universityName: String,
+    @SerializedName("accessToken") var accessToken: String,
+)
