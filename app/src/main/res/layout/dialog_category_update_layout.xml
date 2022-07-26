@@ -9,15 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/category_dialog_back_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="30dp"/>
 
         <TextView
             android:id="@+id/category_dialog_title_tv"
@@ -29,8 +20,8 @@
             android:fontFamily="@font/spoqa_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/category_dialog_back_btn"
-            app:layout_constraintBottom_toBottomOf="@id/category_dialog_back_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             />
@@ -44,7 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/category_dialog_title_tv"
-            app:layout_constraintBottom_toTopOf="@id/category_dialog_next_btn"
+            app:layout_constraintBottom_toTopOf="@id/dialog_category_update_btn"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:paddingHorizontal="20dp">
@@ -225,12 +216,12 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/category_dialog_next_btn"
+            android:id="@+id/dialog_category_update_btn"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/main"
             android:background="@drawable/round_border"
-            android:text="다음"
+            android:text="완료"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:fontFamily="@font/spoqa_bold"
@@ -242,22 +233,6 @@
             android:layout_marginBottom="35dp"
             android:layout_marginTop="40dp"
             />
-
-        <TextView
-            android:id="@+id/category_dialog_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3/5"
-            android:textSize="13sp"
-            android:fontFamily="@font/spoqa_medium"
-            android:textColor="@color/gray_1"
-            app:layout_constraintTop_toBottomOf="@id/category_dialog_next_btn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

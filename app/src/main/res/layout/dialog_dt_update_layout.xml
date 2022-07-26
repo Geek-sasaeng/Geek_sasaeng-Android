@@ -10,41 +10,56 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/link_dialog_title_tv"
+            android:id="@+id/date_dialog_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="식당 링크"
+            android:text="주문 예정 시간"
             android:textSize="18sp"
-            android:textColor="@color/top"
             android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="30dp"
-            />
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginTop="30dp"/>
 
-        <!--edittext밑줄 색상은 backgroundTint로 바꿀 수 있음-->
-        <EditText
-            android:id="@+id/location_dialog_search_et"
-            android:layout_width="0dp"
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="입력하세요"
-            android:textColorHint="@color/gray_1"
-            android:backgroundTint="@color/gray_0"
-            android:textSize="15sp"
-            android:fontFamily="@font/spoqa_regular"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/date_dialog_title_tv"
+            app:layout_constraintBottom_toTopOf="@id/date_dialog_next_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/link_dialog_title_tv"
-            android:paddingStart="7dp"
-            android:paddingBottom="13dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="40dp"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/date_dialog_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7월 1일"
+                android:textSize="32sp"
+                android:fontFamily="@font/spoqa_medium"
+                android:textColor="@color/top"/>
+
+            <TextView
+                android:id="@+id/date_dialog_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:text="10시 50분"
+                android:textSize="20sp"
+                android:fontFamily="@font/spoqa_medium"
+                android:textColor="@color/top"/>
+
+        </LinearLayout>
+
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/link_dialog_next_btn"
+            android:id="@+id/date_dialog_next_btn"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/main"

@@ -87,8 +87,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
 
     private fun checking() : Boolean {
-        Log.d("jjang", binding.createPartyTitleEt.text.toString().length.toString() + "/" + (binding.createPartyTitleEt.text.length.toInt()<=20).toString())
-
         return ((binding.createPartyTitleEt.text.length in 1..20)&&
                 (binding.createPartyContentEt.text.length in 1..500) &&
                 createPartyVM.getDate2().toString() != "null" &&
