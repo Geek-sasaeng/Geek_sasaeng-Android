@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DialogDt : DialogFragment() {
@@ -46,9 +47,14 @@ class DialogDt : DialogFragment() {
         if((createPartyVM.getDate().toString()!="null") && (createPartyVM.getTime().toString()!="null")){
             Log.d("dialogDT", createPartyVM.getDate().toString()+createPartyVM.getTime().toString())
             dateString =createPartyVM.getDate().toString()
+            dateString2 =createPartyVM.getDate().toString()
             timeString =createPartyVM.getTime().toString()
+            timeString2 =createPartyVM.getTime().toString()
             binding.dateDialogDateTv.text = createPartyVM.getDate().toString()
             binding.dateDialogTimeTv.text = createPartyVM.getTime().toString()
+        }else{ //최초 실행시
+            binding.dateDialogDateTv.text = getCurrentDate()
+            binding.dateDialogTimeTv.text = getCurrentTime()
         }
     }
 
@@ -86,8 +92,17 @@ class DialogDt : DialogFragment() {
     override fun onDetach() {
         super.onDetach()
         dialogDtNextClickListener?.onDtClicked(dateString, timeString)//frag-> activity 정보전달
-        createPartyVM.setDateTime(dateString2+" "+ timeString2) //TODO:이러면 근데 "" 빈 문자열이 저장될 수 도 있는뎅..
         dialogDtNextClickListener = null
+    }
+
+    fun getCurrentDate(): String{
+        val formatter = SimpleDateFormat("MM월 dd일", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun getCurrentTime(): String{
+        val formatter = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 
     private fun initClickListener(){
@@ -96,10 +111,23 @@ class DialogDt : DialogFragment() {
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                 dateString = "${month+1}월 ${dayOfMonth}일"
-                dateString2 = "${year}-${month}-${dayOfMonth}"
+
+                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
+                var sMonth : String = (month+1).toString()
+                var sDay : String = dayOfMonth.toString()
+                if(month.toString().length==1){
+                    sMonth = "0"+ sMonth
+                }
+                if(dayOfMonth.toString().length==1){
+                    sDay = "0"+sDay
+                }
+                dateString2 = "${year}-" + sMonth + "-" + sDay
+
+
                 Log.d("dialog", dateString)
                 binding.dateDialogDateTv.text = dateString
                 createPartyVM.setDate(dateString)
+                createPartyVM.setDate2(dateString2)
             }
             DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(
                 Calendar.DAY_OF_MONTH)).show()
@@ -110,9 +138,22 @@ class DialogDt : DialogFragment() {
             //TimePicker
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 timeString = "${hourOfDay}시 ${minute}분"
-                timeString2 = "${hourOfDay}:${minute}:30" //TODO:임의로 그냥 초는 30초로 해둠.. 상관 없겠징? ㅎㅎ
+
+                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
+                var sHour : String = hourOfDay.toString()
+                var sMinute : String = minute.toString()
+                if(minute.toString().length==1){
+                    sMinute = "0"+ sMinute
+                }
+                if(hourOfDay.toString().length==1){
+                    sHour = "0"+sHour
+                }
+                timeString2 = sHour+":"+sMinute+":00" //TODO:임의로 그냥 초는 00초로 해두기로 함
+
+
                 binding.dateDialogTimeTv.text = timeString
                 createPartyVM.setTime(timeString)
+                createPartyVM.setTime2(timeString2)
             }
             TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
 

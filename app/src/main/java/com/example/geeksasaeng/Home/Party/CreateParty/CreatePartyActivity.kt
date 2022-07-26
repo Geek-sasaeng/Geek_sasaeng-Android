@@ -1,17 +1,22 @@
 package com.example.geeksasaeng.Home.CreateParty
 
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.*
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogNum
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
@@ -40,8 +45,39 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService = CreatePartyService() //서비스 객체 생성
         createPartyService.setCreatePartyDefaultLocView(this)
         createPartyService.setCreatePartyView(this)
+        initTextWatcher()
         initClickListener()
         initKakaoMap()
+    }
+
+    private fun initTextWatcher(){
+        binding.createPartyTitleEt.addTextChangedListener ( object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                Log.d("jjang", "텍스트와쳐-title")
+                Log.d("jjang", "textwatcher-title"+ checking().toString())
+                if(checking()){ // 등록버튼 파란색으로 바꿔주기
+                    binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+                }else{
+                    binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+                }
+            }
+        } )
+
+        binding.createPartyContentEt.addTextChangedListener ( object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                Log.d("jjang", "텍스트와쳐-content")
+                Log.d("jjang", "textwatcher-content"+ checking().toString())
+                if(checking()){ // 등록버튼 파란색으로 바꿔주기
+                    binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+                }else{
+                    binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+                }
+            }
+        } )
     }
 
     private fun initKakaoMap(){
@@ -49,16 +85,33 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출
     }
 
+
+    private fun checking() : Boolean {
+        return ((binding.createPartyTitleEt.text.length in 1..20)&&
+                (binding.createPartyContentEt.text.length in 1..500) &&
+                createPartyVM.getDate2().toString() != "null" &&
+                createPartyVM.getTime2().toString() != "null" &&
+                createPartyVM.getMaxMatching().toString() != "null" &&
+                createPartyVM.getCategory().toString() != "null" &&
+                createPartyVM.getMapPoint().toString() != "null")
+    }
+
     private fun initClickListener(){
+
+        binding.createPartyBackBtnIv.setOnClickListener {
+            startActivityWithClear(MainActivity::class.java)
+        }
 
         binding.createPartyRegisterBtnTv.setOnClickListener { //등록버튼 클릭시
             //TODO: "2022-07-26 16:29:30" => 이 시간형식은 어떻게 구할까..
 
-            //TODO: 제목이랑 콘텐츠 안쓰면 오류나는듯?
-            Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+ 1+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+  createPartyVM.getDateTime().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
-            val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), 1, createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
-                createPartyVM.getMaxMatching()!!, createPartyVM.getDateTime().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
-            createPartyService.createPartySender(createPartyRequest) //★파티 등록하기
+            if(checking()){
+                Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
+                val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
+                    createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
+                createPartyService.createPartySender(1, createPartyRequest) //★파티 등록하기
+                startActivityWithClear(MainActivity::class.java)
+            }
         }
 
         binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { //같이 먹고 싶어요 체크버튼 클릭시
@@ -128,18 +181,33 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         //파란색 버튼 없애고 회색버튼으로 띄우기
         binding.createPartyDate2Tv.visibility = View.VISIBLE
         binding.createPartyDate2ColoredTv.visibility = View.INVISIBLE
+        if(checking() == true){ // 등록버튼 파란색으로 바꿔주기
+            binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+        }else{
+            binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+        }
     }
 
     override fun onNumClicked(num: String) {
         //사용자가 선택한 인원수 표시
         binding.createPartyNumber2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyNumber2Tv.text = num
+        if(checking() == true){ // 등록버튼 파란색으로 바꿔주기
+            binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+        }else{
+            binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+        }
     }
 
     override fun onCategoryClicked(category: String) {
         //사용자가 선택한 카테고리 표시
         binding.createPartyCategory2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyCategory2Tv.text = category
+        if(checking() == true){ // 등록버튼 파란색으로 바꿔주기
+            binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+        }else{
+            binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+        }
     }
 
     override fun onLinkClicked(link: String, flagNext: Boolean) { //flagNext는 카카오 지도 때문에 이용
@@ -148,6 +216,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyLink2Tv.text = link
         if(flagNext){ //링크 다이얼로그 => 위치 다이얼로그로 넘어간 경우에만 맵 삭제
             binding.createPartyKakaoMapLocation.removeView(mapView) // 이제 link에서 다음을 클릭했다는 건 DialogLocation에서 지도 띄워야하니까 파티 생성하기 맵뷰는 삭제해주기
+        }
+        if(checking() == true){ // 등록버튼 파란색으로 바꿔주기
+            binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+        } else{
+            binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
         }
     }
 
@@ -158,6 +231,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         binding.createPartyLocation2Tv.setTextColor(ContextCompat.getColor(this,R.color.black))
         binding.createPartyLocation2Tv.text = loc
         drawMap(createPartyVM.getMapPoint()!!)
+        if(checking() == true){ // 등록버튼 파란색으로 바꿔주기
+            binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
+        } else{
+            binding.createPartyRegisterBtnTv.setTextColor((Color.parseColor("#BABABA")))
+        }
     }
 
     private fun drawMap(mapPoint: MapPoint){
@@ -201,7 +279,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     // 파티 등록하기 성공/실패
     override fun onCreatePartySuccess() {
-        Log.d("jjang", "성공")
+        Log.d("jjang", "파티 생성 성공(서버로 정보 보냄)")
     }
 
     override fun onCreatePartyFailure(message: String) {

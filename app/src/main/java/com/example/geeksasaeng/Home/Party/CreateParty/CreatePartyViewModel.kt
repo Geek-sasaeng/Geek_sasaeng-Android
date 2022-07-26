@@ -6,12 +6,13 @@ import net.daum.mf.map.api.MapPoint
 
 //TODO: category랑 categoryInt랑 합쳐보기 (7.30.~7.31.)
 class CreatePartyViewModel: ViewModel() {
-    /*var hashTag :  MutableLiveData<Boolean?> = MutableLiveData<Boolean?>() // 해시태그 여부
+    //var hashTag :  MutableLiveData<Boolean?> = MutableLiveData<Boolean?>() // 해시태그 여부
     var title: MutableLiveData<String?> = MutableLiveData<String?>() //제목
-    var content: MutableLiveData<String?> = MutableLiveData<String?>() //내용*/
+    var content: MutableLiveData<String?> = MutableLiveData<String?>() //내용
     var date: MutableLiveData<String?> = MutableLiveData<String?>() //날짜
     var time: MutableLiveData<String?> = MutableLiveData<String?>() //시간
-    var dateTime : MutableLiveData<String?> = MutableLiveData<String?>() //API용 날짜+시간
+    var date2 : MutableLiveData<String?> = MutableLiveData<String?>() //API용 날짜+시간
+    var time2 : MutableLiveData<String?> = MutableLiveData<String?>() //API용 날짜+시간
     var maxMatching: MutableLiveData<Int?> = MutableLiveData<Int?>() //매칭인원수
     var category: MutableLiveData<String?> = MutableLiveData<String?>() //카테고리
     var categoryInt: MutableLiveData<Int?> = MutableLiveData<Int?>() //카테고리
@@ -24,7 +25,7 @@ class CreatePartyViewModel: ViewModel() {
 
     fun getHashTag() : Boolean?{
         return hashTag.value
-    }
+    }*/
 
     fun setTitle(value: String?){
         title.value = value
@@ -40,7 +41,7 @@ class CreatePartyViewModel: ViewModel() {
 
     fun getContent() : String?{
         return content.value.toString()
-    }*/
+    }
 
     fun setDate(value: String?){
         date.value = value
@@ -58,12 +59,20 @@ class CreatePartyViewModel: ViewModel() {
         return time.value.toString()
     }
 
-    fun setDateTime(value: String?){
-        dateTime.value = value
+    fun setDate2(value: String?){
+        date2.value = value
     }
 
-    fun getDateTime() : String?{
-        return dateTime.value.toString()
+    fun getDate2() : String?{
+        return date2.value.toString()
+    }
+
+    fun setTime2(value: String?){
+        time2.value = value
+    }
+
+    fun getTime2() : String?{
+        return time2.value.toString()
     }
 
     fun setMaxMatching(value: Int?){
