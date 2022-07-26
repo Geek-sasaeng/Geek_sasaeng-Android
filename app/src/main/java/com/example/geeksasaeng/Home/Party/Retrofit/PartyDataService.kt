@@ -16,6 +16,7 @@ class PartyDataService {
     private lateinit var partyDetailView: PartyDetailView
     private lateinit var partyDeleteView: PartyDeleteView
     private lateinit var partyReportView: PartyReportView
+    private lateinit var userReportView: UserReportView
 
     //setView
     fun setPartyDetailView(partyDetailView: PartyDetailView) {
@@ -26,6 +27,9 @@ class PartyDataService {
     }
     fun setPartyReportView(partyReportView: PartyReportView) {
         this.partyReportView = partyReportView
+    }
+    fun setUserReportView(userReportView: UserReportView) {
+        this.userReportView = userReportView
     }
 
     //파티보기 상세조회
@@ -102,6 +106,32 @@ class PartyDataService {
             }
             override fun onFailure(call: Call<PartyReportResponse>, t: Throwable) {
                 Log.d("PARTY-REPORT-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
+            }
+        })
+    }
+
+    // 사용자 신고하기
+    fun userReportSender(userReportRequest: UserReportRequest) {
+        val userReportService = NetworkModule.getInstance()?.create(PartyRetrofitInterface::class.java)
+        userReportService?.reportDeliveryUser(userReportRequest)?.enqueue(object : Callback<UserReportResponse> {
+            override fun onResponse(call: Call<UserReportResponse>, response: Response<UserReportResponse>) {
+                Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
+                Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
+
+                if (response.isSuccessful && response.code() == 200) {
+                    val userReportResponse: UserReportResponse = response.body()!!
+
+                    Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : code = " + userReportResponse.code)
+                    Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : message = " + userReportResponse.message)
+
+                    when (userReportResponse.code) {
+                        1000 -> userReportView.userReportViewSuccess(userReportResponse.code)
+                        else -> userReportView.userReportViewFailure(userReportResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UserReportResponse>, t: Throwable) {
+                Log.d("USER-REPORT-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
             }
         })
     }

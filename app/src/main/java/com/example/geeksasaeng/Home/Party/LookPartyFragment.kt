@@ -13,8 +13,6 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
-import com.google.gson.annotations.SerializedName
-
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
 
@@ -122,7 +120,14 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookLocateText.text = "임시 값"
         binding.lookTimeDate.text = "${result.orderTime.substring(5, 7)}월 ${result.orderTime.substring(8, 10)}일"
         binding.lookTimeTime.text = "${result.orderTime.substring(11, 13)}시 ${result.orderTime.substring(14, 16)}분"
-        binding.lookLinkText.text = result.storeUrl
+
+        if (result.storeUrl.toString() != "null")
+            binding.lookLinkText.text = result.storeUrl
+        else {
+            binding.lookLink.visibility = View.GONE
+            binding.lookLinkText.visibility = View.GONE
+        }
+
         binding.lookTitle.text = result.title
         binding.lookPostDate.text = "${result.updatedAt.substring(5, 7)}/${result.updatedAt.substring(8, 10)} ${result.updatedAt.substring(11, 16)}"
     }
