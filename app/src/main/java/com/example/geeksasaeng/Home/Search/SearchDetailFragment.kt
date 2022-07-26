@@ -13,14 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
-import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
-import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
-import com.example.geeksasaeng.Home.Delivery.DeliveryResult
-import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchDataService
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchResult
@@ -28,7 +23,6 @@ import com.example.geeksasaeng.Home.Search.Retrofit.SearchView
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.databinding.FragmentSearchBasicBinding
 import com.example.geeksasaeng.databinding.FragmentSearchDetailBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -193,16 +187,22 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
                 var deliveryItemId = searchAdapter.getDeliveryItemId(pos).toString()
 
-                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+                // 기존 버전
+                // val transaction: FragmentTransaction = (context as SearchActivity).supportFragmentManager.beginTransaction()
 
-                val bundle = Bundle()
-                bundle.putString("deliveryItemId", deliveryItemId)
+                // val bundle = Bundle()
+                // bundle.putString("deliveryItemId", deliveryItemId)
 
-                val lookPartyFragment = LookPartyFragment()
-                lookPartyFragment.arguments = bundle
+                // val lookPartyFragment = LookPartyFragment()
+                // lookPartyFragment.arguments = bundle
 
-                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
-                transaction.commit()
+                // transaction.addToBackStack("lookParty").replace(R.id.search_frm, lookPartyFragment)
+                // transaction.commit()
+
+                val intent = Intent(activity, MainActivity::class.java)
+                intent.putExtra("deliveryItemId", deliveryItemId)
+                intent.putExtra("status", "search")
+                startActivity(intent)
             }
         })
     }
