@@ -87,16 +87,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
 
     private fun checking() : Boolean {
-        Log.d("jjang", ((binding.createPartyContentEt.text.toString().length>=1&&binding.createPartyContentEt.text.toString().length<=20)&&
-                (binding.createPartyTitleEt.text.toString().length>=1&&binding.createPartyTitleEt.text.toString().length<=500) &&
-                createPartyVM.getDate2().toString() != "null" &&
-                createPartyVM.getTime2().toString() != "null" &&
-                createPartyVM.getMaxMatching().toString() != "null" &&
-                createPartyVM.getCategory().toString() != "null" &&
-                createPartyVM.getMapPoint().toString() != "null").toString())
+        Log.d("jjang", binding.createPartyTitleEt.text.toString().length.toString() + "/" + (binding.createPartyTitleEt.text.length.toInt()<=20).toString())
 
-        return ((binding.createPartyContentEt.text.toString().length>=1&&binding.createPartyContentEt.text.toString().length<=20)&&
-                (binding.createPartyTitleEt.text.toString().length>=1&&binding.createPartyTitleEt.text.toString().length<=500) &&
+        return ((binding.createPartyTitleEt.text.length in 1..20)&&
+                (binding.createPartyContentEt.text.length in 1..500) &&
                 createPartyVM.getDate2().toString() != "null" &&
                 createPartyVM.getTime2().toString() != "null" &&
                 createPartyVM.getMaxMatching().toString() != "null" &&
