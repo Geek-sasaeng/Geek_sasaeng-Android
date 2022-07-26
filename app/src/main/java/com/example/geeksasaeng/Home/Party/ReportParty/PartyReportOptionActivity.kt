@@ -25,12 +25,12 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         if (binding.reportOptionCb.isChecked)
             block = true
 
+        binding.reportOptionTv.text = intent.getStringExtra("reportName") + " (선택 옵션)"
+
         reportCategoryId = intent.getIntExtra("reportCategoryId", 0)
         reportContent = binding.reportOptionEt.text.toString()
         reportedDeliveryPartyId = intent.getIntExtra("reportedDeliveryPartyId", 0)
         reportedMemberId = intent.getIntExtra("reportedMemberId", 0)
-
-        binding.reportOptionTv.text = intent.getStringExtra("reportContent")
     }
 
     fun initClickListener() {

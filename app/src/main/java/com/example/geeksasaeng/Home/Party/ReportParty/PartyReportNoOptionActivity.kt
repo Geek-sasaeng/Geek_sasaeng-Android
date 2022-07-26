@@ -17,12 +17,12 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
     override fun initAfterBinding() {
         initClickListener()
 
+        binding.reportNoOptionTv.text = intent.getStringExtra("reportName")
+
         reportCategoryId = intent.getIntExtra("reportCategoryId", 0)
         reportContent = binding.reportNoOptionEt.text.toString()
         reportedDeliveryPartyId = intent.getIntExtra("reportedDeliveryPartyId", 0)
         reportedMemberId = intent.getIntExtra("reportedMemberId", 0)
-
-        binding.reportNoOptionTv.text = intent.getStringExtra("reportContent")
     }
 
     fun initClickListener() {
