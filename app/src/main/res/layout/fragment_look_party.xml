@@ -79,7 +79,7 @@
                 android:id="@+id/look_host_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="네오"
+                android:text=" "
                 android:textColor="@color/black"
                 android:fontFamily="@font/spoqa_medium"
                 android:textSize="13sp"
@@ -92,7 +92,7 @@
                 android:id="@+id/look_post_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="05/15 23:57"
+                android:text=" "
                 android:textColor="@color/gray_1"
                 android:textSize="11dp"
                 android:layout_marginLeft="15dp"
@@ -101,12 +101,13 @@
                 app:layout_constraintBottom_toBottomOf="@id/look_host_name" />
 
             <TextView
-                android:id="@+id/look_option2"
+                android:id="@+id/look_hash_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_2"
                 android:text="같이 먹고 싶어요"
                 android:layout_marginTop="22dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/look_host_profile"
                 app:layout_constraintTop_toBottomOf="@id/look_host_profile" />
 
@@ -115,14 +116,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="중식 같이 먹어요 같이 먹자"
+                android:text=" "
                 android:fontFamily="@font/spoqa_medium"
                 android:textSize="20sp"
                 android:layout_marginTop="9dp"
                 android:layout_marginLeft="23dp"
                 android:layout_marginRight="23dp"
                 app:layout_constraintStart_toStartOf="@id/look_host_profile"
-                app:layout_constraintTop_toBottomOf="@id/look_option2" />
+                app:layout_constraintTop_toBottomOf="@id/look_hash_tag" />
 
             <TextView
                 android:id="@+id/look_content"
@@ -133,7 +134,7 @@
                 android:textSize="15dp"
                 android:textColor="@color/gray"
                 android:fontFamily="@font/spoqa_medium"
-                android:text="글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글"
+                android:text=" "
                 android:lineHeight="25dp"
                 android:layout_marginTop="14dp"
                 app:layout_constraintTop_toBottomOf="@id/look_title" />
@@ -196,7 +197,7 @@
                 android:id="@+id/look_matching_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2/4"
+                android:text="0/0"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/look_time_date"
@@ -218,7 +219,7 @@
                 android:id="@+id/look_category_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="중식"
+                android:text=" "
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/look_time_date"
@@ -240,7 +241,7 @@
                 android:id="@+id/look_link_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="링크링크"
+                android:text=" "
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/look_time_date"
@@ -262,7 +263,7 @@
                 android:id="@+id/look_locate_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="제1기숙사 후문"
+                android:text=" "
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/look_time_date"
@@ -324,6 +325,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/look_bottom_bar"
         app:layout_constraintBottom_toBottomOf="@id/look_bottom_bar" />
+
+    <View
+        android:id="@+id/look_party_white"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/look_party_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/look_bottom_bar" />
+
+    <ProgressBar
+        android:id="@+id/look_party_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
