@@ -1,12 +1,10 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyReportRequest
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyReportView
+import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityPartyReportNoOptionBinding
 
-class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBinding>(ActivityPartyReportNoOptionBinding::inflate), PartyReportView {
+class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBinding>(ActivityPartyReportNoOptionBinding::inflate), PartyReportView, UserReportView {
 
     var block: Boolean = false
     var reportCategoryId: Int = 0
@@ -32,6 +30,8 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
         binding.reportReportBtn.setOnClickListener {
             if (reportCategoryId <= 4)
                 sendReportParty()
+            else
+                sendReportUser()
         }
     }
 
@@ -52,20 +52,22 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
     override fun partyReportViewFailure(message: String) {
         showToast(message)
     }
-}
 
-//                게시물 신고
-//                {
-//                    "block": true,
-//                    "reportCategoryId": 9,
-//                    "reportContent": "욕설로 신고합니다.",
-//                    "reportedDeliveryPartyId": 231,
-//                    "reportedMemberId": 34
-//                }
-//                사용자 신고
-//                {
-//                    "block": true,
-//                    "reportCategoryId": 9,
-//                    "reportContent": "욕설로 신고합니다.",
-//                    "reportedMemberId": 34
-//                }
+    private fun getReportUser(): UserReportRequest {
+        return UserReportRequest(block, reportCategoryId, reportContent, reportedMemberId)
+    }
+
+    private fun sendReportUser() {
+        val reportUserService = PartyDataService()
+        reportUserService.setUserReportView(this)
+        reportUserService.userReportSender(getReportUser())
+    }
+
+    override fun userReportViewSuccess(code: Int) {
+        showToast("신고 완료")
+    }
+
+    override fun userReportViewFailure(message: String) {
+        showToast(message)
+    }
+}
