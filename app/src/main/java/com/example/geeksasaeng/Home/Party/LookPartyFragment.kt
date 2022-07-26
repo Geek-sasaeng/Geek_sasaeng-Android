@@ -17,6 +17,7 @@ import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
 
     var deliveryItemId: Int? = null
+    var status: String? = null
     var authorStatus: Boolean? = null
     lateinit var partyData: PartyDetailResult
 
@@ -30,11 +31,18 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         (context as MainActivity).supportFragmentManager.popBackStack("partyReport", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
+        status = arguments?.getString("status")
 
         val handler = Handler()
         handler.postDelayed({
             initDeliveryPartyData()
         }, 200)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (status == "search")
+            requireActivity().finish()
     }
 
     private fun initClickListener(){

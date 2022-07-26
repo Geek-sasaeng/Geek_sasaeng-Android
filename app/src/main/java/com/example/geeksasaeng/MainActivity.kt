@@ -1,16 +1,39 @@
 package com.example.geeksasaeng
 
+import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
+import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
+    var status: String? = null
+    var deliveryItemId: String? = null
+
     override fun initAfterBinding() {
-        setFragment(R.id.main_frm, HomeFragment())
+
+        status = intent.getStringExtra("status")
+        deliveryItemId = intent.getStringExtra("deliveryItemId")
+
+        if (status == "search") {
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putString("deliveryItemId", deliveryItemId)
+            bundle.putString("status", status)
+
+            val lookPartyFragment = LookPartyFragment()
+            lookPartyFragment.arguments = bundle
+
+            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            transaction.commit()
+        } else setFragment(R.id.main_frm, HomeFragment())
+
         //getAppKeyHash() //카카오맵 해시키 얻는 용
         setBottomNavi()
     }
