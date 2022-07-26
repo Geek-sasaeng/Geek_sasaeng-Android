@@ -14,6 +14,7 @@ data class PartyDetailResponse(
 data class PartyDetailResult(
     @SerializedName("authorStatus") val authorStatus: Boolean,
     @SerializedName("chief") val chief: String,
+    @SerializedName("chiefId") val chiefId: Int,
     @SerializedName("chiefProfileImgUrl") val chiefProfileImgUrl: String?,
     @SerializedName("content") val content: String,
     @SerializedName("currentMatching") val currentMatching: Int,
