@@ -92,23 +92,5 @@ class DialogLinkUpdate : DialogFragment() {
                 ?.remove(this)?.commit()
         }
 
-        binding.linkDialogBackBtn.setOnClickListener { //뒤로가기 버튼
-
-            //이전 다이얼로그 실행
-            val dialogCategory = DialogCategory()
-            dialogCategory.show(parentFragmentManager, "CustomDialog")
-
-            //자기자신(현 다이얼로그)은 종료 => 종료가 안되는 것 같기두..?
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
-        }
-
-        binding.stepFourSkipBtn.setOnClickListener { //건너뛰기 버튼 (수행하는게 다음이랑 똑같다.)
-
-            flagNext = true // next버튼 클릭했다고 표시
-            //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
-        }
     }
 }

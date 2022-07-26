@@ -51,22 +51,7 @@ class DialogDtUpdate : DialogFragment() {
             //DatePickerApplicationClass
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
             val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                dateString = "${month+1}월 ${dayOfMonth}일"
 
-                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
-                var sMonth : String = (month+1).toString()
-                var sDay : String = dayOfMonth.toString()
-                if(month.toString().length==1){
-                    sMonth = "0"+ sMonth
-                }
-                if(dayOfMonth.toString().length==1){
-                    sDay = "0"+sDay
-                }
-                dateString2 = "${year}-" + sMonth + "-" + sDay
-
-
-                Log.d("dialog", dateString)
-                binding.dateDialogDateTv.text = dateString
             }
             DatePickerDialog(requireContext(), dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(
                 Calendar.DAY_OF_MONTH)).show()
@@ -76,23 +61,7 @@ class DialogDtUpdate : DialogFragment() {
             val cal = Calendar.getInstance()   //캘린더뷰 만들기
             //TimePicker
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                timeString = "${hourOfDay}시 ${minute}분"
 
-                //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
-                var sHour : String = hourOfDay.toString()
-                var sMinute : String = minute.toString()
-                if(minute.toString().length==1){
-                    sMinute = "0"+ sMinute
-                }
-                if(hourOfDay.toString().length==1){
-                    sHour = "0"+sHour
-                }
-                timeString2 = sHour+":"+sMinute+":00" //TODO:임의로 그냥 초는 00초로 해두기로 함
-
-
-                binding.dateDialogTimeTv.text = timeString
-                createPartyVM.setTime(timeString)
-                createPartyVM.setTime2(timeString2)
             }
             TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
 

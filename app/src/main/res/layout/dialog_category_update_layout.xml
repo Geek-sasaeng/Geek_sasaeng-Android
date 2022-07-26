@@ -11,7 +11,7 @@
 
 
         <TextView
-            android:id="@+id/category_dialog_title_tv"
+            android:id="@+id/dialog_category_update_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카테고리 선택"
@@ -34,7 +34,7 @@
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/category_dialog_title_tv"
+            app:layout_constraintTop_toBottomOf="@id/dialog_category_update_title_tv"
             app:layout_constraintBottom_toTopOf="@id/dialog_category_update_btn"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
@@ -42,13 +42,13 @@
 
 
             <RadioGroup
-                android:id="@+id/category_dialog_rg1"
+                android:id="@+id/dialog_category_update_rg1"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <RadioButton
-                    android:id="@+id/category_radio_1"
+                    android:id="@+id/category_update_radio_1"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -63,7 +63,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_3"
+                    android:id="@+id/category_update_radio_3"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -78,7 +78,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_5"
+                    android:id="@+id/category_update_radio_5"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -93,7 +93,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_7"
+                    android:id="@+id/category_update_radio_7"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -109,7 +109,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_9"
+                    android:id="@+id/category_update_radio_9"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -125,13 +125,13 @@
 
             <RadioGroup
                 android:layout_marginStart="8dp"
-                android:id="@+id/category_dialog_rg2"
+                android:id="@+id/dialog_category_update_rg2"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <RadioButton
-                    android:id="@+id/category_radio_2"
+                    android:id="@+id/category_update_radio_2"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -146,7 +146,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_4"
+                    android:id="@+id/category_update_radio_4"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -162,7 +162,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_6"
+                    android:id="@+id/category_update_radio_6"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -178,7 +178,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_8"
+                    android:id="@+id/category_update_radio_8"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"
@@ -194,7 +194,7 @@
                     android:layout_marginBottom="7dp"/>
 
                 <RadioButton
-                    android:id="@+id/category_radio_10"
+                    android:id="@+id/category_update_radio_10"
                     android:background="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
                     android:button="@null"

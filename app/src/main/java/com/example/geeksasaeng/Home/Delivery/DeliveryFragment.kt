@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Delivery
 
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -22,6 +24,7 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
@@ -29,7 +32,7 @@ import java.util.*
 
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
-    private var deliveryArray = ArrayList<DeliveryResult?>()
+    private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
@@ -196,16 +199,28 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
-            override fun onItemClick(data: DeliveryResult, pos : Int) {
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_frm, LookPartyFragment())?.addToBackStack("lookParty")?.commit()
+            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
+                var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
+
+                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+                val bundle = Bundle()
+                bundle.putString("deliveryItemId", deliveryItemId)
+
+                val lookPartyFragment = LookPartyFragment()
+                lookPartyFragment.arguments = bundle
+
+                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+                transaction.commit()
             }
         })
     }
 
-    override fun deliverySuccess(response: DeliveryResponse) {
+    override fun deliverySuccess(result: DeliveryResult) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
-        val result = response.result
-        val size = result!!.size
+
+        val finalPage = result.finalPage
+        val result = result.deliveryPartiesVoList
 
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching
@@ -217,7 +232,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryResult(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()

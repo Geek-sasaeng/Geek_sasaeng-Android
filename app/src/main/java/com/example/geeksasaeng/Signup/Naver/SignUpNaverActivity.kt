@@ -20,15 +20,12 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
     override fun initAfterBinding() {
         progressVM = ViewModelProvider(this).get(ProgressNaverViewModel::class.java)
         signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
-
-        loginId = intent.getStringExtra("loginId")
-        phoneNumber = intent.getStringExtra("phoneNumber")
-
+        val accessToken = intent.getStringExtra("accessToken")
         val transaction: FragmentTransaction = this@SignUpNaverActivity.supportFragmentManager.beginTransaction()
 
         val bundle = Bundle()
-        bundle.putString("loginId", loginId)
-        bundle.putString("phoneNumber", phoneNumber)
+
+        signUpNaverVM.setAccessToken(accessToken)
 
         val stepNaverOneFragment = StepNaverOneFragment()
         stepNaverOneFragment.arguments = bundle

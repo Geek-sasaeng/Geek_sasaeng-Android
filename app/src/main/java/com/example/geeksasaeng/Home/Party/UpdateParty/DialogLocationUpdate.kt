@@ -49,7 +49,6 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
     MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
     lateinit var binding: DialogLocationLayoutUpdateBinding
-    private var dialogLocationNextClickListener: DialogLocationNextClickListener? =null
     var LocationString = ""
     var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     private val GPS_ENABLE_REQUEST_CODE = 2001
@@ -67,7 +66,7 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutUpdateBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
-        binding.locationDialogLocTv.isSelected = true
+        binding.dialogLocationUpdateLocTv.isSelected = true // 이걸 해줘야 물 흐르는 애니메이션이 가능
         ininKakaoMap()
         initData() //꼭 카카오맵 뒤에 있어야함
         initClickListener()
@@ -91,32 +90,11 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
         dialog?.window?.setLayout(width,height)
     }
 
-    //frag->Activity 정보전달용 코드 시작
-    interface DialogLocationNextClickListener{
-        fun onLocationClicked(loc:String, mapPoint: MapPoint, locFlag: Boolean)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        dialogLocationNextClickListener = activity as DialogLocationNextClickListener
-    }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d("location", binding.locationDialogLocTv.text.toString()+"Detached")
-        if(binding.locationDialogLocTv.text!="주소를 입력해주세요"&&binding.locationDialogLocTv.text!="올바른 주소를 입력해주세요. "){
-            locFlag = true // locFlag가 true면 정보를 바꿔주기 위함이다.
-        }
-        LocationString = binding.locationDialogLocTv.text.toString() // 지금 현재 정보 (주소: ~~ 기준) 가져오기
-
-        //TODO: 사실 얘도 VM에 있어서 인자로 넘겨줄 필요가 없긴한뎅,,,,
-        dialogLocationNextClickListener?.onLocationClicked(LocationString, createPartyVM.getMapPoint()!!, locFlag) //frag-> activity 정보전달 (완료 버튼을 눌렀을 떄만)
-        //지금 맵포인트는 초기에 기숙사 deafult위치 불러올때랑, 검색했을때, 마커옮겼을때 정의되므로, (LocationString, mapPoint, locFlag) 이 매개변수 대신에 VM이용
-
-        binding.locationDialogKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
-        dialogLocationNextClickListener = null
+        binding.dialogLocationUpdateKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
     }
-    //frag->Activity 정보전달용 코드 끝
 
     private fun ininKakaoMap(){
         createPartyService = CreatePartyService() //서비스 객체 생성
@@ -139,7 +117,7 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
 
         try {
             addr = geoCoder.getFromLocation(position.mapPointGeoCoord.latitude, position.mapPointGeoCoord.longitude, 1).first().getAddressLine(0)
-            binding.locationDialogLocTv.text = addr
+            binding.dialogLocationUpdateLocTv.text = addr
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -237,24 +215,15 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
     }
 
     private fun initClickListener(){
-        binding.locationDialogNextBtn.setOnClickListener {
+        binding.dialogLocationUpdateBtn.setOnClickListener {
             //마지막 페이지이므로 그냥 종료
             //자기는 종료
             activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
 
-        binding.locationDialogBackBtn.setOnClickListener {
-            //이전 다이얼로그 실행
-            val dialogLink = DialogLink()
-            dialogLink.show(parentFragmentManager, "CustomDialog")
-
-            //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-        }
-
-        binding.locationDialogSearchEt.setOnKeyListener { _, keyCode, event ->
+        binding.dialogLocationUpdateSearchEt.setOnKeyListener { _, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                binding.locationDialogSearchBtn.performClick()
+                binding.dialogLocationUpdateSearchBtn.performClick()
                 true
             }else{
                 false
@@ -262,15 +231,15 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
         }
 
         //서치버튼
-        binding.locationDialogSearchBtn.setOnClickListener {
+        binding.dialogLocationUpdateSearchBtn.setOnClickListener {
             //TODO: 서치시 이전 핀 없애주기
             mapView.removePOIItem(marker) // 원래있던 마커 없애주기
-            var adr = binding.locationDialogSearchEt.text.toString() // 주소 얻어오기
+            var adr = binding.dialogLocationUpdateSearchEt.text.toString() // 주소 얻어오기
             var list = geocoder.getFromLocationName(adr, 10)
 
             if (list != null) {
                 if (list.size == 0) {
-                    binding.locationDialogLocTv.setText("올바른 주소를 입력해주세요. ")
+                    binding.dialogLocationUpdateLocTv.setText("올바른 주소를 입력해주세요. ")
                 } else {
                     val address: Address = list[0]
                     val lat: Double = address.getLatitude() //위도
@@ -377,7 +346,7 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
     private fun drawMap(mapPoint: MapPoint){
         //맵  띄우기
         mapView = MapView(activity)
-        binding.locationDialogKakaoMapView.addView(mapView)
+        binding.dialogLocationUpdateKakaoMapView.addView(mapView)
         //마커생성
         marker = MapPOIItem()
         marker.itemName = "요기?"
