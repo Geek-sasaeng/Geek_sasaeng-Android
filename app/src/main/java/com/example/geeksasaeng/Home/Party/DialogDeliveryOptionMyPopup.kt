@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDeleteView
+import com.example.geeksasaeng.Home.Party.UpdateParty.DialogDtUpdate
 import com.example.geeksasaeng.Home.Party.UpdateParty.PartyUpdateFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
@@ -39,6 +41,9 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
     var storeUrl: String? = null
     var title: String? = null
     var updatedAt: String? = null
+
+    private var UpdateClickListener: PopUpdateClickListener? =null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,9 +86,26 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
         dialog?.window?.setLayout(width, height)
     }
 
+    interface PopUpdateClickListener{
+        //TODO: 뷰모델 이용하면서 사실 여기서 매개변수로 안넘겨줘도 ACTIVITY에서 값 알 수 있어..
+        //TODO: 근데 이걸 하는 이유는 정보 갱신을 위함.
+        fun onPopUpdateClicked()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        UpdateClickListener = requireParentFragment() as PopUpdateClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        UpdateClickListener = null
+    }
+
     private fun initListener() {
         binding.deliveryOptionUpdateTv.setOnClickListener {
             // 수정하기
+            UpdateClickListener?.onPopUpdateClicked()
             this.dismiss()
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -122,7 +144,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
 
             var dialogFragment = DialogPartyDelete()
             dialogFragment.arguments = bundle
-            dialogFragment.show(parentFragmentManager, "DialogPartyDelete")
+            dialogFragment.show(childFragmentManager, "DialogPartyDelete")
         }
     }
 }

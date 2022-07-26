@@ -61,7 +61,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         initClickListener()
     }
 
-
     private fun initGetData(){ // 파티 보기에서 파티 수정하기로 넘어오면서 데이터 받아오기
         authorStatus = requireArguments().getBoolean("authorStatus")
         chief = requireArguments().getString("chief")
@@ -150,17 +149,32 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             longitude.toString() != requireArguments().getDouble("longitude", longitude).toString()
         ){ // 등록버튼 파란색으로 바꿔주기
             binding.deliveryPartyUpdateCompleteBtnTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.main))
-            binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = true
+            if(!binding.deliveryPartyUpdateCompleteBtnTv.isEnabled){
+                binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = true
+            }
         }else{
             binding.deliveryPartyUpdateCompleteBtnTv.setTextColor((Color.parseColor("#BABABA")))
-            binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = false
+            if(binding.deliveryPartyUpdateCompleteBtnTv.isEnabled){ // 이렇게 조건문으로 안 감싸도 될것 같은데 안 그럼 오류가 나더라고,,?
+                binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = false
+            }
         }
         //20자 500자 제한은 xml에서 해놔서 굳이 검사 안해도 될듯..? 근데 파티 생성하기에선 해놓긴 했어.ㅎㅇㅎ
     }
 
     private fun initClickListener(){
 
+        //백버튼
+        binding.deliveryPartyUpdateBackBtnIv.setOnClickListener {
+            //TODO: 안돼...
+            Log.d("cherry", "파티 수정하기 백버튼 눌러짐")
+            //파티 수정=> 파티 보기로 다시 이동
+            //종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+            activity?.supportFragmentManager?.popBackStack()
+        }
 
+        //완료버튼
         binding.deliveryPartyUpdateCompleteBtnTv.setOnClickListener {
             Log.d("cherry", "버튼 눌려짐")
             var numCategory : Int = 0
@@ -179,6 +193,7 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             }
             val updatePartyResult = UpdatePartyRequest(content.toString(), numCategory ,hashTag,latitude,longitude, maxMatching, orderTime, storeUrl, title)
             updatePartyService.updatePartySender(dormitory,partyId,updatePartyResult)
+
         }
 
 
@@ -309,6 +324,11 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     //수정 성공, 실패
     override fun onUpdatePartySuccess() {
         Log.d("cherry", "파티 수정하기 성공")
+        //TODO: 안돼...
+        //종료
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.remove(this)?.commit()
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     override fun onUpdatePartyFailure(message: String) {
