@@ -14,11 +14,12 @@ interface DeliveryRetrofitInterfaces {
     @GET("/commercials")
     fun getCommercials(): Call<DeliveryBannerResponse>
 
-    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjoyNn0sImlhdCI6MTY1Nzk0MTQ4NiwiZXhwIjoxNjU4ODMwNTE5fQ.n9HFrLuc97GeWOcKo-ffAj-k5XAvcd7IH0iEuOVzPaQ")
+    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjozNH0sImlhdCI6MTY1ODgzMjA4NywiZXhwIjoxNjU5NzIxMTE5fQ.h2uzVXgnOs1dYZeQmrXHLaKjWVcnBvDy9haQj9QMO5A")
     // @Headers("Authorization:Bearer \${getJwt()}")
     // 기숙사별 배달 리스트 불러오기
     @GET("/{dormitoryId}/delivery-parties")
     fun getAllDeliveryList(
         @Path("dormitoryId") dormitoryId: Int,
-        @Query("cursor") cursor: Int): Call<DeliveryResponse>
+        @Query("cursor") cursor: Int
+    ): Call<DeliveryResponse>
 }

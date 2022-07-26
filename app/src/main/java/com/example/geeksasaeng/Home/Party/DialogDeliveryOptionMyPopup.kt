@@ -23,6 +23,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
     lateinit var binding: DialogDeliveryOptionMyPopupBinding
     var authorStatus: Boolean? = null
     var chief: String? = null
+    // var chiefId: Int = 0
     var chiefProfileImgUrl: String? = null
     var content: String? = null
     var currentMatching: Int = 0
@@ -48,6 +49,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
 
         authorStatus = requireArguments().getBoolean("partyId")
         chief = requireArguments().getString("chief")
+        // chiefId = requireArguments().getInt("chiefId")
         chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
         content = requireArguments().getString("content")
         currentMatching = requireArguments().getInt("currentMatching")
@@ -108,8 +110,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
             val partyUpdateFragment = PartyUpdateFragment()
             partyUpdateFragment.arguments = bundle
 
-            transaction.addToBackStack("partyUpdate").replace(R.id.main_frm, partyUpdateFragment)
-            transaction.commit()
+            transaction.addToBackStack("partyUpdate").replace(R.id.main_frm, partyUpdateFragment).commit()
         }
 
         binding.deliveryOptionDeleteTv.setOnClickListener {

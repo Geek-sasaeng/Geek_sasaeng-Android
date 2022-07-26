@@ -142,4 +142,38 @@
         app:layout_constraintTop_toBottomOf="@id/search_detail_sort_img"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView
+        android:id="@+id/search_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@drawable/bg_gradient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clickable="false" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_progress_cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/search_detail_party_rv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <!--android:background="#40EFEFEF"-->
+
+        <ProgressBar
+            android:id="@+id/search_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

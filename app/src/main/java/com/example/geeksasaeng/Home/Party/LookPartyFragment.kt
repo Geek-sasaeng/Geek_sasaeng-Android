@@ -55,6 +55,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             if (authorStatus == true) {
                 bundle.putBoolean("authorStatus", partyData.authorStatus)
                 bundle.putString("chief", partyData.chief)
+                bundle.putInt("chiefId", partyData.chiefId)
                 bundle.putString("chiefProfileImgUrl", partyData.chiefProfileImgUrl)
                 bundle.putString("content", partyData.content)
                 bundle.putInt("currentMatching", partyData.currentMatching)
@@ -76,6 +77,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             }
             else if (authorStatus == false) {
                 // TODO: 게시글 쓴 사람 ID 전달
+                bundle.putInt("reportedMemberId", partyData.chiefId)
+                bundle.putInt("reportedDeliveryPartyId", partyData.id)
+
                 dialogFragment = DialogDeliveryOptionOtherPopup()
                 dialogTag = "DeliveryPartyOtherOption"
             }
