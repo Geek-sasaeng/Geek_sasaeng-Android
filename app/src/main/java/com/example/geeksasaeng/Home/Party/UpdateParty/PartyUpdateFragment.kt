@@ -31,8 +31,12 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     var title: String? = null
     var updatedAt: String? = null
 
-    override fun initAfterBinding() {
+    override fun onStart() {
+        super.onStart()
         binding.deliveryPartyUpdateLocation2Tv.isSelected = true // 애니메이션 효과 주기 위해서
+    }
+
+    override fun initAfterBinding() {
         initGetData()
         initClickListener()
     }
@@ -56,11 +60,14 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         storeUrl = requireArguments().getString("storeUrl")
         title = requireArguments().getString("title")
         updatedAt = requireArguments().getString("updatedAt")
+        Log.d("partyUpdate", latitude.toString()+"/"+longitude.toString())
+        Log.d("partyUpdate", orderTime.toString())
 
         binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
         binding.deliveryPartyUpdateTitleEt.setText(title) //제목
         binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
         //주문 예정시간
+        binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
         binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
         binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
         binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
