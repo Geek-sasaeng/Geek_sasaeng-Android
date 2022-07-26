@@ -13,12 +13,14 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
+import com.google.gson.annotations.SerializedName
 
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView {
 
     var deliveryItemId: Int? = null
     var authorStatus: Boolean? = null
+    lateinit var partyData: PartyDetailResult
 
     override fun initAfterBinding() {
         initClickListener()
@@ -51,10 +53,29 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             var dialogTag = String()
 
             if (authorStatus == true) {
+                bundle.putBoolean("authorStatus", partyData.authorStatus)
+                bundle.putString("chief", partyData.chief)
+                bundle.putString("chiefProfileImgUrl", partyData.chiefProfileImgUrl)
+                bundle.putString("content", partyData.content)
+                bundle.putInt("currentMatching", partyData.currentMatching)
+                bundle.putInt("dormitory", partyData.dormitory)
+                bundle.putString("foodCategory", partyData.foodCategory)
+                bundle.putBoolean("hashTag", partyData.hashTag)
+                bundle.putInt("id", partyData.id)
+                bundle.putDouble("latitude", partyData.latitude)
+                bundle.putDouble("longitude", partyData.longitude)
+                bundle.putString("matchingStatus", partyData.matchingStatus)
+                bundle.putInt("maxMatching", partyData.maxMatching)
+                bundle.putString("orderTime", partyData.orderTime)
+                bundle.putString("storeUrl", partyData.storeUrl)
+                bundle.putString("title", partyData.title)
+                bundle.putString("updatedAt", partyData.updatedAt)
+
                 dialogFragment = DialogDeliveryOptionMyPopup()
                 dialogTag = "DeliveryPartyMyOption"
             }
             else if (authorStatus == false) {
+                // TODO: 게시글 쓴 사람 ID 전달
                 dialogFragment = DialogDeliveryOptionOtherPopup()
                 dialogTag = "DeliveryPartyOtherOption"
             }
@@ -71,6 +92,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     }
 
     override fun partyDetailSuccess(result: PartyDetailResult) {
+        partyData = result
+
         binding.lookPartyWhite.visibility = View.GONE
         binding.lookPartyProgressBar.visibility = View.GONE
 
