@@ -31,12 +31,12 @@ data class UpdatePartyResult(
 
 data class UpdatePartyRequest(
     @SerializedName("content") val content: String,
-    @SerializedName("foodCategory") val foodCategory: Int,
-    @SerializedName("hashTag") val hashTag: Boolean,
+    @SerializedName("foodCategory") val foodCategory: Int?,
+    @SerializedName("hashTag") val hashTag: Boolean?,
     @SerializedName("latitude") val latitude: Double,
     @SerializedName("longitude") val longitude: Double,
     @SerializedName("maxMatching") val maxMatching: Int,
-    @SerializedName("orderTime") val orderTime: String,
-    @SerializedName("storeUrl") val storeUrl: String,
-    @SerializedName("title") val title: String
+    @SerializedName("orderTime") val orderTime: String?,
+    @SerializedName("storeUrl") val storeUrl: String?,
+    @SerializedName("title") val title: String?
 )

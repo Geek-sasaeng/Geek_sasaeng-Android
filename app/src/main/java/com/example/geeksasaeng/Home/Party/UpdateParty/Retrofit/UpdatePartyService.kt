@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit
 
+import android.util.Log
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import retrofit2.Call
@@ -25,8 +26,10 @@ class UpdatePartyService {
                 call: Call<UpdatePartyResponse>,
                 response: Response<UpdatePartyResponse>
             ) {
+                Log.d("cherry-response",response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: UpdatePartyResponse = response.body()!!
+                    Log.d("cherry-resp",resp.toString())
                     when (resp.code) {
                         1000 -> updatePartyView.onUpdatePartySuccess()
                         else -> updatePartyView.onUpdatePartyFailure(resp.message)
@@ -35,7 +38,7 @@ class UpdatePartyService {
             }
 
             override fun onFailure(call: Call<UpdatePartyResponse>, t: Throwable) {
-
+                Log.d("cherry","실패패")
             }
 
         })
