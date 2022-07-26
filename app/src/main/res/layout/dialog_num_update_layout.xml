@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/num_dialog_back_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:id="@+id/num_dialog_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="매칭 인원 선택"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/num_dialog_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/num_dialog_back_btn"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            />
+
+
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="47dp"
+            android:backgroundTint="@color/gray_0"
+            android:background="@drawable/round_border"
+            app:layout_constraintTop_toTopOf="@id/num_dialog_picker"
+            app:layout_constraintBottom_toBottomOf="@id/num_dialog_picker"
+            app:layout_constraintStart_toStartOf="@id/num_dialog_picker"
+            app:layout_constraintEnd_toEndOf="@id/num_dialog_picker"/>
+
+        <NumberPicker
+            android:id="@+id/num_dialog_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/num_dialog_title_tv"
+            app:layout_constraintBottom_toTopOf="@id/num_dialog_next_btn"
+            android:selectionDividerHeight="0dp"
+            android:theme="@style/NumPicker"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/num_dialog_next_btn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/main"
+            android:background="@drawable/round_border"
+            android:text="다음"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginTop="60dp"
+            />
+
+        <TextView
+            android:id="@+id/location_dialog_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2/5"
+            android:textSize="13sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/gray_1"
+            app:layout_constraintTop_toBottomOf="@id/num_dialog_next_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
