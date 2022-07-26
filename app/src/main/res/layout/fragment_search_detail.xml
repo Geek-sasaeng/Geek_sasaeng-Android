@@ -5,56 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <EditText
-        android:id="@+id/search_et"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="검색어를 입력하세요"
-        android:textColorHint="@color/gray_0"
-        android:textSize="20sp"
-        android:textColor="@color/top"
-        android:layout_marginTop="29dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="10dp"
-        android:background="@android:color/transparent"
-        android:maxLines="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/search_btn"/>
-
     <ImageView
-        android:id="@+id/search_btn"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_search"
-        android:scaleType="fitXY"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintTop_toTopOf="@id/search_et"
-        app:layout_constraintBottom_toBottomOf="@id/search_et"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <View
-        android:id="@+id/search_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_0"
-        android:layout_marginTop="13dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
-        app:layout_constraintTop_toBottomOf="@id/search_et" />
-
-    <ImageView
-        android:id='@+id/delivery_sort_img'
+        android:id='@+id/search_detail_sort_img'
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:src="@drawable/ic_sort"
         android:layout_marginStart="28dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/search_line"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
-        android:id="@+id/delivery_people_spinner"
+        android:id="@+id/search_detail_people_spinner"
         android:layout_width="100dp"
         android:layout_height="34dp"
         android:layout_marginLeft="15dp"
@@ -64,9 +26,9 @@
         android:spinnerMode="dropdown"
         android:entries="@array/home_dropdown1"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
-        app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
+        app:layout_constraintTop_toTopOf="@id/search_detail_sort_img"
+        app:layout_constraintBottom_toBottomOf="@id/search_detail_sort_img"
+        app:layout_constraintStart_toEndOf="@id/search_detail_sort_img" />
 
     <HorizontalScrollView
         android:layout_width="0dp"
@@ -75,9 +37,9 @@
         android:layout_marginEnd="28dp"
         android:scrollbars="@null"
         android:overScrollMode="never"
-        app:layout_constraintTop_toTopOf="@id/delivery_people_spinner"
-        app:layout_constraintBottom_toBottomOf="@id/delivery_people_spinner"
-        app:layout_constraintStart_toEndOf="@id/delivery_people_spinner"
+        app:layout_constraintTop_toTopOf="@id/search_detail_people_spinner"
+        app:layout_constraintBottom_toBottomOf="@id/search_detail_people_spinner"
+        app:layout_constraintStart_toEndOf="@id/search_detail_people_spinner"
         app:layout_constraintEnd_toEndOf="parent">
 
         <!--아침,점심,저녁,야식 선택-->
@@ -87,13 +49,13 @@
             android:layout_height="34dp">
 
             <RadioGroup
-                android:id="@+id/delivery_time_rg"
+                android:id="@+id/search_detail_time_rg"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <RadioButton
-                    android:id="@+id/delivery_rb1"
+                    android:id="@+id/search_detail_rb1"
                     android:paddingVertical="7dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
@@ -108,7 +70,7 @@
                     android:gravity="center"/>
 
                 <RadioButton
-                    android:id="@+id/delivery_rb2"
+                    android:id="@+id/search_detail_rb2"
                     android:paddingVertical="7dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
@@ -123,7 +85,7 @@
                     android:gravity="center"/>
 
                 <RadioButton
-                    android:id="@+id/delivery_rb3"
+                    android:id="@+id/search_detail_rb3"
                     android:paddingVertical="7dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
@@ -138,7 +100,7 @@
                     android:gravity="center"/>
 
                 <RadioButton
-                    android:id="@+id/delivery_rb4"
+                    android:id="@+id/search_detail_rb4"
                     android:paddingVertical="7dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
@@ -157,19 +119,8 @@
 
     </HorizontalScrollView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/delivery_rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="13dp"
-        android:overScrollMode="never"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/delivery_sort_img"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
     <ImageView
-        android:id="@+id/search_back_logo_ic"
+        android:id="@+id/search_detail_back_logo_ic"
         android:layout_width="72dp"
         android:layout_height="79dp"
         android:src="@drawable/ic_logo_search_back"
@@ -179,5 +130,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_detail_party_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="13dp"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_detail_sort_img"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

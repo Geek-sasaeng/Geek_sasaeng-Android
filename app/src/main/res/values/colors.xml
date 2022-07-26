@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name= "main">#29ABE2</color>
+    <color name= "status_bar">#CD71C9EF</color>
     <color name="gray">#5B5B5B</color>
     <color name="gray_0">#EFEFEF</color>
     <color name="gray_1">#D8D8D8</color>

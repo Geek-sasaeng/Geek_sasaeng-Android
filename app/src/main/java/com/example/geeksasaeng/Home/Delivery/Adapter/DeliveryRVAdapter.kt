@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
 
-class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryResult?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private lateinit var mItemClickListener : OnItemClickListener
+
+    // 클릭 리스너 구현 위한 인터페이스
+    interface OnItemClickListener{
+        fun onItemClick(data: DeliveryResult, pos : Int)
+    }
+
+    fun setOnItemClickListener(listener : OnItemClickListener) {
+        mItemClickListener = listener
+    }
 
     private val VIEW_TYPE_ITEM = 0
 
@@ -23,6 +35,16 @@ class DeliveryRVAdapter(var deliveryList: ArrayList<DeliveryResult?>) : Recycler
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         populateItemRows(viewHolder as ItemViewHolder, position)
+
+        viewHolder.itemView.setOnClickListener {
+            // val intent = Intent(holder.itemView?.context, PostSelectImgActivity::class.java)
+            // intent.putExtra("position", position)
+            mItemClickListener.onItemClick(deliveryList[position]!!, position)
+            Log.d("ItemClickCheck", "position = $position")
+
+            // imgList[position].img!!
+            // ContextCompat.startActivity(holder.itemView.context, intent, null)
+        }
     }
 
     override fun getItemCount(): Int {

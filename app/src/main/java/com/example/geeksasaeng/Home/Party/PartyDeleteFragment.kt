@@ -1,14 +1,13 @@
-package com.example.geeksasaeng.Home.Delivery.Party
+package com.example.geeksasaeng.Home.Party
 
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.databinding.FragmentDeliveryPartyReportBinding
-import com.example.geeksasaeng.databinding.FragmentDeliveryPartyUpdateBinding
+import com.example.geeksasaeng.databinding.FragmentDeliveryPartyDeleteBinding
 
-class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(FragmentDeliveryPartyReportBinding::inflate) {
+class PartyDeleteFragment: BaseFragment<FragmentDeliveryPartyDeleteBinding>(FragmentDeliveryPartyDeleteBinding::inflate) {
 
     override fun initAfterBinding() {
-
+        
     }
 
     override fun onStop() {

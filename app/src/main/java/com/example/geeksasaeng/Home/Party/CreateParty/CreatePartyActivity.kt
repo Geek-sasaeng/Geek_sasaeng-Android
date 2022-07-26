@@ -8,6 +8,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.*
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogNum
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
@@ -26,7 +30,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     private lateinit var createPartyService: CreatePartyService
     private lateinit var createPartyVM: CreatePartyViewModel
-
 
     override fun initAfterBinding() {
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
