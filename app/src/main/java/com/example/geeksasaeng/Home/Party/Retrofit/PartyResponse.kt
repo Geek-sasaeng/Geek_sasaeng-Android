@@ -58,3 +58,17 @@ data class PartyReportRequest(
     @SerializedName("reportedDeliveryPartyId") val reportedDeliveryPartyId: Int,
     @SerializedName("reportedMemberId") val reportedMemberId: Int
 )
+
+data class UserReportResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+data class UserReportRequest(
+    @SerializedName("block") val block: Boolean,
+    @SerializedName("reportCategoryId") val reportCategoryId: Int,
+    @SerializedName("reportContent") val reportContent: String?,
+    @SerializedName("reportedMemberId") val reportedMemberId: Int
+)

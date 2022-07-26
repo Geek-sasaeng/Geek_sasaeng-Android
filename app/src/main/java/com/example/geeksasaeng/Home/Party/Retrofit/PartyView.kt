@@ -19,3 +19,8 @@ interface PartyReportView {
     fun partyReportViewSuccess(code: Int)
     fun partyReportViewFailure(message: String)
 }
+
+interface UserReportView {
+    fun userReportViewSuccess(code: Int)
+    fun userReportViewFailure(message: String)
+}

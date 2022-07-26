@@ -22,4 +22,10 @@ interface PartyRetrofitInterface {
     fun reportDeliveryParty(
         @Body reportPartyRequest: PartyReportRequest
     ): Call<PartyReportResponse>
+
+    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjozNH0sImlhdCI6MTY1ODgzMjA4NywiZXhwIjoxNjU5NzIxMTE5fQ.h2uzVXgnOs1dYZeQmrXHLaKjWVcnBvDy9haQj9QMO5A")
+    @POST("reports/members")
+    fun reportDeliveryUser(
+        @Body reportUserRequest: UserReportRequest
+    ): Call<UserReportResponse>
 }
