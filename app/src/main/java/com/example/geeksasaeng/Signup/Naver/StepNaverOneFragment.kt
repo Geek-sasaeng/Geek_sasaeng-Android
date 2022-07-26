@@ -46,9 +46,6 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     override fun initAfterBinding() {
         progressVM.increase()
-        loginId = arguments?.getString("loginId")
-        phoneNumber = arguments?.getString("phoneNumber")
-
         initSpinner()
         initTextChangedListener()
         initClickListener()
