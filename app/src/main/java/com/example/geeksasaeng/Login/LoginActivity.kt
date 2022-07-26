@@ -22,7 +22,7 @@ import com.navercorp.nid.oauth.*
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 
-class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, SignUpSocialView, LoginView {
+class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, SignUpSocialView, LoginView, SocialLoginView {
 
     var checkPassword: String? = ""
     var emailId: Int? = null
@@ -76,10 +76,73 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         initClickListener()
     }
 
+    private fun initClickListener() {
+        binding.loginLoginBtn.setOnClickListener {
+            login()
+            /*login(false)
+            changeActivity(MainActivity::class.java)*/
+        }
+
+        // 네이버 로그인
+        binding.loginNaverBtn.setOnClickListener {
+            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+            val profileCallback = object : NidProfileCallback<NidProfileResponse> {
+                override fun onSuccess(response: NidProfileResponse) {
+                    loginId = response.profile?.email.toString()
+                    phoneNumber = response.profile?.mobile.toString()
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    Toast.makeText(this@LoginActivity, "errorCode: ${errorCode}\n" + "errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
+
+            val oauthLoginCallback = object : OAuthLoginCallback {
+                override fun onSuccess() {
+                    // 로그인 유저 정보 가져오기
+                    NidOAuthLogin().callProfileApi(profileCallback)
+                    // removeSP()
+                    // saveSP(NaverIdLoginSDK.getAccessToken().toString())
+
+                    // accessToken 서버로 보냄
+                    val accessToken = NaverIdLoginSDK.getAccessToken().toString()
+                    socialLogin(accessToken)
+                }
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    // removeSP()
+                    Log.d("NAVER-LOGIN", "FAILED : $errorCode $errorDescription")
+                }
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            }
+
+            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+        }
+
+        binding.loginSignupBtn.setOnClickListener {
+
+            changeActivity(SignUpActivity::class.java)
+        }
+    }
+
     private fun login() {
         val loginDataService = LoginDataService()
         loginDataService.setLoginView(this)
         loginDataService.login(getLoginUser())
+    }
+
+    private fun socialLogin(accessToken: String) {
+        val socialLoginDataService = SocialLoginDataService()
+        socialLoginDataService.setSocialLoginView(this)
+        socialLoginDataService.socialLogin(SocialLogin(accessToken))
     }
 
     private fun getLoginUser(): Login {
@@ -97,6 +160,22 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         finish()
         changeActivity(MainActivity::class.java)
+    }
+
+    // 소셜 로그인 성공
+    override fun onSocialLoginSuccess(code: Int, result: SocialLoginResult) {
+        // TODO 자동 로그인 기능 구현해야 함
+        // TODO JWT 저장 해야함
+        finish()
+        changeActivity(MainActivity::class.java)
+    }
+
+    // 소셜 로그인 회원가입 창으로 이동
+    override fun onSocialLoginToRegister(message: String, accessToken: String) {
+        val signUpNaverIntent = Intent(this, SignUpNaverActivity::class.java)
+        signUpNaverIntent.putExtra("accessToken", accessToken)
+        startActivity(signUpNaverIntent)
+        showToast("회원가입이 되지않아 회원가입 창으로 이동합니다.")
     }
 
     override fun onLoginFailure(message: String) {
@@ -117,12 +196,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
         signupDataService.setSignUpView(this) // 뷰연결
         signupDataService.signUpSender(getSignupUser()) //★회원가입 진행
-    }
-
-    private fun signupSocial() {
-        val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
-        signupDataService.setSignUpView(this) // 뷰연결
-        signupDataService.signUpSocialSender(getSignupUser()) //★회원가입 진행
     }
 
     private fun setTextChangedListener() {
@@ -157,66 +230,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 }
             }
         })
-    }
-
-    private fun initClickListener() {
-        binding.loginLoginBtn.setOnClickListener {
-            login()
-            /*login(false)
-            changeActivity(MainActivity::class.java)*/
-        }
-
-        binding.loginNaverBtn.setOnClickListener {
-            changeActivity(SignUpNaverActivity::class.java)
-
-            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
-
-            val profileCallback = object : NidProfileCallback<NidProfileResponse> {
-                override fun onSuccess(response: NidProfileResponse) {
-                    loginId = response.profile?.email.toString()
-                    phoneNumber = response.profile?.mobile.toString()
-
-                    Toast.makeText(this@LoginActivity, "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
-                }
-                override fun onFailure(httpStatus: Int, message: String) {
-                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
-                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                    Toast.makeText(this@LoginActivity, "errorCode: ${errorCode}\n" + "errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
-                }
-                override fun onError(errorCode: Int, message: String) {
-                    onFailure(errorCode, message)
-                }
-            }
-
-            val oauthLoginCallback = object : OAuthLoginCallback {
-                override fun onSuccess() {
-                    // 로그인 유저 정보 가져오기
-                    NidOAuthLogin().callProfileApi(profileCallback)
-                    // removeSP()
-                    // saveSP(NaverIdLoginSDK.getAccessToken().toString())
-
-                    signUpNaverVM.setLoginId(loginId)
-                    signUpNaverVM.setPhoneNumber(phoneNumber)
-
-                    changeActivity(SignUpNaverActivity::class.java)
-                }
-                override fun onFailure(httpStatus: Int, message: String) {
-                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
-                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-                    // removeSP()
-                    Log.d("NAVER-LOGIN", "FAILED : $errorCode $errorDescription")
-                }
-                override fun onError(errorCode: Int, message: String) {
-                    onFailure(errorCode, message)
-                }
-            }
-
-            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
-        }
-
-        binding.loginSignupBtn.setOnClickListener {
-            changeActivity(SignUpActivity::class.java)
-        }
     }
 
     //회원가입 성공/실패
