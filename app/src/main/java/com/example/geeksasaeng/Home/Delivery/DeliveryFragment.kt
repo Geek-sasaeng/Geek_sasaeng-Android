@@ -19,6 +19,7 @@ import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryBannerView
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryFilterView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
@@ -30,8 +31,7 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView, DeliveryFilterView {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
@@ -42,10 +42,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
+    lateinit var orderTimeCategory: String
+    var maxMatching: Int = 0
     var nowTime: Long = 0
     var date: Date? = null
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
     var finalPage: Boolean? = false
+    var filterCheckFlag: Boolean = false
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -61,6 +64,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
         binding.deliveryProgressCover.visibility = View.GONE
+        binding.deliveryBottomView.visibility = View.VISIBLE
 
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
@@ -79,9 +83,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         if (totalCursor == 0)
             initLoadPosts()
-
-        Log.d("DELIVERY-FRAGMENT", "TOTAL-CURSOR = $totalCursor")
-        Log.d("DELIVERY-FRAGMENT", "INIT-BINDING")
 
         initScrollListener()
     }
@@ -143,7 +144,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
         totalCursor = 0
-        getDeliveryAllList(1, totalCursor)
+        if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
+        else getDeliveryAllList(1, totalCursor)
     }
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
@@ -153,7 +155,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
-            getDeliveryAllList(dormitoryId, totalCursor)
+            if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
+            else getDeliveryAllList(dormitoryId, totalCursor)
             isLoading = false
             binding.deliveryProgressCover.visibility = View.GONE
         }, 1200)
@@ -163,8 +166,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
             deliveryArray.clear()
-            initAdapter()
             initLoadPosts()
+            initAdapter()
             binding.deliverySwipe.isRefreshing = false
         })
     }
@@ -263,12 +266,30 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
             when(checkedId){
-                R.id.delivery_rb1->Log.d("radio","아침 선택됨")
-                R.id.delivery_rb2->Log.d("radio","점심 선택됨")
-                R.id.delivery_rb3->Log.d("radio","저녁 선택됨")
-                R.id.delivery_rb4->Log.d("radio","야식 선택됨")
-                else->{
-
+                R.id.delivery_rb1 -> {
+                    orderTimeCategory = "BREAKFAST"
+                    filterCheckFlag = true
+                    isLoading = false
+                }
+                R.id.delivery_rb2 -> {
+                    orderTimeCategory = "LUNCH"
+                    filterCheckFlag = true
+                    isLoading = false
+                }
+                R.id.delivery_rb3 -> {
+                    orderTimeCategory = "DINNER"
+                    filterCheckFlag = true
+                    isLoading = false
+                }
+                R.id.delivery_rb4 -> {
+                    orderTimeCategory = "MIDNIGHT_SNACKS"
+                    filterCheckFlag = true
+                    isLoading = false
+                }
+                else -> {
+                    // orderTimeCategory =
+                    filterCheckFlag = false
+                    isLoading = false
                 }
             }
         }
@@ -297,23 +318,23 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         //이벤트 처리
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
                 //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
-                items[0]=items[position] // items[0]은 현재 선택된 아이템 저장용
+                items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
-            }
 
+                if (position in 1..5)
+                    filterCheckFlag = true
+
+                maxMatching = position * 2
+                finalPage = false
+            }
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
@@ -339,7 +360,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
-        Log.d("commercial", "광고 불러오기 성공~!")
         /*for (i in results){
             Log.d("commercial", i.toString() + "= i값")
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
@@ -353,12 +373,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
 
-/*      deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))*/
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
@@ -402,7 +416,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
     }
 
-
     override fun ondeliveryBannerFailure(message: String) {
         Log.d("commercial", "광고 불러오기 실패~!")
         //일단은 더미데이터 넣어둠
@@ -412,5 +425,41 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
         deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))*/
+    }
+
+    // 배달 목록 필터 적용 후 가져오기
+    private fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String, maxMatching: Int) {
+        val deliveryDataService = DeliveryService()
+        deliveryDataService.getDeliveryFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
+        deliveryDataService.setDeliveryFilterView(this)
+        totalCursor += 1
+    }
+
+    override fun deliveryFilterSuccess(result: DeliveryResult) {
+        Log.d("DELIVERY-FILTER", "SUCCESS")
+
+        finalPage = result.finalPage
+        val result = result.deliveryPartiesVoList
+
+        for (i in 0 until result!!.size) {
+            var currentMatching = result?.get(i)?.currentMatching
+            var foodCategory = result?.get(i)?.foodCategory
+            var id = result?.get(i)?.id
+            var maxMatching = result?.get(i)?.maxMatching
+            var orderTime = result?.get(i)?.orderTime
+            var title = result?.get(i)?.title
+            var hashTags = result?.get(i)?.hasHashTag
+
+            deliveryArray.add(
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+            )
+
+            deliveryAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun deliveryFilterFailure(code: Int, message: String) {
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
+        totalCursor--
     }
 }
