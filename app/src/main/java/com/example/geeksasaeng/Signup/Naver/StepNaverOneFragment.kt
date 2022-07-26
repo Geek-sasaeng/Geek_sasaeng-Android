@@ -46,10 +46,6 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     override fun initAfterBinding() {
         progressVM.increase()
-
-        loginId = arguments?.getString("loginId")
-        phoneNumber = arguments?.getString("phoneNumber")
-
         initSpinner()
         initTextChangedListener()
         initClickListener()
@@ -155,6 +151,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             sendEmail()
         }
 
+        // 다음
         binding.stepNaverOneNextBtn.setOnClickListener {
             signUpNaverVM.setLoginId(loginId)
             signUpNaverVM.setPhoneNumber(phoneNumber)
@@ -186,7 +183,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        ToastMsgSignup.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
 
         //이메일이 성공적으로 진행되었을때 버튼 활성화
         binding.stepNaverOneNextBtn.isEnabled = true;

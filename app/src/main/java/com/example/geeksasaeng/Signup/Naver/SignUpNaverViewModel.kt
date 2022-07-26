@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class SignUpNaverViewModel: ViewModel() {
-    var checkPassword: MutableLiveData<String?> = MutableLiveData<String?>()
     var loginId: MutableLiveData<String?> = MutableLiveData<String?>()
     var nickname: MutableLiveData<String?> = MutableLiveData<String?>()
     var password: MutableLiveData<String?> = MutableLiveData<String?>()
@@ -15,17 +14,16 @@ class SignUpNaverViewModel: ViewModel() {
     var phoneNumber: MutableLiveData<String?> = MutableLiveData<String?>()
     var phoneNumberId: MutableLiveData<Int?>? = MutableLiveData<Int?>()
     var informationAgreeStatus: MutableLiveData<String?> = MutableLiveData<String?>()
+    var accessToken: MutableLiveData<String?> = MutableLiveData<String?>()
 
     init {
         phoneNumberId = null
     }
-
-    fun setCheckPassword(value: String?) {
-        checkPassword.value = value
+    fun setAccessToken(value: String?){
+        accessToken.value = value
     }
-
-    fun getCheckPassword(): String {
-        return checkPassword.value.toString()
+    fun getAccessToken(): String{
+        return accessToken.value.toString()
     }
 
     fun setLoginId(value: String?) {
@@ -101,7 +99,7 @@ class SignUpNaverViewModel: ViewModel() {
     }
 
     fun checkNull() : Boolean {
-        return !(checkPassword.value != null && loginId.value != null && nickname.value != null && password.value != null &&
+        return !(loginId.value != null && nickname.value != null && password.value != null &&
                 emailId.value != null && universityName != null && informationAgreeStatus.value != null)
     }
 }

@@ -17,3 +17,4 @@ data class Login(
     @SerializedName("loginId") var loginId: String? = "",
     @SerializedName("password") var password: String? = ""
 )
+
