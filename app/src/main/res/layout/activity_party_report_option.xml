@@ -102,6 +102,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/report_report_btn"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/main"

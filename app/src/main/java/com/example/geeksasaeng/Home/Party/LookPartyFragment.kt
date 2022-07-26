@@ -76,6 +76,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             }
             else if (authorStatus == false) {
                 // TODO: 게시글 쓴 사람 ID 전달
+                // bundle.putInt("reportedMemberId", partyData.chiefId)
+                bundle.putInt("reportedDeliveryPartyId", partyData.id)
+
                 dialogFragment = DialogDeliveryOptionOtherPopup()
                 dialogTag = "DeliveryPartyOtherOption"
             }
