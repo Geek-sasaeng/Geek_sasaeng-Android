@@ -22,10 +22,15 @@ data class DeliveryResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: Array<DeliveryResult>?
+    @SerializedName("result") val result: DeliveryResult
 )
 
 data class DeliveryResult (
+    @SerializedName("deliveryPartiesVoList") var deliveryPartiesVoList: Array<DeliveryPartiesVoList>,
+    @SerializedName("finalPage") var finalPage: Boolean
+)
+
+data class DeliveryPartiesVoList (
     @SerializedName("currentMatching") var currentMatching: Int? = 0,
     @SerializedName("foodCategory") var foodCategory: String? = "",
     @SerializedName("id") var id: Int? = 0,

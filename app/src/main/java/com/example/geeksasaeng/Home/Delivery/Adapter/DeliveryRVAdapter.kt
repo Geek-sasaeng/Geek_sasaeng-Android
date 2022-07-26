@@ -10,16 +10,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
 
-class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryResult?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mItemClickListener : OnItemClickListener
 
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener{
-        fun onItemClick(data: DeliveryResult, pos : Int)
+        fun onItemClick(data: DeliveryPartiesVoList, pos : Int)
     }
 
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -56,7 +57,8 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryResult?>) : 
     }
 
     private inner class ItemViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+        RecyclerView.ViewHolder(itemView)
+    {
         // 메인 파티 리스트 부분
         // Not Use = chief, content, currentMatching, foodCategory, id, location
         // Use = currentMatching, maxMatching, orderTime, title

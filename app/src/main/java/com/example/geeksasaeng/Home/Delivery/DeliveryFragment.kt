@@ -32,7 +32,7 @@ import java.util.*
 
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView {
-    private var deliveryArray = ArrayList<DeliveryResult?>()
+    private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
     private lateinit var deliveryBannerAdapter : BannerVPAdapter
@@ -199,7 +199,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
-            override fun onItemClick(data: DeliveryResult, pos : Int) {
+            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
                 var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
 
                 val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -216,10 +216,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
-    override fun deliverySuccess(response: DeliveryResponse) {
+    override fun deliverySuccess(result: DeliveryResult) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
-        val result = response.result
-        val size = result!!.size
+
+        val finalPage = result.finalPage
+        val result = result.deliveryPartiesVoList
 
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching
@@ -231,7 +232,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryResult(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()

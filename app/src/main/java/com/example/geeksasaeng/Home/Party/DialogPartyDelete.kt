@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDeleteView
 import com.example.geeksasaeng.MainActivity
@@ -62,6 +63,7 @@ class DialogPartyDelete: DialogFragment(), PartyDeleteView {
     override fun partyDeleteViewSuccess(code: Int) {
         // Toast.makeText(activity, code.toString(), Toast.LENGTH_SHORT).show()
         this.dismiss()
+        activity?.supportFragmentManager?.beginTransaction()!!.replace(R.id.main_frm, DeliveryFragment()).commit()
     }
 
     override fun partyDeleteViewFailure(message: String) {

@@ -14,3 +14,8 @@ interface PartyDeleteView {
     fun partyDeleteViewSuccess(code: Int)
     fun partyDeleteViewFailure(message: String)
 }
+
+interface PartyReportView {
+    fun partyReportViewSuccess(code: Int)
+    fun partyReportViewFailure(message: String)
+}

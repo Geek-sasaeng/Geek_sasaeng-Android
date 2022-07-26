@@ -16,4 +16,10 @@ interface PartyRetrofitInterface {
     fun sendDeleteDeliveryParty(
         @Path("partyId") partyId: Int
     ): Call<PartyDeleteResponse>
+
+    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjoyNn0sImlhdCI6MTY1Nzk0MTQ4NiwiZXhwIjoxNjU4ODMwNTE5fQ.n9HFrLuc97GeWOcKo-ffAj-k5XAvcd7IH0iEuOVzPaQ")
+    @POST("reports/delivery-parties")
+    fun reportDeliveryParty(
+        @Body reportPartyRequest: PartyReportRequest
+    ): Call<PartyReportResponse>
 }
