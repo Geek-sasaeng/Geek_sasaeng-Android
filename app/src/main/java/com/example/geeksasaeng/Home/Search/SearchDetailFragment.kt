@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
+import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
@@ -16,7 +17,7 @@ import com.example.geeksasaeng.databinding.FragmentSearchDetailBinding
 
 class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate) {
 
-    private var deliveryArray = ArrayList<DeliveryResult?>()
+    private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
 
     override fun initAfterBinding() {
@@ -24,13 +25,13 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         initSpinner()
 
         deliveryArray.apply {
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
-            add(DeliveryResult(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
+            add(DeliveryPartiesVoList(2, "한식", 100, 4, "2022-07-22 01:20:48", "DummyData", true))
         }
     }
 

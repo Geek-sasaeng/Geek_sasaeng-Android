@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Home.Delivery.Retrofit
 
 import com.example.geeksasaeng.Home.Delivery.DeliveryBannerResult
 import com.example.geeksasaeng.Home.Delivery.DeliveryResponse
+import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 
 interface DeliveryBannerView{
     fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>)
@@ -9,6 +10,6 @@ interface DeliveryBannerView{
 }
 
 interface DeliveryView {
-    fun deliverySuccess(response: DeliveryResponse)
+    fun deliverySuccess(result: DeliveryResult)
     fun deliveryFailure(code: Int, message: String)
 }

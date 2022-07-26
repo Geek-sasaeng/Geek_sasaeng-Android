@@ -28,9 +28,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.geeksasaeng.Home.Party.CreateParty.CreatePartyActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -49,9 +46,9 @@
         <activity android:name=".Home.CreateParty.CreatePartyActivity" />
 
         <!--카카오맵 APP KEY 추가-->
-<!--        <meta-data-->
-<!--            android:name="com.kakao.sdk.AppKey"-->
-<!--            android:value="${kakaoNativeAppKey}" />-->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${kakaoNativeAppKey}" />
 
     </application>
 

@@ -55,10 +55,12 @@ class DeliveryService {
         deliveryPartyService?.getAllDeliveryList(dormitoryId, cursor)?.enqueue(object:
             Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
+                Log.d("DELIVERY-RESPONSE", "response.code = ${response.code()} / response.body = ${response.body()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val deliveryResponse: DeliveryResponse = response.body()!!
+                    Log.d("DELIVERY-RESPONSE", "response.code = ${deliveryResponse.code} / response.body = ${deliveryResponse.message}")
                     when (deliveryResponse.code) {
-                        1000 -> deliveryView.deliverySuccess(response.body()!!)
+                        1000 -> deliveryView.deliverySuccess(response.body()!!.result)
                         else -> deliveryView.deliveryFailure(deliveryResponse.code, deliveryResponse.message)
                     }
                 }
