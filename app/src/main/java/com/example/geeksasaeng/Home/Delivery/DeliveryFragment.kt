@@ -261,15 +261,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
+            filterCheckFlag = true
+
             when(checkedId){
                 R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
                 R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
                 R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
                 R.id.delivery_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
+                else -> filterCheckFlag = false
             }
-
-            filterCheckFlag = true
-            // binding.deliveryBottomView.visibility = View.VISIBLE
         }
     }
 
@@ -437,9 +437,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         if (finalPage == true) {
-            if ((binding.deliveryRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
-                binding.deliveryBottomView.visibility = View.INVISIBLE
-            else binding.deliveryBottomView.visibility = View.VISIBLE
+            Log.d("DELIVERY-FILTER", "getDeliveryFilterList-DeliveryArray-Size = ${deliveryArray.size}")
+            if (deliveryArray.size >= 2) {
+                if ((binding.deliveryRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
+                    binding.deliveryBottomView.visibility = View.INVISIBLE
+                else binding.deliveryBottomView.visibility = View.VISIBLE
+            } else binding.deliveryBottomView.visibility = View.VISIBLE
         }
     }
 

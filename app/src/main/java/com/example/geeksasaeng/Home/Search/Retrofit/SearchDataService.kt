@@ -43,7 +43,7 @@ class SearchDataService {
     }
 
     // 배달 리스트 필터 적용 후 목록들 불러오기
-    fun getFilterFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String, maxMatching: Int){
+    fun getSearchFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?){
         val searchPartyService = NetworkModule.getInstance()?.create(SearchRetrofitInterface::class.java)
         searchPartyService?.getFilterSearchList(dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
