@@ -61,6 +61,11 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        timerTask?.cancel() //화면 꺼질때
+    }
+
     // 타이머 작동
     private fun startTimer() {
         timerTask = timer(period = 1000) { //1초가 주기
