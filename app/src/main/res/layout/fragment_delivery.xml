@@ -30,14 +30,14 @@
     <Spinner
         android:id="@+id/delivery_people_spinner"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="35dp"
         android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
         android:background="@drawable/spinner_outline_unclicked"
         android:popupBackground="@drawable/spinner_outline_unclicked"
         tools:listitem="@layout/item_delivery_people_spinner"
         android:spinnerMode="dropdown"
         android:entries="@array/home_dropdown1"
-        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="@id/delivery_sort_img"
         app:layout_constraintBottom_toBottomOf="@id/delivery_sort_img"
         app:layout_constraintStart_toEndOf="@id/delivery_sort_img" />
@@ -64,11 +64,11 @@
                 android:id="@+id/delivery_time_rg"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="35dp">
 
                 <RadioButton
                     android:id="@+id/delivery_rb1"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -83,7 +83,7 @@
 
                 <RadioButton
                     android:id="@+id/delivery_rb2"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -98,7 +98,7 @@
 
                 <RadioButton
                     android:id="@+id/delivery_rb3"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -113,7 +113,7 @@
 
                 <RadioButton
                     android:id="@+id/delivery_rb4"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"

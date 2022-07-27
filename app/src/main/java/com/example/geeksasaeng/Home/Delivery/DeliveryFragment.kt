@@ -398,6 +398,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 }
             })
         }
+
     }
 
     //3초마다 페이지 넘기는 기능
@@ -418,13 +419,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun ondeliveryBannerFailure(message: String) {
         Log.d("commercial", "광고 불러오기 실패~!")
-        //일단은 더미데이터 넣어둠
-        /*deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.ic_chat))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))
-        deliveryBannerAdapter.addFragment(BannerFragment(R.drawable.home_banner))*/
     }
 
     // 배달 목록 필터 적용 후 가져오기
