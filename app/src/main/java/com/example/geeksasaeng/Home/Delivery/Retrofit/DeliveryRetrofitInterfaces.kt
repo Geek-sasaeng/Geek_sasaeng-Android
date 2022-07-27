@@ -31,7 +31,7 @@ interface DeliveryRetrofitInterfaces {
     fun getFilterDeliveryList(
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
-        @Query("orderTimeCategory") orderTimeCategory: String,
-        @Query("maxMatching") maxMatching: Int
+        @Query("orderTimeCategory") orderTimeCategory: String?,
+        @Query("maxMatching") maxMatching: Int?
     ): Call<DeliveryResponse>
 }

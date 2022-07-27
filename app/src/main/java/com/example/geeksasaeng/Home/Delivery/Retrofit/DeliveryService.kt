@@ -75,7 +75,7 @@ class DeliveryService {
     }
 
     // 배달 리스트 필터 적용 후 목록들 불러오기
-    fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String, maxMatching: Int){
+    fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?){
         val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
         deliveryPartyService?.getFilterDeliveryList(dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
