@@ -52,7 +52,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
     ): View? {
         binding = DialogDeliveryOptionMyPopupBinding.inflate(inflater, container, false)
 
-        authorStatus = requireArguments().getBoolean("partyId")
+        authorStatus = requireArguments().getBoolean("authorStatus")
         chief = requireArguments().getString("chief")
         // chiefId = requireArguments().getInt("chiefId")
         chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
@@ -119,7 +119,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
             bundle.putInt("dormitory", dormitory)
             bundle.putString("foodCategory", foodCategory)
             bundle.putBoolean("hashTag", hashTag!!)
-            bundle.putInt("partyId", id)
+            bundle.putInt("partyId", partyId)
             bundle.putDouble("latitude", latitude)
             bundle.putDouble("longitude", longitude)
             bundle.putString("matchingStatus", matchingStatus)

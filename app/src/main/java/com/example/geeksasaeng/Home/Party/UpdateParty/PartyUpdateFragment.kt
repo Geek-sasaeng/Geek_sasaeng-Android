@@ -119,7 +119,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("che", "^ㅇ^")
                 content = binding.deliveryPartyUpdateContentEt.text.toString()
                 checking()
             }

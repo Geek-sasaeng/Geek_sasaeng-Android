@@ -4,6 +4,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -61,7 +62,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyOptionBtn.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("partyId", deliveryItemId!!)
-
             var dialogFragment = DialogFragment()
             var dialogTag = String()
 
