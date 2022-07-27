@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
@@ -18,8 +19,10 @@ import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView, DialogDeliveryOptionMyPopup.PopUpdateClickListener {
 
@@ -28,6 +31,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     var authorStatus: Boolean? = null
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
+
+    private var remainTime : Long = 0
+    private var timerTask : Timer? = null
 
     override fun initAfterBinding() {
         initClickListener()
@@ -50,6 +56,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     override fun onStop() {
         super.onStop()
+        timerTask?.cancel()
         if (status == "search")
             requireActivity().finish()
     }
@@ -151,7 +158,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         //밑에 파란 바
         binding.lookMemberStatus.text = result.currentMatching.toString()+"/"+result.maxMatching.toString()+ " 명"
-        binding.lookTimer.text = calculateTime(result.orderTime)
+        remainTime = getRemainTime(result.orderTime)
+        startTimer()
     }
 
     override fun partyDetailFailure(code: Int, message: String) {
@@ -188,6 +196,34 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookKakaoMapLocation.removeView(mapView) // 다른 프레그먼트 띄우기 전에 맵 사용해야하니까 지우기
     }
 
+    // 타이머 작동
+    private fun startTimer() {
+        timerTask = timer(period = 1000) { //1초가 주기
+            val timeForm = DecimalFormat("00") //0을 넣은 곳은 빈자리일 경우, 0으로 채워준다.
+            var remainSec = (remainTime) / 1000
+            var longHour = (remainSec / 3600)
+            var longMinute = ((remainSec % 3600) / 60)
+            var longSec = remainSec % 60
+
+
+            val hour = timeForm.format(longHour)
+            val min = timeForm.format(longMinute)
+            val sec = timeForm.format(longSec)
+
+            activity?.runOnUiThread {
+                binding.lookTimer.text = "${hour}:${min}:${sec}"
+
+                if (min == "00" && sec == "00"){
+                    timerTask?.cancel()
+                    binding.lookTimer.text = "시간이 만료되었습니다."
+                }
+            }
+
+            if (remainTime.toInt() != 0) // time이 0이 아니라면
+                remainTime -= 1000 //1초씩 줄이기
+        }
+    }
+
     private fun calculateToday(): String {
         val nowTime = System.currentTimeMillis();
         val date = Date(nowTime)
@@ -195,7 +231,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         return dateFormat.format(date)
     }
 
-    private fun calculateTime(orderTime: String): String {
+    private fun getRemainTime(orderTime: String): Long {
         var orderYear = Integer.parseInt(orderTime.substring(0, 4))
         var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
         var orderDay = Integer.parseInt(orderTime.substring(8, 10))
@@ -226,24 +262,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         var remainTime = order - today //남은 시간 밀리세컨드 단위
 
-        if (remainTime <= 0) {
-            return "시간 만료"
-        }
-
-        //3600이 1분
-        var remainSec = (remainTime) / 1000
-        var shour = (remainSec / 3600).toString()
-        var sminute = ((remainSec % 3600) / 60).toString()
-        var ssec = (remainSec % 60).toString()
-
-        if (sminute.length==1){
-            sminute = "0"+sminute
-        }
-
-        if(ssec.length==1){
-            ssec = "0"+ssec
-        }
-
-        return "${shour}:${sminute}:${ssec}"
+        return remainTime
     }
 }
