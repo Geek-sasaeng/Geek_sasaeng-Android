@@ -102,6 +102,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         var orderDay = Integer.parseInt(orderTime.substring(8, 10))
         var orderHours = Integer.parseInt(orderTime.substring(11, 13))
         var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
+        var orderSec = 0
 
         var currentTime = calculateToday()
         var todayYear = Integer.parseInt(currentTime.substring(0, 4))
@@ -109,12 +110,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         var todayDay = Integer.parseInt(currentTime.substring(8, 10))
         var todayHours = Integer.parseInt(currentTime.substring(11, 13))
         var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+        var todaySec = Integer.parseInt(currentTime.substring(17, 19))
 
         var today = Calendar.getInstance().apply {
             set(Calendar.YEAR, todayYear)
             set(Calendar.MONTH, todayMonth)
             set(Calendar.DAY_OF_MONTH, todayDay)
-        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
+        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)+ (1000* todaySec)
 
         var order = Calendar.getInstance().apply {
             set(Calendar.YEAR, orderYear)
@@ -360,19 +362,22 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
-        /*for (i in results){
-            Log.d("commercial", i.toString() + "= i값")
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-        }*/
         deliveryBannerAdapter = BannerVPAdapter(this)
         //더미 img url
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
+/*        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))*/
+        for (i in results){
+            Log.d("commercial", i.toString() + "= i값")
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+        }
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정

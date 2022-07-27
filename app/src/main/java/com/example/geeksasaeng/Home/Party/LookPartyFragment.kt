@@ -18,6 +18,7 @@ import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView, DialogDeliveryOptionMyPopup.PopUpdateClickListener {
@@ -147,6 +148,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         binding.lookTitle.text = result.title
         binding.lookPostDate.text = "${result.updatedAt.substring(5, 7)}/${result.updatedAt.substring(8, 10)} ${result.updatedAt.substring(11, 16)}"
+
+        //밑에 파란 바
+        binding.lookMemberStatus.text = result.currentMatching.toString()+"/"+result.maxMatching.toString()+ " 명"
+        binding.lookTimer.text = calculateTime(result.orderTime)
     }
 
     override fun partyDetailFailure(code: Int, message: String) {
@@ -181,5 +186,64 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     override fun onPopUpdateClicked() { // 수정하기 팝업 클릭하면,
         binding.lookKakaoMapLocation.removeView(mapView) // 다른 프레그먼트 띄우기 전에 맵 사용해야하니까 지우기
+    }
+
+    private fun calculateToday(): String {
+        val nowTime = System.currentTimeMillis();
+        val date = Date(nowTime)
+        var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        return dateFormat.format(date)
+    }
+
+    private fun calculateTime(orderTime: String): String {
+        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
+        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
+        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
+        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
+        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
+        var orderSec = 0
+
+        var currentTime = calculateToday()
+        Log.d("current", calculateToday().toString())
+        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
+        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
+        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
+        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
+        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+        var todaySec = Integer.parseInt(currentTime.substring(17, 19))
+
+        var today = Calendar.getInstance().apply {
+            set(Calendar.YEAR, todayYear)
+            set(Calendar.MONTH, todayMonth)
+            set(Calendar.DAY_OF_MONTH, todayDay)
+        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes) + (1000* todaySec)
+
+        var order = Calendar.getInstance().apply {
+            set(Calendar.YEAR, orderYear)
+            set(Calendar.MONTH, orderMonth)
+            set(Calendar.DAY_OF_MONTH, orderDay)
+        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes) + (1000* 0)
+
+        var remainTime = order - today //남은 시간 밀리세컨드 단위
+
+        if (remainTime <= 0) {
+            return "시간 만료"
+        }
+
+        //3600이 1분
+        var remainSec = (remainTime) / 1000
+        var shour = (remainSec / 3600).toString()
+        var sminute = ((remainSec % 3600) / 60).toString()
+        var ssec = (remainSec % 60).toString()
+
+        if (sminute.length==1){
+            sminute = "0"+sminute
+        }
+
+        if(ssec.length==1){
+            ssec = "0"+ssec
+        }
+
+        return "${shour}:${sminute}:${ssec}"
     }
 }
