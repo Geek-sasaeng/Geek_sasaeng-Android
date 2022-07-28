@@ -23,6 +23,7 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryFilterView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
+import com.example.geeksasaeng.Home.Party.Retrofit.PartyReportView
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment

@@ -136,7 +136,8 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         totalCursor = 0
         isLoading = false
         finalPage = false
-        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
+        keyword = requireArguments().getString("keyword").toString()
+        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
         else getSearchPartyList(dormitoryId, totalCursor, keyword)
     }
 
@@ -147,7 +148,8 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         binding.searchProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
-            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
+            keyword = requireArguments().getString("keyword").toString()
+            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
             else getSearchPartyList(dormitoryId, totalCursor, keyword)
             isLoading = false
             binding.searchProgressCover.visibility = View.GONE
@@ -280,10 +282,11 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     }
 
     // 배달 목록 필터 적용 후 가져오기
-    private fun getSearchFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?) {
+    private fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?) {
+        Log.d("SEARCH-FRAGMENT", "getSearchFilterList keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
         val searchDataService = SearchDataService()
         searchDataService.setSearchFilterView(this)
-        searchDataService.getSearchFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
+        searchDataService.getSearchFilterList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)
         totalCursor += 1
     }
 

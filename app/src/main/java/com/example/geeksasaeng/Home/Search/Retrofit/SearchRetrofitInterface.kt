@@ -19,11 +19,12 @@ interface SearchRetrofitInterface {
     @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjozNH0sImlhdCI6MTY1ODgzMjA4NywiZXhwIjoxNjU5NzIxMTE5fQ.h2uzVXgnOs1dYZeQmrXHLaKjWVcnBvDy9haQj9QMO5A")
     // @Headers("Authorization:Bearer \${getJwt()}")
     // 기숙사별 배달 리스트 필터 적용 후 불러오기
-    @GET("/{dormitoryId}/delivery-parties")
+    @GET("/{dormitoryId}/delivery-parties/keyword")
     fun getFilterSearchList(
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
-        @Query("orderTimeCategory") orderTimeCategory: String,
-        @Query("maxMatching") maxMatching: Int
+        @Query("keyword") keyword: String,
+        @Query("orderTimeCategory") orderTimeCategory: String?,
+        @Query("maxMatching") maxMatching: Int?
     ): Call<SearchResponse>
 }
