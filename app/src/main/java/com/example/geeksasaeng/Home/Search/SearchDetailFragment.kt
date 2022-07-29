@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Home.Search
 
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
@@ -10,14 +9,14 @@ import android.widget.ImageView
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
-import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchDataService
+import com.example.geeksasaeng.Home.Search.Retrofit.SearchFilterView
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchResult
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchView
 import com.example.geeksasaeng.MainActivity
@@ -28,31 +27,34 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate), SearchView {
+class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate), SearchView, SearchFilterView {
     private var searchArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var searchAdapter: DeliveryRVAdapter
     private lateinit var searchService: SearchDataService
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
+    var orderTimeCategory: String? = null
+    var maxMatching: Int? = null
     var nowTime: Long = 0
     var date: Date? = null
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
     var finalPage: Boolean? = false
+    var filterCheckFlag: Boolean = false
     lateinit var keyword: String
 
     override fun initAfterBinding() {
-
         keyword = requireArguments().getString("keyword").toString()
 
+        searchService = SearchDataService()
+        searchService.setSearchPartyView(this)
         binding.searchProgressCover.visibility = View.GONE
+        binding.searchBottomView.visibility = View.VISIBLE
 
         initSpinner() //필터(spinner) 작업
         initRadioBtn() //필터(radiobutton) 작업
         initAdapter()
-
-        searchService = SearchDataService()
-        searchService.setSearchPartyView(this)
+        initTopScrollListener() // 상단 스크롤 작업
 
         if (totalCursor == 0)
             initLoadPosts()
@@ -63,12 +65,21 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     private fun initRadioBtn(){
         binding.searchDetailTimeRg.setOnCheckedChangeListener { _: RadioGroup, checkedId:Int ->
             binding.searchDetailTimeRg.check(checkedId)
+            filterCheckFlag = true
+
+            when(checkedId){
+                R.id.search_detail_rb1 -> orderTimeCategory = "BREAKFAST"
+                R.id.search_detail_rb2 -> orderTimeCategory = "LUNCH"
+                R.id.search_detail_rb3 -> orderTimeCategory = "DINNER"
+                R.id.search_detail_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
+                else -> filterCheckFlag = false
+            }
         }
     }
 
     // 오늘 날짜 계산
     private fun calculateToday(): String {
-        nowTime = System.currentTimeMillis();
+        nowTime = System.currentTimeMillis()
         date = Date(nowTime)
         return dateFormat.format(date)
     }
@@ -123,20 +134,36 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
         totalCursor = 0
-        getSearchPartyList(1, totalCursor, keyword)
+        isLoading = false
+        finalPage = false
+        keyword = requireArguments().getString("keyword").toString()
+        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
+        else getSearchPartyList(dormitoryId, totalCursor, keyword)
     }
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
     // TODO: 로딩 중에 스크롤 막기
-    // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
     private fun initMoreLoadPosts() {
         binding.searchProgressCover.visibility = View.VISIBLE
+
         val handler = Handler()
         handler.postDelayed({
-            getSearchPartyList(dormitoryId, totalCursor, keyword)
+            keyword = requireArguments().getString("keyword").toString()
+            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
+            else getSearchPartyList(dormitoryId, totalCursor, keyword)
             isLoading = false
             binding.searchProgressCover.visibility = View.GONE
         }, 1200)
+    }
+
+    // 상단 스크롤 관련
+    private fun initTopScrollListener() {
+        binding.searchDetailSwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
+            searchArray.clear()
+            initLoadPosts()
+            initAdapter()
+            binding.searchDetailSwipe.isRefreshing = false
+        })
     }
 
     // 하단 스크롤 관련
@@ -159,8 +186,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == searchArray.size - 1) {
                         if (finalPage == false)
                             initMoreLoadPosts()
-                        else
-                            binding.searchBottomView.visibility = View.INVISIBLE
+                        else binding.searchBottomView.visibility = View.INVISIBLE
 
                         isLoading = true
                     }
@@ -172,9 +198,37 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // 배달 목록 가져오기
     private fun getSearchPartyList(dormitoryId: Int, cursor: Int, keyword: String) {
         val searchDataService = SearchDataService()
-        searchDataService.getSearchPartyList(dormitoryId, cursor, keyword)
         searchDataService.setSearchPartyView(this)
+        searchDataService.getSearchPartyList(dormitoryId, cursor, keyword)
         totalCursor += 1
+    }
+
+    override fun onSearchSuccess(result: SearchResult) {
+        Log.d("SEARCH-RESPSONSE", "SUCCESS")
+
+        finalPage = result.finalPage
+        val result = result.searchPartiesVoList
+
+        for (i in 0 until result!!.size) {
+            var currentMatching = result?.get(i)?.currentMatching
+            var foodCategory = result?.get(i)?.foodCategory
+            var id = result?.get(i)?.id
+            var maxMatching = result?.get(i)?.maxMatching
+            var orderTime = result?.get(i)?.orderTime
+            var title = result?.get(i)?.title
+            var hashTags = result?.get(i)?.hasHashTag
+
+            searchArray.add(
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+            )
+
+            searchAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onSearchFailure(code: Int, message: String) {
+        Log.d("SEARCH-RESPONSE", "SEARCH-DETAIL-FRAGMENT-FAILURE")
+        totalCursor--
     }
 
     // Adapter 설정
@@ -186,18 +240,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         searchAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
             override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
                 var deliveryItemId = searchAdapter.getDeliveryItemId(pos).toString()
-
-                // 기존 버전
-                // val transaction: FragmentTransaction = (context as SearchActivity).supportFragmentManager.beginTransaction()
-
-                // val bundle = Bundle()
-                // bundle.putString("deliveryItemId", deliveryItemId)
-
-                // val lookPartyFragment = LookPartyFragment()
-                // lookPartyFragment.arguments = bundle
-
-                // transaction.addToBackStack("lookParty").replace(R.id.search_frm, lookPartyFragment)
-                // transaction.commit()
 
                 val intent = Intent(activity, MainActivity::class.java)
                 intent.putExtra("deliveryItemId", deliveryItemId)
@@ -223,18 +265,33 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
-                items[0]=items[position] // items[0]은 현재 선택된 아이템 저장용
+                items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+
+                if (position in 1..5)
+                    filterCheckFlag = true
+
+                maxMatching = position * 2
+                finalPage = false
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
 
-    override fun onSearchSuccess(result: SearchResult) {
-        Log.d("DELIVERY-REPSONSE", "SUCCESS")
+    // 배달 목록 필터 적용 후 가져오기
+    private fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?) {
+        Log.d("SEARCH-FRAGMENT", "getSearchFilterList keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
+        val searchDataService = SearchDataService()
+        searchDataService.setSearchFilterView(this)
+        searchDataService.getSearchFilterList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)
+        totalCursor += 1
+    }
+
+    override fun searchFilterSuccess(result: SearchResult) {
+        Log.d("SEARCH-FILTER", "SUCCESS")
 
         finalPage = result.finalPage
         val result = result.searchPartiesVoList
@@ -252,12 +309,18 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
-            searchAdapter.notifyDataSetChanged()
+            searchAdapter.notifyItemChanged(searchArray.size - 1)
+
+            if (finalPage == true) {
+                if ((binding.searchDetailPartyRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= searchArray.size - 2)
+                    binding.searchBottomView.visibility = View.INVISIBLE
+                else binding.searchBottomView.visibility = View.VISIBLE
+            }
         }
     }
 
-    override fun onSearchFailure(code: Int, message: String) {
-        Log.d("SEARCH-RESPONSE", "SEARCH-DETAIL-FRAGMENT-FAILURE")
+    override fun searchFilterFailure(code: Int, message: String) {
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
         totalCursor--
     }
 }

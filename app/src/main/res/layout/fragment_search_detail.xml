@@ -131,16 +131,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_detail_party_rv"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/search_detail_swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
-        android:overScrollMode="never"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_detail_sort_img"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/search_detail_sort_img">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_detail_party_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="13dp"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_detail_sort_img"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/search_bottom_view"
@@ -158,7 +170,7 @@
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/search_detail_party_rv"
+        app:layout_constraintTop_toTopOf="@id/search_detail_swipe"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
         <!--android:background="#40EFEFEF"-->
