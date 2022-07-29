@@ -126,6 +126,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
 
         var remainTime = order - today
+        Log.d("remainTime", remainTime.toString())
 
         if (remainTime <= 0) {
             return "끝끝"

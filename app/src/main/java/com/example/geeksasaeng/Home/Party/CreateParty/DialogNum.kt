@@ -35,7 +35,9 @@ class DialogNum: DialogFragment() {
     private fun initData(){
         //사용자가 입력해둔 정보 있으면, 그걸 default값으로 설정해주기 위함 (사용자가 입력해둔 정보 유무는 ViewModel에 저장되어 있는지 여부로 결정)
         Log.d("dialogNum", createPartyVM.getMaxMatching().toString())
-        if(createPartyVM.getMaxMatching().toString()!="null"){
+        if(createPartyVM.getMaxMatching().toString()=="null") {
+            createPartyVM.setMaxMatching(2) // 입력된 값이 없었다면 초기값 2를 VM에 저장
+        }else{
             numString = createPartyVM.getMaxMatching().toString() //numString값에 원래 저장되어있던 값 지정
             Log.d("dialogNum", createPartyVM.getMaxMatching()!!.toInt().toString())
         }
