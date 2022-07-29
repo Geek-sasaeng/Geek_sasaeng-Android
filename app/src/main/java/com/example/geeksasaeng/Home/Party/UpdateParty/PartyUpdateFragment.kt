@@ -21,7 +21,7 @@ import net.daum.mf.map.api.MapView
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//TODO: 얘이름 UpdateParty로 고치고 싶당
 class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(FragmentDeliveryPartyUpdateBinding::inflate), UpdatePartyView,
     DialogDtUpdate.DialogDtUpdateClickListener, DialogNumUpdate.DialogNumUpdateClickListener, DialogCategoryUpdate.DialogCategoryUpdateClickListener,
     DialogLinkUpdate.DialogLinkUpdateClickListener, DialogLocationUpdate.DialogLocationUpdateClickListener{
@@ -281,6 +281,10 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     private fun drawMap(mapPoint: MapPoint){
         //맵 다시 띄우기
         mapView = MapView(requireActivity())
+        mapView.setOnTouchListener { v, event ->
+            binding.deliveryPartyUpdateSv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.deliveryPartyUpdateKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()

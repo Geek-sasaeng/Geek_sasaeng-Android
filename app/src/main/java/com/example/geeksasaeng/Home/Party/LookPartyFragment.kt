@@ -4,6 +4,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.method.Touch
 import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -182,6 +183,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     //맵 그리는 함수
     private fun drawMap(mapPoint: MapPoint){
         mapView = MapView(requireActivity())
+        mapView.setOnTouchListener { v, event ->
+            binding.lookPartySv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.lookKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()

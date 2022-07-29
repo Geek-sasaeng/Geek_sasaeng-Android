@@ -229,6 +229,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private fun drawMap(mapPoint: MapPoint){
         //맵 다시 띄우기
         mapView = MapView(this)
+        mapView.setOnTouchListener { v, event ->
+            binding.createPartySv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.createPartyKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()
