@@ -8,7 +8,7 @@ import com.example.geeksasaeng.databinding.FragmentBannerBinding
 class BannerFragment(val imgUrl: String) : BaseFragment<FragmentBannerBinding>(FragmentBannerBinding::inflate) {
     override fun initAfterBinding() {
        /* binding.bannerImageIv.setImageResource(imgUrl)*/
-        Log.d("commercial", "Glide 실행됨")
+        Log.d("BannerFragment", "Glide 실행됨")
         Glide.with(this)
             .load(imgUrl)
             .into(binding.bannerImageIv)
