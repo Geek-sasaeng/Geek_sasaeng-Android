@@ -68,10 +68,10 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             filterCheckFlag = true
 
             when(checkedId){
-                R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
-                R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
-                R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
-                R.id.delivery_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
+                R.id.search_detail_rb1 -> orderTimeCategory = "BREAKFAST"
+                R.id.search_detail_rb2 -> orderTimeCategory = "LUNCH"
+                R.id.search_detail_rb3 -> orderTimeCategory = "DINNER"
+                R.id.search_detail_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
                 else -> filterCheckFlag = false
             }
         }
@@ -143,9 +143,9 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
     // TODO: 로딩 중에 스크롤 막기
-    // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
     private fun initMoreLoadPosts() {
         binding.searchProgressCover.visibility = View.VISIBLE
+
         val handler = Handler()
         handler.postDelayed({
             keyword = requireArguments().getString("keyword").toString()

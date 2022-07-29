@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -351,6 +352,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
         deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
+
 
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
