@@ -160,7 +160,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
                 binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = false
             }
         }
-        //20자 500자 제한은 xml에서 해놔서 굳이 검사 안해도 될듯..? 근데 파티 생성하기에선 해놓긴 했어.ㅎㅇㅎ
     }
 
     private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
