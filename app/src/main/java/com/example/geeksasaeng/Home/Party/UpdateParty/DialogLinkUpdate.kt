@@ -22,8 +22,6 @@ class DialogLinkUpdate : DialogFragment() {
     lateinit var binding: DialogLinkUpdateLayoutBinding
     private var dialogLinkUpdateClickListener: DialogLinkUpdateClickListener? =null
 
-    private val createPartyVM: CreatePartyViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,8 +52,11 @@ class DialogLinkUpdate : DialogFragment() {
     //frag->Activity 정보전달용 코드 끝
 
     private fun initData(){
-        if(createPartyVM.getStoreUrl().toString()!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
-            binding.dialogLinkUpdateSearchEt.setText(createPartyVM.getStoreUrl().toString()) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
+        val storeUrl = arguments?.getString("Link")
+        if(storeUrl!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
+            binding.dialogLinkUpdateSearchEt.setText(storeUrl) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
+        }else{
+            binding.dialogLinkUpdateSearchEt.setText("링크를 입력해주세요")
         }
     }
 
@@ -71,13 +72,10 @@ class DialogLinkUpdate : DialogFragment() {
 
         binding.dialogLinkUpdateBtn.setOnClickListener { //다음버튼
 
-            //다음 다이얼로그 띄우기전에 이 작업 필요
             if(binding.dialogLinkUpdateSearchEt.text.toString()!=""){ //뭔가가 입력되었다면
                 dialogLinkUpdateClickListener?.onLinkClicked(binding.dialogLinkUpdateSearchEt.text.toString())
-                createPartyVM.setStoreUrl(binding.dialogLinkUpdateSearchEt.text.toString())
             }else{ //아무것도 없다면
                 dialogLinkUpdateClickListener?.onLinkClicked("링크를 입력해주세요")
-                createPartyVM.setStoreUrl(null)
             }
             //자기는 종료
             parentFragmentManager.beginTransaction()
