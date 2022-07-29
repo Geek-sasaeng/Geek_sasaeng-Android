@@ -186,16 +186,17 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         binding.deliveryPartyUpdateCompleteBtnTv.setOnClickListener {
             Log.d("cherry", "버튼 눌려짐")
             var numCategory : Int = 0
+            //foodcategory(String)에 따른 아이디값(int)변환
             when(foodCategory){
                 "한식"-> numCategory = 1
-                "중식"-> numCategory = 2
-                "분식"-> numCategory = 3
-                "회/돈까스"-> numCategory =4
-                "디저트/음료"-> numCategory = 5
-                "양식"-> numCategory = 6
-                "일식"-> numCategory = 7
-                "치킨/피자"-> numCategory = 8
-                "패스트 푸드"-> numCategory = 9
+                "중식"-> numCategory = 3
+                "분식"-> numCategory = 5
+                "회/돈까스"-> numCategory =7
+                "디저트/음료"-> numCategory = 9
+                "양식"-> numCategory = 2
+                "일식"-> numCategory = 4
+                "치킨/피자"-> numCategory = 6
+                "패스트 푸드"-> numCategory = 8
                 "기타"-> numCategory = 10
                 else->{}
             }
