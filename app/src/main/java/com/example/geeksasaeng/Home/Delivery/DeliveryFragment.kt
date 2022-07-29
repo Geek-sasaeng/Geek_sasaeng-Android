@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -43,8 +44,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
-    lateinit var orderTimeCategory: String
-    var maxMatching: Int = 0
+    var orderTimeCategory: String? = null
+    var maxMatching: Int? = null
     var nowTime: Long = 0
     var date: Date? = null
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -72,10 +73,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initRadioBtn() //필터(radiobutton) 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
-
-        // 배달 파티 리스트 받아오기
-        deliveryService = DeliveryService()
-        deliveryService.setDeliveryView(this)
 
         binding.deliveryFloatingBtn.setOnClickListener {
             val intent = Intent(context, CreatePartyActivity::class.java)
@@ -147,8 +144,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
         totalCursor = 0
+        isLoading = false
+        finalPage = false
         if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
-        else getDeliveryAllList(1, totalCursor)
+        else getDeliveryAllList(dormitoryId, totalCursor)
     }
 
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
@@ -187,16 +186,14 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 if (finalPage == true) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
-                    else
-                        binding.deliveryBottomView.visibility = View.VISIBLE
+                    else binding.deliveryBottomView.visibility = View.VISIBLE
                 }
 
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         if (finalPage == false)
                             initMoreLoadPosts()
-                        else
-                            binding.deliveryBottomView.visibility = View.INVISIBLE
+                        else binding.deliveryBottomView.visibility = View.INVISIBLE
 
                         isLoading = true
                     }
@@ -208,8 +205,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
         val deliveryDataService = DeliveryService()
-        deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         deliveryDataService.setDeliveryView(this)
+        deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
         totalCursor += 1
     }
 
@@ -268,32 +265,14 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initRadioBtn(){
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
+            filterCheckFlag = true
+
             when(checkedId){
-                R.id.delivery_rb1 -> {
-                    orderTimeCategory = "BREAKFAST"
-                    filterCheckFlag = true
-                    isLoading = false
-                }
-                R.id.delivery_rb2 -> {
-                    orderTimeCategory = "LUNCH"
-                    filterCheckFlag = true
-                    isLoading = false
-                }
-                R.id.delivery_rb3 -> {
-                    orderTimeCategory = "DINNER"
-                    filterCheckFlag = true
-                    isLoading = false
-                }
-                R.id.delivery_rb4 -> {
-                    orderTimeCategory = "MIDNIGHT_SNACKS"
-                    filterCheckFlag = true
-                    isLoading = false
-                }
-                else -> {
-                    // orderTimeCategory =
-                    filterCheckFlag = false
-                    isLoading = false
-                }
+                R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
+                R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
+                R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
+                R.id.delivery_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
+                else -> filterCheckFlag = false
             }
         }
     }
@@ -379,6 +358,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
         }
+        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
+
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
@@ -428,10 +409,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     // 배달 목록 필터 적용 후 가져오기
-    private fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String, maxMatching: Int) {
+    private fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?) {
         val deliveryDataService = DeliveryService()
-        deliveryDataService.getDeliveryFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
         deliveryDataService.setDeliveryFilterView(this)
+        deliveryDataService.getDeliveryFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
         totalCursor += 1
     }
 
@@ -439,6 +420,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-FILTER", "SUCCESS")
 
         finalPage = result.finalPage
+
         val result = result.deliveryPartiesVoList
 
         for (i in 0 until result!!.size) {
@@ -454,12 +436,21 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
-            deliveryAdapter.notifyDataSetChanged()
+            deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
+        }
+
+        if (finalPage == true) {
+            Log.d("DELIVERY-FILTER", "getDeliveryFilterList-DeliveryArray-Size = ${deliveryArray.size}")
+            if (deliveryArray.size >= 2) {
+                if ((binding.deliveryRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
+                    binding.deliveryBottomView.visibility = View.INVISIBLE
+                else binding.deliveryBottomView.visibility = View.VISIBLE
+            } else binding.deliveryBottomView.visibility = View.VISIBLE
         }
     }
 
     override fun deliveryFilterFailure(code: Int, message: String) {
-        Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
+        Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
     }
 }
