@@ -41,6 +41,11 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         signUpService.setVerifySmsView(this@StepFourFragment)
     }
 
+    override fun onStop() {
+        super.onStop()
+        timerTask?.cancel() //화면 꺼질때
+    }
+
     override fun initAfterBinding() {
         progressVM.increase()
 

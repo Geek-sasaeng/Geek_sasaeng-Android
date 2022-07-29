@@ -32,6 +32,7 @@ import com.example.geeksasaeng.Home.CreateParty.DialogLink
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
@@ -45,23 +46,19 @@ import net.daum.mf.map.gen.KakaoMapLibraryAndroidMeta
 import java.nio.file.Files.find
 import java.util.*
 
-class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
+class DialogLocationUpdate: DialogFragment(),
     MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
     lateinit var binding: DialogLocationLayoutUpdateBinding
-    var LocationString = ""
+    private var dialogLocationUpdateClickListener: DialogLocationUpdateClickListener? =null
     var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSIONS_REQUEST_CODE = 100
     lateinit var geocoder : Geocoder
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint // TODO: 디폴트 맵포인트로 설정
-    var locFlag = false // 플래그값
+    var locFlag = false // 정보 전달 유무 플래그값
     lateinit var marker : MapPOIItem
-
-    private lateinit var createPartyService: CreatePartyService
-
-    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DialogLocationLayoutUpdateBinding.inflate(inflater, container, false)
@@ -73,14 +70,31 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
         return binding.root
     }
 
+    //frag->Activity 정보전달용 코드 시작
+    interface DialogLocationUpdateClickListener{
+        fun onLocationClicked(mapPoint: MapPoint, locFlag: Boolean)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogLocationUpdateClickListener =  requireParentFragment() as DialogLocationUpdateClickListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        dialogLocationUpdateClickListener?.onLocationClicked(mapPoint, locFlag)
+        binding.dialogLocationUpdateKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
+        dialogLocationUpdateClickListener = null
+    }
+    //frag->Activity 정보전달용 코드 끝
+
     private fun initData(){
-        if(createPartyVM.getMapPoint().toString()!="null"){ // 이미 입력되어있는 mapPoint가 있으면 띄워주기
-            drawMap(createPartyVM.getMapPoint()!!)
-            setAddress(createPartyVM.getMapPoint()!!)
-        }else { // 디폴트로 맵 그려주기
-            //TODO: DormitoryId는 어디서 얻어오지?
-            createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
-        }
+        val latitude = requireArguments().getDouble("latitude")
+        val longitude = requireArguments().getDouble("longitude")
+        this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+        Log.d("updateLoc", mapPoint.toString())
+        drawMap(mapPoint)
+        setAddress(mapPoint)
     }
 
     override fun onResume() {
@@ -91,14 +105,7 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
     }
 
 
-    override fun onDetach() {
-        super.onDetach()
-        binding.dialogLocationUpdateKakaoMapView.removeView(mapView) // 다이얼로그 나가기전에 맵 없애주기
-    }
-
     private fun ininKakaoMap(){
-        createPartyService = CreatePartyService() //서비스 객체 생성
-        createPartyService.setCreatePartyDefaultLocView(this)
 
         //현위치 트래킹
 /*      mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading)
@@ -216,9 +223,9 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
 
     private fun initClickListener(){
         binding.dialogLocationUpdateBtn.setOnClickListener {
-            //마지막 페이지이므로 그냥 종료
+            locFlag = true // 정상적인 종료임을 표시
             //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+            parentFragmentManager.beginTransaction().remove(this).commit()
         }
 
         binding.dialogLocationUpdateSearchEt.setOnKeyListener { _, keyCode, event ->
@@ -246,7 +253,6 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
                     val lon: Double = address.getLongitude() //경도
                     Log.d("adr", lat.toString()+"/"+lon.toString())
                     this.mapPoint = MapPoint.mapPointWithGeoCoord(lat,lon) // 서치하면 맵포인트 설정됨 (mapPoint 이때 정의됨)
-                    createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
                     //마커생성
                     marker = MapPOIItem()
                     marker.itemName = "요기?"
@@ -326,22 +332,11 @@ class DialogLocationUpdate: DialogFragment(), CreatePartyDefaultLocView,
         Log.d("map", "marker이동됨")
         mapView!!.setMapCenterPoint(p2, true)//지도 중심점 변경
         this.mapPoint = p2!! // 맵포인트 수정
-        createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
-
         //역지오코딩
         setAddress(p2)
 
     }
 
-    override fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult) {
-        this.mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude) // default로 맵포인트 설정됨
-        createPartyVM.setMapPoint(this.mapPoint) //★ VM에도 저장 //
-        drawMap(mapPoint) // 지도 그리기
-        setAddress(mapPoint) //tv에 주소 띄우기
-    }
-
-    override fun onDefaultLocFailure() {
-    }
 
     private fun drawMap(mapPoint: MapPoint){
         //맵  띄우기

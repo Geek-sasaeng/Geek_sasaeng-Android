@@ -40,6 +40,11 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
         initClickListener()
     }
 
+    override fun onStop() {
+        super.onStop()
+        timerTask?.cancel() //화면 꺼질때
+    }
+    
     private fun initClickListener() {
 
         // 재전송버튼

@@ -224,6 +224,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         }
     }
 
+    //TODO: locFlag 필요 없네,,,>?? 지우자
     override fun onLocationClicked(loc: String, mapPoint: MapPoint, locFlag: Boolean) {
         //locFlag가 아마 다이얼로그 바깥을 클릭했는지 , 완료로 탈출했는지 여부를 알려주는 걸꺼야
         //TODO: 내 생각엔 여기선 다이얼로그 바깥 클릭해서 탈출 못하게 하면 안되나?
