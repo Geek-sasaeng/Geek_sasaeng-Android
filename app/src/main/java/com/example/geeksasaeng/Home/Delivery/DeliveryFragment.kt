@@ -47,7 +47,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int = 0
     var nowTime: Long = 0
     var date: Date? = null
-    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
 
@@ -110,6 +110,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
         var todayDay = Integer.parseInt(currentTime.substring(8, 10))
         var todayHours = Integer.parseInt(currentTime.substring(11, 13))
+        Log.d("calculateTime-HOUR", todayHours.toString())
         var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
         var todaySec = Integer.parseInt(currentTime.substring(17, 19))
 
@@ -126,6 +127,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
 
         var remainTime = order - today
+        Log.d("remainTime", remainTime.toString())
 
         if (remainTime <= 0) {
             return "끝끝"

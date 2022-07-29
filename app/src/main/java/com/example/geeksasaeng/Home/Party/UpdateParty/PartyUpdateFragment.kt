@@ -163,7 +163,7 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     }
 
     private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
-        var sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date1 = sdf.parse(time)
         val currentTime = Calendar.getInstance().time
         return date1.after(currentTime)

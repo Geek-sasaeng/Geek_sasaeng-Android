@@ -73,6 +73,9 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     private fun checking()  {
         //TODO: 왜 등록이 안되는지 정보가 좀 부족한것 같아..!
+        Log.d("checking",(binding.createPartyTitleEt.text.length in 1..20).toString()+"/"+(binding.createPartyContentEt.text.length in 1..500).toString()+"/"+(createPartyVM.getDate2().toString() != "null").toString()+"/"+
+                (createPartyVM.getTime2().toString() != "null").toString()+"/"+(createPartyVM.getMaxMatching().toString() != "null").toString()+"/"+
+                (createPartyVM.getCategory().toString() != "null").toString()+"/"+(createPartyVM.getMapPoint().toString() != "null").toString())
         if ((binding.createPartyTitleEt.text.length in 1..20)&&
                 (binding.createPartyContentEt.text.length in 1..500) &&
                 createPartyVM.getDate2().toString() != "null" &&
@@ -94,9 +97,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
 
     private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
-        var sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date1 = sdf.parse(time)
         val currentTime = Calendar.getInstance().time
+
+        Log.d("compareDate", date1.after(currentTime).toString())
         return date1.after(currentTime)
     }
 
