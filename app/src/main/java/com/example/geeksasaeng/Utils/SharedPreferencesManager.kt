@@ -34,6 +34,12 @@ fun saveAutoLogin(jwt: String, loginId: String, password: String) {
     editor.apply()
 }
 
+fun saveSocialAutoLogin(jwt: String) {
+    val editor = mSharedPreferences.edit()
+    editor.putString("jwt", jwt)
+    editor.apply()
+}
+
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null)
 fun getPassword(): String? = mSharedPreferences.getString("password", null)

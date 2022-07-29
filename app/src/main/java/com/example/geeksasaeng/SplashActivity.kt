@@ -29,7 +29,10 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         handler.postDelayed({
             if (loginId != null && password != null) {
                 login()
-            } else {
+            }
+            else if(jwt != null) { // 네이버 자동 로그인 체크 한 경우
+                changeMainActivity()
+            }else{
                 removeAutoLogin()
                 changeActivity(LoginActivity::class.java)
                 finish()
@@ -37,16 +40,20 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         }, 1500)
     }
 
+
     private fun login() {
         val loginDataService = LoginDataService()
         loginDataService.setLoginView(this)
         loginDataService.login(Login(loginId, password))
     }
+    private fun changeMainActivity() {
+        changeActivity(MainActivity::class.java)
+        finish()
+    }
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         // 자동 로그인 수정 필요
-        changeActivity(MainActivity::class.java)
-        finish()
+        changeMainActivity()
     }
 
     override fun onLoginFailure(message: String) {
