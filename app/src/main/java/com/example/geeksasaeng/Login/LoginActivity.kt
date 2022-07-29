@@ -157,15 +157,15 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         if (binding.loginAutologinCb.isChecked) {
             saveAutoLogin(result.jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
         }
-
         finish()
         changeActivity(MainActivity::class.java)
     }
 
     // 소셜 로그인 성공
     override fun onSocialLoginSuccess(code: Int, result: SocialLoginResult) {
-        // TODO 자동 로그인 기능 구현해야 함
-        // TODO JWT 저장 해야함
+        // 네이버 자동 로그인 자동 적용
+        val jwt = result.jwt
+        saveSocialAutoLogin(jwt)
         finish()
         changeActivity(MainActivity::class.java)
     }
