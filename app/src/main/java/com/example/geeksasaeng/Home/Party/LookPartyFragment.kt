@@ -227,7 +227,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     private fun calculateToday(): String {
         val nowTime = System.currentTimeMillis();
         val date = Date(nowTime)
-        var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         return dateFormat.format(date)
     }
 

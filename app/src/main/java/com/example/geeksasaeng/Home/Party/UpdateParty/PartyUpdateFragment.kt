@@ -18,6 +18,7 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryPartyUpdateBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -137,7 +138,9 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
                 longitude.toString() != requireArguments().getDouble("longitude", longitude).toString()
                 ).toString())
 
-        if( hashTag.toString() != requireArguments().getBoolean("hashTag").toString()||
+        if( (binding.deliveryPartyUpdateTitleEt.text.length in 1..20 &&
+            binding.deliveryPartyUpdateContentEt.text.length in 1..500) &&
+            (hashTag.toString() != requireArguments().getBoolean("hashTag").toString()||
             content.toString() != requireArguments().getString("content").toString()||
             title.toString() != requireArguments().getString("title").toString()||
             orderTime.toString() != requireArguments().getString("orderTime").toString() ||
@@ -145,8 +148,8 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             foodCategory.toString() != requireArguments().getString("foodCategory").toString() ||
             storeUrl.toString() != requireArguments().getString("storeUrl").toString() ||
             latitude.toString() != requireArguments().getDouble("latitude", latitude).toString() ||
-            longitude.toString() != requireArguments().getDouble("longitude", longitude).toString()
-        ){ // 등록버튼 파란색으로 바꿔주기
+            longitude.toString() != requireArguments().getDouble("longitude", longitude).toString()) && (compareDate(orderTime.toString()))
+        ){ // 완료버튼 파란색으로 바꿔주기 (조건: 제목, 콘텐츠가 글자수 내에 들어있고, 설정된 시간이 현재시간보다 미래일때 변한게 하나라도 있으면 수정가능하게)
             binding.deliveryPartyUpdateCompleteBtnTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.main))
             if(!binding.deliveryPartyUpdateCompleteBtnTv.isEnabled){
                 binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = true
@@ -157,7 +160,13 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
                 binding.deliveryPartyUpdateCompleteBtnTv.isEnabled = false
             }
         }
-        //20자 500자 제한은 xml에서 해놔서 굳이 검사 안해도 될듯..? 근데 파티 생성하기에선 해놓긴 했어.ㅎㅇㅎ
+    }
+
+    private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date1 = sdf.parse(time)
+        val currentTime = Calendar.getInstance().time
+        return date1.after(currentTime)
     }
 
     private fun initClickListener(){

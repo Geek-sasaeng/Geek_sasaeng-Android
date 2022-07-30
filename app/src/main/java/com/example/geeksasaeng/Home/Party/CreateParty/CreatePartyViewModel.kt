@@ -88,14 +88,14 @@ class CreatePartyViewModel: ViewModel() {
         category.value = value
         when(value.toString()){
             "한식"-> setCategoryInt(1)
-            "중식"-> setCategoryInt(2)
-            "분식"-> setCategoryInt(3)
-            "회/돈까스"-> setCategoryInt(4)
-            "디저트/음료"-> setCategoryInt(5)
-            "양식"-> setCategoryInt(6)
-            "일식"-> setCategoryInt(7)
-            "치킨/피자"-> setCategoryInt(8)
-            "패스트 푸드"-> setCategoryInt(9)
+            "중식"-> setCategoryInt(3)
+            "분식"-> setCategoryInt(5)
+            "회/돈까스"-> setCategoryInt(7)
+            "디저트/음료"-> setCategoryInt(9)
+            "양식"-> setCategoryInt(2)
+            "일식"-> setCategoryInt(4)
+            "치킨/피자"-> setCategoryInt(6)
+            "패스트 푸드"-> setCategoryInt(8)
             "기타"-> setCategoryInt(10)
             else->{}
         }

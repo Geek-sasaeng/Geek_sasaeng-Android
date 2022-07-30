@@ -38,7 +38,6 @@ class DialogCategory : DialogFragment() {
         Log.d("dialogCate", createPartyVM.getCategory().toString())
         if(createPartyVM.getCategory().toString()!="null"){
             categoryString = createPartyVM.getCategory().toString() //categoryString값에 원래 저장되어있던 값 지정
-            Log.d("categoryString", (categoryString=="패스트 푸드").toString()+"/"+categoryString+"//"+"패스트 푸드")
             
             //default 체크 작업
             when(categoryString){
