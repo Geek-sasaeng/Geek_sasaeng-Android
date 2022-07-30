@@ -65,6 +65,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         deliveryService = DeliveryService() //서비스 객체 생성
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
+
         binding.deliveryProgressCover.visibility = View.GONE
         binding.deliveryBottomView.visibility = View.VISIBLE
 
@@ -344,12 +345,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         deliveryBannerAdapter = BannerVPAdapter(this)
         //더미 img url
-/*        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))*/
         for (i in results){
             Log.d("commercial", i.toString() + "= i값")
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
@@ -358,7 +353,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
             deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
         }
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
 
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
@@ -385,7 +379,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 }
             })
         }
-
     }
 
     //3초마다 페이지 넘기는 기능
@@ -398,7 +391,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                         handler.sendEmptyMessage(0)
                     }
                 } catch (e : InterruptedException){
-                    Log.d("interupt", "interupt발생")
+                    Log.d("interrupt", "interrupt 발생")
                 }
             }
         }

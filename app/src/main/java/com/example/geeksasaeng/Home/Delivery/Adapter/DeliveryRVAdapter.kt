@@ -56,9 +56,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         return VIEW_TYPE_ITEM
     }
 
-    private inner class ItemViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView)
-    {
+    private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // 메인 파티 리스트 부분
         // Not Use = chief, content, currentMatching, foodCategory, id, location
         // Use = currentMatching, maxMatching, orderTime, title
@@ -77,6 +75,8 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
             deliveryItemTitle = itemView.findViewById(R.id.delivery_item_title)
             deliveryItemCategory = itemView.findViewById(R.id.delivery_item_category)
             deliveryItemHashTag = itemView.findViewById(R.id.delivery_item_hashTag)
+
+            Log.d("DELIVERY-ADAPTER", "ItemViewHolder")
         }
     }
 
