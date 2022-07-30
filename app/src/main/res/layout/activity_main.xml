@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:background="@color/line"
         app:itemRippleColor="@null"
+        app:itemBackground="@color/line"
         app:itemTextColor="@color/gray_3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
