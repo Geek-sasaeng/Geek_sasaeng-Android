@@ -228,6 +228,7 @@ class DialogLocationUpdate: DialogFragment(),
             parentFragmentManager.beginTransaction().remove(this).commit()
         }
 
+        //엔터치면 검색되게 하는 기능
         binding.dialogLocationUpdateSearchEt.setOnKeyListener { _, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                 binding.dialogLocationUpdateSearchBtn.performClick()
