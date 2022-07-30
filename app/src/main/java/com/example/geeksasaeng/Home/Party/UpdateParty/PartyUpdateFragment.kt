@@ -62,7 +62,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         super.onStart()
         updatePartyService = UpdatePartyService() // 서비스 객체 생성
         updatePartyService.setUpdatePartyView(this)
-        binding.deliveryPartyUpdateLocation2Tv.isSelected = true // 애니메이션 효과 주기 위해서
     }
 
     override fun initAfterBinding() {
@@ -347,8 +346,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
 
     //수정 성공, 실패
     override fun onUpdatePartySuccess() {
-        Log.d("cherry", "파티 수정하기 성공")
-        //TODO: 안돼...
         //종료
         activity?.supportFragmentManager?.beginTransaction()
             ?.remove(this)?.commit()

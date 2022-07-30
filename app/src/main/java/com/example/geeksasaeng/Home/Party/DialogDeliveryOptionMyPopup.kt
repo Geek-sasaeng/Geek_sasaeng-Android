@@ -137,6 +137,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
 
         binding.deliveryOptionDeleteTv.setOnClickListener {
             // 삭제하기 팝업으로 이동
+            Log.d("delete", "삭제하기 클리됨")
             this.dismiss()
 
             val bundle = Bundle()
@@ -144,7 +145,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
 
             var dialogFragment = DialogPartyDelete()
             dialogFragment.arguments = bundle
-            dialogFragment.show(childFragmentManager, "DialogPartyDelete")
+            dialogFragment.show(parentFragmentManager, "DialogPartyDelete") //childeFragmentManager일때는 다이얼로그가 안떠서 parentFragmentManger로 수정완료! 근데 why지? 루나는 아려나..?
         }
     }
 }
