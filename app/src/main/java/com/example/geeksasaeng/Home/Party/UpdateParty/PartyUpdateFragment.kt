@@ -3,9 +3,13 @@ package com.example.geeksasaeng.Home.Party.UpdateParty
 import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -48,6 +52,11 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     var storeUrl: String? = null
     var title: String? = null
     var updatedAt: String? = null
+    var isFirst: Boolean = true // 파티 생성하기 화면이 만들어진게 최초인지 확인 위함
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -63,37 +72,40 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     }
 
     private fun initGetData(){ // 파티 보기에서 파티 수정하기로 넘어오면서 데이터 받아오기
-        authorStatus = requireArguments().getBoolean("authorStatus")
-        chief = requireArguments().getString("chief")
-        chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
-        content = requireArguments().getString("content")
-        currentMatching = requireArguments().getInt("currentMatching")
-        dormitory = requireArguments().getInt("dormitory")
-        foodCategory = requireArguments().getString("foodCategory") // 카테고리
-        hashTag = requireArguments().getBoolean("hashTag")
-        partyId = requireArguments().getInt("partyId")
-        latitude = requireArguments().getDouble("latitude", latitude)
-        longitude = requireArguments().getDouble("longitude", longitude)
-        matchingStatus = requireArguments().getString("matchingStatus")
-        maxMatching = requireArguments().getInt("maxMatching") // 최대매칭인원
-        orderTime = requireArguments().getString("orderTime") // 주문 예정시간
-        storeUrl = requireArguments().getString("storeUrl")
-        title = requireArguments().getString("title")
-        updatedAt = requireArguments().getString("updatedAt")
-        Log.d("partyUpdate", latitude.toString()+"/"+longitude.toString())
-        Log.d("partyUpdate", orderTime.toString())
+        if(this.isFirst){
+            authorStatus = requireArguments().getBoolean("authorStatus")
+            chief = requireArguments().getString("chief")
+            chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
+            content = requireArguments().getString("content")
+            currentMatching = requireArguments().getInt("currentMatching")
+            dormitory = requireArguments().getInt("dormitory")
+            foodCategory = requireArguments().getString("foodCategory") // 카테고리
+            hashTag = requireArguments().getBoolean("hashTag")
+            partyId = requireArguments().getInt("partyId")
+            latitude = requireArguments().getDouble("latitude", latitude)
+            longitude = requireArguments().getDouble("longitude", longitude)
+            matchingStatus = requireArguments().getString("matchingStatus")
+            maxMatching = requireArguments().getInt("maxMatching") // 최대매칭인원
+            orderTime = requireArguments().getString("orderTime") // 주문 예정시간
+            storeUrl = requireArguments().getString("storeUrl")
+            title = requireArguments().getString("title")
+            updatedAt = requireArguments().getString("updatedAt")
+            Log.d("partyUpdate", latitude.toString()+"/"+longitude.toString())
+            Log.d("partyUpdate", orderTime.toString())
 
-        binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
-        binding.deliveryPartyUpdateTitleEt.setText(title) //제목
-        binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
-        binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
-        binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
-        binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
-        binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
-        binding.deliveryPartyUpdateLocation2Tv.text = getAddress(latitude, longitude) // 수령장소
-        // 카카오맵에 띄우기
-        this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-        drawMap(mapPoint)
+            binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
+            binding.deliveryPartyUpdateTitleEt.setText(title) //제목
+            binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
+            binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
+            binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
+            binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
+            binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
+            binding.deliveryPartyUpdateLocation2Tv.text = getAddress(latitude, longitude) // 수령장소
+            // 카카오맵에 띄우기
+            this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+            drawMap(mapPoint)
+            this.isFirst = false
+        }
     }
 
     private fun initTextWatcher(){
@@ -105,7 +117,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("che", "^ㅇ^")
                 title = binding.deliveryPartyUpdateTitleEt.text.toString()
                 checking()
             }
