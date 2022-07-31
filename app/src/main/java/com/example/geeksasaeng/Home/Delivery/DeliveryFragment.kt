@@ -51,6 +51,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
+    private var lastCheckedBox = -1
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -263,18 +264,69 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun initRadioBtn(){ //라디오 버튼
-        binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
-            binding.deliveryTimeRg.check(checkedId)
-            filterCheckFlag = true
+        //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
-            when(checkedId){
-                R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
-                R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
-                R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
-                R.id.delivery_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
-                else -> filterCheckFlag = false
+        binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "BREAKFAST"
+                lastCheckedBox = R.id.delivery_cb1
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb1){
+                    orderTimeCategory = null
+                }
             }
+            Log.d("check",orderTimeCategory.toString())
         }
+
+        binding.deliveryCb2.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "LUNCH"
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb2){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.deliveryCb3.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "DINNER"
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb3){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.deliveryCb4.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                orderTimeCategory = "MIDNIGHT_SNACKS"
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb4){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
     }
 
     //배너 작업
