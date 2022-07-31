@@ -71,7 +71,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
-        initRadioBtn() //필터(radiobutton) 작업
+        initCheckBox() //필터(checkBox) 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
 
@@ -263,7 +263,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn(){ //라디오 버튼
+    private fun initCheckBox(){ //라디오 버튼
         //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -289,6 +289,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
+                lastCheckedBox = R.id.delivery_cb2
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb2){
                     orderTimeCategory = null
@@ -304,6 +305,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "DINNER"
+                lastCheckedBox = R.id.delivery_cb3
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb3){
                     orderTimeCategory = null
@@ -319,6 +321,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
+                lastCheckedBox = R.id.delivery_cb4
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb4){
                     orderTimeCategory = null

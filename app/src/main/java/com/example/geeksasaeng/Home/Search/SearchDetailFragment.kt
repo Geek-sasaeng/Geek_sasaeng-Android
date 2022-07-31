@@ -42,6 +42,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
     lateinit var keyword: String
+    private var lastCheckedBox = -1
 
     override fun initAfterBinding() {
         keyword = requireArguments().getString("keyword").toString()
@@ -52,7 +53,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         binding.searchBottomView.visibility = View.VISIBLE
 
         initSpinner() //필터(spinner) 작업
-        initRadioBtn() //필터(radiobutton) 작업
+        initCheckBox() //필터(checkBox) 작업
         initAdapter()
         initTopScrollListener() // 상단 스크롤 작업
 
@@ -62,19 +63,74 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         initScrollListener()
     }
 
-    private fun initRadioBtn(){
-        binding.searchDetailTimeRg.setOnCheckedChangeListener { _: RadioGroup, checkedId:Int ->
-            binding.searchDetailTimeRg.check(checkedId)
-            filterCheckFlag = true
 
-            when(checkedId){
-                R.id.search_detail_rb1 -> orderTimeCategory = "BREAKFAST"
-                R.id.search_detail_rb2 -> orderTimeCategory = "LUNCH"
-                R.id.search_detail_rb3 -> orderTimeCategory = "DINNER"
-                R.id.search_detail_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
-                else -> filterCheckFlag = false
+    private fun initCheckBox(){ //라디오 버튼
+        //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
+
+        binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.searchDetailCb2.isChecked = false
+                binding.searchDetailCb3.isChecked = false
+                binding.searchDetailCb4.isChecked = false
+                orderTimeCategory = "BREAKFAST"
+                lastCheckedBox = R.id.search_detail_cb1
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.search_detail_cb1){
+                    orderTimeCategory = null
+                }
             }
+            Log.d("check",orderTimeCategory.toString())
         }
+
+        binding.searchDetailCb2.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.searchDetailCb1.isChecked = false
+                binding.searchDetailCb3.isChecked = false
+                binding.searchDetailCb4.isChecked = false
+                orderTimeCategory = "LUNCH"
+                lastCheckedBox = R.id.search_detail_cb2
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.search_detail_cb2){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.searchDetailCb3.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.searchDetailCb1.isChecked = false
+                binding.searchDetailCb2.isChecked = false
+                binding.searchDetailCb4.isChecked = false
+                orderTimeCategory = "DINNER"
+                lastCheckedBox = R.id.search_detail_cb3
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb3){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.searchDetailCb4.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.searchDetailCb1.isChecked = false
+                binding.searchDetailCb2.isChecked = false
+                binding.searchDetailCb3.isChecked = false
+                orderTimeCategory = "MIDNIGHT_SNACKS"
+                lastCheckedBox = R.id.search_detail_cb4
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.search_detail_cb4){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
     }
 
     // 오늘 날짜 계산
