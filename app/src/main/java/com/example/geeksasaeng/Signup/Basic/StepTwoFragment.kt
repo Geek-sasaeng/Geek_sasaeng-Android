@@ -18,6 +18,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 import com.example.geeksasaeng.Utils.getUuid
 
@@ -137,7 +138,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        //ToastMsgSingup 대신에 Utils에 CustomToastMsg만들어서 공용으로 쓰려고 하는데..! 괜찮은 것 같으면 주석 지우고 ToastMsgSignup 지워주면 될 것 같아용~
+        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 16)?.show()
 
         binding.stepTwoNextBtn.isEnabled = true
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
