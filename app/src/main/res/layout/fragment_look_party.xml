@@ -54,6 +54,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
+        android:id="@+id/look_party_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
@@ -239,11 +240,16 @@
 
             <TextView
                 android:id="@+id/look_link_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="식당 링크"
+                android:singleLine="true"
+                android:linksClickable="true"
+                android:autoLink="web"
                 android:textColor="@color/black"
                 android:textSize="13sp"
+                android:layout_marginEnd="28dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/look_time_date"
                 app:layout_constraintTop_toTopOf="@id/look_link" />
 

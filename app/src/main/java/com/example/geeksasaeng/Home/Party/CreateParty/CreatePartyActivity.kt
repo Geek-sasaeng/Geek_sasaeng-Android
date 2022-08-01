@@ -2,6 +2,8 @@ package com.example.geeksasaeng.Home.CreateParty
 
 import android.graphics.Color
 import android.location.Geocoder
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -46,6 +48,22 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         initClickListener()
         initKakaoMap()
     }
+
+/*    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        val title = binding.createPartyTitleEt.text
+        val content = binding.createPartyContentEt.text
+        outState.putCharSequence("title", title)
+        outState.putCharSequence("content", content)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val title = savedInstanceState.getCharSequence("title")
+        val content = savedInstanceState.getCharSequence("content")
+        binding.createPartyTitleEt.setText(title)
+        binding.createPartyContentEt.setText(content)
+    }*/
 
     private fun initTextWatcher(){
         binding.createPartyTitleEt.addTextChangedListener ( object: TextWatcher {
@@ -229,6 +247,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private fun drawMap(mapPoint: MapPoint){
         //맵 다시 띄우기
         mapView = MapView(this)
+        mapView.setOnTouchListener { v, event ->
+            binding.createPartySv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.createPartyKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()

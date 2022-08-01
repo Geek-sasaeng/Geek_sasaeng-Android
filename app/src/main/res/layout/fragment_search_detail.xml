@@ -17,8 +17,8 @@
 
     <Spinner
         android:id="@+id/search_detail_people_spinner"
-        android:layout_width="100dp"
-        android:layout_height="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginLeft="15dp"
         android:background="@drawable/spinner_outline_unclicked"
         android:popupBackground="@drawable/spinner_outline_clicked"
@@ -34,8 +34,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="28dp"
-        android:scrollbars="@null"
+        android:layout_marginEnd="10dp"
+        android:scrollbars="none"
         android:overScrollMode="never"
         app:layout_constraintTop_toTopOf="@id/search_detail_people_spinner"
         app:layout_constraintBottom_toBottomOf="@id/search_detail_people_spinner"
@@ -46,17 +46,17 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="34dp">
+            android:layout_height="wrap_content">
 
             <RadioGroup
                 android:id="@+id/search_detail_time_rg"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="35dp">
 
                 <RadioButton
                     android:id="@+id/search_detail_rb1"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -71,7 +71,7 @@
 
                 <RadioButton
                     android:id="@+id/search_detail_rb2"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -86,7 +86,7 @@
 
                 <RadioButton
                     android:id="@+id/search_detail_rb3"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"
@@ -101,7 +101,7 @@
 
                 <RadioButton
                     android:id="@+id/search_detail_rb4"
-                    android:paddingVertical="7dp"
+                    android:height="35dp"
                     android:paddingHorizontal="10dp"
                     android:button="@null"
                     android:textSize="14sp"

@@ -239,7 +239,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn(){
+    private fun initRadioBtn(){ //라디오 버튼
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
             filterCheckFlag = true
@@ -318,16 +318,14 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
+    //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         deliveryBannerAdapter = BannerVPAdapter(this)
-        //더미 img url
-        for (i in results){
-            Log.d("commercial", i.toString() + "= i값")
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+
+        for(j in 1..5){ //fragment already added 고치기 위함
+            for (i in results){
+                deliveryBannerAdapter.addFragment(i.imgUrl)
+            }
         }
 
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
