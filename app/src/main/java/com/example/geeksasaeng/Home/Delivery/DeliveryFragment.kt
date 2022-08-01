@@ -4,18 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.isEmpty
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -27,7 +26,6 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
@@ -46,11 +44,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var totalCursor: Int = 0
     var orderTimeCategory: String? = null
     var maxMatching: Int? = null
-    var nowTime: Long = 0
-    var date: Date? = null
-    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
+
+    // 테스트
+    var value: Int = 0
+    var preFirstItem = -1
+    var preLastItem = -1
 
     //핸들러 설정
     val handler= Handler(Looper.getMainLooper()){
@@ -84,62 +84,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
-    }
-
-    // 오늘 날짜 계산
-    private fun calculateToday(): String {
-        nowTime = System.currentTimeMillis();
-        date = Date(nowTime)
-        return dateFormat.format(date)
-    }
-
-    // 남은 시간 계산
-    // TODO: 흠... 실시간으로 해야하는데 흠...
-    private fun calculateTime(orderTime: String): String {
-        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
-        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
-        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
-        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
-        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
-
-        var currentTime = calculateToday()
-        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
-        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
-        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
-        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
-        Log.d("calculateTime-HOUR", todayHours.toString())
-        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
-
-        var today = Calendar.getInstance().apply {
-            set(Calendar.YEAR, todayYear)
-            set(Calendar.MONTH, todayMonth)
-            set(Calendar.DAY_OF_MONTH, todayDay)
-        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
-
-        var order = Calendar.getInstance().apply {
-            set(Calendar.YEAR, orderYear)
-            set(Calendar.MONTH, orderMonth)
-            set(Calendar.DAY_OF_MONTH, orderDay)
-        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
-
-        var remainTime = order - today
-        Log.d("remainTime", remainTime.toString())
-
-        if (remainTime <= 0) {
-            return "끝끝"
-        }
-
-        var day = remainTime / (24*60*60*1000)
-        var sec = (remainTime % (24*60*60*1000)) / 1000
-        var hour = sec / 3600
-        var minute = (sec % 3600) / 60
-
-        return if (day > 0)
-            "${day}일 ${hour}시간 ${minute}분 남았어요"
-        else if (hour > 0)
-            "${hour}시간 ${minute}분 남았어요"
-        else
-            "${minute}분 남았어요"
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -184,6 +128,34 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
+//                var firstItem = (layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+//                var lastItem = layoutManager.findLastCompletelyVisibleItemPosition()
+
+//                if (preFirstItem == -1 && preLastItem == -1) {
+//                    preFirstItem = firstItem
+//                    preLastItem = lastItem
+//
+//                    for (i in firstItem..lastItem + 1) {
+//                        Log.d("SCROLL-DETAIL", i.toString())
+//                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
+//                        deliveryAdapter.notifyDataSetChanged()
+//                    }
+//                } else if (firstItem != preFirstItem && lastItem != preLastItem) {
+//                    for (i in firstItem..lastItem + 1) {
+//                        Log.d("SCROLL-DETAIL", i.toString())
+//                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
+//                        deliveryAdapter.notifyDataSetChanged()
+//                    }
+//
+//                    preFirstItem = firstItem
+//                    preLastItem = lastItem
+//                }
+
+                // (FirstItemPosition - 1)부터 (LastItemPosition + 1)까지 타이머 run
+                // 화면 위로 올라오면 -> Thread 작동 -> 현재 시간 & orderTime 차 계산 -> Timer 동작 -> 1분 지날 때마다 RecyclerView 새로.....??
+                // 화면 위에서 사라지면 -> Thread 작동 중지
+                // notifyItemChanged()?!!?!??!?!?!??!?
+
                 if (finalPage == true) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
@@ -191,6 +163,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 }
 
                 if (!isLoading) {
+                    // timerHandler.sendEmptyMessage(value); // 앱 시작과 동시에 핸들러에 메세지 전달
+
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         if (finalPage == false)
                             initMoreLoadPosts()
@@ -251,7 +225,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, 10.toString(), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()
@@ -369,12 +345,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     when(state){
                         //뷰페이저가 멈춰져있을때
                         //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
-                        ViewPager2.SCROLL_STATE_IDLE ->{
-                            flag=1
+                        ViewPager2.SCROLL_STATE_IDLE -> {
+                            flag = 1
                             currentPosition = binding.deliveryBannerVp.currentItem+1
                         }
                         //뷰페이저 움직이는 중
-                        ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
+                        ViewPager2.SCROLL_STATE_DRAGGING -> flag = 0
                     }
                 }
             })
@@ -426,7 +402,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
             deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)

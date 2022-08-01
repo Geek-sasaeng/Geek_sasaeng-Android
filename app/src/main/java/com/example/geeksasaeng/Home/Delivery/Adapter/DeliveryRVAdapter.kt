@@ -13,10 +13,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mItemClickListener : OnItemClickListener
+
+    var nowTime: Long = 0
+    var date: Date? = null
+    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+    private val VIEW_TYPE_ITEM = 0
 
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener{
@@ -26,8 +35,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     fun setOnItemClickListener(listener : OnItemClickListener) {
         mItemClickListener = listener
     }
-
-    private val VIEW_TYPE_ITEM = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_delivery, parent, false)
@@ -61,23 +68,12 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         // Not Use = chief, content, currentMatching, foodCategory, id, location
         // Use = currentMatching, maxMatching, orderTime, title
 
-        var deliveryItemMemberIc : ImageView
-        var deliveryItemMemberNumber :TextView
-        var deliveryItemTime : TextView
-        var deliveryItemTitle : TextView
-        var deliveryItemCategory : TextView
-        var deliveryItemHashTag : TextView
-
-        init {
-            deliveryItemMemberIc = itemView.findViewById(R.id.delivery_item_member_ic)
-            deliveryItemMemberNumber = itemView.findViewById(R.id.delivery_item_member_number)
-            deliveryItemTime = itemView.findViewById(R.id.delivery_item_time)
-            deliveryItemTitle = itemView.findViewById(R.id.delivery_item_title)
-            deliveryItemCategory = itemView.findViewById(R.id.delivery_item_category)
-            deliveryItemHashTag = itemView.findViewById(R.id.delivery_item_hashTag)
-
-            Log.d("DELIVERY-ADAPTER", "ItemViewHolder")
-        }
+        var deliveryItemMemberIc : ImageView = itemView.findViewById(R.id.delivery_item_member_ic)
+        var deliveryItemMemberNumber :TextView = itemView.findViewById(R.id.delivery_item_member_number)
+        var deliveryItemTime : TextView = itemView.findViewById(R.id.delivery_item_time)
+        var deliveryItemTitle : TextView = itemView.findViewById(R.id.delivery_item_title)
+        var deliveryItemCategory : TextView = itemView.findViewById(R.id.delivery_item_category)
+        var deliveryItemHashTag : TextView = itemView.findViewById(R.id.delivery_item_hashTag)
     }
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
@@ -94,7 +90,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         }
 
         viewHolder.deliveryItemMemberNumber.setText(item!!.currentMatching.toString() + "/" + item!!.maxMatching)
-        viewHolder.deliveryItemTime.setText(item!!.orderTime)
+        viewHolder.deliveryItemTime.setText(calculateTime(item.orderTime.toString()))
         viewHolder.deliveryItemTitle.setText(item!!.title)
         viewHolder.deliveryItemCategory.setText(item!!.foodCategory)
 
@@ -107,5 +103,55 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
 
     fun getDeliveryItemId(position: Int): Int? {
         return deliveryList[position]?.id
+    }
+
+    // 오늘 날짜 계산
+    private fun calculateToday(): String {
+        nowTime = System.currentTimeMillis();
+        date = Date(nowTime)
+        return dateFormat.format(date)
+    }
+
+    // 남은 시간 계산
+    // TODO: 흠... 실시간으로 해야하는데 흠...
+    private fun calculateTime(orderTime: String): String {
+        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
+        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
+        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
+        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
+        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
+
+        var currentTime = calculateToday()
+        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
+        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
+        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
+        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
+        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+
+        var today = Calendar.getInstance().apply {
+            set(Calendar.YEAR, todayYear)
+            set(Calendar.MONTH, todayMonth)
+            set(Calendar.DAY_OF_MONTH, todayDay)
+        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
+
+        var order = Calendar.getInstance().apply {
+            set(Calendar.YEAR, orderYear)
+            set(Calendar.MONTH, orderMonth)
+            set(Calendar.DAY_OF_MONTH, orderDay)
+        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
+
+        var remainTime = order - today
+
+        var day = remainTime / (24*60*60*1000)
+        var sec = (remainTime % (24*60*60*1000)) / 1000
+        var hour = sec / 3600
+        var minute = (sec % 3600) / 60
+
+        return if (day > 0)
+            "${day}일 ${hour}시간 ${minute}분 남았어요"
+        else if (hour > 0)
+            "${hour}시간 ${minute}분 남았어요"
+        else
+            "${minute}분 남았어요"
     }
 }

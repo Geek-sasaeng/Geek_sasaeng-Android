@@ -1,0 +1,42 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector android:height="976dp" android:width="439dp" android:viewportHeight="976" android:viewportWidth="439">
+            <group android:name="_R_G">
+                <group android:name="_R_G_L_0_G" android:translateX="219.5" android:translateY="488">
+                    <path android:name="_R_G_L_0_G_D_0_P_0" android:fillColor="#29abe2" android:fillAlpha="1" android:fillType="nonZero" android:pathData=" M368.54 -504 C368.54,-504 368.54,522.5 368.54,522.5 C368.54,522.5 -293.5,522.5 -293.5,522.5 C-293.5,522.5 -293.5,-504 -293.5,-504 C-293.5,-504 368.54,-504 368.54,-504c "/>
+                    <path android:name="_R_G_L_0_G_D_1_P_0" android:strokeColor="#000000" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="2" android:strokeAlpha="1" android:pathData=" M368.54 -504 C368.54,-504 368.54,522.5 368.54,522.5 C368.54,522.5 -293.5,522.5 -293.5,522.5 C-293.5,522.5 -293.5,-504 -293.5,-504 C-293.5,-504 368.54,-504 368.54,-504c "/>
+                </group>
+            </group>
+            <group android:name="time_group"/>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="_R_G_L_0_G_D_0_P_0">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator android:propertyName="fillColor" android:duration="1960" android:startOffset="0" android:valueFrom="#29abe2" android:valueTo="#29abe2" android:valueType="colorType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.167,0.167 0.833,0.833 1.0,1.0"/>
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator android:propertyName="fillColor" android:duration="320" android:startOffset="1960" android:valueFrom="#29abe2" android:valueTo="#ffffff" android:valueType="colorType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.167,0.167 0.833,0.833 1.0,1.0"/>
+                    </aapt:attr>
+                </objectAnimator>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="time_group">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator android:propertyName="translateX" android:duration="2960" android:startOffset="0" android:valueFrom="0" android:valueTo="1" android:valueType="floatType"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+</animated-vector>
