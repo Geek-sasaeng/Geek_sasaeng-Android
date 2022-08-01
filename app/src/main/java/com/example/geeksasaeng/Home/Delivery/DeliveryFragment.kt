@@ -262,7 +262,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn(){
+    private fun initRadioBtn(){ //라디오 버튼
         binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
             binding.deliveryTimeRg.check(checkedId)
             filterCheckFlag = true
@@ -341,25 +341,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
+    //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         deliveryBannerAdapter = BannerVPAdapter(this)
         //더미 img url
-/*        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8809453266351.jpg"))
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))*/
-        for (i in results){
-            Log.d("commercial", i.toString() + "= i값")
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+        for(j in 1..5){ //fragment already added 고치기 위함
+            for (i in results){
+                deliveryBannerAdapter.addFragment(i.imgUrl)
+            }
         }
-        deliveryBannerAdapter.addFragment(BannerFragment("https://tqklhszfkvzk6518638.cdn.ntruss.com/product/8801771024750.jpg"))
-
         binding.deliveryBannerVp.adapter= deliveryBannerAdapter
         binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정

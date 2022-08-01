@@ -3,9 +3,13 @@ package com.example.geeksasaeng.Home.Party.UpdateParty
 import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -21,7 +25,7 @@ import net.daum.mf.map.api.MapView
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//TODO: 얘이름 UpdateParty로 고치고 싶당
 class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(FragmentDeliveryPartyUpdateBinding::inflate), UpdatePartyView,
     DialogDtUpdate.DialogDtUpdateClickListener, DialogNumUpdate.DialogNumUpdateClickListener, DialogCategoryUpdate.DialogCategoryUpdateClickListener,
     DialogLinkUpdate.DialogLinkUpdateClickListener, DialogLocationUpdate.DialogLocationUpdateClickListener{
@@ -48,12 +52,16 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     var storeUrl: String? = null
     var title: String? = null
     var updatedAt: String? = null
+    var isFirst: Boolean = true // 파티 생성하기 화면이 만들어진게 최초인지 확인 위함
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onStart() {
         super.onStart()
         updatePartyService = UpdatePartyService() // 서비스 객체 생성
         updatePartyService.setUpdatePartyView(this)
-        binding.deliveryPartyUpdateLocation2Tv.isSelected = true // 애니메이션 효과 주기 위해서
     }
 
     override fun initAfterBinding() {
@@ -63,37 +71,40 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     }
 
     private fun initGetData(){ // 파티 보기에서 파티 수정하기로 넘어오면서 데이터 받아오기
-        authorStatus = requireArguments().getBoolean("authorStatus")
-        chief = requireArguments().getString("chief")
-        chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
-        content = requireArguments().getString("content")
-        currentMatching = requireArguments().getInt("currentMatching")
-        dormitory = requireArguments().getInt("dormitory")
-        foodCategory = requireArguments().getString("foodCategory") // 카테고리
-        hashTag = requireArguments().getBoolean("hashTag")
-        partyId = requireArguments().getInt("partyId")
-        latitude = requireArguments().getDouble("latitude", latitude)
-        longitude = requireArguments().getDouble("longitude", longitude)
-        matchingStatus = requireArguments().getString("matchingStatus")
-        maxMatching = requireArguments().getInt("maxMatching") // 최대매칭인원
-        orderTime = requireArguments().getString("orderTime") // 주문 예정시간
-        storeUrl = requireArguments().getString("storeUrl")
-        title = requireArguments().getString("title")
-        updatedAt = requireArguments().getString("updatedAt")
-        Log.d("partyUpdate", latitude.toString()+"/"+longitude.toString())
-        Log.d("partyUpdate", orderTime.toString())
+        if(this.isFirst){
+            authorStatus = requireArguments().getBoolean("authorStatus")
+            chief = requireArguments().getString("chief")
+            chiefProfileImgUrl = requireArguments().getString("chiefProfileImgUrl")
+            content = requireArguments().getString("content")
+            currentMatching = requireArguments().getInt("currentMatching")
+            dormitory = requireArguments().getInt("dormitory")
+            foodCategory = requireArguments().getString("foodCategory") // 카테고리
+            hashTag = requireArguments().getBoolean("hashTag")
+            partyId = requireArguments().getInt("partyId")
+            latitude = requireArguments().getDouble("latitude", latitude)
+            longitude = requireArguments().getDouble("longitude", longitude)
+            matchingStatus = requireArguments().getString("matchingStatus")
+            maxMatching = requireArguments().getInt("maxMatching") // 최대매칭인원
+            orderTime = requireArguments().getString("orderTime") // 주문 예정시간
+            storeUrl = requireArguments().getString("storeUrl")
+            title = requireArguments().getString("title")
+            updatedAt = requireArguments().getString("updatedAt")
+            Log.d("partyUpdate", latitude.toString()+"/"+longitude.toString())
+            Log.d("partyUpdate", orderTime.toString())
 
-        binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
-        binding.deliveryPartyUpdateTitleEt.setText(title) //제목
-        binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
-        binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
-        binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
-        binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
-        binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
-        binding.deliveryPartyUpdateLocation2Tv.text = getAddress(latitude, longitude) // 수령장소
-        // 카카오맵에 띄우기
-        this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-        drawMap(mapPoint)
+            binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
+            binding.deliveryPartyUpdateTitleEt.setText(title) //제목
+            binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
+            binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
+            binding.deliveryPartyUpdateNumber2Tv.text = maxMatching.toString() +"명" //매칭인원선택
+            binding.deliveryPartyUpdateCategory2Tv.text = foodCategory //카테고리 선택
+            binding.deliveryPartyUpdateLink2Tv.text = storeUrl // 식당 링크
+            binding.deliveryPartyUpdateLocation2Tv.text = getAddress(latitude, longitude) // 수령장소
+            // 카카오맵에 띄우기
+            this.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+            drawMap(mapPoint)
+            this.isFirst = false
+        }
     }
 
     private fun initTextWatcher(){
@@ -105,7 +116,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("che", "^ㅇ^")
                 title = binding.deliveryPartyUpdateTitleEt.text.toString()
                 checking()
             }
@@ -186,16 +196,17 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         binding.deliveryPartyUpdateCompleteBtnTv.setOnClickListener {
             Log.d("cherry", "버튼 눌려짐")
             var numCategory : Int = 0
+            //foodcategory(String)에 따른 아이디값(int)변환
             when(foodCategory){
                 "한식"-> numCategory = 1
-                "중식"-> numCategory = 2
-                "분식"-> numCategory = 3
-                "회/돈까스"-> numCategory =4
-                "디저트/음료"-> numCategory = 5
-                "양식"-> numCategory = 6
-                "일식"-> numCategory = 7
-                "치킨/피자"-> numCategory = 8
-                "패스트 푸드"-> numCategory = 9
+                "중식"-> numCategory = 3
+                "분식"-> numCategory = 5
+                "회/돈까스"-> numCategory =7
+                "디저트/음료"-> numCategory = 9
+                "양식"-> numCategory = 2
+                "일식"-> numCategory = 4
+                "치킨/피자"-> numCategory = 6
+                "패스트 푸드"-> numCategory = 8
                 "기타"-> numCategory = 10
                 else->{}
             }
@@ -281,6 +292,10 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     private fun drawMap(mapPoint: MapPoint){
         //맵 다시 띄우기
         mapView = MapView(requireActivity())
+        mapView.setOnTouchListener { v, event ->
+            binding.deliveryPartyUpdateSv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.deliveryPartyUpdateKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()
@@ -331,8 +346,6 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
 
     //수정 성공, 실패
     override fun onUpdatePartySuccess() {
-        Log.d("cherry", "파티 수정하기 성공")
-        //TODO: 안돼...
         //종료
         activity?.supportFragmentManager?.beginTransaction()
             ?.remove(this)?.commit()

@@ -4,8 +4,11 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.method.Touch
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -38,6 +41,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     override fun initAfterBinding() {
         initClickListener()
         binding.lookPartyProgressBar.visibility = View.VISIBLE
+        binding.lookLocateText.isSelected = true // 물흐르는 애니메이션
 
         // 파티 수정하기, 신고하기 Stack에서 제거
         (context as MainActivity).supportFragmentManager.popBackStack("partyUpdate", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -50,8 +54,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         handler.postDelayed({
             initDeliveryPartyData()
         }, 200)
-
-        binding.lookCategoryText.isSelected = true
     }
 
     override fun onStop() {
@@ -182,6 +184,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     //맵 그리는 함수
     private fun drawMap(mapPoint: MapPoint){
         mapView = MapView(requireActivity())
+        mapView.setOnTouchListener { v, event ->
+            binding.lookPartySv.requestDisallowInterceptTouchEvent(true) //부모에게 Touch Event를 빼앗기지 않게 할 수 있다.
+            return@setOnTouchListener false
+        }
         binding.lookKakaoMapLocation.addView(mapView)
         //마커생성
         val marker = MapPOIItem()
