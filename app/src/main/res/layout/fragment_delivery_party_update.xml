@@ -5,7 +5,6 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/delivery_party_update_top"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +52,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <ScrollView
         android:id="@+id/delivery_party_update_sv"
         android:layout_width="match_parent"
@@ -90,7 +88,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/delivery_party_update_together_check_btn"
                 app:layout_constraintStart_toEndOf="@id/delivery_party_update_together_check_btn"
                 app:layout_constraintTop_toTopOf="@id/delivery_party_update_together_check_btn" />
-
 
             <EditText
                 android:id="@+id/delivery_party_update_title_et"
@@ -140,7 +137,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/delivery_party_update_content_et" />
-
 
             <!--주문 예정 시간-->
             <TextView
@@ -358,7 +354,6 @@
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_location2_tv"
                 android:layout_marginEnd="14dp"/>
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/delivery_party_update_kakaoMap_location"
                 android:layout_width="0dp"
@@ -374,7 +369,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

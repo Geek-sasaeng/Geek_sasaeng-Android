@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Home.Search
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -35,6 +36,7 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
     }
 
     fun initClickListener() {
+
         binding.searchBtn.setOnClickListener {
             supportFragmentManager.popBackStack("SearchDetail", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
@@ -50,6 +52,16 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
 
             transaction.addToBackStack("SearchDetail").replace(R.id.search_frm, searchDetailFragment)
             transaction.commit()
+        }
+
+        //엔터치면 검색되게 하는 기능
+        binding.searchEt.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                binding.searchBtn.performClick()
+                true
+            }else{
+                false
+            }
         }
     }
 }

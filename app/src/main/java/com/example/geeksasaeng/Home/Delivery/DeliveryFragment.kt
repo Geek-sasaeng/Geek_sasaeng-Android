@@ -31,11 +31,11 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView, DeliveryFilterView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
-    private lateinit var deliveryBannerAdapter : BannerVPAdapter
+    private lateinit var deliveryBannerAdapter: BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
@@ -53,7 +53,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var preLastItem = -1
 
     //핸들러 설정
-    val handler= Handler(Looper.getMainLooper()){
+    val handler = Handler(Looper.getMainLooper()) {
         setPage()
         true
     }
@@ -239,12 +239,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn(){
-        binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
+    private fun initRadioBtn() { //라디오 버튼
+        binding.deliveryTimeRg.setOnCheckedChangeListener { _: RadioGroup, checkedId: Int ->
             binding.deliveryTimeRg.check(checkedId)
             filterCheckFlag = true
 
-            when(checkedId){
+            when (checkedId) {
                 R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
                 R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
                 R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
@@ -255,25 +255,25 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     //배너 작업
-    private fun initBanner(){
+    private fun initBanner() {
         deliveryService.getDeliveryBanner() //광고 불러오기
     }
 
     //페이지 변경하기
-    fun setPage(){
-        if(currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
+    fun setPage() {
+        if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
             currentPosition = 0
         binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
-        currentPosition+=1
+        currentPosition += 1
     }
 
     //스피너 관련 작업
-    private fun initSpinner(){
+    private fun initSpinner() {
         val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
         //어댑터
         val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
         binding.deliveryPeopleSpinner.adapter = spinnerAdapter
-        binding.deliveryPeopleSpinner.setSelection(items.size-1) //마지막아이템을 스피너 초기값으로 설정해준다.
+        binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
         //이벤트 처리
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -288,14 +288,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
-                if (position in 1..5)
-                    filterCheckFlag = true
+                    if (position in 1..5)
+                        filterCheckFlag = true
 
-                maxMatching = position * 2
-                finalPage = false
+                    maxMatching = position * 2
+                    finalPage = false
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-        }
     }
 
     override fun onResume() {
@@ -318,20 +319,19 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
+    //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         deliveryBannerAdapter = BannerVPAdapter(this)
+
         //더미 img url
-        for (i in results){
-            Log.d("commercial", i.toString() + "= i값")
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
-            deliveryBannerAdapter.addFragment(BannerFragment(i.imgUrl))
+        for (j in 1..5) { //fragment already added 고치기 위함
+            for (i in results) {
+                deliveryBannerAdapter.addFragment(i.imgUrl)
+            }
         }
 
-        binding.deliveryBannerVp.adapter= deliveryBannerAdapter
-        binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
+        binding.deliveryBannerVp.adapter = deliveryBannerAdapter
+        binding.deliveryBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
@@ -342,12 +342,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageScrollStateChanged(state: Int) {
                     super.onPageScrollStateChanged(state)
-                    when(state){
+                    when (state) {
                         //뷰페이저가 멈춰져있을때
                         //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
                         ViewPager2.SCROLL_STATE_IDLE -> {
                             flag = 1
-                            currentPosition = binding.deliveryBannerVp.currentItem+1
+                            currentPosition = binding.deliveryBannerVp.currentItem + 1
                         }
                         //뷰페이저 움직이는 중
                         ViewPager2.SCROLL_STATE_DRAGGING -> flag = 0
@@ -358,15 +358,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     //3초마다 페이지 넘기는 기능
-    inner class PagerRunnable:Runnable{
+    inner class PagerRunnable : Runnable {
         override fun run() {
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(3000)
-                    if(this@DeliveryFragment.flag==1) {
+                    if (this@DeliveryFragment.flag == 1) {
                         handler.sendEmptyMessage(0)
                     }
-                } catch (e : InterruptedException){
+                } catch (e: InterruptedException) {
                     Log.d("interrupt", "interrupt 발생")
                 }
             }

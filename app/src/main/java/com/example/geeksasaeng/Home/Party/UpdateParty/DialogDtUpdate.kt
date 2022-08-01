@@ -79,7 +79,7 @@ class DialogDtUpdate : DialogFragment() {
         binding.dialogDateUpdateDateTv.setOnClickListener { //날짜 정보
             //DatePickerApplicationClass
             val cal = Calendar.getInstance()    //캘린더뷰 만들기
-            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 dateString = "${month+1}월 ${dayOfMonth}일"
 
                 //TODO: 이 부분 DateFormat이용할 수 있으면 좋을 텐뎅.. 아직 모르겠음
@@ -106,7 +106,7 @@ class DialogDtUpdate : DialogFragment() {
         binding.dialogDateUpdateTimeTv.setOnClickListener { //시간 정보
             val cal = Calendar.getInstance()   //캘린더뷰 만들기
             //TimePicker
-            val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 timeString = "${hourOfDay}시 ${minute}분"
                 var sHour : String = hourOfDay.toString()
                 var sMinute : String = minute.toString()

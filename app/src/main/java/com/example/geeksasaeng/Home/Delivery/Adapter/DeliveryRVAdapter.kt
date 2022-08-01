@@ -115,6 +115,13 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     // 남은 시간 계산
     // TODO: 흠... 실시간으로 해야하는데 흠...
     private fun calculateTime(orderTime: String): String {
+        Log.d("DELIVERY-ADAPTER", orderTime)
+        Log.d("DELIVERY-ADAPTER", "0-4 " + orderTime.substring(0, 4))
+        Log.d("DELIVERY-ADAPTER", "5-7 " + orderTime.substring(5, 7))
+        Log.d("DELIVERY-ADAPTER", "8-10 " + orderTime.substring(8, 10))
+        Log.d("DELIVERY-ADAPTER", "11-13 " + orderTime.substring(11, 13))
+        Log.d("DELIVERY-ADAPTER", "14-16 " + orderTime.substring(14, 16))
+
         var orderYear = Integer.parseInt(orderTime.substring(0, 4))
         var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
         var orderDay = Integer.parseInt(orderTime.substring(8, 10))
