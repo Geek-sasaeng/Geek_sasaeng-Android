@@ -21,8 +21,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginStart="30dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,8 +46,7 @@
             android:text="완료"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="#BABABA"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -63,8 +61,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <CheckBox
                 android:id="@+id/delivery_party_update_together_check_btn"
@@ -234,8 +231,7 @@
                 android:textColor="@color/top"
                 android:textSize="15sp"
                 app:layout_constraintTop_toTopOf="@id/delivery_party_update_category2_tv"
-                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date_tv"
-                />
+                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date_tv" />
 
             <TextView
                 android:id="@+id/delivery_party_update_category2_tv"
@@ -254,8 +250,7 @@
                 android:fontFamily="@font/spoqa_regular"
                 app:layout_constraintTop_toBottomOf="@id/delivery_party_update_number2_tv"
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_date2_tv"
-                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date2_tv"
-                />
+                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date2_tv" />
 
             <ImageView
                 android:id="@+id/delivery_party_update_category_edit_btn"
@@ -296,8 +291,7 @@
                 android:fontFamily="@font/spoqa_regular"
                 app:layout_constraintTop_toBottomOf="@id/delivery_party_update_category2_tv"
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_date2_tv"
-                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date2_tv"
-                />
+                app:layout_constraintStart_toStartOf="@id/delivery_party_update_date2_tv" />
 
             <ImageView
                 android:id="@+id/delivery_party_update_link_edit_btn"
@@ -307,7 +301,7 @@
                 app:layout_constraintTop_toTopOf="@id/delivery_party_update_link2_tv"
                 app:layout_constraintBottom_toBottomOf="@id/delivery_party_update_link2_tv"
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_link2_tv"
-                android:layout_marginEnd="14dp"/>
+                android:layout_marginEnd="14dp" />
 
             <!--수령장소 선택-->
             <TextView
@@ -352,7 +346,7 @@
                 app:layout_constraintTop_toTopOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintBottom_toBottomOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_location2_tv"
-                android:layout_marginEnd="14dp"/>
+                android:layout_marginEnd="14dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/delivery_party_update_kakaoMap_location"
@@ -365,9 +359,10 @@
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintTop_toBottomOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
