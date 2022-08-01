@@ -146,6 +146,9 @@
 
             </androidx.core.widget.NestedScrollView>
 
+
+            </androidx.core.widget.NestedScrollView>
+
             <View
                 android:id="@+id/delivery_party_update_content_underscore_view"
                 android:layout_width="0dp"
