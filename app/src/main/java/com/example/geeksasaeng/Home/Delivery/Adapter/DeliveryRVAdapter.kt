@@ -6,16 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
-import com.example.geeksasaeng.Home.Delivery.DeliveryResult
 import com.example.geeksasaeng.R
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -23,13 +19,23 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
 
     var nowTime: Long = 0
     var date: Date? = null
-    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    var remainSecond: Int = 0
 
     private val VIEW_TYPE_ITEM = 0
 
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener{
         fun onItemClick(data: DeliveryPartiesVoList, pos : Int)
+    }
+
+    // 타이머 구현을 위한 인터페이스
+    interface SetTimerListener {
+        fun setTimer()
+    }
+
+    fun checkTimerRemainSecond(): Int {
+        return remainSecond
     }
 
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -42,16 +48,15 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        populateItemRows(viewHolder as ItemViewHolder, position)
+        itemBind(viewHolder as ItemViewHolder, position)
+        timerBind(viewHolder as ItemViewHolder, position)
+
+        checkTimerRemainSecond()
+
+        Log.d("DELIVERY-ADAPTER", "onBindViewHolder")
 
         viewHolder.itemView.setOnClickListener {
-            // val intent = Intent(holder.itemView?.context, PostSelectImgActivity::class.java)
-            // intent.putExtra("position", position)
             mItemClickListener.onItemClick(deliveryList[position]!!, position)
-            Log.d("ItemClickCheck", "position = $position")
-
-            // imgList[position].img!!
-            // ContextCompat.startActivity(holder.itemView.context, intent, null)
         }
     }
 
@@ -64,10 +69,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // 메인 파티 리스트 부분
-        // Not Use = chief, content, currentMatching, foodCategory, id, location
-        // Use = currentMatching, maxMatching, orderTime, title
-
         var deliveryItemMemberIc : ImageView = itemView.findViewById(R.id.delivery_item_member_ic)
         var deliveryItemMemberNumber :TextView = itemView.findViewById(R.id.delivery_item_member_number)
         var deliveryItemTime : TextView = itemView.findViewById(R.id.delivery_item_time)
@@ -76,7 +77,8 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         var deliveryItemHashTag : TextView = itemView.findViewById(R.id.delivery_item_hashTag)
     }
 
-    private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
+    // 타이머를 제외한 나머지 부분 Binding
+    private fun itemBind(viewHolder: ItemViewHolder, position: Int) {
         // 메인 파티 리스트 부분
         // Use = currentMatching, maxMatching, orderTime, title
 
@@ -90,7 +92,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         }
 
         viewHolder.deliveryItemMemberNumber.setText(item!!.currentMatching.toString() + "/" + item!!.maxMatching)
-        viewHolder.deliveryItemTime.setText(calculateTime(item.orderTime.toString()))
         viewHolder.deliveryItemTitle.setText(item!!.title)
         viewHolder.deliveryItemCategory.setText(item!!.foodCategory)
 
@@ -99,6 +100,11 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         } else if (!item!!.hasHashTag!!) {
             viewHolder.deliveryItemHashTag.setTextColor(Color.parseColor("#EFEFEF"))
         }
+    }
+
+    // 타이머 부분 Binding
+    private fun timerBind(viewHolder: ItemViewHolder, position: Int) {
+        viewHolder.deliveryItemTime.setText(calculateTime(deliveryList[position]!!.orderTime.toString()))
     }
 
     fun getDeliveryItemId(position: Int): Int? {
@@ -115,13 +121,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     // 남은 시간 계산
     // TODO: 흠... 실시간으로 해야하는데 흠...
     private fun calculateTime(orderTime: String): String {
-        Log.d("DELIVERY-ADAPTER", orderTime)
-        Log.d("DELIVERY-ADAPTER", "0-4 " + orderTime.substring(0, 4))
-        Log.d("DELIVERY-ADAPTER", "5-7 " + orderTime.substring(5, 7))
-        Log.d("DELIVERY-ADAPTER", "8-10 " + orderTime.substring(8, 10))
-        Log.d("DELIVERY-ADAPTER", "11-13 " + orderTime.substring(11, 13))
-        Log.d("DELIVERY-ADAPTER", "14-16 " + orderTime.substring(14, 16))
-
         var orderYear = Integer.parseInt(orderTime.substring(0, 4))
         var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
         var orderDay = Integer.parseInt(orderTime.substring(8, 10))
@@ -134,6 +133,9 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         var todayDay = Integer.parseInt(currentTime.substring(8, 10))
         var todayHours = Integer.parseInt(currentTime.substring(11, 13))
         var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
+        var todaySeconds = Integer.parseInt(currentTime.substring(17, 19))
+
+        remainSecond = todaySeconds
 
         var today = Calendar.getInstance().apply {
             set(Calendar.YEAR, todayYear)
@@ -161,4 +163,27 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         else
             "${minute}분 남았어요"
     }
+
+    /*
+    internal class TimerThread : Thread() {
+        var sec: Int = 0
+
+        override fun run() {
+            while (true) {
+                sec++
+                try {
+                    sleep(1000)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+                if (sec % 60 == 0) {
+
+                }
+
+                Log.d("TIMER-TEST", "sec = $sec")
+            }
+        }
+    }
+    */
 }

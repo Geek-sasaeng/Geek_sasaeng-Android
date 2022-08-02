@@ -1,6 +1,7 @@
 package com.example.geeksasaeng
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingFragment
 import com.example.geeksasaeng.Community.CommunityFragment
@@ -9,6 +10,7 @@ import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
@@ -35,6 +37,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         } else setFragment(R.id.main_frm, HomeFragment())
 
         //getAppKeyHash() //카카오맵 해시키 얻는 용
+        // FCM Token 확인하기 위한 코드
+        // val token = FirebaseMessaging.getInstance().token.result
+        // Log.d("FCM-TOKEN-RESPONSE", token.toString())
+
         setBottomNavi()
     }
 

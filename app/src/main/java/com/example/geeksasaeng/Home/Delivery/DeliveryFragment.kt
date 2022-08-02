@@ -28,10 +28,11 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
+import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView, DeliveryRVAdapter.SetTimerListener {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
@@ -46,6 +47,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int? = null
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
+    var second: Int = 0
+    var timerThread = Thread(TimerRunnable())
 
     // 테스트
     var value: Int = 0
@@ -131,25 +134,27 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 //                var firstItem = (layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 //                var lastItem = layoutManager.findLastCompletelyVisibleItemPosition()
 
-//                if (preFirstItem == -1 && preLastItem == -1) {
-//                    preFirstItem = firstItem
-//                    preLastItem = lastItem
-//
-//                    for (i in firstItem..lastItem + 1) {
-//                        Log.d("SCROLL-DETAIL", i.toString())
-//                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
-//                        deliveryAdapter.notifyDataSetChanged()
-//                    }
-//                } else if (firstItem != preFirstItem && lastItem != preLastItem) {
-//                    for (i in firstItem..lastItem + 1) {
-//                        Log.d("SCROLL-DETAIL", i.toString())
-//                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
-//                        deliveryAdapter.notifyDataSetChanged()
-//                    }
-//
-//                    preFirstItem = firstItem
-//                    preLastItem = lastItem
-//                }
+                /*
+                if (preFirstItem == -1 && preLastItem == -1) {
+                    preFirstItem = firstItem
+                    preLastItem = lastItem
+
+                    for (i in firstItem..lastItem + 1) {
+                        Log.d("SCROLL-DETAIL", i.toString())
+                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
+                        deliveryAdapter.notifyDataSetChanged()
+                    }
+                } else if (firstItem != preFirstItem && lastItem != preLastItem) {
+                    for (i in firstItem..lastItem + 1) {
+                        Log.d("SCROLL-DETAIL", i.toString())
+                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
+                        deliveryAdapter.notifyDataSetChanged()
+                    }
+
+                    preFirstItem = firstItem
+                    preLastItem = lastItem
+                }
+                 */
 
                 // (FirstItemPosition - 1)부터 (LastItemPosition + 1)까지 타이머 run
                 // 화면 위로 올라오면 -> Thread 작동 -> 현재 시간 & orderTime 차 계산 -> Timer 동작 -> 1분 지날 때마다 RecyclerView 새로.....??
@@ -421,5 +426,30 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliveryFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
+    }
+
+    // RecyclerView의 타이머와 연결하기 위한 Interface를 Override
+    override fun setTimer() {
+
+    }
+
+    // 남은 시간을 1분마다 업데이트 하기 위함
+    inner class TimerRunnable : Runnable {
+        override fun run() {
+            while (true) {
+                second++
+                try {
+                    sleep(1000)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+                if (second % 60 == 0) {
+
+                }
+
+                Log.d("TIMER-TEST", "sec = $second")
+            }
+        }
     }
 }
