@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.geeksasaeng.DormitoryActivity
+import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportOptionActivity
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -158,7 +160,13 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             saveAutoLogin(result.jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
         }
         finish()
-        changeActivity(MainActivity::class.java)
+        if(result.loginStatus=="NEVER"){ //첫 로그인이면
+            val intent = Intent(this, DormitoryActivity::class.java)
+            intent.putExtra("nickName", result.nickName)
+            startActivity(intent)
+        }else{
+            changeActivity(MainActivity::class.java)
+        }
     }
 
     // 소셜 로그인 성공
@@ -167,7 +175,13 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         val jwt = result.jwt
         saveSocialAutoLogin(jwt)
         finish()
-        changeActivity(MainActivity::class.java)
+        if(result.loginStatus=="NEVER"){ //첫 로그인이면
+            val intent = Intent(this, DormitoryActivity::class.java)
+            intent.putExtra("nickName", result.nickName)
+            startActivity(intent)
+        }else{
+            changeActivity(MainActivity::class.java)
+        }
     }
 
     // 소셜 로그인 회원가입 창으로 이동
