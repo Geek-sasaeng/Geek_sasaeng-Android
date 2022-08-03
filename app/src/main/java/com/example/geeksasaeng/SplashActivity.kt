@@ -48,8 +48,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         loginDataService.login(Login(loginId, password))
     }
     private fun changeMainActivity() {
-        changeActivity(LoginActivity::class.java) // 디버깅용
-        //changeActivity(MainActivity::class.java)
+        //changeActivity(LoginActivity::class.java) // 디버깅용
+        changeActivity(MainActivity::class.java)
         finish()
     }
 
