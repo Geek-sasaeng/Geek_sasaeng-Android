@@ -35,7 +35,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".DormitoryActivity"
+            android:name=".Login.DormitoryActivity"
             android:exported="false" />
         <activity android:name=".Login.LoginActivity" />
         <activity

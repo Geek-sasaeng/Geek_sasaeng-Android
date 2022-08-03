@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DormitoryActivity">
+    tools:context=".Login.DormitoryActivity">
 
     <TextView
         android:id="@+id/domitory_hi_tv"

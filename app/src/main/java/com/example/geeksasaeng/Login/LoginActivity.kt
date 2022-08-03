@@ -6,19 +6,15 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.DormitoryActivity
-import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportOptionActivity
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverViewModel
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Utils.*
-import com.google.gson.annotations.SerializedName
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.*
 import com.navercorp.nid.profile.NidProfileCallback
@@ -162,10 +158,13 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         finish()
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
-            intent.putExtra("nickName", result.nickName)
+            intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
             startActivity(intent)
         }else{
-            changeActivity(MainActivity::class.java)
+            val intent = Intent(this, DormitoryActivity::class.java)
+            intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
+            startActivity(intent)
+            //changeActivity(MainActivity::class.java)
         }
     }
 
@@ -180,7 +179,10 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName)
             startActivity(intent)
         }else{
-            changeActivity(MainActivity::class.java)
+            val intent = Intent(this, DormitoryActivity::class.java)
+            intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
+            startActivity(intent)
+            //changeActivity(MainActivity::class.java)
         }
     }
 

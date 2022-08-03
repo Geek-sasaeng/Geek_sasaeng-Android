@@ -189,8 +189,10 @@ class SignupDataService() {
                     call: Call<SignUpEmailResponse>,
                     response: Response<SignUpEmailResponse>
                 ) {
+                    Log.d("email-response", response.toString())
                     if (response.isSuccessful && response.code() == 200) {
                         val emailResponse: SignUpEmailResponse = response.body()!!
+                        Log.d("email-resp", emailResponse.toString())
                         when (emailResponse.code) {
                             1802 -> signUpEmailView.onSignUpEmailSuccess(emailResponse.message)
                             else -> signUpEmailView.onSignUpEmailFailure(
@@ -202,6 +204,7 @@ class SignupDataService() {
                 }
 
                 override fun onFailure(call: Call<SignUpEmailResponse>, t: Throwable) {
+                    Log.d("email", "통신오류")
                     Log.d("EMAIL-RESPONSE", "EmailDataService-onFailure : EmailFailed", t)
                 }
             })

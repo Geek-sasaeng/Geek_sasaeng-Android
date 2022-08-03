@@ -3,6 +3,7 @@ package com.example.geeksasaeng
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.example.geeksasaeng.Login.DormitoryActivity
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Login.Retrofit.Login
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
@@ -47,7 +48,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         loginDataService.login(Login(loginId, password))
     }
     private fun changeMainActivity() {
-        changeActivity(MainActivity::class.java)
+        changeActivity(LoginActivity::class.java) // 디버깅용
+        //changeActivity(MainActivity::class.java)
         finish()
     }
 
