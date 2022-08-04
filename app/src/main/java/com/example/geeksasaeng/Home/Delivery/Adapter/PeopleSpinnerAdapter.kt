@@ -29,6 +29,7 @@ class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) : Base
         val rootView: View = LayoutInflater.from(context).inflate(R.layout.item_delivery_people_spinner, viewGroup, false)
         val textName: TextView = rootView.findViewById(R.id.spinner_text)
         val image: ImageView = rootView.findViewById(R.id.arrow_iv)
+
         if (i == 0) { //젤 상단 아이템
             textName.setText(spinnerList!![i])
             image.setImageResource(R.drawable.ic_spinner_down)

@@ -354,13 +354,14 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryPeopleSpinner.setSelection(items.size-1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
         //이벤트 처리
+
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
-                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]

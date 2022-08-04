@@ -27,12 +27,11 @@ class DormitoryDataService {
                 call: Call<DormitoryResponse>,
                 response: Response<DormitoryResponse>
             ) {
-                Log.d("dormitoryy", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: DormitoryResponse = response.body()!!
                     when(resp.code){
-                        200-> dormitoryView.onDormitySuccess(resp.result)
-                        else-> dormitoryView.onDormityFailure()
+                        1000-> dormitoryView.onDormitySuccess(resp.result)
+                        else-> dormitoryView.onDormityFailure(resp.message)
                     }
                 }
             }

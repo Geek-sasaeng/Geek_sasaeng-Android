@@ -161,9 +161,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
             startActivity(intent)
         }else{
-            /*val intent = Intent(this, DormitoryActivity::class.java)
-            intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
-            startActivity(intent)*/
             changeActivity(MainActivity::class.java)
         }
     }
@@ -179,9 +176,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName)
             startActivity(intent)
         }else{
-            /*val intent = Intent(this, DormitoryActivity::class.java)
-            intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
-            startActivity(intent)*/
             changeActivity(MainActivity::class.java)
         }
     }

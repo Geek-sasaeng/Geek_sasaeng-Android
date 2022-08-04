@@ -7,6 +7,7 @@ import com.example.geeksasaeng.Login.Retrofit.DormitoryResult
 import com.example.geeksasaeng.Login.Retrofit.DormitoryView
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.saveDormitory
 import com.example.geeksasaeng.databinding.ActivityDormitoryBinding
 
@@ -47,6 +48,7 @@ class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormito
     private fun initClickListener(){
         // 시작하기 버튼 클릭 시
         binding.dormitoryStartBtn.setOnClickListener {
+            Log.d("dormitory", dormitoryId.toString())
             val dormitoryRequest = DormitoryRequest(dormitoryId)
             dormitoryService.dormitorySender(dormitoryRequest) //★
             changeActivity(MainActivity::class.java)
@@ -56,11 +58,11 @@ class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormito
     //기숙사 수정 api
     override fun onDormitySuccess(result: DormitoryResult) {
         //TODO: SharedPref에 기숙사값 넣어주기
-        Log.d("dormitoryy", "성공")
+        Log.d("cherry",result.dormitoryName)
         saveDormitory("제"+result.dormitoryName)
     }
 
-    override fun onDormityFailure() {
+    override fun onDormityFailure(message: String) {
         showToast("기숙사 수정 실패") //디버깅용
     }
 

@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home
 
 import android.content.Intent
+import android.util.Log
 import com.example.geeksasaeng.Home.Search.SearchActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getDormitory
@@ -13,7 +14,8 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
 
     override fun initAfterBinding() {
         initClickListener()
-        binding.homeDormitoryNameTv.text = getDormitory() // 저장되어있는 기숙사 정보 가져와서 설정해주기
+        binding.homeDormitoryNameTv.text = getDormitory().toString() // 저장되어있는 기숙사 정보 가져와서 설정해주기
+        Log.d("cherry", getDormitory().toString())
         val homeVPAdapter = HomeVPAdapter(this)
         binding.homeVp.adapter = homeVPAdapter
         TabLayoutMediator(binding.homeTab, binding.homeVp) {
