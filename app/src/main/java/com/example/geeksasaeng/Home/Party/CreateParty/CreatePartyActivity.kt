@@ -44,6 +44,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService = CreatePartyService() //서비스 객체 생성
         createPartyService.setCreatePartyDefaultLocView(this)
         createPartyService.setCreatePartyView(this)
+
+        getApplicationContext()
         initTextWatcher()
         initClickListener()
         initKakaoMap()
