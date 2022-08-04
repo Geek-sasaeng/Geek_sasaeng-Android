@@ -12,6 +12,7 @@ import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.R
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -20,22 +21,15 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     var nowTime: Long = 0
     var date: Date? = null
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    var remainSecond: Int = 0
+    var todaySec: Int = 0
+    var timerTask: TimerThread = TimerThread(todaySec)
+    var minuteFlag: Boolean = false
 
     private val VIEW_TYPE_ITEM = 0
 
     // 클릭 리스너 구현 위한 인터페이스
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick(data: DeliveryPartiesVoList, pos : Int)
-    }
-
-    // 타이머 구현을 위한 인터페이스
-    interface SetTimerListener {
-        fun setTimer()
-    }
-
-    fun checkTimerRemainSecond(): Int {
-        return remainSecond
     }
 
     fun setOnItemClickListener(listener : OnItemClickListener) {
@@ -51,9 +45,11 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         itemBind(viewHolder as ItemViewHolder, position)
         timerBind(viewHolder as ItemViewHolder, position)
 
-        checkTimerRemainSecond()
+        // timerTask.start()
 
-        Log.d("DELIVERY-ADAPTER", "onBindViewHolder")
+        // 1분 지나면 binding 다시
+//        if (minuteFlag)
+//            timerBind(viewHolder, position)
 
         viewHolder.itemView.setOnClickListener {
             mItemClickListener.onItemClick(deliveryList[position]!!, position)
@@ -79,9 +75,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
 
     // 타이머를 제외한 나머지 부분 Binding
     private fun itemBind(viewHolder: ItemViewHolder, position: Int) {
-        // 메인 파티 리스트 부분
-        // Use = currentMatching, maxMatching, orderTime, title
-
         val item = deliveryList!![position]
 
         // (최대 멤버 - 현재 매칭 멤버 = 1)인 상황에는 파란색 아이콘, 아닐 경우 회색 아이콘을 구분하기 위한 부분
@@ -105,6 +98,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     // 타이머 부분 Binding
     private fun timerBind(viewHolder: ItemViewHolder, position: Int) {
         viewHolder.deliveryItemTime.setText(calculateTime(deliveryList[position]!!.orderTime.toString()))
+        // viewHolder.deliveryItemTime.setText(deliveryList[position]!!.orderTime.toString())
     }
 
     fun getDeliveryItemId(position: Int): Int? {
@@ -135,7 +129,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
         var todaySeconds = Integer.parseInt(currentTime.substring(17, 19))
 
-        remainSecond = todaySeconds
+        todaySec = todaySeconds
 
         var today = Calendar.getInstance().apply {
             set(Calendar.YEAR, todayYear)
@@ -164,26 +158,32 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
             "${minute}분 남았어요"
     }
 
-    /*
-    internal class TimerThread : Thread() {
-        var sec: Int = 0
-
+    // 남은 시간을 1분마다 업데이트 하기 위함
+    inner class TimerThread(var sec: Int) : Thread() {
         override fun run() {
             while (true) {
                 sec++
+
                 try {
-                    sleep(1000)
+                    Thread.sleep(1000)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
 
                 if (sec % 60 == 0) {
-
+                    minuteFlag = true
                 }
 
-                Log.d("TIMER-TEST", "sec = $sec")
+                Log.d("DELIVERY-ADAPTER", "Sec = $sec")
             }
         }
     }
-    */
+
+    fun returnTimer(): Boolean {
+        return minuteFlag
+    }
+
+    fun returnRemainSec(): Int {
+        return todaySec
+    }
 }

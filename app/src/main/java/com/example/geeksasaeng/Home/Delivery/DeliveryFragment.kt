@@ -32,7 +32,7 @@ import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView, DeliveryRVAdapter.SetTimerListener {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
@@ -47,13 +47,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int? = null
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
-    var second: Int = 0
-    var timerThread = Thread(TimerRunnable())
 
     // 테스트
     var value: Int = 0
-    var preFirstItem = -1
-    var preLastItem = -1
+    var minuteFlag: Boolean = false
+    var remainSec: Int = 0
+    var timerTask = TimerThread(remainSec)
 
     //핸들러 설정
     val handler = Handler(Looper.getMainLooper()) {
@@ -62,6 +61,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
+
         // 모든 fragment stack 제거
         clearBackStack()
 
@@ -131,36 +132,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
-//                var firstItem = (layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-//                var lastItem = layoutManager.findLastCompletelyVisibleItemPosition()
-
-                /*
-                if (preFirstItem == -1 && preLastItem == -1) {
-                    preFirstItem = firstItem
-                    preLastItem = lastItem
-
-                    for (i in firstItem..lastItem + 1) {
-                        Log.d("SCROLL-DETAIL", i.toString())
-                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
-                        deliveryAdapter.notifyDataSetChanged()
-                    }
-                } else if (firstItem != preFirstItem && lastItem != preLastItem) {
-                    for (i in firstItem..lastItem + 1) {
-                        Log.d("SCROLL-DETAIL", i.toString())
-                        deliveryArray[i]!!.orderTime = (Integer.parseInt(deliveryArray[i]!!.orderTime) - 1).toString()
-                        deliveryAdapter.notifyDataSetChanged()
-                    }
-
-                    preFirstItem = firstItem
-                    preLastItem = lastItem
-                }
-                 */
-
-                // (FirstItemPosition - 1)부터 (LastItemPosition + 1)까지 타이머 run
-                // 화면 위로 올라오면 -> Thread 작동 -> 현재 시간 & orderTime 차 계산 -> Timer 동작 -> 1분 지날 때마다 RecyclerView 새로.....??
-                // 화면 위에서 사라지면 -> Thread 작동 중지
-                // notifyItemChanged()?!!?!??!?!?!??!?
-
                 if (finalPage == true) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
@@ -168,8 +139,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 }
 
                 if (!isLoading) {
-                    // timerHandler.sendEmptyMessage(value); // 앱 시작과 동시에 핸들러에 메세지 전달
-
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         if (finalPage == false)
                             initMoreLoadPosts()
@@ -231,7 +200,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
             deliveryArray.add(
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
-                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, 10.toString(), title, hashTags)
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
@@ -275,6 +243,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     //스피너 관련 작업
     private fun initSpinner() {
         val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+
         //어댑터
         val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
         binding.deliveryPeopleSpinner.adapter = spinnerAdapter
@@ -298,28 +267,39 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                     maxMatching = position * 2
                     finalPage = false
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("DELIVERY-FRAGMENT", "onStart")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d("DELIVERY-FRAGMENT", "onResume")
+        // remainSec = deliveryAdapter.returnRemainSec()
+        // timerTask.start()
+
         flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 
     override fun onPause() {
         super.onPause()
+        Log.d("DELIVERY-FRAGMENT", "onPause")
         flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("DELIVERY-FRAGMENT", "onDestroy")
         thread.interrupt() //쓰레드 중지
     }
 
-    fun clearBackStack() {
+    private fun clearBackStack() {
         val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
@@ -408,6 +388,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
             deliveryArray.add(
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
+                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
@@ -428,27 +409,23 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    // RecyclerView의 타이머와 연결하기 위한 Interface를 Override
-    override fun setTimer() {
-
-    }
-
     // 남은 시간을 1분마다 업데이트 하기 위함
-    inner class TimerRunnable : Runnable {
+    inner class TimerThread(var sec: Int) : Thread() {
         override fun run() {
             while (true) {
-                second++
+                sec++
+
                 try {
-                    sleep(1000)
+                    Thread.sleep(1000)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
 
-                if (second % 60 == 0) {
-
+                if (sec % 60 == 0) {
+                    minuteFlag = true
                 }
 
-                Log.d("TIMER-TEST", "sec = $second")
+                Log.d("DELIVERY-FRAGMENT", "Sec = $sec")
             }
         }
     }
