@@ -4,18 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.isEmpty
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -27,17 +26,17 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
 import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Naver.StepNaverOneFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
+import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryBannerView, DeliveryFilterView {
+class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
-    private lateinit var deliveryBannerAdapter : BannerVPAdapter
+    private lateinit var deliveryBannerAdapter: BannerVPAdapter
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
@@ -46,25 +45,31 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var totalCursor: Int = 0
     var orderTimeCategory: String? = null
     var maxMatching: Int? = null
-    var nowTime: Long = 0
-    var date: Date? = null
-    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
 
+    // 테스트
+    var value: Int = 0
+    var minuteFlag: Boolean = false
+    var remainSec: Int = 0
+    var timerTask = TimerThread(remainSec)
+
     //핸들러 설정
-    val handler= Handler(Looper.getMainLooper()){
+    val handler = Handler(Looper.getMainLooper()) {
         setPage()
         true
     }
 
     override fun initAfterBinding() {
+        Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
+
         // 모든 fragment stack 제거
         clearBackStack()
 
         deliveryService = DeliveryService() //서비스 객체 생성
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
+
         binding.deliveryProgressCover.visibility = View.GONE
         binding.deliveryBottomView.visibility = View.VISIBLE
 
@@ -83,62 +88,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
-    }
-
-    // 오늘 날짜 계산
-    private fun calculateToday(): String {
-        nowTime = System.currentTimeMillis();
-        date = Date(nowTime)
-        return dateFormat.format(date)
-    }
-
-    // 남은 시간 계산
-    // TODO: 흠... 실시간으로 해야하는데 흠...
-    private fun calculateTime(orderTime: String): String {
-        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
-        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
-        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
-        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
-        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
-
-        var currentTime = calculateToday()
-        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
-        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
-        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
-        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
-        Log.d("calculateTime-HOUR", todayHours.toString())
-        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
-
-        var today = Calendar.getInstance().apply {
-            set(Calendar.YEAR, todayYear)
-            set(Calendar.MONTH, todayMonth)
-            set(Calendar.DAY_OF_MONTH, todayDay)
-        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
-
-        var order = Calendar.getInstance().apply {
-            set(Calendar.YEAR, orderYear)
-            set(Calendar.MONTH, orderMonth)
-            set(Calendar.DAY_OF_MONTH, orderDay)
-        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
-
-        var remainTime = order - today
-        Log.d("remainTime", remainTime.toString())
-
-        if (remainTime <= 0) {
-            return "끝끝"
-        }
-
-        var day = remainTime / (24*60*60*1000)
-        var sec = (remainTime % (24*60*60*1000)) / 1000
-        var hour = sec / 3600
-        var minute = (sec % 3600) / 60
-
-        return if (day > 0)
-            "${day}일 ${hour}시간 ${minute}분 남았어요"
-        else if (hour > 0)
-            "${hour}시간 ${minute}분 남았어요"
-        else
-            "${minute}분 남았어요"
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -250,7 +199,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
             deliveryAdapter.notifyDataSetChanged()
@@ -262,12 +212,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn(){ //라디오 버튼
-        binding.deliveryTimeRg.setOnCheckedChangeListener { _:RadioGroup, checkedId:Int ->
+    private fun initRadioBtn() { //라디오 버튼
+        binding.deliveryTimeRg.setOnCheckedChangeListener { _: RadioGroup, checkedId: Int ->
             binding.deliveryTimeRg.check(checkedId)
             filterCheckFlag = true
 
-            when(checkedId){
+            when (checkedId) {
                 R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
                 R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
                 R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
@@ -278,25 +228,26 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     //배너 작업
-    private fun initBanner(){
+    private fun initBanner() {
         deliveryService.getDeliveryBanner() //광고 불러오기
     }
 
     //페이지 변경하기
-    fun setPage(){
-        if(currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
+    fun setPage() {
+        if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
             currentPosition = 0
         binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
-        currentPosition+=1
+        currentPosition += 1
     }
 
     //스피너 관련 작업
-    private fun initSpinner(){
+    private fun initSpinner() {
         val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+
         //어댑터
         val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
         binding.deliveryPeopleSpinner.adapter = spinnerAdapter
-        binding.deliveryPeopleSpinner.setSelection(items.size-1) //마지막아이템을 스피너 초기값으로 설정해준다.
+        binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
         //이벤트 처리
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -311,32 +262,44 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
-                if (position in 1..5)
-                    filterCheckFlag = true
+                    if (position in 1..5)
+                        filterCheckFlag = true
 
-                maxMatching = position * 2
-                finalPage = false
+                    maxMatching = position * 2
+                    finalPage = false
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("DELIVERY-FRAGMENT", "onStart")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d("DELIVERY-FRAGMENT", "onResume")
+        // remainSec = deliveryAdapter.returnRemainSec()
+        // timerTask.start()
+
         flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 
     override fun onPause() {
         super.onPause()
+        Log.d("DELIVERY-FRAGMENT", "onPause")
         flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("DELIVERY-FRAGMENT", "onDestroy")
         thread.interrupt() //쓰레드 중지
     }
 
-    fun clearBackStack() {
+    private fun clearBackStack() {
         val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
@@ -344,14 +307,16 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         deliveryBannerAdapter = BannerVPAdapter(this)
+
         //더미 img url
-        for(j in 1..5){ //fragment already added 고치기 위함
-            for (i in results){
+        for (j in 1..5) { //fragment already added 고치기 위함
+            for (i in results) {
                 deliveryBannerAdapter.addFragment(i.imgUrl)
             }
         }
-        binding.deliveryBannerVp.adapter= deliveryBannerAdapter
-        binding.deliveryBannerVp.orientation= ViewPager2.ORIENTATION_HORIZONTAL
+
+        binding.deliveryBannerVp.adapter = deliveryBannerAdapter
+        binding.deliveryBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
 
         //뷰페이저 넘기는 쓰레드
@@ -362,33 +327,32 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageScrollStateChanged(state: Int) {
                     super.onPageScrollStateChanged(state)
-                    when(state){
+                    when (state) {
                         //뷰페이저가 멈춰져있을때
                         //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
-                        ViewPager2.SCROLL_STATE_IDLE ->{
-                            flag=1
-                            currentPosition = binding.deliveryBannerVp.currentItem+1
+                        ViewPager2.SCROLL_STATE_IDLE -> {
+                            flag = 1
+                            currentPosition = binding.deliveryBannerVp.currentItem + 1
                         }
                         //뷰페이저 움직이는 중
-                        ViewPager2.SCROLL_STATE_DRAGGING -> flag=0
+                        ViewPager2.SCROLL_STATE_DRAGGING -> flag = 0
                     }
                 }
             })
         }
-
     }
 
     //3초마다 페이지 넘기는 기능
-    inner class PagerRunnable:Runnable{
+    inner class PagerRunnable : Runnable {
         override fun run() {
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(3000)
-                    if(this@DeliveryFragment.flag==1) {
+                    if (this@DeliveryFragment.flag == 1) {
                         handler.sendEmptyMessage(0)
                     }
-                } catch (e : InterruptedException){
-                    Log.d("interupt", "interupt발생")
+                } catch (e: InterruptedException) {
+                    Log.d("interrupt", "interrupt 발생")
                 }
             }
         }
@@ -423,7 +387,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
+                // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
 
             deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
@@ -442,5 +407,26 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliveryFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
+    }
+
+    // 남은 시간을 1분마다 업데이트 하기 위함
+    inner class TimerThread(var sec: Int) : Thread() {
+        override fun run() {
+            while (true) {
+                sec++
+
+                try {
+                    Thread.sleep(1000)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+
+                if (sec % 60 == 0) {
+                    minuteFlag = true
+                }
+
+                Log.d("DELIVERY-FRAGMENT", "Sec = $sec")
+            }
+        }
     }
 }
