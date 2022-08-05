@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
 
-// TODO: Chatting ArrayList로 바꿔주기
-class ChattingListRVAdapter(private var chattingList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
+class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingList>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChattingListRVAdapter.ViewHolder {
         val binding: ItemChattingListBinding = ItemChattingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,9 +19,8 @@ class ChattingListRVAdapter(private var chattingList: ArrayList<DeliveryPartiesV
 
     override fun getItemCount(): Int = chattingList.size
 
-    // TODO: Chatting ArrayList로 바꿔주기
     inner class ViewHolder(val binding: ItemChattingListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chattingList: DeliveryPartiesVoList) {
+        fun bind(chattingList: ChattingList) {
 
         }
     }
