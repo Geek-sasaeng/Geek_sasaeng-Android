@@ -1,8 +1,11 @@
 package com.example.geeksasaeng.Chatting
 
+import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
+import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 
@@ -38,5 +41,13 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
         binding.chattingListRv.adapter = chattingListRVAdapter
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        chattingListRVAdapter.setOnItemClickListener(object: ChattingListRVAdapter.OnItemClickListener {
+            override fun onItemClick(chattingList: ChattingList, position: Int) {
+                val intent = Intent(activity, ChattingRoomActivity::class.java)
+                intent.putExtra("roomName", chattingList.roomName)
+                startActivity(intent)
+            }
+        })
     }
 }
