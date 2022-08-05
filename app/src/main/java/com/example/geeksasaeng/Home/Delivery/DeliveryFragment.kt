@@ -28,8 +28,6 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
-import java.lang.Thread.sleep
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
@@ -47,12 +45,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int? = null
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
-
-    // 테스트
-    var value: Int = 0
-    var minuteFlag: Boolean = false
-    var remainSec: Int = 0
-    var timerTask = TimerThread(remainSec)
 
     //핸들러 설정
     val handler = Handler(Looper.getMainLooper()) {
@@ -88,6 +80,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
+
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -183,6 +176,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
+    // 배달파티 목록 조회 성공
     override fun deliverySuccess(result: DeliveryResult) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
 
@@ -370,6 +364,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor += 1
     }
 
+    // 배달 필터 성공
     override fun deliveryFilterSuccess(result: DeliveryResult) {
         Log.d("DELIVERY-FILTER", "SUCCESS")
 
@@ -390,7 +385,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
-
             deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
         }
 
@@ -407,26 +401,5 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliveryFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
-    }
-
-    // 남은 시간을 1분마다 업데이트 하기 위함
-    inner class TimerThread(var sec: Int) : Thread() {
-        override fun run() {
-            while (true) {
-                sec++
-
-                try {
-                    Thread.sleep(1000)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-
-                if (sec % 60 == 0) {
-                    minuteFlag = true
-                }
-
-                Log.d("DELIVERY-FRAGMENT", "Sec = $sec")
-            }
-        }
     }
 }
