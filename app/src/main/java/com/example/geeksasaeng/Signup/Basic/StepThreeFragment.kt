@@ -34,7 +34,6 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun initAfterBinding() {
         progressVM.increase()
-
         email = signUpVM.getEmail()
         universityName = signUpVM.getUniversityName()
 
@@ -57,7 +56,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
         binding.stepThreeNextBtn.setOnClickListener {
             // 이메일 번호 인증
-            verifyEmail()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFourFragment()).commit()  //디버깅용
+             //verifyEmail()
         }
     }
 

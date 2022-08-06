@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -8,16 +9,14 @@
         android:id="@+id/step_five_welcome_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32sp"
+        android:textSize="30sp"
         android:lineSpacingExtra="10dp"
         android:textColor="@color/top"
         android:fontFamily="@font/spoqa_bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingStart="5dp"
-        android:paddingEnd="100dp"
-        android:layout_marginTop="183dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="100dp"
         android:text="긱사생에 오신 것을\n환영합니다"/>
 
     <CheckBox
@@ -32,21 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="약관 전체동의"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_marginStart="10dp"
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_bold"
         app:layout_constraintStart_toEndOf="@id/step_five_agree_all_cb"
-        app:layout_constraintTop_toTopOf="@id/step_five_agree_all_cb"
-        app:layout_constraintBottom_toBottomOf="@id/step_five_agree_all_cb"
-        />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/step_five_agree_all_cb"
         app:layout_constraintBottom_toBottomOf="@id/step_five_agree_all_cb"
         />
@@ -73,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(필수)"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_marginStart="10dp"
         android:textColor="@color/main"
         android:fontFamily="@font/spoqa_regular"
@@ -87,8 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이용약관 동의"
-        android:layout_marginStart="3dp"
-        android:textSize="18sp"
+        android:layout_marginStart="5dp"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_regular"
         app:layout_constraintStart_toEndOf="@id/step_five_agree1_tv1"
@@ -97,6 +86,7 @@
         />
 
     <ImageView
+        android:id="@+id/step_five_agree1_more_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_arrow_right"
@@ -119,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(필수)"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_marginStart="10dp"
         android:textColor="@color/main"
         android:fontFamily="@font/spoqa_regular"
@@ -133,8 +123,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="개인정보 수집 및 이용동의"
-        android:layout_marginStart="3dp"
-        android:textSize="18sp"
+        android:layout_marginStart="5dp"
+        android:textSize="16sp"
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_regular"
         app:layout_constraintStart_toEndOf="@id/step_five_agree2_tv1"
@@ -143,14 +133,14 @@
         />
 
     <ImageView
+        android:id="@+id/step_five_agree2_more_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
         android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/step_five_agree2_cb"
+        android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="@id/step_five_agree2_cb"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/step_five_agree2_cb" />
 
 
 

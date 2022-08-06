@@ -16,7 +16,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
         signUpVM = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.sign_up_vp, StepOneFragment())
+            .replace(R.id.sign_up_vp, StepFiveFragment())
             .commit()
 
         progressVM.currentPro.observe(this, Observer {

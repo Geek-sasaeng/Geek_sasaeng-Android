@@ -134,8 +134,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun sendEmail() {
         Log.d("email", "email")
         email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
+        //TODO: 내생각에 이미 가입된 USER의 UUID를 주면 이메일 전송이 안되는 듯해 -> (따라서 문제는 계정2개 만들 수 X..?/안내라도 해줘야하나)
         val uuid = getUuid().toString()
-        val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
+        val signUpEmailRequest = SignUpEmailRequest(email.toString(), university.toString(), uuid.toString())
         Log.d("email", email.toString()+"/"+university.toString()+"/"+uuid.toString())
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
