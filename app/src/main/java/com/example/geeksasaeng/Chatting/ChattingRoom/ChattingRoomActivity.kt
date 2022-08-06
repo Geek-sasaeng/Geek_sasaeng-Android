@@ -1,8 +1,7 @@
-package com.example.geeksasaeng.Chatting
+package com.example.geeksasaeng.Chatting.ChattingRoom
 
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity

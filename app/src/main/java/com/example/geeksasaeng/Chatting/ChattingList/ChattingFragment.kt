@@ -1,11 +1,8 @@
-package com.example.geeksasaeng.Chatting
+package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
-import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
-import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 
@@ -42,7 +39,8 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
         binding.chattingListRv.adapter = chattingListRVAdapter
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        chattingListRVAdapter.setOnItemClickListener(object: ChattingListRVAdapter.OnItemClickListener {
+        chattingListRVAdapter.setOnItemClickListener(object:
+            ChattingListRVAdapter.OnItemClickListener {
             override fun onItemClick(chattingList: ChattingList, position: Int) {
                 val intent = Intent(activity, ChattingRoomActivity::class.java)
                 intent.putExtra("roomName", chattingList.roomName)

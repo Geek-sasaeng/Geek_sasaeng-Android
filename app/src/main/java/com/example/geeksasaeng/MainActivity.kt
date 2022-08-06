@@ -2,7 +2,7 @@ package com.example.geeksasaeng
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Chatting.ChattingFragment
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment

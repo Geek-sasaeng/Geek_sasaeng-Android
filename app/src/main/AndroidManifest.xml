@@ -46,7 +46,7 @@
         <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Home.Search.SearchActivity" />
-        <activity android:name=".Chatting.ChattingRoomActivity" />
+        <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity" />
 
         <!--카카오맵 APP KEY 추가-->
         <meta-data

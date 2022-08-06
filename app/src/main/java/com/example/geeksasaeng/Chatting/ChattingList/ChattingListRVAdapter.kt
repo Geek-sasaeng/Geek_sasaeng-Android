@@ -1,13 +1,9 @@
-package com.example.geeksasaeng.Chatting
+package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
-import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingList>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
@@ -22,7 +18,7 @@ class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingList>) :
         fun onItemClick(chattingList: ChattingList, position: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChattingListRVAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemChattingListBinding = ItemChattingListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }

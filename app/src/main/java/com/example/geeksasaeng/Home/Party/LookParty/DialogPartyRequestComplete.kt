@@ -1,13 +1,11 @@
 package com.example.geeksasaeng.Home.Party.LookParty
 
-import android.app.ProgressDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.util.Util
-import com.example.geeksasaeng.Chatting.ChattingFragment
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogPartyRequestCompleteBinding
