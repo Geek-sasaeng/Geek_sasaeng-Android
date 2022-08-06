@@ -10,7 +10,6 @@ import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
-import com.google.firebase.messaging.FirebaseMessaging
 
 class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate), LoginView {
 
@@ -51,7 +50,8 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
         loginDataService.login(Login(loginId, password))
     }
     private fun changeMainActivity() {
-        changeActivity(MainActivity::class.java)
+        changeActivity(LoginActivity::class.java) // 디버깅용
+        //changeActivity(MainActivity::class.java)
         finish()
     }
 

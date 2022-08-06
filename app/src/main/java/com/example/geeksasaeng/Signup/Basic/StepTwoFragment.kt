@@ -18,6 +18,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 import com.example.geeksasaeng.Utils.getUuid
 
@@ -117,6 +118,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun initClickListener() {
         // 이메일 인증 전송 버튼
         binding.stepTwoEmailCheckBtnO.setOnClickListener {
+            Log.d("email","인증번호 전송버튼 눌림")
             sendEmail()
         }
 
@@ -130,14 +132,20 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     }
 
     private fun sendEmail() {
+        Log.d("email", "email")
         email = binding.stepTwoEmailEt.text.toString() + binding.stepTwoEmail2Et.text.toString()
+        //TODO: 내생각에 이미 가입된 USER의 UUID를 주면 이메일 전송이 안되는 듯해 -> (따라서 문제는 계정2개 만들 수 X..?/안내라도 해줘야하나)
         val uuid = getUuid().toString()
-        val signUpEmailRequest = SignUpEmailRequest(email, university, uuid)
+        val signUpEmailRequest = SignUpEmailRequest(email.toString(), university.toString(), uuid.toString())
+        Log.d("email", email.toString()+"/"+university.toString()+"/"+uuid.toString())
         signUpService.signUpEmailSender(signUpEmailRequest)
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        Log.d("email", "성공했습니다")
+        //ToastMsgSingup 대신에 Utils에 CustomToastMsg만들어서 공용으로 쓰려고 하는데..! 괜찮은 것 같으면 주석 지우고 ToastMsgSignup 지워주면 될 것 같아용~
+        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 16)?.show()
 
         binding.stepTwoNextBtn.isEnabled = true
         binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
@@ -146,7 +154,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         verifyBtnClick = 1
     }
 
-    override fun onSignUpEmailFailure(code: Int, message: String) {
+    override fun onSignUpEmailFailure(code: Int, message: String)
+    {   Log.d("email", "실패했습니다")
         Log.d("SIGNUP-RESPONSE", "실패했습니다")
         Log.d("SIGNUP-RESPONSE", "CODE = $code")
 

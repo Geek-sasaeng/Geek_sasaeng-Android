@@ -17,5 +17,7 @@ data class SocialLoginResponse(
 )
 
 data class SocialLoginResult(
-    @SerializedName("jwt") val jwt: String
+    @SerializedName("jwt") val jwt: String,
+    @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("nickName") val nickName: String
 )

@@ -13,11 +13,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyRequest
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyService
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpActivity
+import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentDeliveryPartyUpdateBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -350,6 +354,7 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
         activity?.supportFragmentManager?.beginTransaction()
             ?.remove(this)?.commit()
         activity?.supportFragmentManager?.popBackStack()
+        CustomToastMsg.createToast((requireContext()), "수정이 완료되었습니다", "#8029ABE2", 58)?.show()
     }
 
     override fun onUpdatePartyFailure(message: String) {

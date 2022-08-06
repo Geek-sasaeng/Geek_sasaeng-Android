@@ -3,6 +3,19 @@ package com.example.geeksasaeng.Utils
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
 
+// 기숙사 정보
+fun removeDormitory(){
+    val editor = mSharedPreferences.edit()
+    editor.remove("dormitory")
+    editor.commit()
+}
+
+fun saveDormitory(dorm: String){
+    val editor = mSharedPreferences.edit()
+    editor.putString("dormitory", dorm)
+    editor.apply()
+}
+
 // uuid
 fun removeUuid(){
     val editor = mSharedPreferences.edit()
@@ -40,6 +53,7 @@ fun saveSocialAutoLogin(jwt: String) {
     editor.apply()
 }
 
+fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null)
 fun getPassword(): String? = mSharedPreferences.getString("password", null)

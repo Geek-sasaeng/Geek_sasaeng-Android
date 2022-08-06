@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name= "home_dropdown1">
-        <item>2명 이하</item>
+        <item>현재 값 저장용</item>
         <item>2명 이하</item>
         <item>4명 이하</item>
         <item>6명 이하</item>

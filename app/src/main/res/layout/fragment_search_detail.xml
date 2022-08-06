@@ -48,72 +48,64 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <RadioGroup
-                android:id="@+id/search_detail_time_rg"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp">
+            <CheckBox
+                android:id="@+id/search_detail_cb1"
+                android:height="35dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="14sp"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="아침"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"/>
 
-                <RadioButton
-                    android:id="@+id/search_detail_rb1"
-                    android:height="35dp"
-                    android:paddingHorizontal="10dp"
-                    android:button="@null"
-                    android:textSize="14sp"
-                    android:layout_width="54dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/spinner_outline_unclicked"
-                    android:textColor="@drawable/selector_time_radiobtn_text"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:text="아침"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"/>
+            <CheckBox
+                android:id="@+id/search_detail_cb2"
+                android:height="35dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="14sp"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="점심"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"/>
 
-                <RadioButton
-                    android:id="@+id/search_detail_rb2"
-                    android:height="35dp"
-                    android:paddingHorizontal="10dp"
-                    android:button="@null"
-                    android:textSize="14sp"
-                    android:layout_width="54dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/spinner_outline_unclicked"
-                    android:textColor="@drawable/selector_time_radiobtn_text"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:text="점심"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"/>
+            <CheckBox
+                android:id="@+id/search_detail_cb3"
+                android:height="35dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="14sp"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="저녁"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"/>
 
-                <RadioButton
-                    android:id="@+id/search_detail_rb3"
-                    android:height="35dp"
-                    android:paddingHorizontal="10dp"
-                    android:button="@null"
-                    android:textSize="14sp"
-                    android:layout_width="54dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/spinner_outline_unclicked"
-                    android:textColor="@drawable/selector_time_radiobtn_text"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:text="저녁"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"/>
-
-                <RadioButton
-                    android:id="@+id/search_detail_rb4"
-                    android:height="35dp"
-                    android:paddingHorizontal="10dp"
-                    android:button="@null"
-                    android:textSize="14sp"
-                    android:layout_width="54dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/spinner_outline_unclicked"
-                    android:textColor="@drawable/selector_time_radiobtn_text"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:text="야식"
-                    android:gravity="center"/>
-
-            </RadioGroup>
+            <CheckBox
+                android:id="@+id/search_detail_cb4"
+                android:height="35dp"
+                android:paddingHorizontal="10dp"
+                android:button="@null"
+                android:textSize="14sp"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner_outline_unclicked"
+                android:textColor="@drawable/selector_time_radiobtn_text"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="야식"
+                android:gravity="center"/>
 
         </LinearLayout>
 
