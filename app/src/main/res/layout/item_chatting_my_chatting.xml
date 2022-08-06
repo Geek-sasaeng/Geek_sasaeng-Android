@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:paddingHorizontal="23dp"
+    android:layout_marginVertical="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -24,11 +25,10 @@
         app:layout_constraintEnd_toStartOf="@id/item_my_chatting_profile_iv">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
+            android:id="@+id/item_my_chatting_chatting"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_my_chatting_not_read_tv"
             app:layout_constraintTop_toTopOf="parent"
             app:cardCornerRadius="5dp"
             app:cardBackgroundColor="@color/gray_0"
@@ -38,11 +38,12 @@
                 android:id="@+id/item_my_chatting_chatting_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="안녕하세요~안녕안녕안녕안녕안녕안녕안녕안녕안녕 안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕"
+                android:text="안녕하세요~"
                 android:textColor="@color/black"
                 android:paddingHorizontal="18dp"
                 android:paddingVertical="10dp"
                 android:lineHeight="20sp"
+                android:layout_gravity="right"
                 android:textSize="15sp"
                 android:fontFamily="@font/spoqa_medium" />
 
@@ -50,14 +51,17 @@
 
         <TextView
             android:id="@+id/item_my_chatting_not_read_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/main"
             android:textSize="12sp"
             android:text="0"
+            android:layout_marginEnd="3dp"
+            android:gravity="right"
             android:fontFamily="@font/spoqa_medium"
             android:paddingHorizontal="2dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_my_chatting_chatting"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

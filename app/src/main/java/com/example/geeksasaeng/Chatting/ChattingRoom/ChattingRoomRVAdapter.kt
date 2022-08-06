@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -64,19 +65,27 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
 
     inner class MyChattingViewHolder(val binding: ItemChattingMyChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
-
+            binding.itemMyChattingChattingTv.text = chatting.message
+            binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
+            // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
+            binding.itemMyChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
         }
     }
 
     inner class YourChattingViewHolder(val binding: ItemChattingYourChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
-
+            binding.itemYourChattingChattingTv.text = chatting.message
+            binding.itemYourChattingNotReadTv.text = chatting.notRead?.toString()
+            // binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
+            binding.itemYourChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
         }
     }
 
     inner class SystemChattingViewHolder(val binding: ItemChattingSystemChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
-
+            // 00 님이 입장하셨습니다
+            // 모든 파티원이 입장을 마쳤습니다! 안내에 따라 메뉴를 입력해주세요
+            binding.itemChattingSystemChattingTv.text = chatting.message
         }
     }
 
