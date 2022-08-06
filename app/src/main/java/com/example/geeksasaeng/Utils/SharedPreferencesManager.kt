@@ -29,6 +29,13 @@ fun saveDormitory(dorm: String){
     editor.apply()
 }
 
+// 기숙사 ID
+fun saveDormitoryId(dormId: Int){
+    val editor = mSharedPreferences.edit()
+    editor.putInt("dormitoryId", dormId)
+    editor.apply()
+}
+
 // uuid
 fun removeUuid(){
     val editor = mSharedPreferences.edit()
@@ -67,6 +74,7 @@ fun saveSocialAutoLogin(jwt: String) {
 }
 
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
+fun getDormitoryId(): Int? = mSharedPreferences.getInt("dormitoryId", 0)
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null)

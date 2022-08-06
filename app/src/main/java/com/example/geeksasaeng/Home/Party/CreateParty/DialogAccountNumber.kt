@@ -28,5 +28,18 @@ class DialogAccountNumber : DialogFragment() {
 
     private fun initClickListener(){
 
+        binding.accountDialogBackBtn.setOnClickListener {
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+        }
+
+        binding.accountDialogNextBtn.setOnClickListener {
+            val dialogPartyName = DialogPartyName()
+            dialogPartyName.show(parentFragmentManager, "CustomDialog")
+
+            //자기자신(현 다이얼로그)은 종료
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+        }
     }
 }

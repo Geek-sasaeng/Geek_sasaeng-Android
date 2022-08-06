@@ -166,6 +166,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
+            saveDormitoryId(result.dormitoryId)
             changeActivity(MainActivity::class.java)
         }
     }
@@ -183,6 +184,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }else{
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
+            saveDormitoryId(result.dormitoryId)
             changeActivity(MainActivity::class.java)
         }
     }

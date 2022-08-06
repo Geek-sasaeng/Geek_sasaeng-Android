@@ -11,13 +11,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.*
-import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
-import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
-import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
-import com.example.geeksasaeng.Home.Party.CreateParty.DialogNum
+import com.example.geeksasaeng.Home.Party.CreateParty.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.getDormitory
+import com.example.geeksasaeng.Utils.getDormitoryId
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -132,13 +131,15 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         }
 
         binding.createPartyRegisterBtnTv.setOnClickListener { //등록버튼 클릭시
-            //TODO: "2022-07-26 16:29:30" => 이 시간형식은 어떻게 구할까..
 
-            Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
+            //Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
             val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
                 createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
-            createPartyService.createPartySender(1, createPartyRequest) //★파티 등록하기
-            startActivityWithClear(MainActivity::class.java)
+            createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기
+
+            DialogAccountNumber().show(supportFragmentManager, "CustomDialog") // 계좌정보 입력 다이얼로그 띄우기
+
+            //startActivityWithClear(MainActivity::class.java)
         }
 
         binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { //같이 먹고 싶어요 체크버튼 클릭시

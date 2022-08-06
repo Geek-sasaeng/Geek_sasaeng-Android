@@ -17,7 +17,7 @@ data class SocialLoginResponse(
 )
 
 data class SocialLoginResult(
-    @SerializedName("dormitoryId") val dormitoryId: String,
+    @SerializedName("dormitoryId") val dormitoryId: Int,
     @SerializedName("dormitoryName") val dormitoryName: String,
     @SerializedName("jwt") val jwt: String,
     @SerializedName("loginStatus") val loginStatus: String,
