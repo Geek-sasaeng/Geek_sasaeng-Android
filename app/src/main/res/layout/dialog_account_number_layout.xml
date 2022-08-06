@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="350dp"
+    android:layout_width="330dp"
+    android:layout_height="370dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp">
 
@@ -39,6 +39,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="은행을 입력하세요"
+            android:inputType="text"
+            android:maxLines="1"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_0"
             android:textSize="15sp"
@@ -47,15 +49,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/account_dialog_title_tv"
             android:paddingStart="7dp"
-            android:paddingBottom="13dp"
+            android:paddingBottom="20dp"
             android:layout_marginHorizontal="28dp"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="37dp" />
 
         <EditText
             android:id="@+id/account_dialog_bank_number_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="계좌번호를 입력하세요"
+            android:inputType="number"
+            android:maxLines="1"
             android:textColorHint="@color/gray_1"
             android:backgroundTint="@color/gray_0"
             android:textSize="15sp"
@@ -66,7 +70,7 @@
             android:paddingStart="7dp"
             android:paddingBottom="13dp"
             android:layout_marginHorizontal="28dp"
-            android:layout_marginTop="10dp" />
+             />
 
         <TextView
             android:layout_width="wrap_content"

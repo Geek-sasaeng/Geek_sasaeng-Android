@@ -44,6 +44,9 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService.setCreatePartyDefaultLocView(this)
         createPartyService.setCreatePartyView(this)
 
+        binding.createPartyDate2ColoredTv.text = getCurrentDate()+" "+getCurrentTime()
+
+
         getApplicationContext()
         initTextWatcher()
         initClickListener()
@@ -114,6 +117,15 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         }
     }
 
+    fun getCurrentDate(): String{
+        val formatter = SimpleDateFormat("MM월 dd일", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun getCurrentTime(): String{
+        val formatter = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
 
     private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
         var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -197,13 +209,14 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     //다이얼로그에서 next버튼 클릭시 값 받아오기
-    override fun onDtClicked(date: String, time: String) {
+    //TODO: 이거 인자값 없애도 될듯 VM쓰면
+    override fun onDtClicked() {
         //사용자가 선택한 날짜 표시
         binding.createPartyDate2Tv.setTextColor(ContextCompat.getColor(this, R.color.black))
-        if(date==""||time==""){ // 정보가 하나라도 부족하면
+        if(createPartyVM.getDate()==""||createPartyVM.getTime()==""){ // 정보가 하나라도 부족하면
             binding.createPartyDate2Tv.text = "주문 예정 시간을 입력해주세요"
         }else{
-            binding.createPartyDate2Tv.text = date+ " " + time
+            binding.createPartyDate2Tv.text = createPartyVM.getDate()+ " " + createPartyVM.getTime()
         }
 
         //파란색 버튼 없애고 회색버튼으로 띄우기

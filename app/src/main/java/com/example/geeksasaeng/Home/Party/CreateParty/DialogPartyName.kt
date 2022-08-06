@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogPartyNameLayoutBinding
 
 class DialogPartyName : DialogFragment() {
     lateinit var binding: DialogPartyNameLayoutBinding
+    private val createPartyVM: CreatePartyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,8 +25,31 @@ class DialogPartyName : DialogFragment() {
     ): View? {
         binding = DialogPartyNameLayoutBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //레이아웃배경을 투명하게 해줌?
+        initData()
         initClickListener()
         return binding.root
+    }
+
+    private fun initData(){
+        if(createPartyVM.getPartyName().toString()!="null"){
+            binding.partyNameDialogEt.setText(createPartyVM.getPartyName().toString())
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val width = resources.getDimensionPixelSize(R.dimen.party_name_popup_width)
+        val height = resources.getDimensionPixelSize(R.dimen.party_name_popup_height)
+        dialog?.window?.setLayout(width,height)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        if(binding.partyNameDialogEt.text.toString()!=""){
+            createPartyVM.setPartyName(binding.partyNameDialogEt.text.toString())
+        }else{
+            createPartyVM.setPartyName(null)
+        }
     }
 
     private fun initClickListener(){

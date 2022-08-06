@@ -1,7 +1,7 @@
 package com.example.geeksasaeng.Signup
 
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.privacytemrsAgree
+import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.privacyTemrsAgree
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.serviceTemrsAgree
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityTos2Binding
@@ -22,7 +22,7 @@ class Tos2Activity : BaseActivity<ActivityTos2Binding>(ActivityTos2Binding::infl
             if (isSocial){ // 소셜회원가입일때
                 //
             }else{// 일반 회원가입일때
-                privacytemrsAgree = true
+                privacyTemrsAgree = true
             }
             finish()
         }

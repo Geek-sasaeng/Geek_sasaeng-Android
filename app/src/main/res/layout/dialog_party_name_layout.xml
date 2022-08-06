@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="330dp"
     android:layout_height="300dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp">
@@ -23,7 +23,7 @@
             android:id="@+id/party_name_dialog_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="계좌번호 입력하기"
+            android:text="파티 이름 입력하기"
             android:textSize="18sp"
             android:textColor="@color/top"
             android:fontFamily="@font/spoqa_medium"

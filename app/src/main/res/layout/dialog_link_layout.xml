@@ -63,8 +63,8 @@
             android:layout_marginTop="13dp"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
             android:src="@drawable/link_dialog_img"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
@@ -79,7 +79,7 @@
             android:text="원하는 식당의 링크를 복사하여\n입력해주세요"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="@color/top"
-            android:textSize="15sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/link_dialog_search_et"
             app:layout_constraintEnd_toEndOf="@id/link_dialog_search_et"
             app:layout_constraintTop_toBottomOf="@id/link_dialog_triangle_iv"
@@ -108,7 +108,8 @@
             android:textColor="#5B5B5B"
             android:fontFamily="@font/spoqa_regular"
             android:background="@android:color/transparent"
-            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toTopOf="@id/link_dialog_next_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

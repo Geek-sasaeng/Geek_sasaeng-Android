@@ -221,7 +221,6 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                 (binding.stepOneCheckPwMsgTv.text.toString() == "비밀번호가 일치합니다") &&
                 (binding.stepOneNicknameMsgTv.text.toString() == "사용 가능한 닉네임입니다")
 
-        check = true //디버깅용
         if (check) { //다음으로 넘어갈 수 있으면
             binding.stepOneNextBtn.isEnabled=true
             binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
