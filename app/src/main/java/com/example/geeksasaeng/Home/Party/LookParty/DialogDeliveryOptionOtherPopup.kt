@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.Party
+package com.example.geeksasaeng.Home.Party.LookParty
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

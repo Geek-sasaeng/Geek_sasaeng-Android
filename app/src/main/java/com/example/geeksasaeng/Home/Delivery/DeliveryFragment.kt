@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -23,13 +22,11 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryBannerView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryFilterView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
-import com.example.geeksasaeng.Home.Party.LookPartyFragment
+import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
-import java.lang.Thread.sleep
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {

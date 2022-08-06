@@ -7,4 +7,8 @@
     <dimen name="party_popup_width">206dp</dimen>
     <dimen name="party_my_popup_height">183dp</dimen>
     <dimen name="party_other_popup_height">130dp</dimen>
+    <dimen name="party_request_width">256dp</dimen>
+    <dimen name="party_request_height">212dp</dimen>
+    <dimen name="party_request_complete_width">246dp</dimen>
+    <dimen name="party_request_complete_height">93dp</dimen>
 </resources>

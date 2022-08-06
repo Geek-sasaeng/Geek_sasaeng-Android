@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.Party
+package com.example.geeksasaeng.Home.Party.LookParty
 
 import android.content.Context
 import android.graphics.Color
@@ -9,12 +9,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDeleteView
-import com.example.geeksasaeng.Home.Party.UpdateParty.DialogDtUpdate
 import com.example.geeksasaeng.Home.Party.UpdateParty.PartyUpdateFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R

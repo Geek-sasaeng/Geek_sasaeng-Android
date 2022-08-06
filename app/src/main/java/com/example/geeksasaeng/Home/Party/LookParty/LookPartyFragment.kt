@@ -1,15 +1,11 @@
-package com.example.geeksasaeng.Home.Party
+package com.example.geeksasaeng.Home.Party.LookParty
 
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.text.method.Touch
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
@@ -17,6 +13,7 @@ import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResult
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailView
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 import net.daum.mf.map.api.MapPOIItem
@@ -27,7 +24,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timer
 
-class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView, DialogDeliveryOptionMyPopup.PopUpdateClickListener {
+class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener {
 
     var deliveryItemId: Int? = null
     var status: String? = null
@@ -107,6 +105,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
             dialogFragment.setArguments(bundle)
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
+        }
+
+        binding.lookPartyRequestTv.setOnClickListener {
+            val dialog = DialogPartyRequest()
+            dialog.show(parentFragmentManager, "partyRequest")
         }
     }
 
