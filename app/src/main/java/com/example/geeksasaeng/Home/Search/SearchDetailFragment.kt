@@ -275,7 +275,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             var hashTags = result?.get(i)?.hasHashTag
 
             searchArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
             searchAdapter.notifyDataSetChanged()
@@ -362,7 +362,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             var hashTags = result?.get(i)?.hasHashTag
 
             searchArray.add(
-                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
             searchAdapter.notifyItemChanged(searchArray.size - 1)

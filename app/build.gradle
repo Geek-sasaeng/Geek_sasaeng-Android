@@ -78,4 +78,13 @@ dependencies {
 
     // Infinity Scroll
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Splash Animation
+    implementation 'com.airbnb.android:lottie:1.5.3'
+    
+    // FCM
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
 }
+
+// FCM 세팅
+apply plugin: 'com.google.gms.google-services'

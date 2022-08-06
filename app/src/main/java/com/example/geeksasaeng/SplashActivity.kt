@@ -11,6 +11,7 @@ import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
+import com.google.firebase.messaging.FirebaseMessaging
 
 class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate), LoginView {
 
@@ -19,6 +20,10 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
     var password: String? = null
 
     override fun initAfterBinding() {
+        // Splash Animation 적용
+        binding.splashAnimView.imageAssetsFolder = "images"
+        binding.splashAnimView.playAnimation()
+
         val handler = Handler(Looper.getMainLooper())
 
         jwt = getJwt()
@@ -40,7 +45,6 @@ class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding:
             }
         }, 1500)
     }
-
 
     private fun login() {
         val loginDataService = LoginDataService()
