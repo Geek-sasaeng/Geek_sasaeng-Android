@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.33" />
         <entry key="..\:/Users/jimin/.gradle/caches/transforms-3/65c4e1953584d4eb753df5c7e540eaf2/transformed/oauth-5.1.1/res/layout/nid_progress_dialog.xml" value="0.11928174433518597" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/ic_home.xml" value="0.219" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/ic_logo.xml" value="0.219" />
@@ -101,7 +102,7 @@
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/spinner_outline_unclicked.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/drawable/tab_underline.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_create_party.xml" value="0.22" />
-        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_dormitory.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_dormitory.xml" value="0.1" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.16354166666666667" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/activity_search.xml" value="0.1" />
@@ -135,11 +136,10 @@
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_dialog_link.xml" value="0.128125" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_helper.xml" value="0.1640625" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_home.xml" value="0.12236286919831224" />
-        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_search_detail.xml" value="0.1" />
-        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.1" />
+        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.14583333333333334" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_four.xml" value="0.13333333333333333" />
-        <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_naver_one.xml" value="0.1273798730734361" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_one.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_three.xml" value="0.1484375" />
         <entry key="..\:/Users/ran/Geek/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_two.xml" value="0.17916666666666667" />
@@ -215,12 +215,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="VisualizationToolProject">
-    <option name="state">
-      <ProjectState>
-        <option name="scale" value="0.1" />
-      </ProjectState>
-    </option>
   </component>
 </project>

@@ -22,7 +22,7 @@ import com.navercorp.nid.oauth.*
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 
-class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpView, SignUpSocialView, LoginView, SocialLoginView {
+class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpSocialView, LoginView, SocialLoginView {
 
     var checkPassword: String? = ""
     var emailId: Int? = null
@@ -50,28 +50,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun initAfterBinding() {
         signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
-
-        checkPassword = intent.getStringExtra("checkPassword")
-        emailId = intent.getIntExtra("emailId", -1)
-        informationAgreeStatus = intent.getStringExtra("informationAgreeStatus")
-        loginId = intent.getStringExtra("loginId")
-        nickname = intent.getStringExtra("nickname")
-        password = intent.getStringExtra("password")
-        phoneNumberId = intent.getIntExtra("phoneNumberId", -1)
-        universityName = intent.getStringExtra("universityName")
-
-//        showToast("checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
-//                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
-
-        Log.d("SIGNUP-RESPONSE", "checkpassword = $checkPassword / emailId = $emailId / informationAgreeStatus = $informationAgreeStatus / loginId = $loginId / nickname = $nickname / " +
-                "password = $password / phoneNumberId = $phoneNumberId / universityName = $universityName")
-
-        signup()
-
-        /*
-        네이버 회원가입 추가해주기
-         */
-
         setTextChangedListener()
         initClickListener()
     }
@@ -79,8 +57,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
             login()
-            /*login(false)
-            changeActivity(MainActivity::class.java)*/
         }
 
         // 네이버 로그인
@@ -210,13 +186,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         return SignUpRequest(checkPassword.toString(), emailId, informationAgreeStatus.toString(), loginId.toString(), nickname.toString(), password.toString(), phoneNumberId, universityName.toString())
     }
 
-    //회원가입하는 함수
-    private fun signup() {
-        val signupDataService = SignupDataService()  //회원가입 서비스 객체 생성
-        signupDataService.setSignUpView(this) // 뷰연결
-        signupDataService.signUpSender(getSignupUser()) //★회원가입 진행
-    }
-
     private fun setTextChangedListener() {
         binding.loginIdEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -249,24 +218,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
                 }
             }
         })
-    }
-
-    //회원가입 성공/실패
-    override fun onSignUpSuccess() {
-        // TODO: 성공하면 나오는 화면 생기면 넣어주기
-        showToast("성공")
-        Log.d("signup", "회원가입에 성공하였습니다.")
-    }
-
-    override fun onSignUpFailure(message: String) {
-        // 2006 : 중복되는 유저 아이디
-        // 2007 : 중복되는 유저 이메일
-        // 2008 : 존재하지 않는 학교 이름
-        // 2201 : 회원 정보 동의 Status가 Y가 아닌 경우
-        // 2205 : 존재하지 않는 회원 ID
-        // 4000 : 서버 오류
-        showToast("실패 $message")
-        Log.d("signup", "회원가입에 실패하였습니다.\n$message")
     }
 
     override fun onSignUpSocialSuccess() {
