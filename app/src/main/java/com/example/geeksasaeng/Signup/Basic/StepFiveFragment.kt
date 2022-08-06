@@ -118,6 +118,7 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
         val intent = Intent(activity, LoginActivity::class.java)
         startActivity(intent)
         Log.d("signup", "회원가입에 성공하셨습니다.")
+        showToast("회원가입에 성공하셨습니다.")
         activity?.finish()
     }
 
