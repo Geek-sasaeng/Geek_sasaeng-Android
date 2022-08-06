@@ -3,7 +3,6 @@ package com.example.geeksasaeng
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.geeksasaeng.Login.DormitoryActivity
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.Login.Retrofit.Login
 import com.example.geeksasaeng.Login.Retrofit.LoginDataService
@@ -11,7 +10,6 @@ import com.example.geeksasaeng.Login.Retrofit.LoginResult
 import com.example.geeksasaeng.Login.Retrofit.LoginView
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
-import com.google.firebase.messaging.FirebaseMessaging
 
 class SplashActivity: BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate), LoginView {
 
