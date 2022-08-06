@@ -189,7 +189,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     override fun onVerifySmsFailure(message: String) {
         //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 틀렸습니다", "#80A8A8A8")?.show()
+        ToastMsgSignup.createToast((activity as SignUpActivity), message, "#80A8A8A8")?.show()
     }
 
     private fun checkingNext(){
