@@ -2,25 +2,21 @@ package com.example.geeksasaeng.Home.Search.Retrofit
 
 import com.example.geeksasaeng.Home.Delivery.DeliveryResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface SearchRetrofitInterface {
-    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjozNH0sImlhdCI6MTY1OTI4MDQxMywiZXhwIjoxNjYwMTY5NDQ2fQ.QGsxRw4gkp-BUZczmTLzcJR-NHRDaSyEmeJaqW8JEZY")
     @GET("/{dormitoryId}/delivery-parties/keyword")
     fun getSearchPartyList(
+        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
         @Query("keyword") keyword: String
     ): Call<SearchResponse>
 
-    @Headers("Authorization:Bearer eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJqd3RJbmZvIjp7InVuaXZlcnNpdHlJZCI6MSwidXNlcklkIjozNH0sImlhdCI6MTY1OTI4MDQxMywiZXhwIjoxNjYwMTY5NDQ2fQ.QGsxRw4gkp-BUZczmTLzcJR-NHRDaSyEmeJaqW8JEZY")
-    // @Headers("Authorization:Bearer \${getJwt()}")
     // 기숙사별 배달 리스트 필터 적용 후 불러오기
     @GET("/{dormitoryId}/delivery-parties/keyword")
     fun getFilterSearchList(
+        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
         @Query("keyword") keyword: String,

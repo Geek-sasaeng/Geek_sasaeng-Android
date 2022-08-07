@@ -38,6 +38,11 @@ fun removeAutoLogin() {
     editor.remove("password")
     editor.commit()
 }
+fun saveJwt(jwt: String){
+    val editor = mSharedPreferences.edit()
+    editor.putString("jwt", jwt)
+    editor.apply()
+}
 
 fun saveAutoLogin(jwt: String, loginId: String, password: String) {
     val editor = mSharedPreferences.edit()

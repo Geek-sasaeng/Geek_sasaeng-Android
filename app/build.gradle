@@ -80,7 +80,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Splash Animation
-    implementation 'com.airbnb.android:lottie:1.5.3'
+    implementation 'com.airbnb.android:lottie:3.2.0'
     
     // FCM
     implementation 'com.google.firebase:firebase-messaging:21.1.0'

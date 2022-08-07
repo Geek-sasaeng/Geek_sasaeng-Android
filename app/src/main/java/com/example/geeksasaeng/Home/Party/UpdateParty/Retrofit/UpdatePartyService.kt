@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit
 import android.util.Log
 import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +21,7 @@ class UpdatePartyService {
     }
 
     fun updatePartySender(dormitoryId: Int, partyId:Int, updatePartyRequest: UpdatePartyRequest){
-        updatePartyService.updateParty(dormitoryId, updatePartyRequest, partyId).enqueue(object:
+        updatePartyService.updateParty("Bearer " + getJwt(), dormitoryId, updatePartyRequest, partyId).enqueue(object:
             Callback<UpdatePartyResponse>{
             override fun onResponse(
                 call: Call<UpdatePartyResponse>,
@@ -40,7 +41,6 @@ class UpdatePartyService {
             override fun onFailure(call: Call<UpdatePartyResponse>, t: Throwable) {
                 Log.d("cherry","실패패")
             }
-
         })
     }
 }

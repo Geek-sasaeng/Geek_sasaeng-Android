@@ -127,10 +127,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
+        val jwt = result.jwt
         // 자동 로그인 수정 필요
         if (binding.loginAutologinCb.isChecked) {
-            saveAutoLogin(result.jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
+            saveAutoLogin(jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
         }
+        saveJwt(jwt)
         finish()
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
