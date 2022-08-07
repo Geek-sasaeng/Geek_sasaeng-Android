@@ -23,16 +23,39 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
     private val signUpVM: SignUpViewModel by activityViewModels()
 
     private lateinit var signUpService : SignupDataService //아이디, 닉네임 중복확인용
+    private var isNotFirst: Boolean = false
 
     override fun onStart() {
         super.onStart()
+
+        progressVM.setValue(1)
+        if (isNotFirst) {
+            binding.stepOneIdMsgTv.text="사용 가능한 아이디입니다"
+            binding.stepOnePwMsgTv.text= "사용 가능한 비밀번호입니다"
+            binding.stepOneCheckPwMsgTv.text = "비밀번호가 일치합니다"
+            binding.stepOneNicknameMsgTv.text = "사용 가능한 닉네임입니다"
+
+            binding.stepOneIdMsgTv.visibility = View.VISIBLE
+            binding.stepOnePwMsgTv.visibility = View.VISIBLE
+            binding.stepOneCheckPwMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+            binding.stepOneCheckPwMsgTv.visibility = View.VISIBLE
+            binding.stepOneNicknameMsgTv.visibility = View.VISIBLE
+
+            binding.stepOneIdBtnO.visibility = View.VISIBLE
+            binding.stepOneIdBtnX.visibility = View.GONE
+
+            binding.stepOneNicknameBtnO.visibility = View.VISIBLE
+            binding.stepOneNicknameBtnX.visibility = View.GONE
+
+            checkingNext()
+        }
+
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpIdCheckView(this@StepOneFragment)//아이디 중복확인 뷰 연결
         signUpService.setSignUpNickCheckView(this@StepOneFragment)//닉네임 중복확인 뷰 연결
     }
 
     override fun initAfterBinding() {
-        progressVM.increase()
         initTextWatcher()
         initClickListener()
     }
@@ -55,7 +78,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOneIdBtnO.visibility = View.GONE
                     binding.stepOneIdBtnX.visibility = View.VISIBLE
                 }
-
+                binding.stepOneIdMsgTv.text=""
                 checkingNext()
             }
         })
@@ -131,7 +154,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
                     binding.stepOneNicknameBtnO.visibility = View.GONE
                     binding.stepOneNicknameBtnX.visibility = View.VISIBLE
                 }
-
+                binding.stepOneNicknameMsgTv.text = ""
                 checkingNext()
             }
         })
@@ -177,8 +200,8 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             signUpVM.setLoginId(binding.stepOneIdEt.text.toString())
             signUpVM.setNickname(binding.stepOneIdEt.text.toString())
             signUpVM.setPassword(binding.stepOnePasswordEt.text.toString())
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepTwoFragment()).commit()
+            isNotFirst = true
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepTwoFragment()).addToBackStack("stepTwo").commit()
         }
     }
 
@@ -226,6 +249,7 @@ class StepOneFragment: BaseFragment<FragmentStepOneBinding>(FragmentStepOneBindi
             binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
         } else{
+            binding.stepOneNextBtn.isEnabled=false
             binding.stepOneNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
             binding.stepOneNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
         }

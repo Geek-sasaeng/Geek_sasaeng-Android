@@ -53,10 +53,12 @@ class StepNaverThreeFragment :
 
         binding.stepNaverThreeAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialServiceTemrsAgree = isChecked
+            binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
         }
 
         binding.stepNaverThreeAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialPrivacyTemrsAgree = isChecked
+            binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
         }
 
         binding.stepNaverThreeAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->

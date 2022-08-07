@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.app.ProgressDialog.show
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.example.geeksasaeng.Utils.getUuid
 import java.text.DecimalFormat
@@ -33,13 +35,21 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     private var timerTask : Timer? = null
 
     private lateinit var signUpService :SignupDataService
+    private var isNotFirst: Boolean = false
 
     override fun onStart() {
         super.onStart()
+        progressVM.setValue(4)
+        if (isNotFirst){
+            binding.stepFourNextBtn.isEnabled = true
+            binding.stepFourNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
+            binding.stepFourNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        }
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setSignUpSmsView(this@StepFourFragment)
         signUpService.setVerifySmsView(this@StepFourFragment)
     }
+
 
     override fun onStop() {
         super.onStop()
@@ -47,11 +57,8 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
     }
 
     override fun initAfterBinding() {
-        progressVM.increase()
-
         initTextWatcher()
         initClickListener()
-        binding.stepFourNextBtn.isEnabled = true //디버깅용
     }
 
     private fun initTextWatcher() {
@@ -119,11 +126,12 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
         binding.stepFourNextBtn.setOnClickListener {
             timerTask?.cancel()
 
+            isNotFirst = true
             phoneNumber = binding.stepFourPhoneEt.text.toString()
             signUpVM.setPhoneNumber(phoneNumber)
             signUpVM.setPhoneNumberId(phoneNumberId)
 
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFiveFragment()).commit()
+            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFiveFragment()).addToBackStack("stepFive").commit()
         }
     }
 
@@ -169,12 +177,13 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
     // sms인증문자 보내기 성공/실패
     override fun onSignUpSmsSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
+        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
     }
 
     override fun onSignUpSmsFailure(code: Int, message: String) {
         when (code) {
-            2015 -> ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            2015 -> CustomToastMsg.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8", 53)?.show()//ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
             else -> Log.d("SMS-RESPONSE", "Error code = $code / Error msg = $message")
         }
     }

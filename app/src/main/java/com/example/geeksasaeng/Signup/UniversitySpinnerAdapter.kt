@@ -31,6 +31,7 @@ class UniversitySpinnerAdapter(context: Context, spinnerList: Array<String>?) : 
     }
 
     override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
+        Log.d("cherry", "스피너 뷰 생성됨")
         val rootView: View = LayoutInflater.from(context).inflate(R.layout.item_signup_university_spinner, viewGroup, false)
         val textName: TextView = rootView.findViewById(R.id.spinner_university_text)
         val image: ImageView = rootView.findViewById(R.id.university_arrow_iv)

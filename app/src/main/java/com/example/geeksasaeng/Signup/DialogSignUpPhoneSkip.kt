@@ -30,7 +30,7 @@ class DialogSignUpPhoneSkip: DialogFragment() {
             //건너뛰기 수행
             this.dismiss()
             (context as SignUpActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.sign_up_vp, StepFiveFragment()).commit() //이용약관으로 프레그먼트 전환
+                .replace(R.id.sign_up_vp, StepFiveFragment()).addToBackStack("stepFive").commit() //이용약관으로 프레그먼트 전환
         }
 
         binding.signupCancelBtn.setOnClickListener {

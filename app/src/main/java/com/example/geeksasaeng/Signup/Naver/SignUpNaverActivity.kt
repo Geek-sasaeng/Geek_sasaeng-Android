@@ -31,6 +31,7 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
         stepNaverOneFragment.arguments = bundle
 
         transaction.replace(R.id.sign_up_naver_vp, stepNaverOneFragment)
+            .addToBackStack(null)
         transaction.commit()
 
         progressVM.currentPro.observe(this, Observer {

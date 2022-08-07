@@ -33,12 +33,12 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
     override fun onStart() {
         super.onStart()
+        progressVM.setValue(5)
         checkTermsAgree()
         signUpSetting()
     }
 
     override fun initAfterBinding() {
-        progressVM.increase()
         initClickListener()
     }
 
@@ -57,10 +57,19 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
         binding.stepFiveAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             serviceTemrsAgree = isChecked
+            if(privacyTemrsAgree){
+                binding.stepFiveAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFiveAgree2Cb.isChecked = true
+            }
         }
 
         binding.stepFiveAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             privacyTemrsAgree = isChecked
+            if(serviceTemrsAgree){
+                binding.stepFiveAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFiveAgree1Cb.isChecked=true
+            }
+
         }
 
         binding.stepFiveAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
