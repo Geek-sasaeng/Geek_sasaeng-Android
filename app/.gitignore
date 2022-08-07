@@ -1,1 +1,5 @@
 /build
+
+# local configuration files
+local.properties
+Secret.kt
