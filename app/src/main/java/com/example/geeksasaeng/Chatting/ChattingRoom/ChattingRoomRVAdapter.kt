@@ -4,15 +4,9 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Chatting.ChattingRoom.Chatting
-import com.example.geeksasaeng.Chatting.ChattingRoom.myChatting
-import com.example.geeksasaeng.Chatting.ChattingRoom.systemChatting
-import com.example.geeksasaeng.Chatting.ChattingRoom.yourChatting
+import com.example.geeksasaeng.Chatting.ChattingRoom.*
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.databinding.ItemChattingListBinding
-import com.example.geeksasaeng.databinding.ItemChattingMyChattingBinding
-import com.example.geeksasaeng.databinding.ItemChattingSystemChattingBinding
-import com.example.geeksasaeng.databinding.ItemChattingYourChattingBinding
+import com.example.geeksasaeng.databinding.*
 import kotlin.collections.ArrayList
 
 class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -35,6 +29,10 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
                 val binding = ItemChattingSystemChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return SystemChattingViewHolder(binding)
             }
+            emoticonChatting -> {
+                val binding = ItemChattingEmoticonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return EmoticonChattingViewHolder(binding)
+            }
             else -> {
                 val binding = ItemChattingSystemChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return SystemChattingViewHolder(binding)
@@ -54,6 +52,10 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
             }
             systemChatting -> {
                 (holder as SystemChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+            emoticonChatting -> {
+                (holder as EmoticonChattingViewHolder).bind(chattingList[position])
                 holder.setIsRecyclable(false)
             }
             else -> {
@@ -86,6 +88,12 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
             // 00 님이 입장하셨습니다
             // 모든 파티원이 입장을 마쳤습니다! 안내에 따라 메뉴를 입력해주세요
             binding.itemChattingSystemChattingTv.text = chatting.message
+        }
+    }
+
+    inner class EmoticonChattingViewHolder(val binding: ItemChattingEmoticonBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(chatting: Chatting) {
+            // 이모티콘으로 인사해보세요 관련 binding
         }
     }
 
