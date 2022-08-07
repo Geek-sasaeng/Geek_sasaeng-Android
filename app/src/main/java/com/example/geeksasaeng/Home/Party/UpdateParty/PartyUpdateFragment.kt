@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import com.example.geeksasaeng.Home.Party.LookPartyFragment
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyRequest
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyService
 import com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit.UpdatePartyView
