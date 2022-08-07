@@ -17,7 +17,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.sign_up_vp, StepOneFragment())
-            .addToBackStack("stepOne")
             .commit()
 
         progressVM.currentPro.observe(this, Observer {

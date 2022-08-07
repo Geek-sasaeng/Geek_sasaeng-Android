@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Signup.Naver
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
@@ -11,6 +12,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepNaverTwoBinding
 import com.example.geeksasaeng.Utils.getUuid
 import java.text.DecimalFormat
@@ -26,12 +28,20 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
 
     private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
+    private var isFirst: Boolean = true
 
+
+    //TODO:verifyChceck없애도 되나
     var verifyCheck = 0
 
+
     override fun initAfterBinding() {
-        progressVM.increase()
-        startTimer()
+        progressVM.setValue(2)
+
+        if(isFirst){
+            time = requireArguments().getInt("time")
+            startTimer()
+        }
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepNaverTwoFragment)
@@ -92,13 +102,13 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
-        (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverThreeFragment()).commit()
+        signUpNaverVM.setEmailId(result.emailId)
+        isFirst = false
+        (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverThreeFragment()).addToBackStack(null).commit()
     }
 
     override fun onVerifyEmailFailure(message: String) {
-        showToast(message)
-
-        if (verifyCheck == 0) {
+        /*if (verifyCheck == 0) {
             binding.stepNaverTwoCheckMsgTv.visibility = View.GONE
             binding.stepNaverTwoResultMsgTv.visibility = View.VISIBLE
             binding.stepNaverTwoResultMsgTv.text = "인증번호가 틀렸습니다"
@@ -108,7 +118,8 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
                     R.color.error
                 )
             )
-        }
+        }*/
+        CustomToastMsg.createToast((activity as SignUpNaverActivity), "인증번호가 틀렸습니다.", "#80A8A8A8", 53)?.show()
 
         verifyCheck = -1
     }
@@ -120,7 +131,8 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
+        CustomToastMsg.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
+        //ToastMsgSignup.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
 
         resetTimer()
         startTimer()
@@ -128,12 +140,14 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
         when(code){
-            2803 -> showToast(message)
+            2803 -> {}
             2804 -> {
-                ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+                CustomToastMsg.createToast((activity as SignUpNaverActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8", 53)?.show()
+                //ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
             }
             2805 -> {
-                ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+                CustomToastMsg.createToast((activity as SignUpNaverActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8", 53)?.show()
+                //ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
             }
         }
     }

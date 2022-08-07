@@ -42,9 +42,10 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun initAfterBinding() {
 
+        email = signUpVM.getEmail()
+        universityName = signUpVM.getUniversityName()
+
         if(isFirst){
-            email = signUpVM.getEmail()
-            universityName = signUpVM.getUniversityName()
             time = requireArguments().getInt("time")
             startTimer()
         }

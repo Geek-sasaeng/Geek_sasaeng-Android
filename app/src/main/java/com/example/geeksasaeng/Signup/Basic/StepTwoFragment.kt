@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Signup.Basic
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -43,7 +44,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
 
-    var verifyBtnClick: Int = 0
+    private var isSendEmail: Boolean = false
 
     override fun onStart() {
         super.onStart()
@@ -138,6 +139,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                     binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
                     binding.stepTwoEmailCheckBtnO.visibility = View.GONE
                 }
+
+                isSendEmail = false
+                checkingNext()
             }
         })
 
@@ -152,6 +156,9 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                     binding.stepTwoEmailCheckBtnX.visibility = View.VISIBLE
                     binding.stepTwoEmailCheckBtnO.visibility = View.GONE
                 }
+
+                isSendEmail = false
+                checkingNext()
             }
         })
     }
@@ -192,11 +199,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
         CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
 
-        binding.stepTwoNextBtn.isEnabled = true
-        binding.stepTwoNextBtn.setBackgroundResource(R.drawable.round_border_button);
-        binding.stepTwoNextBtn.setTextColor(Color.parseColor("#ffffff"))
-
-        verifyBtnClick = 1
+        isSendEmail = true
+        checkingNext()
         startTimer()
     }
 
@@ -211,7 +215,19 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
             2804 -> ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
             2805 -> ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
         }
-        verifyBtnClick = -1
+
+    }
+
+    private fun checkingNext(){
+        if(isSendEmail){
+            binding.stepTwoNextBtn.isEnabled = true;
+            binding.stepTwoNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
+            binding.stepTwoNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        }else{
+            binding.stepTwoNextBtn.isEnabled = false;
+            binding.stepTwoNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
+            binding.stepTwoNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
+        }
     }
 
 

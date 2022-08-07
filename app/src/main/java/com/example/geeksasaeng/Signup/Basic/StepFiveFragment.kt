@@ -45,13 +45,13 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
     private fun initClickListener() {
         binding.stepFiveAgree1MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos1Activity::class.java)
-            intent.getBooleanExtra("isSocial", false)
+            intent.putExtra("isSocial", false)
             startActivity(intent)
         }
 
         binding.stepFiveAgree2MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos2Activity::class.java)
-            intent.getBooleanExtra("isSocial", false)
+            intent.putExtra("isSocial", false)
             startActivity(intent)
         }
 

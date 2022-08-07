@@ -33,7 +33,7 @@ class StepNaverThreeFragment :
     }
 
     override fun initAfterBinding() {
-        progressVM.increase()
+        progressVM.setValue(3)
         initClickListener()
     }
 
@@ -41,24 +41,31 @@ class StepNaverThreeFragment :
 
         binding.stepNaverThreeAgree1MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos1Activity::class.java)
-            intent.getBooleanExtra("isSocial", true)
+            intent.putExtra("isSocial", true)
             startActivity(intent)
         }
 
         binding.stepNaverThreeAgree2MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos2Activity::class.java)
-            intent.getBooleanExtra("isSocial", true)
+            intent.putExtra("isSocial", true)
             startActivity(intent)
         }
 
         binding.stepNaverThreeAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialServiceTemrsAgree = isChecked
-            binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+            if(socialPrivacyTemrsAgree){
+                binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+                binding.stepNaverThreeAgree2Cb.isChecked = true
+            }
+
         }
 
         binding.stepNaverThreeAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialPrivacyTemrsAgree = isChecked
-            binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+            if(socialServiceTemrsAgree){
+                binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+                binding.stepNaverThreeAgree1Cb.isChecked = true
+            }
         }
 
         binding.stepNaverThreeAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -77,9 +84,10 @@ class StepNaverThreeFragment :
 
         binding.stepNaverThreeStartBtn.setOnClickListener {
             if(socialServiceTemrsAgree&& socialPrivacyTemrsAgree){
-                val email = signUpNaverVM.getEmail();
-                val nickname = signUpNaverVM.getNickname();
-                val universitName = signUpNaverVM.getUniversityName();
+                signUpNaverVM.setInformationAgreeStatus("Y")
+                val email = signUpNaverVM.getEmail()
+                val nickname = signUpNaverVM.getNickname()
+                val universitName = signUpNaverVM.getUniversityName()
                 val accessToken = signUpNaverVM.getAccessToken()
                 val infomationAgreeStatus = signUpNaverVM.getInformationAgreeStatus()
 
