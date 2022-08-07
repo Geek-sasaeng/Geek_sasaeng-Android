@@ -3,7 +3,9 @@ package com.example.geeksasaeng.Login.Retrofit
 import com.google.gson.annotations.SerializedName
 
 data class LoginResult(
-    @SerializedName("jwt") val jwt: String
+    @SerializedName("jwt") val jwt: String,
+    @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("nickName") val nickName: String
 )
 
 data class LoginResponse(

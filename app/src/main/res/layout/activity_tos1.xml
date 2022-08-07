@@ -1,0 +1,1184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tos1_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/tos1_back_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_back"
+            android:backgroundTint="#D9D9D9"
+            android:layout_marginLeft="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tos_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약관 동의"
+            android:textColor="@color/black"
+            android:fontFamily="@font/spoqa_medium"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/tos1_sv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@id/tos1_bottom_bar"
+        app:layout_constraintTop_toBottomOf="@id/tos1_toolbar"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-120dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/tos_number1_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="1. 개인정보 처리방침"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tos_number1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="개인정보 처리방침은 긱사생(이하 &quot;회사&quot;라 합니다)이 특정한 가입절차를 거친 이용자들만 이용 가능한 폐쇄형 서비스를 제공함에 있어, 개인정보를 어떻게 수집·이용·보관·파기하는지에 대한 정보를 담은 방침을 의미합니다. 개인정보 처리방침은 개인정보보호법 등 국내 개인정보 보호 법령을 모두 준수하고 있습니다. 본 개인정보 처리방침에서 정하지 않은 용어의 정의는 서비스 이용약관을 따릅니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number1_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number1_tv" />
+
+            <View
+                android:id="@+id/tos_number1_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="2. 수집하는 개인정보의 항목"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number1_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number2_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회사는 서비스 제공을 위해 다음 항목 중 최소한의 개인정보를 수집합니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  회원가입 시 수집되는 개인정보"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="학교, 기숙사, 아이디, 이메일, 이름,\n휴대전화 번호, 생년월일, 성별, 입학연도, 닉네임,\n연계정보(CI, DI)"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  별도로 수집되는 개인정보"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="1. 학교 인증을 할 경우"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="학교 이메일"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="2. 프로필 사진을 지정할 경우"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.2_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="프로필 사진"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.3_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="3. 이벤트·행사 참여를 할 경우"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.2_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.3_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="이름, 전화번호, 주소, 타 서비스 고유번호"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.3_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.4_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="4. 제휴·광고·게시 요청을 할 경우"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.3_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2.2.4_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="단체명, 대표자· \n담당자 정보(이름, 이메일, 전화번호, 직책)"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.4_tv" />
+
+
+            <TextView
+                android:id="@+id/tos_number2_notification1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="31dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:lineSpacingExtra="5sp"
+                android:text="※ 각 항목 또는 추가적으로 수집이 필요한 개인정보 및 개인정보를 포함한 자료는 이용자 응대 과정과 서비스 내부 알림 수단 등을 통해 별도의 동의 절차를 거쳐 요청·수집될 수 있습니다."
+                android:textColor="@color/top"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2.2.4_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number2_notification2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:lineSpacingExtra="5sp"
+                android:text="※ 서비스 이용 과정에서 기기 정보(유저 에이전트), 이용 기록, 로그 기록(IP 주소, 접속 시간)이 자동으로 수집될 수 있습니다."
+                android:textColor="@color/top"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number2_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2_notification1_tv" />
+
+
+            <View
+                android:id="@+id/tos_number2_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2_notification2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="3. 수집한 개인정보의 처리 목적"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number2_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number3_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="수집된 개인정보는 다음의 목적에 한해 이용됩니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  가입 및 탈퇴 의사 확인, 회원 식별, 재학생 확인 등 회원 관리"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  서비스 제공 및 기존·신규 시스템 개발·유지·개선"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3.3_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  불법·약관 위반 게시물 게시 등 부정행위 방지를 위한 운영 시스템 개발·유지·개선"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3.4_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  악성 사용자 방지를 위한 운영 시스템 개발·유지·개선"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3.3_tv" />
+
+            <TextView
+                android:id="@+id/tos_number3.5_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  문의·제휴·광고·이벤트·게시 관련 요청 응대 및 처리"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number3_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3.4_tv" />
+
+            <View
+                android:id="@+id/tos_number3_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3.5_tv" />
+
+            <TextView
+                android:id="@+id/tos_number4_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="4. 개인정보의 제3자 제공"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number3_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number4_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회사는 회원의 개인정보를 제3자에게 제공하지 않습니다. 단, 다음의 사유가 있을 경우 제공할 수 있습니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number4_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4_tv" />
+
+            <TextView
+                android:id="@+id/tos_number4.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  회원이 제휴사의 서비스를 이용하기 위해 개인정보 제공을 회사에 요청할 경우"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number4_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number4.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  관련법에 따른 규정에 의한 경우"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number4_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number4.3_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  이용자의 생명이나 안전에 급박한 위험이 확인되어 이를 해소하기 위한 경우"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number4_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number4.4_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  영업의 양수 등"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number4_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4.3_tv" />
+
+            <View
+                android:id="@+id/tos_number4_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4.4_tv" />
+
+
+            <TextView
+                android:id="@+id/tos_number5_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="5. 개인정보 처리의 위탁"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number4_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number5_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회사는 원활한 개인정보 업무처리와 보안성 높은 서비스 제공을 위하여, 신뢰도가 검증된 다음 회사 및 서비스에 개인정보 관련 업무 처리를 위탁하고 있습니다. 위탁계약 체결 시 회사는 기술적·관리적 보호조치 등 수탁자에 대한 관리·감독을 하고 있습니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5_tv" />
+
+            <TextView
+                android:id="@+id/tos_number5.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  Amazon Web Services, Inc."
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number5.1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 서비스 시스템 제공, 데이터 관리 및 보관"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.1_tv" />
+
+
+            <TextView
+                android:id="@+id/tos_number5.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  Google"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number5.2_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 회원 관리, 운영 시스템 지원"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number5.3_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  Naver Cloub Platform"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.2_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number5.3_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 본인 인증(SNS 인증)"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number5_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.3_tv" />
+
+            <View
+                android:id="@+id/tos_number5_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5.3_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="6. 수집한 개인정보의 보관 및 파기"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number5_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number6_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회사는 서비스를 제공하는 동안 개인정보 처리방침 및 관련법에 의거하여 회원의 개인정보를 지속적으로 관리 및 보관합니다. 탈퇴 등 개인정보 수집 및 이용목적이 달성될 경우, 수집된 개인정보는 즉시 또는 다음과 같이 일정 기간 이후 파기됩니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  가입 및 학교 인증 시 수집된 개인정보"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 탈퇴 후 14일"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  제휴·광고·이벤트 관련 요청 응대 및 처리 자료"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.2_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 3개월"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.3_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  학교 인증 요청 자료"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.2_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.3_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 3개월"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.3_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.4_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  기기 정보 및 로그 기록"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.3_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.4_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 최대 1년"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.4_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.5_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  문의 및 응대 기록"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.4_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6.5_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text=": 3년"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.5_tv" />
+
+            <TextView
+                android:id="@+id/tos_number6_notification_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:lineSpacingExtra="5sp"
+                android:text="※ 위 항에도 불구하고 법령에 의해 개인정보를 보존해야 하는 경우, 해당 개인정보는 물리적·논리적으로 분리하여 해당 법령에서 정한 기간에 따라 저장합니다.\n\n※ 회원이 1년 이상 로그인 및 접속을 하지 않을 경우, 해당 계정은 휴면 계정으로 전환됩니다. 개인정보의 안전한 처리를 위해 휴면 계정의 학교, 아이디, 이메일, 이름, 닉네임, 입학연도, 연계정보는 분리 보관되며, 이외의 개인정보 및 이용기록은 모두 파기될 수 있습니다. 휴면 계정이 로그인에 성공할 경우, 휴면 상태가 즉시 해제되어 모든 서비스를 이용할 수 있습니다. 휴면 계정 전환 이후에도 3년 동안 로그인을 하지 않을 경우, 해당 계정은 영구 삭제됩니다.\n\n※ 회원 탈퇴, 보관 기한 만료 등 파기 사유가 발생한 개인정보는 재생이 불가능한 방법으로 파기됩니다. 전자적 파일 형태로 기록·저장된 개인정보는 기록을 재생할 수 없도록 파기하며, 종이 문서에 기록·저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.\n\n※ 부정행위 시, 제재 및 제재 내역 확인을 위해 IP, 게시물, 기숙사 정보, 학교 이메일, 채팅 정보, 연계정보를 이용제한 종료일로부터 1년 동안 보관합니다."
+                android:textColor="@color/top"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number6_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6.5_content_tv" />
+
+
+            <View
+                android:id="@+id/tos_number6_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6_notification_tv" />
+
+            <TextView
+                android:id="@+id/tos_number7_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="7. 정보주체의 권리, 의무 및 행사"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number6_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number7_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회원은 언제든지 서비스 내부 [내 정보] 또는 긱사생 팀 이메일(geeksasaeng@gmail.com)을 통해 자신의 개인정보를 조회하거나 수정, 삭제, 탈퇴를 할 수 있습니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number7_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number7_tv" />
+
+
+            <View
+                android:id="@+id/tos_number7_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number7_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="8. 개인정보에 관한 책임자 및 서비스"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number7_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number8_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="회사는 회원의 개인정보를 최선으로 보호하고 관련된 불만을 처리하기 위해 최선의 노력을 다하고 있습니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  개인정보보호 담당 부서"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8.1_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="긱사생 서버 팀"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="41dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text=" •  긱사생 팀 이메일"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_content_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8.1_content_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8.2_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="geeksasaeng@gmail.com"
+                android:autoLink="email"
+                android:textColor="@color/top"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8.2_tv" />
+
+
+            <TextView
+                android:id="@+id/tos_number8_notification1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:lineSpacingExtra="5sp"
+                android:text="※ 서비스 이용, 접근 제한 등의 문의는 위 창구를 통해 처리되지 않습니다. 해당 문의는 긱사생 카카오톡 플러스 친구([https://pf.kakao.com/_Sxolhxj/chat]\n(https://pf.kakao.com/_Sxolhxj/chat))를 통해 전달해주시기 바랍니다."
+                android:textColor="@color/top"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8.2_content_tv" />
+
+            <View
+                android:id="@+id/tos_number8_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="23dp"
+                android:paddingHorizontal="23dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_notification1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8_content2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="기타 개인정보 침해에 대한 신고나 상담이 필요하신 경우에는 다음 기관에 문의하시기 바랍니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_line" />
+
+            <TextView
+                android:id="@+id/tos_number8_content2.1_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="1) 개인정보 분쟁조정위원회"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content2_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8_content2.1_sub_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="https://www.kopico.go.kr"
+                android:autoLink="web"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content2.1_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8_content2.2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="2) 사이버범죄 신고시스템"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content2.1_sub_tv" />
+
+            <TextView
+                android:id="@+id/tos_number8_content2.2_sub_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:text="https://ecrm.police.go.kr"
+                android:autoLink="web"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number8_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content2.2_tv" />
+
+            <View
+                android:id="@+id/tos_number8_under_line"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_content2.2_sub_tv" />
+
+            <TextView
+                android:id="@+id/tos_number9_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="9. 기타"
+                android:textColor="@color/top"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tos_number8_under_line" />
+
+            <TextView
+                android:id="@+id/tos_number9_content_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/spoqa_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="이 개인정보 처리방침은 2022년 7월 13일에 개정되었습니다."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tos_number9_tv"
+                app:layout_constraintTop_toBottomOf="@id/tos_number9_tv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <View
+        android:id="@+id/tos1_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tos1_bottom_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="개인정보 수집 및 이용동의"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tos1_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tos1_bottom_bar"
+        app:layout_constraintVertical_bias="0.515" />
+
+    <LinearLayout
+        android:id="@+id/tos1_check_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tos1_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/tos1_bottom_bar"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="동의"
+            android:fontFamily="@font/spoqa_medium"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginRight="11dp" />
+
+        <ImageView
+            android:id="@+id/tos1_next_btn"
+            android:layout_width="12dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_next"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

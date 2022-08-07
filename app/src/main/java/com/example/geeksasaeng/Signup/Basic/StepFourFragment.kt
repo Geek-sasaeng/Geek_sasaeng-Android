@@ -51,6 +51,7 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
 
         initTextWatcher()
         initClickListener()
+        binding.stepFourNextBtn.isEnabled = true //디버깅용
     }
 
     private fun initTextWatcher() {

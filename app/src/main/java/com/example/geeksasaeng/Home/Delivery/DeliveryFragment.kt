@@ -44,12 +44,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int? = null
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
-
-    // 테스트
-    var value: Int = 0
-    var minuteFlag: Boolean = false
-    var remainSec: Int = 0
-    var timerTask = TimerThread(remainSec)
+    private var lastCheckedBox = -1
 
     //핸들러 설정
     val handler = Handler(Looper.getMainLooper()) {
@@ -72,7 +67,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
-        initRadioBtn() //필터(radiobutton) 작업
+        initCheckBox() //필터(checkBox) 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
 
@@ -85,6 +80,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
+
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -180,6 +176,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
+    // 배달파티 목록 조회 성공
     override fun deliverySuccess(result: DeliveryResult) {
         Log.d("DELIVERY-REPSONSE", "SUCCESS")
 
@@ -209,19 +206,73 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initRadioBtn() { //라디오 버튼
-        binding.deliveryTimeRg.setOnCheckedChangeListener { _: RadioGroup, checkedId: Int ->
-            binding.deliveryTimeRg.check(checkedId)
-            filterCheckFlag = true
+    private fun initCheckBox(){ //라디오 버튼
+        //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
-            when (checkedId) {
-                R.id.delivery_rb1 -> orderTimeCategory = "BREAKFAST"
-                R.id.delivery_rb2 -> orderTimeCategory = "LUNCH"
-                R.id.delivery_rb3 -> orderTimeCategory = "DINNER"
-                R.id.delivery_rb4 -> orderTimeCategory = "MIDNIGHT_SNACKS"
-                else -> filterCheckFlag = false
+        binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "BREAKFAST"
+                lastCheckedBox = R.id.delivery_cb1
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb1){
+                    orderTimeCategory = null
+                }
             }
+            Log.d("check",orderTimeCategory.toString())
         }
+
+        binding.deliveryCb2.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "LUNCH"
+                lastCheckedBox = R.id.delivery_cb2
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb2){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.deliveryCb3.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb4.isChecked = false
+                orderTimeCategory = "DINNER"
+                lastCheckedBox = R.id.delivery_cb3
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb3){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
+        binding.deliveryCb4.setOnCheckedChangeListener { buttonView, isChecked ->
+            filterCheckFlag = true
+            if(isChecked){
+                binding.deliveryCb1.isChecked = false
+                binding.deliveryCb2.isChecked = false
+                binding.deliveryCb3.isChecked = false
+                orderTimeCategory = "MIDNIGHT_SNACKS"
+                lastCheckedBox = R.id.delivery_cb4
+            }else{ // 체크가 꺼지면
+                if(lastCheckedBox==R.id.delivery_cb4){
+                    orderTimeCategory = null
+                }
+            }
+            Log.d("check",orderTimeCategory.toString())
+        }
+
     }
 
     //배너 작업
@@ -247,13 +298,14 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
         //이벤트 처리
+
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
-                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
                 items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]
@@ -367,6 +419,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor += 1
     }
 
+    // 배달 필터 성공
     override fun deliveryFilterSuccess(result: DeliveryResult) {
         Log.d("DELIVERY-FILTER", "SUCCESS")
 
@@ -387,7 +440,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
-
             deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
         }
 
@@ -404,26 +456,5 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliveryFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
-    }
-
-    // 남은 시간을 1분마다 업데이트 하기 위함
-    inner class TimerThread(var sec: Int) : Thread() {
-        override fun run() {
-            while (true) {
-                sec++
-
-                try {
-                    Thread.sleep(1000)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-
-                if (sec % 60 == 0) {
-                    minuteFlag = true
-                }
-
-                Log.d("DELIVERY-FRAGMENT", "Sec = $sec")
-            }
-        }
     }
 }

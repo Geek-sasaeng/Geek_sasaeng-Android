@@ -29,7 +29,7 @@ class ApplicationClass: Application() {
 
         //SharedPreference
         mSharedPreferences = applicationContext.getSharedPreferences(TAG, Context.MODE_PRIVATE)
-        if(getUuid()==null){ //uuid가 존재하지 않으면,
+        if(getUuid()==null){ //uuid가 존재하지 않으면, (uuid는 최초1회만 생성하면 되기 때문에)
             val uuid = UUID.randomUUID().toString() //uuid 생성
             saveUuid(uuid) // sharedpref에 저장
         }
