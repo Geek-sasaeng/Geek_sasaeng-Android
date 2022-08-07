@@ -1,7 +1,7 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
 import android.content.Intent
-import com.example.geeksasaeng.Home.Party.LookPartyFragment
+import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
