@@ -35,7 +35,8 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     private lateinit var signUpService : SignupDataService // 닉네임 중복확인용
 
     // TODO: 학교 리스트 API 연결
-    var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
+    var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교","자신의 학교를 선택해주세요")
+    //var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
 
     override fun onStart() {
         super.onStart()
@@ -55,6 +56,8 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     private fun initSpinner(){
         val spinnerAdapter = UniversitySpinnerAdapter(requireContext(), universityList)
         binding.stepNaverOneSchoolSp.adapter = spinnerAdapter
+        binding.stepNaverOneSchoolSp.setSelection(0) //첫 아이템을 스피너 초기값으로 설정해준다.
+
         binding.stepNaverOneSchoolSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // 축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
@@ -62,13 +65,17 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
 
-                universityList[0] = universityList[position] // items[0]은 현재 선택된 아이템 저장용
+                if(universityList[position].length!=1){ // 자음을 하나짜리가 아니면
+                    universityList[universityList.size-1] = universityList[position] // 마지막 아이템은 현재 선택된 아이템 저장용
+                }
+
                 val textName: TextView = view!!.findViewById(R.id.spinner_university_text)
-                textName.text = universityList[position]
+                textName.text = universityList[universityList.size-1]
                 universityName = textName.text.toString()
 
                 if (universityName == "자신의 학교를 선택해주세요") {
                     universityName = null
+                    binding.stepNaverOneEmail2Et.setText("")
                 }
 
                 // TODO: 학교 리스트 API 연결하기

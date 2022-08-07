@@ -21,13 +21,15 @@ import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepTwoBinding
 import com.example.geeksasaeng.Utils.getUuid
+import com.navercorp.nid.oauth.NidOAuthPreferencesManager.code
 
 class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBinding::inflate), SignUpEmailView {
 
     var email: String? = ""
     var university: String? = ""
 
-    var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
+    var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교","자신의 학교를 선택해주세요")
+    //var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교", "ㄴ", "나천대학교", "ㄷ", "다천대학교", "ㄹ", "라천대학교", "ㅁ", "마천대학교")
 
     private lateinit var signUpService : SignupDataService
 
@@ -51,6 +53,8 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
     private fun initSpinner() {
         val spinnerAdapter = UniversitySpinnerAdapter(requireContext(), universityList)
         binding.stepTwoSchoolSp.adapter = spinnerAdapter
+        binding.stepTwoSchoolSp.setSelection(0) //첫 아이템을 스피너 초기값으로 설정해준다.
+
         binding.stepTwoSchoolSp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // 축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
@@ -58,17 +62,22 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
 
-                universityList[0] = universityList[position] // items[0]은 현재 선택된 아이템 저장용
+                if(universityList[position].length!=1){ // 자음을 하나짜리가 아니면
+                    Log.d("cherry", universityList[position].toString())
+                    universityList[universityList.size-1] = universityList[position] // 마지막 아이템은 현재 선택된 아이템 저장용
+                }
                 val textName: TextView = view!!.findViewById(R.id.spinner_university_text)
-                textName.text = universityList[position]
+                textName.text = universityList[universityList.size-1]
                 university = textName.text.toString()
 
                 if (university == "자신의 학교를 선택해주세요") {
                     university = null
+                    binding.stepTwoEmail2Et.setText("")
                 }
 
                 // 임의로 넣어놓은 부분!!
                 // TODO: 나중에 학교 리스트 API 연결하기
+
                 if (university == "가천대학교")
                     binding.stepTwoEmail2Et.setText("@gachon.ac.kr")
                 else if (university == "나천대학교")
@@ -79,6 +88,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                     binding.stepTwoEmail2Et.setText("@rachon.ac.kr")
                 else if (university == "마천대학교")
                     binding.stepTwoEmail2Et.setText("@machon.ac.kr")
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) { }

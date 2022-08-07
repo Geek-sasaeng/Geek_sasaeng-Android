@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 class PeopleSpinnerAdapter(context: Context, spinnerList: Array<String>?) : BaseAdapter() {
     private val context: Context
     private val spinnerList: Array<String>?
+
     override fun getCount(): Int {
         return (spinnerList?.size ?: 0 ) - 1
     } //마지막 아이템은 힌트용으로 사용할 것이므로 getCount에서 1을 빼준다.

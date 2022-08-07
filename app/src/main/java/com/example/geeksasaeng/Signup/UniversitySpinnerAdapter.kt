@@ -18,8 +18,9 @@ class UniversitySpinnerAdapter(context: Context, spinnerList: Array<String>?) : 
     private val spinnerList: Array<String>? = spinnerList
 
     override fun getCount(): Int {
-        return spinnerList?.size ?: 0
+        return (spinnerList?.size ?: 0) -1
     }
+    //마지막 아이템은 힌트용으로 사용할 것이므로 getCount에서 1을 빼준다.
 
     override fun getItem(i: Int): Any {
         return spinnerList!![i]
@@ -44,6 +45,7 @@ class UniversitySpinnerAdapter(context: Context, spinnerList: Array<String>?) : 
             textName.setTextColor(ContextCompat.getColor(context, R.color.gray_2))
             textName.setTextSize(Dimension.SP, 12F)
             view?.isEnabled = false
+            view?.isClickable = false
         } else { // 학교 아이템
             textName.setText(spinnerList!![i])
             image.visibility = View.INVISIBLE

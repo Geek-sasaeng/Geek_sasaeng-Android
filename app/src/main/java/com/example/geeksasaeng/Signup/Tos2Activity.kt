@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Signup
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.privacyTemrsAgree
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.serviceTemrsAgree
+import com.example.geeksasaeng.Signup.Naver.StepNaverThreeFragment.Companion.socialPrivacyTemrsAgree
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityTos2Binding
 
@@ -20,7 +21,7 @@ class Tos2Activity : BaseActivity<ActivityTos2Binding>(ActivityTos2Binding::infl
         }
         binding.tos2CheckBtn.setOnClickListener {
             if (isSocial){ // 소셜회원가입일때
-                //
+                socialPrivacyTemrsAgree = true
             }else{// 일반 회원가입일때
                 privacyTemrsAgree = true
             }
