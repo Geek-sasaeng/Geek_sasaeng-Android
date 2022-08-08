@@ -1,7 +1,9 @@
 package com.example.geeksasaeng.Signup.Retrofit
 
 import android.util.Log
+import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -200,6 +202,8 @@ class SignupDataService() {
                                 emailResponse.message
                             )
                         }
+                    }else{
+                        Log.d("email", response.body()?.message.toString())
                     }
                 }
 

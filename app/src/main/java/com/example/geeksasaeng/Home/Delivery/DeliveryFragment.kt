@@ -207,7 +207,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun initCheckBox(){ //라디오 버튼
-        //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
