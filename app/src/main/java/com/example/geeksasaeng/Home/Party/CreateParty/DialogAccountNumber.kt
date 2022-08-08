@@ -42,17 +42,6 @@ class DialogAccountNumber : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        if(binding.accountDialogBankEt.text.toString()!=""){//뭔가가 입력되었다면
-            createPartyVM.setAccount(binding.accountDialogBankEt.text.toString())
-        }else{//아무것도 없다면
-            createPartyVM.setAccount(null)
-        }
-
-        if(binding.accountDialogBankNumberEt.text.toString()!=""){//뭔가가 입력되었다면
-            createPartyVM.setAccountNumber(binding.accountDialogBankNumberEt.text.toString().toInt())
-        }else{//아무것도 없다면
-            createPartyVM.setAccountNumber(null)
-        }
     }
 
     override fun onResume() {
@@ -70,6 +59,19 @@ class DialogAccountNumber : DialogFragment() {
         }
 
         binding.accountDialogNextBtn.setOnClickListener {
+
+            if(binding.accountDialogBankEt.text.toString()!=""){//뭔가가 입력되었다면
+                createPartyVM.setAccount(binding.accountDialogBankEt.text.toString())
+            }else{//아무것도 없다면
+                createPartyVM.setAccount(null)
+            }
+
+            if(binding.accountDialogBankNumberEt.text.toString()!=""){//뭔가가 입력되었다면
+                createPartyVM.setAccountNumber(binding.accountDialogBankNumberEt.text.toString())
+            }else{//아무것도 없다면
+                createPartyVM.setAccountNumber(null)
+            }
+
             val dialogPartyName = DialogPartyName()
             dialogPartyName.show(parentFragmentManager, "CustomDialog")
 

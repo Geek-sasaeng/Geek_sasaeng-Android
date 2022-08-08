@@ -19,7 +19,7 @@ class CreatePartyViewModel: ViewModel() {
     var storeUrl: MutableLiveData<String?> = MutableLiveData<String?>() //식당링크
     var mapPoint: MutableLiveData<MapPoint?> = MutableLiveData<MapPoint?>() //위치
     var account : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 정보
-    var accountNumber : MutableLiveData<Int?> = MutableLiveData<Int?>() //계좌은행 번호
+    var accountNumber : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 번호
     var partyName: MutableLiveData<String?> = MutableLiveData<String?>() //파티 이름
 
 
@@ -141,12 +141,12 @@ class CreatePartyViewModel: ViewModel() {
         return account.value.toString()
     }
 
-    fun setAccountNumber(value: Int?){
+    fun setAccountNumber(value: String?){
         accountNumber.value = value
     }
 
-    fun getAccountNumber() : Int?{
-        return accountNumber.value
+    fun getAccountNumber() : String?{
+        return accountNumber.value.toString()
     }
 
     fun setPartyName(value: String?){

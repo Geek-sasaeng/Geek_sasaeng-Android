@@ -26,7 +26,8 @@ import java.util.*
 
 //TODO: 여기서는 잘하면 CreatePartyDefaultLocView 이거 없이도 가능할지도? 7.30-31에 이 부분 다시 봐보기
 class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView,
-    DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener {
+    DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener,
+    DialogPartyName.DialogPartyNameClickListener{
 
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint
@@ -107,6 +108,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
                 createPartyVM.getCategory().toString() != "null" &&
                 createPartyVM.getMapPoint().toString() != "null")
         { // 등록조건이 만족되면,
+            Log.d("checking","여기까지옴")
             binding.createPartyRegisterBtnTv.setTextColor(ContextCompat.getColor(this@CreatePartyActivity, R.color.main))
             if(!binding.createPartyRegisterBtnTv.isEnabled){
                 binding.createPartyRegisterBtnTv.isEnabled = true
@@ -133,7 +135,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         val currentTime = Calendar.getInstance().time
 
         Log.d("compareDate", date1.after(currentTime).toString())
-        return date1.after(currentTime)
+
+        return date1.after(currentTime)||date1.equals(currentTime)
     }
 
     private fun initClickListener(){
@@ -142,16 +145,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             startActivityWithClear(MainActivity::class.java)
         }
 
-        binding.createPartyRegisterBtnTv.setOnClickListener { //등록버튼 클릭시
-
-            //Log.d("jjang", binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
-            val createPartyRequest = CreatePartyRequest(binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
-                createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
-            createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기
-
+        binding.createPartyRegisterBtnTv.setOnClickListener { //다음버튼
             DialogAccountNumber().show(supportFragmentManager, "CustomDialog") // 계좌정보 입력 다이얼로그 띄우기
-
-            //startActivityWithClear(MainActivity::class.java)
         }
 
         binding.createPartyTogetherCheckBtn.setOnCheckedChangeListener { //같이 먹고 싶어요 체크버튼 클릭시
@@ -310,5 +305,13 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     override fun onCreatePartyFailure(message: String) {
         Log.d("jjang",message)
+    }
+
+    override fun onCompleteClicked() { //마지막 파티이름 dialog에서 클릭버튼을 누르면
+        Log.d("jjang", createPartyVM.getAccountNumber().toString()+"/"+createPartyVM.getAccount().toString()+"/"+createPartyVM.getPartyName().toString()+"/"+binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
+        val createPartyRequest = CreatePartyRequest(createPartyVM.getAccountNumber().toString(), createPartyVM.getAccount().toString(), createPartyVM.getPartyName().toString(), binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
+            createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
+        createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기
+        startActivityWithClear(MainActivity::class.java)
     }
 }
