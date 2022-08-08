@@ -3,9 +3,11 @@ package com.example.geeksasaeng.Login
 import android.content.*
 import android.text.*
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
 import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
 import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
@@ -124,6 +126,10 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
             startActivity(intent)
         }else{
+            //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
+            saveProfileImgUrl(result.profileImgUrl)
+            saveDormitory("제"+result.dormitoryName)
+            saveDormitoryId(result.dormitoryId)
             changeActivity(MainActivity::class.java)
         }
     }
@@ -139,6 +145,9 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName)
             startActivity(intent)
         }else{
+            saveProfileImgUrl(result.profileImgUrl)
+            saveDormitory("제"+result.dormitoryName)
+            saveDormitoryId(result.dormitoryId)
             changeActivity(MainActivity::class.java)
         }
     }

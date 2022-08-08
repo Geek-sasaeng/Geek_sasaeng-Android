@@ -38,10 +38,14 @@ data class CreatePartyResult(
     @SerializedName("orderTime") val orderTime: String,
     @SerializedName("orderTimeCategoryType") val orderTimeCategoryType: String,
     @SerializedName("storeUrl") val storeUrl: String,
-    @SerializedName("title") val title: String
+    @SerializedName("title") val title: String,
+    @SerializedName("uuid") val uuid: String
 )
 
 data class CreatePartyRequest (
+    @SerializedName("accountNumber") val accountNumber: String,
+    @SerializedName("bank") val bank: String,
+    @SerializedName("chatRoomName") val chatRoomName: String,
     @SerializedName("content") val content: String,
     @SerializedName("foodCategory") val foodCategory: Int,
     @SerializedName("hashTag") val hashTag: Boolean,

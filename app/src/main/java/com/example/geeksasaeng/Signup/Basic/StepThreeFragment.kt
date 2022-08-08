@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup.Basic
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Signup.ToastMsgSignup
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepThreeBinding
 import com.example.geeksasaeng.Utils.getUuid
 import java.text.DecimalFormat
@@ -29,15 +31,24 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     private var time = 300000 //5분은 300초 = 300*1000
     private var timerTask : Timer? = null
+    private var isFirst: Boolean = true
 
     var verifyCheck = 0
 
+    override fun onStart() {
+        super.onStart()
+        progressVM.setValue(3)
+    }
+
     override fun initAfterBinding() {
-        progressVM.increase()
+
         email = signUpVM.getEmail()
         universityName = signUpVM.getUniversityName()
 
-        startTimer()
+        if(isFirst){
+            time = requireArguments().getInt("time")
+            startTimer()
+        }
 
         signUpService = SignupDataService() //서비스 객체 생성
         signUpService.setVerifyEmailView(this@StepThreeFragment)
@@ -104,13 +115,15 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
         signUpVM.setEmailId(result.emailId)
-        (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFourFragment()).commit()
+        isFirst = false
+        (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFourFragment()).addToBackStack("stepFour").commit()
     }
 
     override fun onVerifyEmailFailure(message: String) {
         verifyCheck = -1
 
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 틀렸습니다", "#80A8A8A8")?.show()
+        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 틀렸습니다", "#80A8A8A8")?.show()
+        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 틀렸습니다.", "#80A8A8A8", 53)?.show()
     }
 
     private fun sendEmail() {
@@ -120,7 +133,8 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
     }
 
     override fun onSignUpEmailSuccess(message: String) {
-        ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다", "#8029ABE2")?.show()
+        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다", "#8029ABE2")?.show()
+        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
         
         resetTimer()
         startTimer()
@@ -128,9 +142,9 @@ class StepThreeFragment : BaseFragment<FragmentStepThreeBinding>(FragmentStepThr
 
     override fun onSignUpEmailFailure(code: Int, message: String) {
         when (code) {
-            2803 -> ToastMsgSignup.createToast((activity as SignUpActivity), "유효하지 않은 인증번호입니다", "#80A8A8A8")?.show()
-            2804 -> ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
-            2805 -> ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
+            2803 -> CustomToastMsg.createToast((activity as SignUpActivity), "유효하지 않은 인증번호입니다", "#80A8A8A8", 53)?.show()//ToastMsgSignup.createToast((activity as SignUpActivity), "유효하지 않은 인증번호입니다", "#80A8A8A8")?.show()
+            2804 -> CustomToastMsg.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8", 53)?.show() //ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
+            2805 -> CustomToastMsg.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8", 53)?.show() //ToastMsgSignup.createToast((activity as SignUpActivity), "잠시 후에 다시 시도해주세요", "#80A8A8A8")?.show()
         }
     }
 }

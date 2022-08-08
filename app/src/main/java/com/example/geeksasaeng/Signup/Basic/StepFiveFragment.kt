@@ -25,7 +25,7 @@ import okhttp3.internal.notifyAll
 class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveBinding::inflate), SignUpView{
     companion object{
         var serviceTemrsAgree: Boolean = false
-        var privacytemrsAgree: Boolean = false
+        var privacyTemrsAgree: Boolean = false
     }
     private val progressVM: ProgressViewModel by activityViewModels()
     private val signUpVM: SignUpViewModel by activityViewModels()
@@ -33,34 +33,43 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
     override fun onStart() {
         super.onStart()
+        progressVM.setValue(5)
         checkTermsAgree()
         signUpSetting()
     }
 
     override fun initAfterBinding() {
-        progressVM.increase()
         initClickListener()
     }
 
     private fun initClickListener() {
         binding.stepFiveAgree1MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos1Activity::class.java)
-            intent.getBooleanExtra("isSocial", false)
+            intent.putExtra("isSocial", false)
             startActivity(intent)
         }
 
         binding.stepFiveAgree2MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos2Activity::class.java)
-            intent.getBooleanExtra("isSocial", false)
+            intent.putExtra("isSocial", false)
             startActivity(intent)
         }
 
         binding.stepFiveAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             serviceTemrsAgree = isChecked
+            if(privacyTemrsAgree){
+                binding.stepFiveAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFiveAgree2Cb.isChecked = true
+            }
         }
 
         binding.stepFiveAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
-            privacytemrsAgree = isChecked
+            privacyTemrsAgree = isChecked
+            if(serviceTemrsAgree){
+                binding.stepFiveAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFiveAgree1Cb.isChecked=true
+            }
+
         }
 
         binding.stepFiveAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -68,17 +77,17 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
                 binding.stepFiveAgree1Cb.isChecked = true
                 binding.stepFiveAgree2Cb.isChecked = true
                 serviceTemrsAgree = true
-                privacytemrsAgree = true
+                privacyTemrsAgree = true
             } else {
                 binding.stepFiveAgree1Cb.isChecked = false
                 binding.stepFiveAgree2Cb.isChecked = false
                 serviceTemrsAgree = false
-                privacytemrsAgree = false
+                privacyTemrsAgree = false
             }
         }
 
         binding.stepFiveStartBtn.setOnClickListener {
-            if(serviceTemrsAgree && privacytemrsAgree){
+            if(serviceTemrsAgree && privacyTemrsAgree){
                 signUp()
             }else{
                 showToast("이용 약관을 모두 체크하셔야 회원가입 진행을 하실 수 있습니다.")
@@ -90,7 +99,7 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
         if(serviceTemrsAgree){
             binding.stepFiveAgree1Cb.isChecked = true
         }
-        if(privacytemrsAgree){
+        if(privacyTemrsAgree){
             binding.stepFiveAgree2Cb.isChecked = true
         }
     }

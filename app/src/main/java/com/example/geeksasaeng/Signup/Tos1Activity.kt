@@ -13,6 +13,7 @@ import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.serviceTemrsAgree
 import com.example.geeksasaeng.Signup.Naver.StepNaverThreeFragment
+import com.example.geeksasaeng.Signup.Naver.StepNaverThreeFragment.Companion.socialServiceTemrsAgree
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityTos1Binding
 
@@ -23,6 +24,7 @@ class Tos1Activity : BaseActivity<ActivityTos1Binding>(ActivityTos1Binding::infl
 
     override fun initAfterBinding() {
         isSocial = intent.getBooleanExtra("isSocial", false)
+        Log.d("cherry", "social"+intent.getBooleanExtra("isSocial", false).toString())
         initClickListener()
     }
 
@@ -32,8 +34,9 @@ class Tos1Activity : BaseActivity<ActivityTos1Binding>(ActivityTos1Binding::infl
         }
 
         binding.tos1CheckBtn.setOnClickListener {
+            Log.d("cherry", isSocial.toString())
             if (isSocial){ // 소셜회원가입일때
-                //
+                socialServiceTemrsAgree = true
             }else{// 일반 회원가입일때
                 serviceTemrsAgree = true
             }

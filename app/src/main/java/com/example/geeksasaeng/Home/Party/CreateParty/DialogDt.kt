@@ -55,6 +55,12 @@ class DialogDt : DialogFragment() {
         }else{ //최초 실행시
             binding.dateDialogDateTv.text = getCurrentDate()
             binding.dateDialogTimeTv.text = getCurrentTime()
+            //현재시간을 default값으로 설정해주기
+            createPartyVM.setDate(getCurrentDate())
+            createPartyVM.setTime(getCurrentTime())
+            //2도 설정해주기
+            createPartyVM.setDate2(getCurrentDate2())
+            createPartyVM.setTime2(getCurrentTime2())
         }
     }
 
@@ -81,7 +87,7 @@ class DialogDt : DialogFragment() {
     interface DialogDtNextClickListener{
         //TODO: 뷰모델 이용하면서 사실 여기서 매개변수로 안넘겨줘도 ACTIVITY에서 값 알 수 있어..
         //TODO: 근데 이걸 하는 이유는 정보 갱신을 위함.
-        fun onDtClicked(date:String, time:String)
+        fun onDtClicked()
     }
 
     override fun onAttach(context: Context) {
@@ -91,7 +97,7 @@ class DialogDt : DialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        dialogDtNextClickListener?.onDtClicked(dateString, timeString)//frag-> activity 정보전달
+        dialogDtNextClickListener?.onDtClicked()//frag-> activity 정보전달
         dialogDtNextClickListener = null
     }
 
@@ -100,8 +106,18 @@ class DialogDt : DialogFragment() {
         return formatter.format(Calendar.getInstance().time)
     }
 
+    fun getCurrentDate2(): String{
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
     fun getCurrentTime(): String{
         val formatter = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun getCurrentTime2(): String{
+        val formatter = SimpleDateFormat("HH:mm:00", Locale.getDefault())
         return formatter.format(Calendar.getInstance().time)
     }
 

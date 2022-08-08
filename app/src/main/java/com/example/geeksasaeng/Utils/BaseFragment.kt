@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Utils
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d("cherry", "onCreateView됨")
         _binding = inflate.invoke(inflater, container, false)
         return binding.root
     }

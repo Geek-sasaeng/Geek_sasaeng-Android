@@ -18,6 +18,10 @@ class CreatePartyViewModel: ViewModel() {
     var categoryInt: MutableLiveData<Int?> = MutableLiveData<Int?>() //카테고리
     var storeUrl: MutableLiveData<String?> = MutableLiveData<String?>() //식당링크
     var mapPoint: MutableLiveData<MapPoint?> = MutableLiveData<MapPoint?>() //위치
+    var account : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 정보
+    var accountNumber : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 번호
+    var partyName: MutableLiveData<String?> = MutableLiveData<String?>() //파티 이름
+
 
 /*    fun setHashTag(value: Boolean?){
         hashTag.value = value
@@ -127,6 +131,30 @@ class CreatePartyViewModel: ViewModel() {
 
     fun getMapPoint() : MapPoint?{
         return mapPoint.value
+    }
+
+    fun setAccount(value: String?){
+        account.value = value
+    }
+
+    fun getAccount() : String?{
+        return account.value.toString()
+    }
+
+    fun setAccountNumber(value: String?){
+        accountNumber.value = value
+    }
+
+    fun getAccountNumber() : String?{
+        return accountNumber.value.toString()
+    }
+
+    fun setPartyName(value: String?){
+        partyName.value = value
+    }
+
+    fun getPartyName() : String?{
+        return partyName.value.toString()
     }
 
 
