@@ -27,9 +27,11 @@ class LoginDataService() {
 
         loginService?.login(user)?.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                Log.d("LOGIN-RESPONSE", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val loginResponse: LoginResponse = response.body()!!
 
+                    Log.d("LOGIN-RESP", loginResponse.toString())
                     when (loginResponse.code) {
                         1000 -> loginView.onLoginSuccess(loginResponse.code, loginResponse.result!!)
                         4000 -> Log.d("LOGIN", "서버 오류")
@@ -39,7 +41,7 @@ class LoginDataService() {
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 //실패처리
-                Log.d("LOGIN-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
+                Log.d("LOGIN-RESPONSE", "SignupDataService-onFailure : SignupFailed"+t.toString(), t)
             }
         })
     }
@@ -59,7 +61,7 @@ class LoginDataService() {
             }
             override fun onFailure(call: Call<AutoLoginResponse>, t: Throwable) {
                 //실패처리
-                Log.d("LOGIN-RESPONSE", "SignupDataService-onFailure : SignupFailed", t)
+                Log.d("LOGIN-RESPONSE", "SignupDataService-onFailure : SignupFailed-자동로그인", t)
             }
         })
     }

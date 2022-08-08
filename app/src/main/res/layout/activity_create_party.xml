@@ -106,6 +106,7 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:gravity="left"
                 android:hint=" 제목"
+                android:inputType="text"
                 android:maxLines="1"
                 android:maxLength="20"
                 android:padding="10dp"

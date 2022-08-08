@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Utils
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
 
@@ -62,6 +63,7 @@ fun removeAutoLogin() {
 }
 
 fun saveJwt(jwt: String){
+    Log.d("jwt", jwt)
     val editor = mSharedPreferences.edit()
     editor.putString("jwt", jwt)
     editor.apply()
