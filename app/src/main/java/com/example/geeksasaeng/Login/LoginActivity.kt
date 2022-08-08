@@ -8,6 +8,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.HomeFragment
+import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
+import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
+import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -23,30 +26,12 @@ import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 
 class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), SignUpSocialView, LoginView, SocialLoginView {
-
-    var checkPassword: String? = ""
-    var emailId: Int? = null
-    var informationAgreeStatus: String? = ""
     var loginId: String? = ""
     var nickname: String? = ""
-    var password: String? = ""
     var phoneNumber: String? = ""
-    var phoneNumberId: Int? = null
-    var universityName: String? = ""
 
-    private var OAUTH_CLIENT_ID: String = "Kvyd6swFfWHQJgjWaHr1"
-    private var OAUTH_CLIENT_SECRET = "pq8VgJC5sn"
-    private var OAUTH_CLIENT_NAME = "긱사생"
-
-    private var autoLogin: SharedPreferences? = null
-    private var autoLoginEditor: SharedPreferences.Editor? = null
-    private var getAutoLogin: SharedPreferences? = null
 
     private lateinit var signUpNaverVM: SignUpNaverViewModel
-
-    var autoJwt: String? = null
-    var autoLoginid: String? = null
-    var autoPassword: String? = null
 
     override fun initAfterBinding() {
         signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
@@ -129,10 +114,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
-        // 자동 로그인 수정 필요
+        val jwt = result.jwt
+        // 자동 로그인
         if (binding.loginAutologinCb.isChecked) {
-            saveAutoLogin(result.jwt, binding.loginIdEt.text.toString(), binding.loginPwdEt.text.toString())
+            setAutoLogin(jwt)
         }
+        saveJwt(jwt)
         finish()
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
@@ -151,7 +138,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     override fun onSocialLoginSuccess(code: Int, result: SocialLoginResult) {
         // 네이버 자동 로그인 자동 적용
         val jwt = result.jwt
-        saveSocialAutoLogin(jwt)
+        setAutoLogin(jwt)
         finish()
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
@@ -178,12 +165,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 2012 : 탈퇴한 회원
         // 2400 : 존재하지 않는 아이디
         showToast(message)
-    }
-
-    //회원가입하려는 유저를 SignUpRequest형태로 돌려주는 함수
-    private fun getSignupUser(): SignUpRequest {
-        // TODO: 일단은 약관동의에 다 "Y"로 넣어둠 (StepFive의 StepFiveStartBtn 클릭리스너 부분 참조)
-        return SignUpRequest(checkPassword.toString(), emailId, informationAgreeStatus.toString(), loginId.toString(), nickname.toString(), password.toString(), phoneNumberId, universityName.toString())
     }
 
     private fun setTextChangedListener() {

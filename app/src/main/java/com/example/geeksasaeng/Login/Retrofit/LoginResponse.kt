@@ -23,3 +23,22 @@ data class Login(
     @SerializedName("password") var password: String? = ""
 )
 
+data class AutoLoginResult(
+    @SerializedName("dormitoryId") val dormitoryId: Int,
+    @SerializedName("dormitoryName") val dormitoryName: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("loginId") val loginId: String,
+    @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("memberLoginType") val memberLoginType: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("profileImgUrl") val profileImgUrl: String,
+    @SerializedName("universityName") val universityName: String,
+)
+
+data class AutoLoginResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: AutoLoginResult?
+)

@@ -6,6 +6,7 @@ import com.example.geeksasaeng.Home.Delivery.DeliveryResponse
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +16,6 @@ class DeliveryService {
     private lateinit var deliveryBannerView: DeliveryBannerView
     private lateinit var deliveryView: DeliveryView
     private lateinit var deliveryFilterView: DeliveryFilterView
-
     private val deliveryDataService = retrofit.create(DeliveryRetrofitInterfaces::class.java)
 
     //setView
@@ -55,7 +55,7 @@ class DeliveryService {
     // 배달 리스트 목록들 불러오기
     fun getDeliveryAllList(dormitoryId: Int, cursor: Int){
         val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
-        deliveryPartyService?.getAllDeliveryList(dormitoryId, cursor)?.enqueue(object:
+        deliveryPartyService?.getAllDeliveryList("Bearer " + getJwt(), dormitoryId, cursor)?.enqueue(object:
             Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 Log.d("DELIVERY-RESPONSE", "response.code = ${response.code()} / response.body = ${response.body()}")
@@ -77,7 +77,7 @@ class DeliveryService {
     // 배달 리스트 필터 적용 후 목록들 불러오기
     fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?){
         val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
-        deliveryPartyService?.getFilterDeliveryList(dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
+        deliveryPartyService?.getFilterDeliveryList("Bearer " + getJwt(), dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 // Log.d("DELIVERY-FILTER", "response.code = ${response.code()} / response.body = ${response.body()}")
                 Log.d("DELIVERY-FILTER", "response.code = ${response.code()}")

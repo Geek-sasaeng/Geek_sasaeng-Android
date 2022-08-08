@@ -5,6 +5,7 @@ import android.location.Geocoder
 import android.util.Log
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +29,7 @@ class CreatePartyService {
 
     //기숙사 위치 정보
     fun getDefaultLoc( dormitoryId : Int) {
-        createPartyDataService.getDeliveryPartyDefaultLocation(dormitoryId).enqueue(object :
+        createPartyDataService.getDeliveryPartyDefaultLocation("Bearer " + getJwt(), dormitoryId).enqueue(object :
             Callback<CreatePartyDefaultLocResponse> {
             override fun onResponse(
                 call: Call<CreatePartyDefaultLocResponse>,
@@ -51,7 +52,7 @@ class CreatePartyService {
 
     //파티 생성하기
     fun createPartySender(dormitoryId: Int, createPartyRequest: CreatePartyRequest){
-        createPartyDataService.createParty(dormitoryId, createPartyRequest).enqueue(object:
+        createPartyDataService.createParty("Bearer " + getJwt(), dormitoryId, createPartyRequest).enqueue(object:
         Callback<CreatePartyResponse>{
             override fun onResponse(
                 call: Call<CreatePartyResponse>,

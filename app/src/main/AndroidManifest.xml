@@ -10,14 +10,15 @@
 
     <application
         android:name=".Utils.ApplicationClass"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_app_logo"
         android:roundIcon="@mipmap/ic_app_logo_round"
-        android:allowBackup="false"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.Geeksasaeng"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
@@ -47,13 +48,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
-        <activity
-            android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
+        <activity android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
+        <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Home.Search.SearchActivity" /> <!-- 카카오맵 APP KEY 추가 -->
+        <activity android:name=".Home.Search.SearchActivity" />
+        <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity" />
+
+        <!--카카오맵 APP KEY 추가-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="${kakaoNativeAppKey}" />
