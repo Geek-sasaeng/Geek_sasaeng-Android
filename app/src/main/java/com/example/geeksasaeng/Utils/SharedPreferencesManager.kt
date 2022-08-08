@@ -34,26 +34,28 @@ fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
 fun removeAutoLogin() {
     val editor = mSharedPreferences.edit()
     editor.remove("jwt")
+    editor.remove("is")
     editor.remove("loginId")
     editor.remove("password")
+    editor.remove("autoLogin")
     editor.commit()
 }
 
-fun saveAutoLogin(jwt: String, loginId: String, password: String) {
+fun saveJwt(jwt: String){
     val editor = mSharedPreferences.edit()
     editor.putString("jwt", jwt)
-    editor.putString("loginId", loginId)
-    editor.putString("password", password)
     editor.apply()
 }
 
-fun saveSocialAutoLogin(jwt: String) {
+fun setAutoLogin(jwt: String){
     val editor = mSharedPreferences.edit()
     editor.putString("jwt", jwt)
+    editor.putBoolean("autoLogin", true)
     editor.apply()
 }
 
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
+fun isAutoLogin(): Boolean? = mSharedPreferences.getBoolean("autoLogin", false)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null)
 fun getPassword(): String? = mSharedPreferences.getString("password", null)
