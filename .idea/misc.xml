@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/data.xml" value="0.2895" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.2833333333333333" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_splash.xml" value="0.30833333333333335" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.33" />
         <entry key="..\:/Users/jimin/.gradle/caches/transforms-3/65c4e1953584d4eb753df5c7e540eaf2/transformed/oauth-5.1.1/res/layout/nid_progress_dialog.xml" value="0.11928174433518597" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/data.xml" value="0.1" />

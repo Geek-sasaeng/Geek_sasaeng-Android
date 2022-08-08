@@ -4,6 +4,7 @@ import com.example.geeksasaeng.Login.Retrofit.DormitoryResponse
 import com.example.geeksasaeng.Login.Retrofit.DormitoryRetrofitInterfaces
 import com.example.geeksasaeng.Login.Retrofit.DormitoryView
 import com.example.geeksasaeng.Utils.ApplicationClass
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +23,7 @@ class DormitoryDataService {
 
     //기숙사수정하기
     fun dormitorySender(dormitoryId: DormitoryRequest){
-        DormitoryDataService.dormitoryUpdate(dormitoryId).enqueue(object : Callback<DormitoryResponse> {
+        DormitoryDataService.dormitoryUpdate("Bearer " + getJwt(), dormitoryId).enqueue(object : Callback<DormitoryResponse> {
             override fun onResponse(
                 call: Call<DormitoryResponse>,
                 response: Response<DormitoryResponse>
