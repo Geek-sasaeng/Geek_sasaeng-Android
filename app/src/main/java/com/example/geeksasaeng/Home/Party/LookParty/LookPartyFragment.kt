@@ -108,8 +108,13 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         }
 
         binding.lookPartyRequestTv.setOnClickListener {
-            val dialog = DialogPartyRequest()
-            dialog.show(parentFragmentManager, "partyRequest")
+            // TODO: 일반 유저가 파티에 참여한 이후에 채팅방 가기로 글자 바꿔주기
+            if (authorStatus == true) {
+                // 채팅방으로 바로 갈 수 있도록 설정
+            } else if (authorStatus == false) {
+                val dialog = DialogPartyRequest()
+                dialog.show(parentFragmentManager, "partyRequest")
+            }
         }
     }
 
@@ -126,6 +131,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyProgressBar.visibility = View.GONE
 
         authorStatus = result.authorStatus
+
+        // 글쓴이 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
+        if (authorStatus == true) binding.lookPartyRequestTv.text = "채팅방 가기"
+        else if (authorStatus == false) binding.lookPartyRequestTv.text = "신청하기"
 
         if (result?.chiefProfileImgUrl != null)
             binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))

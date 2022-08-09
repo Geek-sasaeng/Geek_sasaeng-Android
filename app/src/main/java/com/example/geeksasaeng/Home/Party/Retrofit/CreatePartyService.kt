@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty.Retrofit
+package com.example.geeksasaeng.Home.Party.Retrofit
 
 import android.location.Address
 import android.location.Geocoder

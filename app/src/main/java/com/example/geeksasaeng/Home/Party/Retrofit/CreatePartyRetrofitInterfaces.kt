@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty.Retrofit
+package com.example.geeksasaeng.Home.Party.Retrofit
 
 import retrofit2.Call
 import retrofit2.http.*

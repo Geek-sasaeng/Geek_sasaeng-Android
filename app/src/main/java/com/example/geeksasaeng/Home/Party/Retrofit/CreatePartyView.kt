@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty.Retrofit
+package com.example.geeksasaeng.Home.Party.Retrofit
 
 interface CreatePartyDefaultLocView{
     fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult)
