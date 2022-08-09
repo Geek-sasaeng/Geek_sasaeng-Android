@@ -98,4 +98,8 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
     }
 
     override fun getItemCount(): Int = chattingList.size
+
+    fun addItem(item: Chatting) {
+        chattingList.add(item)
+    }
 }

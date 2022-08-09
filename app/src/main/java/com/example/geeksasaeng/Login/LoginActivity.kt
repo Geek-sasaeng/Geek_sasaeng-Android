@@ -127,6 +127,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             startActivity(intent)
         }else{
             //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
+            saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
             saveDormitoryId(result.dormitoryId)
@@ -145,6 +146,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             intent.putExtra("nickName", result.nickName)
             startActivity(intent)
         }else{
+            saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
             saveDormitoryId(result.dormitoryId)
