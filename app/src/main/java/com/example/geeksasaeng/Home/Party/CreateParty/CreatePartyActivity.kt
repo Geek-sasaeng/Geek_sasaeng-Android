@@ -44,7 +44,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private lateinit var createPartyVM: CreatePartyViewModel
 
     private var nextable: Boolean = false
-    private val db = Firebase.firestore
+    private val db = Firebase.firestore //파이어스토어
 
     override fun initAfterBinding() {
 
