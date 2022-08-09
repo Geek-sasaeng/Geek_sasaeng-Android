@@ -47,7 +47,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
         status = arguments?.getString("status")
-
+        Log.d("jjang", "룩파티에서의 파티 아이디"+deliveryItemId.toString())
         val handler = Handler()
         handler.postDelayed({
             initDeliveryPartyData()
@@ -63,8 +63,14 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
-            (context as MainActivity).supportFragmentManager.popBackStack();
+            if(status=="lookParty"){
+                //ZERO: 뒤로가기 구현 힘들어서 그냥 onBackPressed이용함
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
+                (context as MainActivity).onBackPressed()
+            }else{
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
+                (context as MainActivity).supportFragmentManager.popBackStack();
+            }
         }
 
         binding.lookPartyOptionBtn.setOnClickListener {

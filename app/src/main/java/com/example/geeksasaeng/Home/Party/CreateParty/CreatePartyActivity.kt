@@ -46,6 +46,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private var nextable: Boolean = false
     private val db = Firebase.firestore //파이어스토어
 
+
     override fun initAfterBinding() {
 
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
@@ -332,9 +333,12 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
-        intent.putExtra("deliveryItemId", result.partyId)
+        intent.putExtra("deliveryItemId", result.partyId.toString())
+        Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.partyId.toString())
+        binding.createPartyKakaoMapLocation.removeView(mapView) //카카오맵 종료
+        finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
-        finish()
+
 
         //firebase에 채팅방 생성하기 위한 데이터 구조 만들기
         var participantsList = ArrayList<String>()

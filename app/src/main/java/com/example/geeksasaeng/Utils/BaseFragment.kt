@@ -16,7 +16,6 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d("cherry", "onCreateView됨")
         _binding = inflate.invoke(inflater, container, false)
         return binding.root
     }
