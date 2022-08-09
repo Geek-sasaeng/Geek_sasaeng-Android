@@ -332,7 +332,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
-        intent.putExtra("deliveryItemId", "1") //TODO: partyId 서버에서 받아와서 바꾸기
+        intent.putExtra("deliveryItemId", result.partyId) 
         startActivity(intent)
         finish()
 
