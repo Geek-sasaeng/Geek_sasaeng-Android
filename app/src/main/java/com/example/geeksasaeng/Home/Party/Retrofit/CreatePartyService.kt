@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty.Retrofit
+package com.example.geeksasaeng.Home.Party.Retrofit
 
 import android.location.Address
 import android.location.Geocoder
@@ -64,7 +64,7 @@ class CreatePartyService {
                     val resp: CreatePartyResponse = response.body()!!
                     Log.d("jjang-resp", resp.toString())
                     when (resp.code) {
-                        1000 -> createPartyView.onCreatePartySuccess()
+                        1000 -> createPartyView.onCreatePartySuccess(resp.result!!)
                         else -> createPartyView.onCreatePartyFailure(resp.message)
                     }
                 }

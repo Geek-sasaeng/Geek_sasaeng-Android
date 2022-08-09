@@ -19,7 +19,6 @@
         <item name="windowActionBar">false</item>
         <!-- EditText -->
         <item name="colorControlActivated">@color/main</item>
-        <item name="android:textSelectHandle">@color/main</item>
     </style>
 
     <style name="Theme.Geeksasaeng.NoActionBar">

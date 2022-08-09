@@ -13,8 +13,8 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.*
 import com.example.geeksasaeng.Home.Party.CreateParty.*
+import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
@@ -23,6 +23,9 @@ import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getDormitory
 import com.example.geeksasaeng.Utils.getDormitoryId
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -41,8 +44,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private lateinit var createPartyVM: CreatePartyViewModel
 
     private var nextable: Boolean = false
+    private val db = Firebase.firestore
 
     override fun initAfterBinding() {
+
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
         binding.createPartyNumber2Tv.isEnabled = false
         binding.createPartyCategory2Tv.isEnabled = false
@@ -53,7 +58,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService.setCreatePartyView(this)
 
         binding.createPartyDate2ColoredTv.text = getCurrentDate()+" "+getCurrentTime()
-
 
         getApplicationContext()
         initTextWatcher()
@@ -152,7 +156,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             if(nextable){
                 DialogAccountNumber().show(supportFragmentManager, "CustomDialog") // 계좌정보 입력 다이얼로그 띄우기
             }else{ // 활성화가 안되어 있는 상태라면
-                
+
                 //사용자에게 뭐가 부족한지 알려주기 위해
                 if(!(binding.createPartyTitleEt.text.length in 1..20)){
                     CustomToastMsg.createToast(this, "제목을 입력해주세요", "#8029ABE2", 58)?.show()
@@ -322,7 +326,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     // 파티 등록하기 성공/실패
-    override fun onCreatePartySuccess() {
+    override fun onCreatePartySuccess(result: CreatePartyResult) {
         Log.d("jjang", "파티 생성 성공(서버로 정보 보냄)")
         //TODO:파티보기로 이동
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
@@ -331,6 +335,28 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         intent.putExtra("deliveryItemId", "1") //TODO: partyId 서버에서 받아와서 바꾸기
         startActivity(intent)
         finish()
+
+        //firebase에 채팅방 생성하기 위한 데이터 구조 만들기
+        var participantsList = ArrayList<String>()
+        participantsList.add("방장닉네임") //TODO: 방장닉네임 알아와서 넣어주기
+
+        val roomInfo = hashMapOf(
+            "roomInfo" to hashMapOf(
+                "accountNumber" to result.accountNumber,
+                "bank" to result.bank,
+                "category" to "배달파티",
+                "isFinish" to false,
+                "participants" to participantsList,
+                "title" to result.title
+            )
+        )
+
+        //firebase에 채팅방 생성
+        db.collection("Rooms")
+            .document(result.uuid)
+            .set(roomInfo)
+            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("firebase", "Error writing document", e) }
     }
 
     override fun onCreatePartyFailure(message: String) {

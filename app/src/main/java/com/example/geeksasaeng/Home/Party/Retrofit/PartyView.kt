@@ -24,3 +24,8 @@ interface UserReportView {
     fun userReportViewSuccess(code: Int)
     fun userReportViewFailure(message: String)
 }
+
+interface JoinPartyView {
+    fun joinPartyViewSuccess(code: Int)
+    fun joinPartyViewFailure(message: String)
+}

@@ -20,6 +20,14 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".SplashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Signup.Basic.SignUpActivity"
             android:exported="false" />
         <activity
@@ -38,15 +46,6 @@
             android:name=".Login.DormitoryActivity"
             android:exported="false" />
         <activity android:name=".Login.LoginActivity" />
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".Signup.Naver.SignUpNaverActivity" />
         <activity android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
             android:windowSoftInputMode="adjustResize" />

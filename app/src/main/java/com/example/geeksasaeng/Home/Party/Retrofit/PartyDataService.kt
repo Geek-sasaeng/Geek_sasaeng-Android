@@ -1,7 +1,7 @@
 package com.example.geeksasaeng.Home.Party.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyRequest
+import android.widget.Toast
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryRetrofitInterfaces
 import com.example.geeksasaeng.Utils.ApplicationClass
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
@@ -18,6 +18,7 @@ class PartyDataService {
     private lateinit var partyDeleteView: PartyDeleteView
     private lateinit var partyReportView: PartyReportView
     private lateinit var userReportView: UserReportView
+    private lateinit var joinPartyView: JoinPartyView
 
     //setView
     fun setPartyDetailView(partyDetailView: PartyDetailView) {
@@ -31,6 +32,9 @@ class PartyDataService {
     }
     fun setUserReportView(userReportView: UserReportView) {
         this.userReportView = userReportView
+    }
+    fun setJoinPartyView(joinPartyView: JoinPartyView) {
+        this.joinPartyView = joinPartyView
     }
 
     //파티보기 상세조회
@@ -133,6 +137,28 @@ class PartyDataService {
             }
             override fun onFailure(call: Call<UserReportResponse>, t: Throwable) {
                 Log.d("USER-REPORT-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
+            }
+        })
+    }
+
+    // 배달 파티 참여하기
+    fun joinPartySender(joinPartyRequest: JoinPartyRequest) {
+        val joinPartyService = NetworkModule.getInstance()?.create(PartyRetrofitInterface::class.java)
+        joinPartyService?.joinDeliveryParty("Bearer " + getJwt(), joinPartyRequest)?.enqueue(object: Callback<JoinPartyResponse> {
+            override fun onResponse(call: Call<JoinPartyResponse>, response: Response<JoinPartyResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val joinPartyResponse: JoinPartyResponse = response.body()!!
+
+                    when (joinPartyResponse.code) {
+                        1000 -> joinPartyView.joinPartyViewSuccess(joinPartyResponse.code)
+                        4000 -> Log.d("JOIN-PARTY", "서버 오류")
+                        else -> joinPartyView.joinPartyViewFailure(joinPartyResponse.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JoinPartyResponse>, t: Throwable) {
+                Log.d("Party-Response", "PartyDataService-joinPartySender-onFailure", t)
             }
         })
     }

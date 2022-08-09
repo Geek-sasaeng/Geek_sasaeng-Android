@@ -72,3 +72,19 @@ data class UserReportRequest(
     @SerializedName("reportContent") val reportContent: String?,
     @SerializedName("reportedMemberId") val reportedMemberId: Int
 )
+
+data class JoinPartyResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess: Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: JoinPartyResult
+)
+
+data class JoinPartyResult(
+    @SerializedName("deliveryPartyId") val deliveryPartyId: Int,
+    @SerializedName("deliveryPartyMemberId") val deliveryPartyMemberId: Int
+)
+
+data class JoinPartyRequest(
+    @SerializedName("partyId") val partyId: Int
+)

@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit
 
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
+import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyDefaultLocResult
 import com.google.gson.annotations.SerializedName
 
 //배달 파티 수정
