@@ -28,6 +28,7 @@ import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getDormitoryId
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
@@ -42,7 +43,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
     var isLoading = false
-    var dormitoryId: Int = 1
+    var dormitoryId: Int = 0
     var totalCursor: Int = 0
     var orderTimeCategory: String? = null
     var maxMatching: Int? = null
@@ -83,8 +84,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        dormitoryId = getDormitoryId()!!
         Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
-
         // 모든 fragment stack 제거
         clearBackStack()
 

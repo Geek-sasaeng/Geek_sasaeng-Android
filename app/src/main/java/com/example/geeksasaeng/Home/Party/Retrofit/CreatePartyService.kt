@@ -64,7 +64,7 @@ class CreatePartyService {
                     val resp: CreatePartyResponse = response.body()!!
                     Log.d("jjang-resp", resp.toString())
                     when (resp.code) {
-                        1000 -> createPartyView.onCreatePartySuccess()
+                        1000 -> createPartyView.onCreatePartySuccess(resp.result!!)
                         else -> createPartyView.onCreatePartyFailure(resp.message)
                     }
                 }

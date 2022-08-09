@@ -6,6 +6,6 @@ interface CreatePartyDefaultLocView{
 }
 
 interface CreatePartyView{
-    fun onCreatePartySuccess()
+    fun onCreatePartySuccess(result: CreatePartyResult)
     fun onCreatePartyFailure(message: String)
 }

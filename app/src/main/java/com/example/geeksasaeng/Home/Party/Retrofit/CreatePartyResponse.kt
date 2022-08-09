@@ -25,6 +25,9 @@ data class CreatePartyResponse(
 )
 
 data class CreatePartyResult(
+    @SerializedName("accountNumber") val accountNumber: String,
+    @SerializedName("bank") val bank: String,
+    @SerializedName("chatRoomName") val chatRoomName: String,
     @SerializedName("chief") val chief: String,
     @SerializedName("content") val content: String,
     @SerializedName("createdAt") val createdAt: String,
