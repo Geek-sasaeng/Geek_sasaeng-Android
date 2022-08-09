@@ -9,6 +9,7 @@ import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -37,7 +38,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initAdapter()
         initClickListener()
         initTextChangedListener()
-        initChatListener()
+        initSendChatListener()
     }
 
     private fun initChatArray() {
@@ -119,18 +120,20 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         })
     }
 
-    private fun initChatListener() {
+    private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
+            // TODO: 채팅방 리스트 API와 연동
             chattingRoomName = "TestRoom3"
 
             val uuid = UUID.randomUUID().toString()
 
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
+            var nickname = getNickname()
             var time = calculateDate()
 
             var data = hashMapOf(
                 "content" to myChatting,
-                "nickname" to "닉네임",
+                "nickname" to nickname,
                 "time" to time,
                 "userImgUrl" to "이미지 링크"
             )

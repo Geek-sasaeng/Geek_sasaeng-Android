@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Utils
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
 
@@ -12,7 +13,7 @@ fun removeNickname() {
 
 fun saveNickname(nickname: String) {
     val editor = mSharedPreferences.edit()
-    editor.putString("ninkname", nickname)
+    editor.putString("nickname", nickname)
     editor.apply()
 }
 
