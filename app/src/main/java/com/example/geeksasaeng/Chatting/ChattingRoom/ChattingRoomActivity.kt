@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     var topLayoutFlag = false
     var leader = false
     private var chattingRoomName = String()
+    private var nickname = getNickname()
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -38,6 +40,8 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initAdapter()
         initClickListener()
         initTextChangedListener()
+        initChatListener()
+        initReceiveChatListener()
         initSendChatListener()
     }
 
@@ -120,15 +124,17 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         })
     }
 
+    private fun initChatListener() {
+        // TODO: 채팅방 리스트 API와 연동
+        chattingRoomName = "TestRoom3"
+    }
+
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
-            // TODO: 채팅방 리스트 API와 연동
-            chattingRoomName = "TestRoom3"
 
             val uuid = UUID.randomUUID().toString()
 
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
-            var nickname = getNickname()
             var time = calculateDate()
 
             var data = hashMapOf(
@@ -141,8 +147,25 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
                     // 채팅 Adapter에 적용
-                    val item = Chatting(1, true, R.drawable.ic_default_profile, myChatting, null)
+                    val item = Chatting(1, nickname, R.drawable.ic_default_profile, myChatting, null)
                     chattingRoomRVAdapter.addItem(item)
+                    chattingRoomRVAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun initReceiveChatListener() {
+        db.collection("Rooms").document(chattingRoomName).collection("Messages").get().addOnSuccessListener { result ->
+            for (document in result) {
+                var item: Chatting
+
+                if (document["nickname"].toString() == nickname) // 자신의 채팅
+                    item = Chatting(1, document["nickname"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
+                else // 상대의 채팅 
+                    item = Chatting(2, document["nickname"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
+                
+                chattingRoomRVAdapter.addItem(item)
+                chattingRoomRVAdapter.notifyDataSetChanged()
             }
         }
     }

@@ -102,4 +102,9 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
     fun addItem(item: Chatting) {
         chattingList.add(item)
     }
+
+    fun addAllItems(items: List<Chatting>) {
+        chattingList.addAll(items)
+        this.notifyDataSetChanged()
+    }
 }
