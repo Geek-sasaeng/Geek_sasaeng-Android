@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
+import com.example.geeksasaeng.Home.Delivery.Timer.DeliveryTimer
+import com.example.geeksasaeng.Home.Delivery.Timer.TimerData
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchDataService
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchFilterView
 import com.example.geeksasaeng.Home.Search.Retrofit.SearchResult
@@ -25,12 +27,14 @@ import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentSearchDetailBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
 
 class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate), SearchView, SearchFilterView {
     private var searchArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var searchAdapter: DeliveryRVAdapter
     private lateinit var searchService: SearchDataService
+    private lateinit var timerTask: DeliveryTimer
     var isLoading = false
     var dormitoryId: Int = 1
     var totalCursor: Int = 0
@@ -54,6 +58,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
+        initTimer() // 타이머 작업
         initAdapter()
         initTopScrollListener() // 상단 스크롤 작업
 
@@ -201,12 +206,11 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // TODO: 로딩 중에 스크롤 막기
     private fun initMoreLoadPosts() {
         binding.searchProgressCover.visibility = View.VISIBLE
-
+        keyword = requireArguments().getString("keyword").toString()
+        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
+        else getSearchPartyList(dormitoryId, totalCursor, keyword)
         val handler = Handler()
         handler.postDelayed({
-            keyword = requireArguments().getString("keyword").toString()
-            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
-            else getSearchPartyList(dormitoryId, totalCursor, keyword)
             isLoading = false
             binding.searchProgressCover.visibility = View.GONE
         }, 1200)
@@ -289,7 +293,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // Adapter 설정
     private fun initAdapter() {
-        searchAdapter = DeliveryRVAdapter(searchArray)
+        searchAdapter = DeliveryRVAdapter(searchArray, timerTask)
         binding.searchDetailPartyRv.adapter = searchAdapter
         binding.searchDetailPartyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -303,6 +307,13 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 startActivity(intent)
             }
         })
+    }
+
+    // 타이머 설정
+    private fun initTimer(){
+        var timer = Timer()
+        timerTask = DeliveryTimer(CopyOnWriteArrayList<TimerData>())
+        timer.schedule(timerTask, 0, 1000)
     }
 
     //스피너 관련 작업

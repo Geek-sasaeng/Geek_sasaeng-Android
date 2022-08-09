@@ -22,10 +22,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
     override fun initAfterBinding() {
 //      Splash Animation 적용
         val animationView = binding.animationView
-        animationView.setRenderMode(RenderMode.AUTOMATIC)
+        animationView.setRenderMode(RenderMode.HARDWARE)
         animationView.enableMergePathsForKitKatAndAbove(true)
         animationView.imageAssetsFolder = "images"
-        animationView.setAnimation("data.json");
         animationView.playAnimation()
         getLoginService()
         // 화면 전환
