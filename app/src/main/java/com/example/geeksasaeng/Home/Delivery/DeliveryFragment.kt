@@ -22,23 +22,28 @@ import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryBannerView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryFilterView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryView
+import com.example.geeksasaeng.Home.Delivery.Timer.DeliveryTimer
+import com.example.geeksasaeng.Home.Delivery.Timer.TimerData
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getDormitoryId
 import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
     private lateinit var deliveryBannerAdapter: BannerVPAdapter
+    private lateinit var timerTask: DeliveryTimer
     private var flag: Int = 1
     private var currentPosition = Int.MAX_VALUE / 2
     private val thread = Thread(PagerRunnable())
     var isLoading = false
-    var dormitoryId: Int = 1
+    var dormitoryId: Int = 0
     var totalCursor: Int = 0
     var orderTimeCategory: String? = null
     var maxMatching: Int? = null
@@ -52,15 +57,39 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         true
     }
 
-    override fun initAfterBinding() {
-        Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
+    override fun onStart() {
+        super.onStart()
+        Log.d("DELIVERY-FRAGMENT", "onStart")
+    }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("DELIVERY-FRAGMENT", "onResume")
+        // remainSec = deliveryAdapter.returnRemainSec()
+        // timerTask.start()
+
+        flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("DELIVERY-FRAGMENT", "onPause")
+        flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("DELIVERY-FRAGMENT", "onDestroy")
+        thread.interrupt() //쓰레드 중지
+    }
+
+    override fun initAfterBinding() {
+        dormitoryId = getDormitoryId()!!
+        Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
         // 모든 fragment stack 제거
         clearBackStack()
 
-        deliveryService = DeliveryService() //서비스 객체 생성
-        deliveryService.setDeliveryView(this)
-        deliveryService.setDeliveryBannerView(this)
+        initDeliveryService()
 
         binding.deliveryProgressCover.visibility = View.GONE
         binding.deliveryBottomView.visibility = View.VISIBLE
@@ -68,8 +97,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
+        initTimer() // 타이머 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
+
 
         binding.deliveryFloatingBtn.setOnClickListener {
             val intent = Intent(context, CreatePartyActivity::class.java)
@@ -110,10 +141,42 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
             deliveryArray.clear()
+            timerTask.removeAllTimerData()
             initLoadPosts()
             initAdapter()
             binding.deliverySwipe.isRefreshing = false
         })
+    }
+
+    // Adapter 설정
+    private fun initAdapter() {
+        deliveryAdapter = DeliveryRVAdapter(deliveryArray, timerTask)
+        binding.deliveryRv.adapter = deliveryAdapter
+        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
+                var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
+
+                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+                val bundle = Bundle()
+                bundle.putString("deliveryItemId", deliveryItemId)
+
+                val lookPartyFragment = LookPartyFragment()
+                lookPartyFragment.arguments = bundle
+
+                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+                transaction.commit()
+            }
+        })
+    }
+
+    // 타이머 설정
+    private fun initTimer(){
+        var timer = Timer()
+        timerTask = DeliveryTimer(CopyOnWriteArrayList<TimerData>())
+        timer.schedule(timerTask, 0, 1000)
     }
 
     // 하단 스크롤 관련
@@ -143,37 +206,16 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             }
         })
     }
+    private fun initDeliveryService(){
+        deliveryService = DeliveryService() //서비스 객체 생성
+        deliveryService.setDeliveryView(this)
+        deliveryService.setDeliveryBannerView(this)
+    }
 
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
-        val deliveryDataService = DeliveryService()
-        deliveryDataService.setDeliveryView(this)
-        deliveryDataService.getDeliveryAllList(dormitoryId, cursor)
+        deliveryService.getDeliveryAllList(dormitoryId, cursor)
         totalCursor += 1
-    }
-
-    // Adapter 설정
-    private fun initAdapter() {
-        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-        binding.deliveryRv.adapter = deliveryAdapter
-        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
-        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
-            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
-                var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
-
-                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
-
-                val bundle = Bundle()
-                bundle.putString("deliveryItemId", deliveryItemId)
-
-                val lookPartyFragment = LookPartyFragment()
-                lookPartyFragment.arguments = bundle
-
-                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
-                transaction.commit()
-            }
-        })
     }
 
     // 배달파티 목록 조회 성공
@@ -319,32 +361,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("DELIVERY-FRAGMENT", "onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("DELIVERY-FRAGMENT", "onResume")
-        // remainSec = deliveryAdapter.returnRemainSec()
-        // timerTask.start()
-
-        flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("DELIVERY-FRAGMENT", "onPause")
-        flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("DELIVERY-FRAGMENT", "onDestroy")
-        thread.interrupt() //쓰레드 중지
     }
 
     private fun clearBackStack() {

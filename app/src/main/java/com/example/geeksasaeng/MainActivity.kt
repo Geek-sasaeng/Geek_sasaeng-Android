@@ -36,7 +36,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
-        } else setFragment(R.id.main_frm, HomeFragment())
+        } else if(status == "lookParty"){ //파티생성하기=>방금 만든 파티 상세보기..용
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putString("deliveryItemId", deliveryItemId)
+            bundle.putString("status", status)
+
+            val lookPartyFragment = LookPartyFragment()
+            lookPartyFragment.arguments = bundle
+
+            transaction.replace(R.id.main_frm, lookPartyFragment)
+            transaction.commit()
+
+        }else setFragment(R.id.main_frm, HomeFragment())
 
         getAppKeyHash() //카카오맵 해시키 얻는 용
         // FCM Token 확인하기 위한 코드

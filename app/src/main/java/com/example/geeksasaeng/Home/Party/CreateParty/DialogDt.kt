@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpViewModel
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogDtLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,14 +48,17 @@ class DialogDt : DialogFragment() {
         if((createPartyVM.getDate().toString()!="null") && (createPartyVM.getTime().toString()!="null")){
             Log.d("dialogDT", createPartyVM.getDate().toString()+createPartyVM.getTime().toString())
             dateString =createPartyVM.getDate().toString()
-            dateString2 =createPartyVM.getDate().toString()
+            dateString2 =createPartyVM.getDate2().toString()
             timeString =createPartyVM.getTime().toString()
-            timeString2 =createPartyVM.getTime().toString()
+            timeString2 =createPartyVM.getTime2().toString()
             binding.dateDialogDateTv.text = createPartyVM.getDate().toString()
             binding.dateDialogTimeTv.text = createPartyVM.getTime().toString()
         }else{ //최초 실행시
             binding.dateDialogDateTv.text = getCurrentDate()
             binding.dateDialogTimeTv.text = getCurrentTime()
+
+            timeString2=getCurrentTime2()
+            dateString2=getCurrentDate2()
             //현재시간을 default값으로 설정해주기
             createPartyVM.setDate(getCurrentDate())
             createPartyVM.setTime(getCurrentTime())
@@ -121,6 +125,14 @@ class DialogDt : DialogFragment() {
         return formatter.format(Calendar.getInstance().time)
     }
 
+    private fun compareDate(time: String): Boolean{ //현재보다 미래인지 체크 위함
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date1 = sdf.parse(time)
+        val currentTime = Calendar.getInstance().time
+
+        return date1.after(currentTime)
+    }
+
     private fun initClickListener(){
         binding.dateDialogDateTv.setOnClickListener { //날짜 정보
             //DatePickerApplicationClass
@@ -173,6 +185,10 @@ class DialogDt : DialogFragment() {
                 binding.dateDialogTimeTv.text = timeString
                 createPartyVM.setTime(timeString)
                 createPartyVM.setTime2(timeString2)
+
+                if(!compareDate(dateString2+" "+timeString2)){ // 미래 시간이 아니면
+                    CustomToastMsg.createToast((requireContext()), "현재보다 미래 시간을 입력해주세요", "#8029ABE2", 58)?.show()
+                }
             }
             TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
 
@@ -181,13 +197,17 @@ class DialogDt : DialogFragment() {
 
         binding.dateDialogNextBtn.setOnClickListener { //다음버튼
 
-            //다음 다이얼로그 띄우기
-            val dialogNum = DialogNum()
-            dialogNum.show(parentFragmentManager, "CustomDialog")
+            if(!compareDate(dateString2+" "+timeString2)){ // 미래 시간이 아니면
+                CustomToastMsg.createToast((requireContext()), "현재보다 미래 시간을 입력해주세요", "#8029ABE2", 58)?.show()
+            }else{
+                //다음 다이얼로그 띄우기
+                val dialogNum = DialogNum()
+                dialogNum.show(parentFragmentManager, "CustomDialog")
 
-            //자기는 종료
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
+                //자기는 종료
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.remove(this)?.commit()
+            }
         }
     }
 

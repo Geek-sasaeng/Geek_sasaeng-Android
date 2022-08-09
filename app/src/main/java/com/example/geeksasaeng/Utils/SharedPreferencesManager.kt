@@ -74,6 +74,7 @@ fun removeAutoLogin() {
 }
 
 fun saveJwt(jwt: String){
+    Log.d("jwt", jwt)
     val editor = mSharedPreferences.edit()
     editor.putString("jwt", jwt)
     editor.apply()
