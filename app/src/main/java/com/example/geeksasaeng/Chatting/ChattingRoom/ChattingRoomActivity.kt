@@ -20,6 +20,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     private var roomName = String()
     private var chattingArray = ArrayList<Chatting>()
+    private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
@@ -156,17 +157,22 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     private fun initReceiveChatListener() {
         db.collection("Rooms").document(chattingRoomName).collection("Messages").get().addOnSuccessListener { result ->
-            for (document in result) {
-                var item: Chatting
+            var item: Chatting
 
+            for (document in result) {
                 if (document["nickname"].toString() == nickname) // 자신의 채팅
                     item = Chatting(1, document["nickname"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
-                else // 상대의 채팅 
+                else // 상대의 채팅
                     item = Chatting(2, document["nickname"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
-                
+
+                timeList.add(document["time"].toString())
+
                 chattingRoomRVAdapter.addItem(item)
                 chattingRoomRVAdapter.notifyDataSetChanged()
             }
+
+            // 시간을 기준으로 정렬
+            timeList = timeList.sorted() as MutableList<String>
         }
     }
 
