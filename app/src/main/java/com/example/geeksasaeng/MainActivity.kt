@@ -57,7 +57,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 md.update(signature.toByteArray())
                 val something = String(Base64.encode(md.digest(), 0))
                 Log.e("Hash key", something)
-                showToast(something)
             }
         } catch (e: Exception) {
 
