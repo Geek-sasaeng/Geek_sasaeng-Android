@@ -29,9 +29,9 @@ import androidx.fragment.app.activityViewModels
 import com.airbnb.lottie.model.Marker
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyViewModel
 import com.example.geeksasaeng.Home.CreateParty.DialogLink
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocResult
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyDefaultLocView
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyService
+import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyDefaultLocResult
+import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyDefaultLocView
+import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
@@ -44,8 +44,7 @@ import net.daum.mf.map.gen.KakaoMapLibraryAndroidMeta
 import java.nio.file.Files.find
 import java.util.*
 
-class DialogLocation: DialogFragment(), CreatePartyDefaultLocView,
-    MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
+class DialogLocation: DialogFragment(), CreatePartyDefaultLocView, MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapView.POIItemEventListener {
 
     lateinit var binding: DialogLocationLayoutBinding
     private var dialogLocationNextClickListener: DialogLocationNextClickListener? =null

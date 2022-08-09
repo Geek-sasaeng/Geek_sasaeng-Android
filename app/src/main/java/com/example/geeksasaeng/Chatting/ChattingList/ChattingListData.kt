@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
-data class ChattingList(
+data class ChattingListData(
     val roomName: String,
     val roomImgUrl: String,
     val lastChat: String,

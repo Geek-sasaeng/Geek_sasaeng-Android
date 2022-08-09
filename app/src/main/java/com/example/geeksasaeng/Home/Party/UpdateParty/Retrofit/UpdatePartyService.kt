@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Home.Party.UpdateParty.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Home.CreateParty.Retrofit.CreatePartyResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call

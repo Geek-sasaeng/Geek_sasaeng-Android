@@ -84,6 +84,10 @@ dependencies {
     
     // FCM
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
 }
 
 // FCM 세팅

@@ -28,4 +28,10 @@ interface PartyRetrofitInterface {
         @Header("Authorization") jwt: String?,
         @Body reportUserRequest: UserReportRequest
     ): Call<UserReportResponse>
+
+    @POST("/deliveryPartyMember")
+    fun joinDeliveryParty(
+        @Header("Authorization") jwt: String?,
+        @Body joinPartyRequest: JoinPartyRequest
+    ): Call<JoinPartyResponse>
 }

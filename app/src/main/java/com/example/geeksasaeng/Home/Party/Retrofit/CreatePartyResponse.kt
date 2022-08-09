@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Home.CreateParty.Retrofit
+package com.example.geeksasaeng.Home.Party.Retrofit
 
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResult
 import com.google.gson.annotations.SerializedName

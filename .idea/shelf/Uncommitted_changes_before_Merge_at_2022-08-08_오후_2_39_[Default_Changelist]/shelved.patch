@@ -1,0 +1,113 @@
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyResponse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Home.Party.Retrofit\r\n\r\nimport com.example.geeksasaeng.Signup.Retrofit.SignUpResult\r\nimport com.google.gson.annotations.SerializedName\r\n\r\n// 파티보기 상세조회\r\ndata class PartyDetailResponse(\r\n    @SerializedName(\"code\") val code: Int,\r\n    @SerializedName(\"isSuccess\") val isSuccess : Boolean,\r\n    @SerializedName(\"message\") val message: String,\r\n    @SerializedName(\"result\") val result: PartyDetailResult?\r\n)\r\n\r\ndata class PartyDetailResult(\r\n    @SerializedName(\"authorStatus\") val authorStatus: Boolean,\r\n    @SerializedName(\"chief\") val chief: String,\r\n    @SerializedName(\"chiefId\") val chiefId: Int,\r\n    @SerializedName(\"chiefProfileImgUrl\") val chiefProfileImgUrl: String?,\r\n    @SerializedName(\"content\") val content: String,\r\n    @SerializedName(\"currentMatching\") val currentMatching: Int,\r\n    @SerializedName(\"dormitory\") val dormitory: Int,\r\n    @SerializedName(\"foodCategory\") val foodCategory: String,\r\n    @SerializedName(\"hashTag\") val hashTag: Boolean,\r\n    @SerializedName(\"id\") val id: Int,\r\n    @SerializedName(\"latitude\") val latitude: Double,\r\n    @SerializedName(\"longitude\") val longitude: Double,\r\n    @SerializedName(\"matchingStatus\") val matchingStatus: String,\r\n    @SerializedName(\"maxMatching\") val maxMatching: Int,\r\n    @SerializedName(\"orderTime\") val orderTime: String,\r\n    @SerializedName(\"storeUrl\") val storeUrl: String?,\r\n    @SerializedName(\"title\") val title: String,\r\n    @SerializedName(\"updatedAt\") val updatedAt: String,\r\n)\r\n\r\ndata class PartyDeleteResponse(\r\n    @SerializedName(\"code\") val code: Int,\r\n    @SerializedName(\"isSuccess\") val isSuccess : Boolean,\r\n    @SerializedName(\"message\") val message: String,\r\n    @SerializedName(\"result\") val result: PartyDeleteResult?\r\n)\r\n\r\ndata class PartyDeleteResult(\r\n    @SerializedName(\"deliveryPartyId\") val deliveryPartyId: Int,\r\n    @SerializedName(\"status\") val status: String\r\n)\r\n\r\ndata class PartyReportResponse(\r\n    @SerializedName(\"code\") val code: Int,\r\n    @SerializedName(\"isSuccess\") val isSuccess : Boolean,\r\n    @SerializedName(\"message\") val message: String,\r\n    @SerializedName(\"result\") val result: String\r\n)\r\n\r\ndata class PartyReportRequest(\r\n    @SerializedName(\"block\") val block: Boolean,\r\n    @SerializedName(\"reportCategoryId\") val reportCategoryId: Int,\r\n    @SerializedName(\"reportContent\") val reportContent: String?,\r\n    @SerializedName(\"reportedDeliveryPartyId\") val reportedDeliveryPartyId: Int,\r\n    @SerializedName(\"reportedMemberId\") val reportedMemberId: Int\r\n)\r\n\r\ndata class UserReportResponse(\r\n    @SerializedName(\"code\") val code: Int,\r\n    @SerializedName(\"isSuccess\") val isSuccess : Boolean,\r\n    @SerializedName(\"message\") val message: String,\r\n    @SerializedName(\"result\") val result: String\r\n)\r\n\r\ndata class UserReportRequest(\r\n    @SerializedName(\"block\") val block: Boolean,\r\n    @SerializedName(\"reportCategoryId\") val reportCategoryId: Int,\r\n    @SerializedName(\"reportContent\") val reportContent: String?,\r\n    @SerializedName(\"reportedMemberId\") val reportedMemberId: Int\r\n)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyResponse.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyResponse.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyResponse.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyResponse.kt	(date 1659937145220)
+@@ -71,4 +71,16 @@
+     @SerializedName("reportCategoryId") val reportCategoryId: Int,
+     @SerializedName("reportContent") val reportContent: String?,
+     @SerializedName("reportedMemberId") val reportedMemberId: Int
++)
++
++data class JoinPartyResponse(
++    @SerializedName("code") val code: Int,
++    @SerializedName("isSuccess") val isSuccess: Boolean,
++    @SerializedName("message") val message: String,
++    @SerializedName("result") val result: JoinPartyResult
++)
++
++data class JoinPartyResult(
++    @SerializedName("deliveryPartyId") val deliveryPartyId: Int,
++    @SerializedName("deliveryPartyMemberId") val deliveryPartyMemberId: Int
+ )
+\ No newline at end of file
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyView.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Home.Party.Retrofit\r\n\r\nimport com.example.geeksasaeng.Home.Delivery.DeliveryResponse\r\n\r\ninterface PartyView {\r\n}\r\n\r\ninterface PartyDetailView {\r\n    fun partyDetailSuccess(result: PartyDetailResult)\r\n    fun partyDetailFailure(code: Int, message: String)\r\n}\r\n\r\ninterface PartyDeleteView {\r\n    fun partyDeleteViewSuccess(code: Int)\r\n    fun partyDeleteViewFailure(message: String)\r\n}\r\n\r\ninterface PartyReportView {\r\n    fun partyReportViewSuccess(code: Int)\r\n    fun partyReportViewFailure(message: String)\r\n}\r\n\r\ninterface UserReportView {\r\n    fun userReportViewSuccess(code: Int)\r\n    fun userReportViewFailure(message: String)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyView.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyView.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyView.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/PartyView.kt	(date 1659936979736)
+@@ -23,4 +23,9 @@
+ interface UserReportView {
+     fun userReportViewSuccess(code: Int)
+     fun userReportViewFailure(message: String)
++}
++
++interface JoinPartyView {
++    fun joinPartyViewSuccess(code: Int)
++    fun joinPartyViewFailure(message: String)
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyRetrofitInterfaces.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyRetrofitInterfaces.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyRetrofitInterfaces.kt
+rename from app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyRetrofitInterfaces.kt
+rename to app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyRetrofitInterfaces.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyRetrofitInterfaces.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyRetrofitInterfaces.kt	(date 1659936604306)
+@@ -1,4 +1,4 @@
+-package com.example.geeksasaeng.Home.CreateParty.Retrofit
++package com.example.geeksasaeng.Home.Party.Retrofit
+ 
+ import retrofit2.Call
+ import retrofit2.http.*
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyView.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyView.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyView.kt
+rename from app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyView.kt
+rename to app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyView.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyView.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyView.kt	(date 1659936604296)
+@@ -1,4 +1,4 @@
+-package com.example.geeksasaeng.Home.CreateParty.Retrofit
++package com.example.geeksasaeng.Home.Party.Retrofit
+ 
+ interface CreatePartyDefaultLocView{
+     fun onDefaultLocSuccess(result: CreatePartyDefaultLocResult)
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyService.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyService.kt
+rename from app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyService.kt
+rename to app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyService.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyService.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyService.kt	(date 1659936604318)
+@@ -1,4 +1,4 @@
+-package com.example.geeksasaeng.Home.CreateParty.Retrofit
++package com.example.geeksasaeng.Home.Party.Retrofit
+ 
+ import android.location.Address
+ import android.location.Geocoder
+Index: app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyResponse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyResponse.kt b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyResponse.kt
+rename from app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyResponse.kt
+rename to app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyResponse.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Party/CreateParty/Retrofit/CreatePartyResponse.kt	(revision f4f45edba39a437a834b842059b5e1b4160dd656)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Party/Retrofit/CreatePartyResponse.kt	(date 1659936604325)
+@@ -1,4 +1,4 @@
+-package com.example.geeksasaeng.Home.CreateParty.Retrofit
++package com.example.geeksasaeng.Home.Party.Retrofit
+ 
+ import com.example.geeksasaeng.Signup.Retrofit.SignUpResult
+ import com.google.gson.annotations.SerializedName

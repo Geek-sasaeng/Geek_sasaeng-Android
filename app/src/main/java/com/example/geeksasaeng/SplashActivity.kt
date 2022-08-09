@@ -13,8 +13,7 @@ import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivitySplashBinding
 import java.lang.Exception
 
-class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate),
-     AutoLoginView {
+class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate), AutoLoginView {
     private lateinit var loginService: LoginDataService
     var jwt: String? = null
     var loginId: String? = null
