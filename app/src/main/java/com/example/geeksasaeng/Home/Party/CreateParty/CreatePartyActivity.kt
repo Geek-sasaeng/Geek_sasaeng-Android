@@ -18,10 +18,7 @@ import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.CustomToastMsg
-import com.example.geeksasaeng.Utils.getDormitory
-import com.example.geeksasaeng.Utils.getDormitoryId
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -342,16 +339,17 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
         //firebase에 채팅방 생성하기 위한 데이터 구조 만들기
         var participantsList = ArrayList<String>()
-        participantsList.add("방장닉네임") //TODO: 방장닉네임 알아와서 넣어주기
+        participantsList.add(getNickname().toString()) //TODO: 방장닉네임 알아와서 넣어주기
 
         val roomInfo = hashMapOf(
             "roomInfo" to hashMapOf(
                 "accountNumber" to result.accountNumber,
                 "bank" to result.bank,
                 "category" to "배달파티",
+                "maxMatching" to result.maxMatching, //서리가 말한 maxMatching값 추가해둠
                 "isFinish" to false,
                 "participants" to participantsList,
-                "title" to result.title
+                "title" to result.chatRoomName
             )
         )
 

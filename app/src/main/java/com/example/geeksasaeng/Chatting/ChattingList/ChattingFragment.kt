@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -27,7 +28,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
             // add(ChattingList("roomName", "roomImgUrl", "lastChat", "lastTime", "newMsg"))
             db.collection("Rooms")
-                .whereArrayContains("roomInfo.participants", "서리리") //TODO: 저장되어있는 본인 닉네임 꺼내서 넣어주기
+                .whereArrayContains("roomInfo.participants", getNickname().toString()) //사용자 닉네임을 이용해서 사용자가 참여중인 채팅방 찾아올 수 있다.
                 .whereEqualTo("roomInfo.isFinish", false) //유저가 참여하고 있고, 종료되지 않은 채팅방 데이터만 가져올 쿼리 생성
                 .get()
                 .addOnSuccessListener { documents ->
