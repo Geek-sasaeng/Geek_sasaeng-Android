@@ -30,6 +30,7 @@ data class PartyDetailResult(
     @SerializedName("storeUrl") val storeUrl: String?,
     @SerializedName("title") val title: String,
     @SerializedName("updatedAt") val updatedAt: String,
+    @SerializedName("uuid") val uuid: String
 )
 
 data class PartyDeleteResponse(

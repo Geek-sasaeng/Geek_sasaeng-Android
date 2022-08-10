@@ -18,10 +18,7 @@ import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.CustomToastMsg
-import com.example.geeksasaeng.Utils.getDormitory
-import com.example.geeksasaeng.Utils.getDormitoryId
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -45,6 +42,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     private var nextable: Boolean = false
     private val db = Firebase.firestore //파이어스토어
+
 
     override fun initAfterBinding() {
 
@@ -332,22 +330,26 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
-        intent.putExtra("deliveryItemId", "1") //TODO: partyId 서버에서 받아와서 바꾸기
+        intent.putExtra("deliveryItemId", result.partyId.toString())
+        Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.partyId.toString())
+        binding.createPartyKakaoMapLocation.removeView(mapView) //카카오맵 종료
+        finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
-        finish()
+
 
         //firebase에 채팅방 생성하기 위한 데이터 구조 만들기
         var participantsList = ArrayList<String>()
-        participantsList.add("방장닉네임") //TODO: 방장닉네임 알아와서 넣어주기
+        participantsList.add(getNickname().toString()) //TODO: 방장닉네임 알아와서 넣어주기
 
         val roomInfo = hashMapOf(
             "roomInfo" to hashMapOf(
                 "accountNumber" to result.accountNumber,
                 "bank" to result.bank,
                 "category" to "배달파티",
+                "maxMatching" to result.maxMatching, //서리가 말한 maxMatching값 추가해둠
                 "isFinish" to false,
                 "participants" to participantsList,
-                "title" to result.title
+                "title" to result.chatRoomName
             )
         )
 
