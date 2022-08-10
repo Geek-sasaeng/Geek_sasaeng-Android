@@ -4,6 +4,19 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
 
+// 닉네임
+fun removeNickname() {
+    val editor = mSharedPreferences.edit()
+    editor.remove("nickname")
+    editor.commit()
+}
+
+fun saveNickname(nickname: String) {
+    val editor = mSharedPreferences.edit()
+    editor.putString("nickname", nickname)
+    editor.apply()
+}
+
 // 프로필 이미지
 fun removeProfileImgUrl(){
     val editor = mSharedPreferences.edit()
@@ -49,8 +62,6 @@ fun saveUuid(uuid: String) {
     editor.apply()
 }
 
-fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
-
 // 자동로그인
 fun removeAutoLogin() {
     val editor = mSharedPreferences.edit()
@@ -76,6 +87,8 @@ fun setAutoLogin(jwt: String){
     editor.apply()
 }
 
+fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
+fun getNickname(): String? = mSharedPreferences.getString("nickname", null)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
 fun getDormitoryId(): Int? = mSharedPreferences.getInt("dormitoryId", 0)
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)

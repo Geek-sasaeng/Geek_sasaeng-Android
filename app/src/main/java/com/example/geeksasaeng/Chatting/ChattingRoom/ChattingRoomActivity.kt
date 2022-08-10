@@ -1,26 +1,35 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
     private var chattingArray = ArrayList<Chatting>()
+    private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
+    private var chattingRoomName = String()
+    private var nickname = getNickname()
+
+    // Firebase
+    val db = FirebaseFirestore.getInstance()
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
@@ -32,11 +41,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initAdapter()
         initClickListener()
         initTextChangedListener()
+        initChatListener()
+        initReceiveChatListener()
+        initSendChatListener()
     }
 
     private fun initChatArray() {
-        // 임시로 delay 넣은 부분
-        val handler = Handler()
+        /*
         chattingArray.apply {
             add(Chatting(3, null, null, "네오님이 입장하셨습니다", null))
             add(Chatting(3, null, null, "루나님이 입장하셨습니다", null))
@@ -51,6 +62,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             add(Chatting(2, false, R.drawable.ic_default_profile2, "저는 짜장면이요!", 1))
             add(Chatting(1, true, R.drawable.ic_default_profile, "좋아요", 2))
         }
+        */
     }
 
     private fun initTopLayout() {
@@ -101,12 +113,72 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
-                if (binding.chattingRoomChattingTextEt.text.isNotEmpty())
+                if (binding.chattingRoomChattingTextEt.text.isNotEmpty()) {
                     binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.main))
+                    binding.chattingRoomSendTv.isEnabled = true
+                }
                 else {
                     binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray_2))
+                    binding.chattingRoomSendTv.isEnabled = false
                 }
             }
         })
+    }
+
+    private fun initChatListener() {
+        // TODO: 채팅방 리스트 API와 연동
+        chattingRoomName = "TestRoom3"
+    }
+
+    private fun initSendChatListener() {
+        binding.chattingRoomSendTv.setOnClickListener {
+
+            val uuid = UUID.randomUUID().toString()
+
+            var myChatting = binding.chattingRoomChattingTextEt.text.toString()
+            var time = calculateDate()
+
+            var data = hashMapOf(
+                "content" to myChatting,
+                "nickname" to nickname,
+                "time" to time,
+                "userImgUrl" to "이미지 링크"
+            )
+
+            db.collection("Rooms").document(chattingRoomName).collection("Messages")
+                .document(uuid).set(data).addOnSuccessListener {
+                    // 채팅 Adapter에 적용
+                    val item = Chatting(1, nickname, R.drawable.ic_default_profile, myChatting, null)
+                    chattingRoomRVAdapter.addItem(item)
+                    chattingRoomRVAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun initReceiveChatListener() {
+        db.collection("Rooms").document(chattingRoomName).collection("Messages").get().addOnSuccessListener { result ->
+            var item: Chatting
+
+            for (document in result) {
+                if (document["nickname"].toString() == nickname) // 자신의 채팅
+                    item = Chatting(1, document["nickname"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
+                else // 상대의 채팅
+                    item = Chatting(2, document["nickname"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
+
+                timeList.add(document["time"].toString())
+
+                chattingRoomRVAdapter.addItem(item)
+                chattingRoomRVAdapter.notifyDataSetChanged()
+            }
+
+            // 시간을 기준으로 정렬
+            timeList = timeList.sorted() as MutableList<String>
+        }
+    }
+
+    private fun calculateDate(): String {
+        val now: Long = System.currentTimeMillis()
+        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        return simpleDate.format(Date(now))
     }
 }
