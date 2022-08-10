@@ -40,6 +40,7 @@ data class CreatePartyResult(
     @SerializedName("maxMatching") val maxMatching: Int,
     @SerializedName("orderTime") val orderTime: String,
     @SerializedName("orderTimeCategoryType") val orderTimeCategoryType: String,
+    @SerializedName("partyId") val partyId: Int,
     @SerializedName("storeUrl") val storeUrl: String,
     @SerializedName("title") val title: String,
     @SerializedName("uuid") val uuid: String
