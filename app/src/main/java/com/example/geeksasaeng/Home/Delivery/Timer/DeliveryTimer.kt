@@ -4,27 +4,23 @@ import android.os.CountDownTimer
 import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.locks.ReentrantLock
 
-// CopyOnWriteArrayList는 동시성 이슈 해결을 위한 List 컬렉션이다.
-class DeliveryTimer(var timerDataList: CopyOnWriteArrayList<TimerData>) : TimerTask() {
+class DeliveryTimer(val textView: TextView, millisInFuture: Long,
+                    countDownInterval: Long): CountDownTimer(millisInFuture, countDownInterval) {
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var nowTime: Long = 0
     var date: Date? = null
     var todaySec: Int = 0
 
-    override fun run() {
-        for (timerData in timerDataList) {
-            timerData.orderTime -= 1000
-            val date = Date(timerData.orderTime)
-            val leftTime = dateFormat.format(date)
-            timerData.textView.post {
-                timerData.textView.text = calculateTime(leftTime)
-            }
-        }
+    override fun onTick(millsUntilFinished: Long) {
+        val date = Date(millsUntilFinished)
+        val leftTime = dateFormat.format(date)
+        textView.setText(calculateTime(leftTime))
     }
 
+    override fun onFinish() {
+        textView.setText("0 초")
+    }
     // 남은 시간 계산
     private fun calculateTime(orderTime: String): String {
         var orderYear = Integer.parseInt(orderTime.substring(0, 4))
@@ -57,8 +53,8 @@ class DeliveryTimer(var timerDataList: CopyOnWriteArrayList<TimerData>) : TimerT
 
         var remainTime = order - today
 
-        var day = remainTime / (24 * 60 * 60 * 1000)
-        var sec = (remainTime % (24 * 60 * 60 * 1000)) / 1000
+        var day = remainTime / (24*60*60*1000)
+        var sec = (remainTime % (24*60*60*1000)) / 1000
         var hour = sec / 3600
         var minute = (sec % 3600) / 60
 
@@ -75,20 +71,5 @@ class DeliveryTimer(var timerDataList: CopyOnWriteArrayList<TimerData>) : TimerT
         nowTime = System.currentTimeMillis();
         date = Date(nowTime)
         return dateFormat.format(date)
-    }
-
-    fun addTimerData(textView: TextView, orderTime: Long) {
-        timerDataList.add(TimerData(textView, orderTime))
-    }
-
-    fun removeAllTimerData() {
-        timerDataList.clear()
-    }
-
-    fun removeExistTextView(textView: TextView){
-        for(timerData in timerDataList){
-            if(timerData.textView == textView)
-                timerDataList.remove(timerData)
-        }
     }
 }

@@ -97,7 +97,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
-        initTimer() // 타이머 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
 
@@ -141,7 +140,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
             deliveryArray.clear()
-            timerTask.removeAllTimerData()
             initLoadPosts()
             initAdapter()
             binding.deliverySwipe.isRefreshing = false
@@ -150,7 +148,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // Adapter 설정
     private fun initAdapter() {
-        deliveryAdapter = DeliveryRVAdapter(deliveryArray, timerTask)
+        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -171,14 +169,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             }
         })
     }
-
-    // 타이머 설정
-    private fun initTimer(){
-        var timer = Timer()
-        timerTask = DeliveryTimer(CopyOnWriteArrayList<TimerData>())
-        timer.schedule(timerTask, 0, 1000)
-    }
-
     // 하단 스크롤 관련
     // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)
     private fun initScrollListener() {

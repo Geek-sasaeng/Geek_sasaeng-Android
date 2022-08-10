@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Home.Delivery.Adapter
 
 import android.graphics.Color
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Home.Delivery.Timer.DeliveryTimer
 import com.example.geeksasaeng.R
-import okhttp3.internal.notify
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>,
-                        private var deliveryTimer: DeliveryTimer) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     private lateinit var mItemClickListener: OnItemClickListener
     var minuteFlag: Boolean = false
+
+    private val VIEW_TYPE_ITEM = 0
 
     // 클릭 리스너 구현 위한 인터페이스
     interface OnItemClickListener {
@@ -40,7 +39,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         itemBind(viewHolder as ItemViewHolder, position)
-        timerBind(viewHolder, position)
+        timerBind(viewHolder as ItemViewHolder, position)
         viewHolder.itemView.setOnClickListener {
             mItemClickListener.onItemClick(deliveryList[position]!!, position)
         }
@@ -62,7 +61,6 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         var deliveryItemTitle: TextView = itemView.findViewById(R.id.delivery_item_title)
         var deliveryItemCategory: TextView = itemView.findViewById(R.id.delivery_item_category)
         var deliveryItemHashTag: TextView = itemView.findViewById(R.id.delivery_item_hashTag)
-//        var timer: TimerTask? = null
     }
 
     // 타이머를 제외한 나머지 부분 Binding
@@ -88,12 +86,10 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
     // 타이머 부분 Binding
     private fun timerBind(viewHolder: ItemViewHolder, position: Int) {
-        // 타이머 세팅
-        val textView = viewHolder.deliveryItemTime
-        deliveryTimer.removeExistTextView(textView)
+        // 실시간 타이머 ON
         val leftTime = dateFormat.parse(deliveryList[position]!!.orderTime).time
-        deliveryTimer.addTimerData(textView, leftTime)
-
+        val deliveryTimer = DeliveryTimer(viewHolder.deliveryItemTime, leftTime, 1000)
+        deliveryTimer.start()
     }
 
     fun getDeliveryItemId(position: Int): Int? {
