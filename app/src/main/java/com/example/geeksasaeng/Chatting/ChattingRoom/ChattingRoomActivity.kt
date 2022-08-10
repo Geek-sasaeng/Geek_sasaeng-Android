@@ -19,11 +19,9 @@ import java.util.*
 class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
-    private var chattingArray = ArrayList<Chatting>()
-    private var timeList: MutableList<String> = mutableListOf<String>()
+    private var chattingList: MutableList<Chatting> = mutableListOf()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
-    // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
-    var topLayoutFlag = false
+    var topLayoutFlag = false // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
@@ -36,7 +34,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
         binding.chattingRoomTitleTv.text = roomName
 
-        initChatArray()
         initTopLayout()
         initAdapter()
         initClickListener()
@@ -44,25 +41,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initChatListener()
         initReceiveChatListener()
         initSendChatListener()
-    }
-
-    private fun initChatArray() {
-        /*
-        chattingArray.apply {
-            add(Chatting(3, null, null, "네오님이 입장하셨습니다", null))
-            add(Chatting(3, null, null, "루나님이 입장하셨습니다", null))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요", null))
-            add(Chatting(4, null, null, null, null))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "안녕하세요!", null))
-            add(Chatting(3, null, null, "제로님이 입장하셨습니다", null))
-            add(Chatting(3, null, null, "모든 파티원이 입장을 마쳤습니다!\n안내에 따라 메뉴를 입력해주세요", null))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "안녕하세요~", 1))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕", 1))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "뭐 먹을까요", 1))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "저는 짜장면이요!", 1))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "좋아요", 2))
-        }
-        */
     }
 
     private fun initTopLayout() {
@@ -87,7 +65,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initAdapter() {
-        chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingArray)
+        chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
         binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
@@ -148,7 +126,8 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
                     // 채팅 Adapter에 적용
-                    val item = Chatting(1, nickname, R.drawable.ic_default_profile, myChatting, null)
+                    // TODO: 보내는 시간 넣어주기
+                    val item = Chatting(1, nickname, "test", R.drawable.ic_default_profile, myChatting, null)
                     chattingRoomRVAdapter.addItem(item)
                     chattingRoomRVAdapter.notifyDataSetChanged()
             }
@@ -161,24 +140,23 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             for (document in result) {
                 if (document["nickname"].toString() == nickname) // 자신의 채팅
-                    item = Chatting(1, document["nickname"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
+                    item = Chatting(1, document["nickname"].toString(), document["time"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
                 else // 상대의 채팅
-                    item = Chatting(2, document["nickname"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
-
-                timeList.add(document["time"].toString())
-
-                chattingRoomRVAdapter.addItem(item)
-                chattingRoomRVAdapter.notifyDataSetChanged()
+                    item = Chatting(2, document["nickname"].toString(), document["time"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
+                
+                chattingList.add(item)
             }
 
-            // 시간을 기준으로 정렬
-            timeList = timeList.sorted() as MutableList<String>
+            chattingList = chattingList.sortedBy { it.time } as MutableList<Chatting>
+            // Log.d("FIREBASE-RESPONSE", chattingList.toString())
+
+            chattingRoomRVAdapter.addAllItems(chattingList)
         }
     }
 
-    private fun calculateDate(): String {
-        val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-        return simpleDate.format(Date(now))
+        private fun calculateDate(): String {
+            val now: Long = System.currentTimeMillis()
+            val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+            return simpleDate.format(Date(now))
+        }
     }
-}

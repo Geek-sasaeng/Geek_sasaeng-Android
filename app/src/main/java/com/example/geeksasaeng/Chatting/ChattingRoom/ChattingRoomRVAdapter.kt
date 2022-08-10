@@ -9,7 +9,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.*
 import kotlin.collections.ArrayList
 
-class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return chattingList[position].viewType
@@ -103,7 +103,7 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
         chattingList.add(item)
     }
 
-    fun addAllItems(items: List<Chatting>) {
+    fun addAllItems(items: MutableList<Chatting>) {
         chattingList.addAll(items)
         this.notifyDataSetChanged()
     }
