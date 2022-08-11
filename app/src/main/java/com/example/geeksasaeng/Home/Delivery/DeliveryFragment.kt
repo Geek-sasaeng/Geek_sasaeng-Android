@@ -85,6 +85,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun initAfterBinding() {
         dormitoryId = getDormitoryId()!!
+        Log.d("dormitory", "기숙사 정보"+dormitoryId.toString()+"가 DeliveryFragment에 전달됨")
         Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
         // 모든 fragment stack 제거
         clearBackStack()

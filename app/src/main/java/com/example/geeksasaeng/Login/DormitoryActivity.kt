@@ -13,6 +13,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.saveDormitory
+import com.example.geeksasaeng.Utils.saveDormitoryId
 import com.example.geeksasaeng.databinding.ActivityDormitoryBinding
 
 class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormitoryBinding::inflate), DormitoryView {
@@ -54,7 +55,7 @@ class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormito
         binding.dormitoryStartBtn.setOnClickListener {
             Log.d("dormitory", dormitoryId.toString())
             val dormitoryRequest = DormitoryRequest(dormitoryId)
-            dormitoryService.dormitorySender(dormitoryRequest) //★
+            dormitoryService.dormitorySender(dormitoryRequest) //★ 기숙사 수정 api
             changeActivity(MainActivity::class.java)
         }
     }
@@ -62,12 +63,14 @@ class DormitoryActivity : BaseActivity<ActivityDormitoryBinding>(ActivityDormito
     //기숙사 수정 api
     override fun onDormitySuccess(result: DormitoryResult) {
         //TODO: SharedPref에 기숙사값 넣어주기
-        Log.d("cherry",result.dormitoryName)
+        Log.d("dormitory",result.dormitoryName)
         saveDormitory("제"+result.dormitoryName)
+        saveDormitoryId(result.dormitoryId) //가끔 null뜨고, 목록 안 불러와지는 오류 이거 때문이었다.
+        finish()
     }
 
     override fun onDormityFailure(message: String) {
-        showToast("기숙사 수정 실패") //디버깅용
+        showToast("기숙사 수정 실패"+message) //디버깅용
     }
 
 }

@@ -120,19 +120,20 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         if (binding.loginAutologinCb.isChecked) {
             setAutoLogin(jwt)
         }
-        saveJwt(jwt)
-        finish()
+        saveJwt(jwt) //TODO: 얜 왜 필요한거지?
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
             intent.putExtra("nickName", result.nickName) // DormitoryActivity로 닉네임 넘겨줌
             startActivity(intent)
         }else{
+            Log.d("cherry", "첫 로그인이 아님")
             //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
             saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
             saveDormitoryId(result.dormitoryId)
             changeActivity(MainActivity::class.java)
+            finish()
         }
     }
 
@@ -141,16 +142,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 네이버 자동 로그인 자동 적용
         val jwt = result.jwt
         setAutoLogin(jwt)
-        finish()
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
             intent.putExtra("nickName", result.nickName)
             startActivity(intent)
         }else{
+            Log.d("cherry", "첫 로그인이 아님")
             saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
             saveDormitoryId(result.dormitoryId)
+            finish()
             changeActivity(MainActivity::class.java)
         }
     }
