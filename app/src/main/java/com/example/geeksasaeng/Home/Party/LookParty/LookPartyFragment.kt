@@ -8,12 +8,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResult
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailView
+import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
 import net.daum.mf.map.api.MapPOIItem
@@ -25,13 +22,15 @@ import java.util.*
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener {
-
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, ChattingRoomJoinView {
     var deliveryItemId: Int? = null
     var status: String? = null
     var authorStatus: Boolean? = null
+    var belongStatus: String? = null
+    var dialogPartyRequest: DialogPartyRequest? = null
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
+    lateinit var partyDataService : PartyDataService
 
     private var remainTime : Long = 0
     private var timerTask : Timer? = null
@@ -78,7 +77,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             bundle.putInt("partyId", deliveryItemId!!)
             var dialogFragment = DialogFragment()
             var dialogTag = String()
-
             if (authorStatus == true) {
                 bundle.putBoolean("authorStatus", partyData.authorStatus)
                 bundle.putString("chief", partyData.chief)
@@ -113,21 +111,22 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
         }
 
+        // 매칭 신청 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
-            // TODO: 일반 유저가 파티에 참여한 이후에 채팅방 가기로 글자 바꿔주기
-            if (authorStatus == true) {
-                // 채팅방으로 바로 갈 수 있도록 설정
-            } else if (authorStatus == false) {
-                val dialog = DialogPartyRequest()
-                dialog.show(parentFragmentManager, "partyRequest")
+            if (authorStatus == true || belongStatus == "Y") {
+                //TODO 채팅방으로 바로 갈 수 있도록 설정
+            } else {
+                dialogPartyRequest = DialogPartyRequest(partyData.id)
+                dialogPartyRequest!!.setChattingRoonJoinView(this)
+                dialogPartyRequest!!.show(parentFragmentManager, "partyRequest")
             }
         }
     }
 
     private fun initDeliveryPartyData() {
-        val partyDetailService = PartyDataService()
-        partyDetailService.partyDetailSender(deliveryItemId!!)
-        partyDetailService.setPartyDetailView(this)
+        partyDataService = PartyDataService()
+        partyDataService.partyDetailSender(deliveryItemId!!)
+        partyDataService.setPartyDetailView(this)
     }
 
     override fun partyDetailSuccess(result: PartyDetailResult) {
@@ -137,10 +136,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyProgressBar.visibility = View.GONE
 
         authorStatus = result.authorStatus
+        belongStatus = result.belongStatus
 
-        // 글쓴이 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
-        if (authorStatus == true) binding.lookPartyRequestTv.text = "채팅방 가기"
-        else if (authorStatus == false) binding.lookPartyRequestTv.text = "신청하기"
+        // 글쓴이, 파티 멤버 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
+        if (authorStatus == true || belongStatus == "Y") binding.lookPartyRequestTv.text = "채팅방 가기"
+        else binding.lookPartyRequestTv.text = "신청하기"
 
         if (result?.chiefProfileImgUrl != null)
             binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))
@@ -288,4 +288,21 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         return remainTime
     }
+
+    override fun showPartyRequestSuccess() {
+        belongStatus = "Y"
+        binding.lookPartyRequestTv.text = "채팅방 가기"
+        val dialog = DialogPartyRequestComplete()
+        dialog.show(parentFragmentManager, "partyRequestComplete")
+        val handler = Handler()
+        handler.postDelayed({
+            dialog.dismiss()
+        }, 3000)
+        dialogPartyRequest!!.dismiss()
+    }
+
+    override fun showPartyRequestFail() {
+        showToast("이미 매칭 신청이 완료된 배달 파티입니다.")
+    }
+
 }

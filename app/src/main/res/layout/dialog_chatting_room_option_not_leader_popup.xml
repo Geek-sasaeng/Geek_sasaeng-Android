@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_chatting_room_option_not_leader"
     android:layout_width="206dp"
     android:layout_height="183dp"
     app:cardCornerRadius="7dp"

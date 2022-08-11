@@ -3,24 +3,18 @@ package com.example.geeksasaeng.Home.CreateParty
 import android.content.Intent
 import android.graphics.Color
 import android.location.Geocoder
-import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Home.Party.CreateParty.*
 import com.example.geeksasaeng.Home.Party.Retrofit.*
-import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
@@ -45,7 +39,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
 
     override fun initAfterBinding() {
-
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
         binding.createPartyNumber2Tv.isEnabled = false
         binding.createPartyCategory2Tv.isEnabled = false

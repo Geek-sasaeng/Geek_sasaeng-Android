@@ -58,7 +58,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
-        initTimer() // 타이머 작업
         initAdapter()
         initTopScrollListener() // 상단 스크롤 작업
 
@@ -293,7 +292,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // Adapter 설정
     private fun initAdapter() {
-        searchAdapter = DeliveryRVAdapter(searchArray, timerTask)
+        searchAdapter = DeliveryRVAdapter(searchArray)
         binding.searchDetailPartyRv.adapter = searchAdapter
         binding.searchDetailPartyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -308,14 +307,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             }
         })
     }
-
-    // 타이머 설정
-    private fun initTimer(){
-        var timer = Timer()
-        timerTask = DeliveryTimer(CopyOnWriteArrayList<TimerData>())
-        timer.schedule(timerTask, 0, 1000)
-    }
-
     //스피너 관련 작업
     private fun initSpinner(){
         val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
