@@ -2,10 +2,14 @@ package com.example.geeksasaeng.Login
 
 import DormitoryDataService
 import android.util.Log
+import android.widget.EditText
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.example.geeksasaeng.Login.Retrofit.DormitoryRequest
 import com.example.geeksasaeng.Login.Retrofit.DormitoryResult
 import com.example.geeksasaeng.Login.Retrofit.DormitoryView
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.saveDormitory
