@@ -18,6 +18,7 @@ import java.util.*
 class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
+    private var roomUuid = String()
     private var chattingArray = ArrayList<Chatting>()
     private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -32,7 +33,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
-
+        roomUuid = intent.getStringExtra("roomUuid").toString()
         binding.chattingRoomTitleTv.text = roomName
 
         initChatArray()
@@ -147,8 +148,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         })
     }
     private fun initChatListener() {
-        // TODO: 채팅방 리스트 API와 연동
-        chattingRoomName = "TestRoom3"
+        chattingRoomName = roomUuid
     }
 
     private fun initSendChatListener() {
@@ -193,7 +193,9 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             }
 
             // 시간을 기준으로 정렬
-            timeList = timeList.sorted() as MutableList<String>
+            if(timeList.isNotEmpty()){
+                timeList = timeList.sorted() as MutableList<String>
+            }
         }
     }
 

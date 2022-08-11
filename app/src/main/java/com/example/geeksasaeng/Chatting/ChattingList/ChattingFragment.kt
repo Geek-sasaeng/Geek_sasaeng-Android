@@ -21,11 +21,9 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     }
 
     private fun initChattingList() {
-        // 채팅방 DummyData
 
-
+        chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
         chattingList.apply {
-
             // add(ChattingList("roomName", "roomImgUrl", "lastChat", "lastTime", "newMsg"))
             db.collection("Rooms")
                 .whereArrayContains("roomInfo.participants", getNickname().toString()) //사용자 닉네임을 이용해서 사용자가 참여중인 채팅방 찾아올 수 있다.
@@ -33,10 +31,13 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
-                        val roomInfo = document.data.getValue("roomInfo") as HashMap<String, Any>
+                        val roomInfo = document.data.getValue("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                         Log.d("firestore", "성공함 + ${document.id} => ${document.data}"+roomInfo.getValue("title").toString() )
+
                         val roomName = roomInfo.getValue("title").toString()
-                        add(ChattingListData(roomName, "http://geeksasaeng.shop/s3/neo.jpg", "firebase채팅입니다.", "방금", "+10"))
+                        val roomUuid = document.id
+                        add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", "firebase채팅입니다.", "방금", "+10"))
+
                     }
                     initAdapter()
                 }
@@ -44,6 +45,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                     Log.w("firestore", "Error getting documents: ", exception)
                 }
 
+            // 채팅방 DummyData
             /*add(ChattingListData("채팅방0", "http://geeksasaeng.shop/s3/neo.jpg", "마지막 채팅입니다ㅏㅏㅏㅏㅏㅏㅏ", "방금", "+10"))
             add(ChattingListData("채팅방1", "http://geeksasaeng.shop/s3/neo.jpg", "가나다라마바사아자차카타파하", "방금", "+10"))
             add(ChattingListData("채팅방2", "http://geeksasaeng.shop/s3/neo.jpg", "가 나 다 라 마 바 사 아 자 차 카 타 파 하", "방금", "+10"))
@@ -58,6 +60,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
         }
     }
 
+
     private fun initAdapter() {
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
         Log.d("firestore", chattingList.toString())
@@ -69,6 +72,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
             override fun onItemClick(chattingList: ChattingListData, position: Int) {
                 val intent = Intent(activity, ChattingRoomActivity::class.java)
                 intent.putExtra("roomName", chattingList.roomName)
+                intent.putExtra("roomUuid", chattingList.roomUuid)
                 startActivity(intent)
             }
         })
