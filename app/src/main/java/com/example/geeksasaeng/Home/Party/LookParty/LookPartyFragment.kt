@@ -303,6 +303,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         belongStatus = "Y"
         binding.lookPartyRequestTv.text = "채팅방 가기"
+        binding.lookMatchingNumber.text = (partyData.currentMatching+1).toString() + "/" + partyData.maxMatching // 현재 매칭 수 + 1
 
         val dialogPartyRequestComplete = DialogPartyRequestComplete()
         dialogPartyRequestComplete.dialogPartyRequestCompleteView = this
@@ -337,6 +338,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
     }
 
+    // 파이어 베이스 participants 추가
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
