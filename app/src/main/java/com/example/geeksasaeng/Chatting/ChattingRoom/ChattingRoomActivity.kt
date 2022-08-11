@@ -127,7 +127,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initChatListener() {
-        // TODO: 채팅방 리스트 API와 연동
         chattingRoomName = roomUuid
     }
 
