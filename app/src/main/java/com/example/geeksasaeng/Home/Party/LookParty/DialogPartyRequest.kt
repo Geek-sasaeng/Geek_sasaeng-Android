@@ -1,35 +1,29 @@
 package com.example.geeksasaeng.Home.Party.LookParty
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
 import com.example.geeksasaeng.Home.Party.Retrofit.JoinPartyRequest
 import com.example.geeksasaeng.Home.Party.Retrofit.JoinPartyView
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.databinding.DialogPartyRequestBinding
-import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
-interface ChattingRoomJoinView{
-    fun showPartyRequestSuccess()
-    fun showPartyRequestFail()
+
+interface DialogPartyRequestView{
+    fun partyJoinAPISuccess()
+    fun partyJoinAPIFail()
 }
 
 class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
     private lateinit var partyDataService : PartyDataService
     private lateinit var binding: DialogPartyRequestBinding
-    private lateinit var chattingRoomJoinView : ChattingRoomJoinView
+    private lateinit var dialogPartyRequestView : DialogPartyRequestView
 
-    fun setChattingRoonJoinView(chattingRoomJoinView: ChattingRoomJoinView){
-        this.chattingRoomJoinView = chattingRoomJoinView
+    fun setChattingRoonJoinView(dialogPartyRequestView: DialogPartyRequestView){
+        this.dialogPartyRequestView = dialogPartyRequestView
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,11 +64,11 @@ class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
 
     override fun joinPartyViewSuccess(code: Int) {
         Log.d("JoinParty", "SUCCESS")
-        chattingRoomJoinView.showPartyRequestSuccess()
+        dialogPartyRequestView.partyJoinAPISuccess()
     }
 
     override fun joinPartyViewFailure(message: String) {
         Log.d("JoinParty", "FAIL")
-        chattingRoomJoinView.showPartyRequestFail()
+        dialogPartyRequestView.partyJoinAPIFail()
     }
 }
