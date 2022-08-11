@@ -344,20 +344,24 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
+                Log.d("peopleSpinner", position.toString()+"/"+"")
+                if(position==0){ // 제일 상단 클릭하면 초기화 해주기 위해
+                    items[0]= items[6] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                }else{
+                    items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
+                }
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
                 image.visibility = View.VISIBLE
                 //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
-                items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
                 val textName: TextView = view!!.findViewById(R.id.spinner_text)
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
-                    if (position in 1..5)
-                        filterCheckFlag = true
+                filterCheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
 
-                    maxMatching = position * 2
-                    finalPage = false
+                maxMatching = position * 2
+                finalPage = false
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}

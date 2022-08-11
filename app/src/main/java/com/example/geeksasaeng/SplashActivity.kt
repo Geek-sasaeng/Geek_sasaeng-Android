@@ -38,7 +38,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
         password = getPassword() // TODO: 이거 필요해?
         //Splash-Response
         Log.d("splash", getJwt() + " " + getLoginId() + " " + getPassword()+ "/"+ getDormitoryId().toString())
-        if (jwt != null && isAutoLogin() == true && getDormitoryId()!=-1) { // 자동 로그인 체크 한 경우 + 기숙사 설정을 완료한 경우
+        if (jwt != null && isAutoLogin() == true && getDormitoryId()!=-1) { // 자동 로그인 체크 한 경우 + 기숙사 설정을 완료한 경우(dormitoryId가 -1이 불러와지면 기숙사 설정을 안한 상태이므로 자동로그인이 체크되어있어도, 로그인부터 다시하게 함)
             loginService.autoLogin()
         } else {
             removeAutoLogin()
