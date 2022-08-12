@@ -2,7 +2,6 @@ package com.example.geeksasaeng.Chatting.ChattingRoom
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +44,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initChatListener()
         initReceiveChatListener()
         initSendChatListener()
+        optionClickListener()
     }
 
     private fun initChatArray() {
@@ -109,6 +109,28 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         }
     }
 
+    private fun optionClickListener() {
+        binding.chattingRoomOptionBtn.setOnClickListener{
+            // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
+            val optionDialog = ChattingNotLeaderOptionDialog()
+            optionDialog.show(supportFragmentManager, "chattingUserOptinDialog")
+        }
+
+        binding.chattingRoomBackBtn.setOnClickListener {
+            finish()
+        }
+
+        binding.chattingRoomTopLayoutBtn.setOnClickListener {
+            binding.chattingRoomTopLayout.visibility = View.GONE
+            topLayoutFlag = false
+
+            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
+                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료")
+                CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+        }
+    }
+
     private fun initTextChangedListener() {
         binding.chattingRoomChattingTextEt.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -125,7 +147,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             }
         })
     }
-
     private fun initChatListener() {
         chattingRoomName = roomUuid
     }

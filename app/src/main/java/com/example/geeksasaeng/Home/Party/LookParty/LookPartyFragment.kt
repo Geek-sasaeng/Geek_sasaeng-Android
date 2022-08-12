@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party.LookParty
 
+import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
@@ -8,33 +9,39 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailResult
-import com.example.geeksasaeng.Home.Party.Retrofit.PartyDetailView
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener {
-
-    var deliveryItemId: Int? = null
-    var status: String? = null
-    var authorStatus: Boolean? = null
-    lateinit var partyData: PartyDetailResult
-    lateinit var mapView : MapView
-
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView {
+    private var deliveryItemId: Int? = null
+    private var status: String? = null
+    private var authorStatus: Boolean? = null
+    private var belongStatus: String? = null
+    private var dialogPartyRequest: DialogPartyRequest? = null
     private var remainTime : Long = 0
     private var timerTask : Timer? = null
+    private val db = Firebase.firestore //파이어스토어
+
+    lateinit var partyData: PartyDetailResult
+    lateinit var mapView : MapView
+    lateinit var partyDataService : PartyDataService
 
     override fun initAfterBinding() {
         initClickListener()
@@ -78,7 +85,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             bundle.putInt("partyId", deliveryItemId!!)
             var dialogFragment = DialogFragment()
             var dialogTag = String()
-
             if (authorStatus == true) {
                 bundle.putBoolean("authorStatus", partyData.authorStatus)
                 bundle.putString("chief", partyData.chief)
@@ -113,21 +119,22 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
         }
 
+        // 매칭 신청 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
-            // TODO: 일반 유저가 파티에 참여한 이후에 채팅방 가기로 글자 바꿔주기
-            if (authorStatus == true) {
-                // 채팅방으로 바로 갈 수 있도록 설정
-            } else if (authorStatus == false) {
-                val dialog = DialogPartyRequest()
-                dialog.show(parentFragmentManager, "partyRequest")
+            if (authorStatus == true || belongStatus == "Y") {
+                showPartyChattingRoom()
+            } else {
+                dialogPartyRequest = DialogPartyRequest(partyData.id)
+                dialogPartyRequest!!.setChattingRoonJoinView(this)
+                dialogPartyRequest!!.show(parentFragmentManager, "partyRequest")
             }
         }
     }
 
     private fun initDeliveryPartyData() {
-        val partyDetailService = PartyDataService()
-        partyDetailService.partyDetailSender(deliveryItemId!!)
-        partyDetailService.setPartyDetailView(this)
+        partyDataService = PartyDataService()
+        partyDataService.partyDetailSender(deliveryItemId!!)
+        partyDataService.setPartyDetailView(this)
     }
 
     override fun partyDetailSuccess(result: PartyDetailResult) {
@@ -137,10 +144,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyProgressBar.visibility = View.GONE
 
         authorStatus = result.authorStatus
+        belongStatus = result.belongStatus
 
-        // 글쓴이 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
-        if (authorStatus == true) binding.lookPartyRequestTv.text = "채팅방 가기"
-        else if (authorStatus == false) binding.lookPartyRequestTv.text = "신청하기"
+        // 글쓴이, 파티 멤버 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
+        if (authorStatus == true || belongStatus == "Y") binding.lookPartyRequestTv.text = "채팅방 가기"
+        else binding.lookPartyRequestTv.text = "신청하기"
 
         if (result?.chiefProfileImgUrl != null)
             binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))
@@ -288,4 +296,56 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         return remainTime
     }
+
+    override fun partyJoinAPISuccess() {
+        // 파이어 베이스 채팅방 사용자 닉네임 추가
+        joinPartyChattingRoom()
+
+        belongStatus = "Y"
+        binding.lookPartyRequestTv.text = "채팅방 가기"
+        binding.lookMatchingNumber.text = (partyData.currentMatching+1).toString() + "/" + partyData.maxMatching // 현재 매칭 수 + 1
+
+        val dialogPartyRequestComplete = DialogPartyRequestComplete()
+        dialogPartyRequestComplete.dialogPartyRequestCompleteView = this
+        dialogPartyRequestComplete.show(parentFragmentManager, "partyRequestComplete")
+
+        val handler = Handler()
+        handler.postDelayed({
+            dialogPartyRequestComplete.dismiss()
+        }, 3000)
+
+        dialogPartyRequest!!.dismiss()
+    }
+
+    override fun partyJoinAPIFail() {
+        showToast("이미 매칭 신청이 완료된 배달 파티입니다.")
+    }
+
+    // 채팅방으로 이동
+    override fun showPartyChattingRoom() {
+        val chatUUID = partyData.uuid
+        db.collection("Rooms").document(partyData.uuid).get()
+            .addOnSuccessListener {doc ->
+                if (doc != null){
+                    val value = doc.data!!["roomInfo"] as HashMap<String, Any>
+                    val chatName = value["title"].toString()
+                    val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    intent.putExtra("roomName", chatName)
+                    intent.putExtra("roomUuid", chatUUID)
+                    startActivity(intent)
+                }
+            }
+            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+    }
+
+    // 파이어 베이스 participants 추가
+    fun joinPartyChattingRoom(){
+        db.collection("Rooms")
+            .document(partyData.uuid)
+            .update("roomInfo.participants", FieldValue.arrayUnion(getNickname().toString()))
+            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+    }
+
+
 }
