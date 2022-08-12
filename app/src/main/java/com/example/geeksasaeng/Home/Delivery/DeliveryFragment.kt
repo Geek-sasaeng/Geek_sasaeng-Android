@@ -141,13 +141,18 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            deliveryArray.clear()
-            timerTask.removeAllTimerData()
-            initLoadPosts()
-            initAdapter()
-            binding.deliverySwipe.isRefreshing = false
+            refreshing()
         })
     }
+
+    private fun refreshing(){
+        deliveryArray.clear()
+        timerTask.removeAllTimerData()
+        initLoadPosts()
+        initAdapter()
+        binding.deliverySwipe.isRefreshing = false
+    }
+
 
     // Adapter 설정
     private fun initAdapter() {
@@ -249,7 +254,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initCheckBox(){ //라디오 버튼
+    private fun initCheckBox(){ //체크버튼 이벤트 (아침, 점심, 저녁)
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
@@ -264,6 +269,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -280,6 +286,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -296,6 +303,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -312,22 +320,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
-    }
-
-    //배너 작업
-    private fun initBanner() {
-        deliveryService.getDeliveryBanner() //광고 불러오기
-    }
-
-    //페이지 변경하기
-    fun setPage() {
-        if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
-            currentPosition = 0
-        binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
-        currentPosition += 1
     }
 
     //스피너 관련 작업
@@ -340,7 +337,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
         //이벤트 처리
-
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
@@ -362,11 +358,27 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 maxMatching = position * 2
                 finalPage = false
+
+                refreshing()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
+    
+    //배너 작업
+    private fun initBanner() {
+        deliveryService.getDeliveryBanner() //광고 불러오기
+    }
+
+    //페이지 변경하기
+    fun setPage() {
+        if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
+            currentPosition = 0
+        binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
+        currentPosition += 1
+    }
+
 
     private fun clearBackStack() {
         val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
