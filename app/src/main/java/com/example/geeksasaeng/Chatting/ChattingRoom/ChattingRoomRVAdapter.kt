@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -105,6 +106,7 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
 
     fun addAllItems(items: MutableList<Chatting>) {
         chattingList.addAll(items)
+        Log.d("FIREBASE-RESPONSE", "CHATTINGLIST = ${items}")
         this.notifyDataSetChanged()
     }
 }

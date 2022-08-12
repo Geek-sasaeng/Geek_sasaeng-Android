@@ -12,7 +12,11 @@ import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,6 +29,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
+    var chattingNumber = 0
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -35,12 +40,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         binding.chattingRoomTitleTv.text = roomName
 
         initTopLayout()
-        initAdapter()
         initClickListener()
         initTextChangedListener()
         initChatListener()
-        initReceiveChatListener()
         initSendChatListener()
+        initRealTimeChatListener()
+        initAdapter()
+        // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
     }
 
     private fun initTopLayout() {
@@ -110,7 +116,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
-
             val uuid = UUID.randomUUID().toString()
 
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
@@ -125,38 +130,40 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
-                    // 채팅 Adapter에 적용
                     // TODO: 보내는 시간 넣어주기
-                    val item = Chatting(1, nickname, "test", R.drawable.ic_default_profile, myChatting, null)
-                    chattingRoomRVAdapter.addItem(item)
-                    chattingRoomRVAdapter.notifyDataSetChanged()
+                    binding.chattingRoomSendTv.text = ""
             }
         }
     }
 
-    private fun initReceiveChatListener() {
-        db.collection("Rooms").document(chattingRoomName).collection("Messages").get().addOnSuccessListener { result ->
-            var item: Chatting
+    private fun calculateDate(): String {
+        val now: Long = System.currentTimeMillis()
+        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        return simpleDate.format(Date(now))
+    }
 
-            for (document in result) {
-                if (document["nickname"].toString() == nickname) // 자신의 채팅
-                    item = Chatting(1, document["nickname"].toString(), document["time"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
-                else // 상대의 채팅
-                    item = Chatting(2, document["nickname"].toString(), document["time"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
-                
-                chattingList.add(item)
+    private fun initRealTimeChatListener() {
+        db.collection("Rooms").document("TestRoom3").collection("Messages")
+            .addSnapshotListener { snapshots, _ ->
+                for (dc in snapshots?.documentChanges!!) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        var item: Chatting
+
+                        if (nickname == dc.document["nickname"]) {
+                            item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
+                        } else {
+                            item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
+                        }
+
+                        chattingList.add(item)
+                    }
+                }
+
+                if (chattingList.size != 0) {
+                    chattingList = chattingList.sortedBy { it.time } as MutableList<Chatting>
+                    Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SORTED = ${chattingList}")
+                    chattingRoomRVAdapter.addAllItems(chattingList)
+                }
             }
-
-            chattingList = chattingList.sortedBy { it.time } as MutableList<Chatting>
-            // Log.d("FIREBASE-RESPONSE", chattingList.toString())
-
-            chattingRoomRVAdapter.addAllItems(chattingList)
-        }
     }
-
-        private fun calculateDate(): String {
-            val now: Long = System.currentTimeMillis()
-            val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-            return simpleDate.format(Date(now))
-        }
-    }
+}
