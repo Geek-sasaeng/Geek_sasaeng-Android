@@ -85,6 +85,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun initAfterBinding() {
         dormitoryId = getDormitoryId()!!
+        Log.d("dormitory", "기숙사 정보"+dormitoryId.toString()+"가 DeliveryFragment에 전달됨")
         Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
         // 모든 fragment stack 제거
         clearBackStack()
@@ -97,7 +98,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
-        initTimer() // 타이머 작업
         initTopScrollListener() // 상단 스크롤 작업
         initAdapter()
 
@@ -140,17 +140,21 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            deliveryArray.clear()
-            timerTask.removeAllTimerData()
-            initLoadPosts()
-            initAdapter()
-            binding.deliverySwipe.isRefreshing = false
+            refreshing()
         })
     }
 
+    private fun refreshing(){ // 파티목록 새로고침
+        deliveryArray.clear()
+        initLoadPosts()
+        initAdapter()
+        binding.deliverySwipe.isRefreshing = false
+    }
+
+
     // Adapter 설정
     private fun initAdapter() {
-        deliveryAdapter = DeliveryRVAdapter(deliveryArray, timerTask)
+        deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -171,14 +175,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             }
         })
     }
-
-    // 타이머 설정
-    private fun initTimer(){
-        var timer = Timer()
-        timerTask = DeliveryTimer(CopyOnWriteArrayList<TimerData>())
-        timer.schedule(timerTask, 0, 1000)
-    }
-
     // 하단 스크롤 관련
     // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)
     private fun initScrollListener() {
@@ -248,7 +244,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initCheckBox(){ //라디오 버튼
+    private fun initCheckBox(){ //체크버튼 이벤트 (아침, 점심, 저녁)
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
@@ -263,6 +259,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -279,6 +276,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -295,6 +293,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -311,9 +310,50 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     orderTimeCategory = null
                 }
             }
+
+            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
+    }
+
+    //스피너 관련 작업
+    private fun initSpinner() {
+        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+
+        //어댑터
+        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
+        binding.deliveryPeopleSpinner.adapter = spinnerAdapter
+        binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
+
+        //이벤트 처리
+        binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //TODO:스피너
+                Log.d("peopleSpinner", position.toString()+"/"+"")
+                if(position==0){ // 제일 상단 클릭하면 초기화 해주기 위해
+                    items[0]= items[6] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                }else{
+                    items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
+                }
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
+                val textName: TextView = view!!.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
+
+                filterCheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
+
+                maxMatching = position * 2
+                finalPage = false
+
+                refreshing()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     //배너 작업
@@ -329,39 +369,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         currentPosition += 1
     }
 
-    //스피너 관련 작업
-    private fun initSpinner() {
-        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
-
-        //어댑터
-        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
-        binding.deliveryPeopleSpinner.adapter = spinnerAdapter
-        binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
-
-        //이벤트 처리
-
-        binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //TODO:스피너
-                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
-                image.setImageResource(R.drawable.ic_spinner_up)
-                image.visibility = View.VISIBLE
-                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
-                items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
-                val textName: TextView = view!!.findViewById(R.id.spinner_text)
-                textName.text = items[position]
-                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
-
-                    if (position in 1..5)
-                        filterCheckFlag = true
-
-                    maxMatching = position * 2
-                    finalPage = false
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
 
     private fun clearBackStack() {
         val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager

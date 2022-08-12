@@ -24,8 +24,12 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = mutableListOf()
+    private var roomUuid = String()
+    private var chattingArray = ArrayList<Chatting>()
+    private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
-    var topLayoutFlag = false // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
+    // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
+    var topLayoutFlag = false
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
@@ -36,7 +40,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
-
+        roomUuid = intent.getStringExtra("roomUuid").toString()
         binding.chattingRoomTitleTv.text = roomName
 
         initTopLayout()
@@ -47,6 +51,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initRealTimeChatListener()
         initAdapter()
         // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
+        optionClickListener()
     }
 
     private fun initTopLayout() {
@@ -92,6 +97,28 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         }
     }
 
+    private fun optionClickListener() {
+        binding.chattingRoomOptionBtn.setOnClickListener{
+            // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
+            val optionDialog = ChattingNotLeaderOptionDialog()
+            optionDialog.show(supportFragmentManager, "chattingUserOptinDialog")
+        }
+
+        binding.chattingRoomBackBtn.setOnClickListener {
+            finish()
+        }
+
+        binding.chattingRoomTopLayoutBtn.setOnClickListener {
+            binding.chattingRoomTopLayout.visibility = View.GONE
+            topLayoutFlag = false
+
+            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
+                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료")
+                CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+        }
+    }
+
     private fun initTextChangedListener() {
         binding.chattingRoomChattingTextEt.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -110,8 +137,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initChatListener() {
-        // TODO: 채팅방 리스트 API와 연동
-        chattingRoomName = "TestRoom3"
+        chattingRoomName = roomUuid
     }
 
     private fun initSendChatListener() {

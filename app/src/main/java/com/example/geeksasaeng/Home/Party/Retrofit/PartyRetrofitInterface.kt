@@ -11,6 +11,7 @@ interface PartyRetrofitInterface {
         @Path("partyId") partyId: Int
     ): Call<PartyDetailResponse>
 
+    //배달 파티 삭제
     @PATCH("delivery-party/{partyId}")
     fun sendDeleteDeliveryParty(
         @Header("Authorization") jwt: String?,
