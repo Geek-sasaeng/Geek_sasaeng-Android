@@ -145,7 +145,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         })
     }
 
-    private fun refreshing(){
+    private fun refreshing(){ // 파티목록 새로고침
         deliveryArray.clear()
         timerTask.removeAllTimerData()
         initLoadPosts()
@@ -365,7 +365,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
-    
+
     //배너 작업
     private fun initBanner() {
         deliveryService.getDeliveryBanner() //광고 불러오기
