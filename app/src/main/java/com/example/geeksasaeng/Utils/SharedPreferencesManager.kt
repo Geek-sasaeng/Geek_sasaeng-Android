@@ -66,7 +66,7 @@ fun saveUuid(uuid: String) {
 fun removeAutoLogin() {
     val editor = mSharedPreferences.edit()
     editor.remove("jwt")
-    editor.remove("is")
+    editor.remove("is") //TODO: ??? "is"가 뭐지?
     editor.remove("loginId")
     editor.remove("password")
     editor.remove("autoLogin")
@@ -90,9 +90,9 @@ fun setAutoLogin(jwt: String){
 fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
 fun getNickname(): String? = mSharedPreferences.getString("nickname", null)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
-fun getDormitoryId(): Int? = mSharedPreferences.getInt("dormitoryId", 0)
+fun getDormitoryId(): Int? = mSharedPreferences.getInt("dormitoryId", -1)
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun isAutoLogin(): Boolean? = mSharedPreferences.getBoolean("autoLogin", false)
-fun getLoginId(): String? = mSharedPreferences.getString("loginId", null)
-fun getPassword(): String? = mSharedPreferences.getString("password", null)
+fun getLoginId(): String? = mSharedPreferences.getString("loginId", null) // TODO: ?? save가 없는뎅..
+fun getPassword(): String? = mSharedPreferences.getString("password", null) // TODO: ??
