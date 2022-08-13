@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -31,7 +32,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
-    private var chattingNumber = 0
+    private var chattingLoadInitial = true
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -48,7 +49,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initSendChatListener()
         initRealTimeChatListener()
         initAdapter()
-        // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
         optionClickListener()
     }
 
@@ -169,7 +169,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private fun initRealTimeChatListener() {
         db.collection("Rooms").document(roomUuid)
             .collection("Messages").addSnapshotListener { snapshots, _ ->
-
             for (dc in snapshots?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
@@ -181,13 +180,23 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                     }
 
                     chattingList.add(item)
+
+                    if (!chattingLoadInitial) {
+                        chattingRoomRVAdapter.addItem(item)
+                        var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+                        binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
+                    }
                 }
             }
 
-            Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SIZE = ${chattingList.size}")
-
-            if (chattingList.size != 0)
-                chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+            if (chattingLoadInitial) {
+                if (chattingList.size != 0) {
+                    chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+                    var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+                    binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
+                }
+                chattingLoadInitial = false
+            }
         }
     }
 }
