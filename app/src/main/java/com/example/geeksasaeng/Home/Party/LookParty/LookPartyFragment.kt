@@ -68,6 +68,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             requireActivity().finish()
     }
 
+
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
             if(status=="lookParty"){
