@@ -154,8 +154,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
-                    // TODO: 보내는 시간 넣어주기
-                    // binding.chattingRoomSendTv.text = ""
+                    binding.chattingRoomChattingTextEt.setText("")
             }
         }
     }
