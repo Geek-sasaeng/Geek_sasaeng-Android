@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,22 +12,26 @@ import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
+    private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
-    private var chattingArray = ArrayList<Chatting>()
-    private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
+    private var chattingNumber = 0
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -36,34 +41,15 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         roomUuid = intent.getStringExtra("roomUuid").toString()
         binding.chattingRoomTitleTv.text = roomName
 
-        initChatArray()
         initTopLayout()
-        initAdapter()
         initClickListener()
         initTextChangedListener()
         initChatListener()
-        initReceiveChatListener()
         initSendChatListener()
+        initRealTimeChatListener()
+        initAdapter()
+        // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
         optionClickListener()
-    }
-
-    private fun initChatArray() {
-        /*
-        chattingArray.apply {
-            add(Chatting(3, null, null, "네오님이 입장하셨습니다", null))
-            add(Chatting(3, null, null, "루나님이 입장하셨습니다", null))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요", null))
-            add(Chatting(4, null, null, null, null))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "안녕하세요!", null))
-            add(Chatting(3, null, null, "제로님이 입장하셨습니다", null))
-            add(Chatting(3, null, null, "모든 파티원이 입장을 마쳤습니다!\n안내에 따라 메뉴를 입력해주세요", null))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "안녕하세요~", 1))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕", 1))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "뭐 먹을까요", 1))
-            add(Chatting(2, false, R.drawable.ic_default_profile2, "저는 짜장면이요!", 1))
-            add(Chatting(1, true, R.drawable.ic_default_profile, "좋아요", 2))
-        }
-        */
     }
 
     private fun initTopLayout() {
@@ -88,7 +74,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initAdapter() {
-        chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingArray)
+        chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
         binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
@@ -113,7 +99,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
             val optionDialog = ChattingNotLeaderOptionDialog()
-            optionDialog.show(supportFragmentManager, "chattingUserOptinDialog")
+            optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
@@ -147,13 +133,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             }
         })
     }
+
     private fun initChatListener() {
         chattingRoomName = roomUuid
     }
 
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
-
             val uuid = UUID.randomUUID().toString()
 
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
@@ -168,33 +154,8 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
-                    // 채팅 Adapter에 적용
-                    val item = Chatting(1, nickname, R.drawable.ic_default_profile, myChatting, null)
-                    chattingRoomRVAdapter.addItem(item)
-                    chattingRoomRVAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    private fun initReceiveChatListener() {
-        db.collection("Rooms").document(chattingRoomName).collection("Messages").get().addOnSuccessListener { result ->
-            var item: Chatting
-
-            for (document in result) {
-                if (document["nickname"].toString() == nickname) // 자신의 채팅
-                    item = Chatting(1, document["nickname"].toString(), R.drawable.ic_default_profile, document["content"].toString(), null)
-                else // 상대의 채팅
-                    item = Chatting(2, document["nickname"].toString(), R.drawable.ic_default_profile2, document["content"].toString(), null)
-
-                timeList.add(document["time"].toString())
-
-                chattingRoomRVAdapter.addItem(item)
-                chattingRoomRVAdapter.notifyDataSetChanged()
-            }
-
-            // 시간을 기준으로 정렬
-            if(timeList.isNotEmpty()){
-                timeList = timeList.sorted() as MutableList<String>
+                    // TODO: 보내는 시간 넣어주기
+                    binding.chattingRoomSendTv.text = ""
             }
         }
     }
@@ -203,5 +164,30 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         val now: Long = System.currentTimeMillis()
         val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         return simpleDate.format(Date(now))
+    }
+
+    private fun initRealTimeChatListener() {
+        db.collection("Rooms").document(roomUuid)
+            .collection("Messages").addSnapshotListener { snapshots, _ ->
+
+            for (dc in snapshots?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    var item: Chatting
+
+                    if (nickname == dc.document["nickname"]) {
+                        item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
+                    } else {
+                        item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
+                    }
+
+                    chattingList.add(item)
+                }
+            }
+
+            Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SIZE = ${chattingList.size}")
+
+            if (chattingList.size != 0)
+                chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+        }
     }
 }
