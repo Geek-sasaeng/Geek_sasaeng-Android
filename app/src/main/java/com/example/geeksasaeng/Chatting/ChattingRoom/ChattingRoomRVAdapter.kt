@@ -71,6 +71,8 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
         fun bind(chatting: Chatting) {
             binding.itemMyChattingChattingTv.text = chatting.message
             binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
+            binding.itemMyChattingNicknameTv.text = chatting.nickname
+            binding.itemMyChattingTimeTv.text = setTime(chatting.time)
             // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
             binding.itemMyChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
         }
@@ -80,6 +82,8 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
         fun bind(chatting: Chatting) {
             binding.itemYourChattingChattingTv.text = chatting.message
             binding.itemYourChattingNotReadTv.text = chatting.notRead?.toString()
+            binding.itemYourChattingNicknameTv.text = chatting.nickname
+            binding.itemYourChattingTimeTv.text = setTime(chatting.time)
             // binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
             binding.itemYourChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
         }
@@ -101,14 +105,22 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
 
     override fun getItemCount(): Int = chattingList.size
 
-    fun addItem(item: Chatting) {
-        chattingList.add(item)
-        // this.notifyDataSetChanged()
+    fun setTime(time: String): String {
+        val hour = Integer.parseInt(time.substring(11, 13))
+        val minute = Integer.parseInt(time.substring(14, 16))
+        return if (hour in 0..11)
+            "오전 $hour:$minute"
+        else "오후 $hour:$minute"
     }
 
     fun itemSort() {
         var items = chattingList.sortedBy { it.time } as MutableList<Chatting>
         addAllItems(items)
+    }
+
+    fun addItem(item: Chatting) {
+        chattingList.add(item)
+        // this.notifyDataSetChanged()
     }
 
     fun addAllItems(items: MutableList<Chatting>) {
