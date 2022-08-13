@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,13 +10,14 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.*
 import kotlin.collections.ArrayList
 
-class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return chattingList[position].viewType
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("FIREBASE-RESPONSE", "chattingList = ${chattingList.toString()}")
         when (viewType){
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -71,6 +73,7 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
             binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
             // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
             binding.itemMyChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
+            Log.d("FIREBASE-RESPONSE", "Chatting = ${chatting.message.toString()}")
         }
     }
 
@@ -103,7 +106,8 @@ class ChattingRoomRVAdapter(private var chattingList: ArrayList<Chatting>) : Rec
         chattingList.add(item)
     }
 
-    fun addAllItems(items: List<Chatting>) {
+    fun addAllItems(items: MutableList<Chatting>) {
+        chattingList.clear()
         chattingList.addAll(items)
         this.notifyDataSetChanged()
     }
