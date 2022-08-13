@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Chatting.ChattingRoom.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.*
+import okhttp3.internal.notify
 import kotlin.collections.ArrayList
 
 class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -102,7 +103,12 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
 
     fun addItem(item: Chatting) {
         chattingList.add(item)
-        this.notifyDataSetChanged()
+        // this.notifyDataSetChanged()
+    }
+
+    fun itemSort() {
+        var items = chattingList.sortedBy { it.time } as MutableList<Chatting>
+        addAllItems(items)
     }
 
     fun addAllItems(items: MutableList<Chatting>) {

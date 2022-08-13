@@ -155,7 +155,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
                     // TODO: 보내는 시간 넣어주기
-                    binding.chattingRoomSendTv.text = ""
+                    // binding.chattingRoomSendTv.text = ""
             }
         }
     }
@@ -167,8 +167,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document(roomUuid)
-            .collection("Messages").addSnapshotListener { snapshots, _ ->
+        db.collection("Rooms").document(roomUuid).collection("Messages").addSnapshotListener { snapshots, _ ->
             for (dc in snapshots?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
@@ -179,24 +178,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                         item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
 
-                    chattingList.add(item)
-
-                    if (!chattingLoadInitial) {
-                        chattingRoomRVAdapter.addItem(item)
-                        var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
-                        binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
-                    }
+                    chattingRoomRVAdapter.addItem(item)
                 }
             }
 
-            if (chattingLoadInitial) {
-                if (chattingList.size != 0) {
-                    chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
-                    var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
-                    binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
-                }
-                chattingLoadInitial = false
-            }
+            chattingRoomRVAdapter.itemSort()
+            var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+            binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
         }
     }
 }
