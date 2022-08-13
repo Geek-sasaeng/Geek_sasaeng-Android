@@ -23,17 +23,15 @@ import java.util.*
 class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
-    private var chattingList: MutableList<Chatting> = mutableListOf()
+    private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
-    private var chattingArray = ArrayList<Chatting>()
-    private var timeList: MutableList<String> = mutableListOf<String>()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
-    var chattingNumber = 0
+    private var chattingNumber = 0
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -101,7 +99,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
             val optionDialog = ChattingNotLeaderOptionDialog()
-            optionDialog.show(supportFragmentManager, "chattingUserOptinDialog")
+            optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
@@ -169,27 +167,27 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document("TestRoom3").collection("Messages")
-            .addSnapshotListener { snapshots, _ ->
-                for (dc in snapshots?.documentChanges!!) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        var item: Chatting
+        db.collection("Rooms").document(roomUuid)
+            .collection("Messages").addSnapshotListener { snapshots, _ ->
 
-                        if (nickname == dc.document["nickname"]) {
-                            item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
-                        } else {
-                            item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
-                        }
+            for (dc in snapshots?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    var item: Chatting
 
-                        chattingList.add(item)
+                    if (nickname == dc.document["nickname"]) {
+                        item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
+                    } else {
+                        item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
-                }
 
-                if (chattingList.size != 0) {
-                    chattingList = chattingList.sortedBy { it.time } as MutableList<Chatting>
-                    Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SORTED = ${chattingList}")
-                    chattingRoomRVAdapter.addAllItems(chattingList)
+                    chattingList.add(item)
                 }
             }
+
+            Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SIZE = ${chattingList.size}")
+
+            if (chattingList.size != 0)
+                chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+        }
     }
 }

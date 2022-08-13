@@ -17,6 +17,7 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("FIREBASE-RESPONSE", "chattingList = ${chattingList.toString()}")
         when (viewType){
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -72,6 +73,7 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
             binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
             // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
             binding.itemMyChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
+            Log.d("FIREBASE-RESPONSE", "Chatting = ${chatting.message.toString()}")
         }
     }
 
@@ -105,8 +107,8 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
     }
 
     fun addAllItems(items: MutableList<Chatting>) {
+        chattingList.clear()
         chattingList.addAll(items)
-        Log.d("FIREBASE-RESPONSE", "CHATTINGLIST = ${items}")
         this.notifyDataSetChanged()
     }
 }
