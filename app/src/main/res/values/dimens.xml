@@ -19,4 +19,6 @@
     <dimen name="chatting_room_option_leader_height">397dp</dimen>
     <dimen name="chatting_room_option_not_leader_width">206dp</dimen>
     <dimen name="chatting_room_option_not_leader_height">183dp</dimen>
+    <dimen name="party_close_popup_height">250dp</dimen>
+    <dimen name="chatting_exit_popup_height">236dp</dimen>
 </resources>

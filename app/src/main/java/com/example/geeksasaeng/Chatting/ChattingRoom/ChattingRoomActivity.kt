@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -31,7 +32,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
-    private var chattingNumber = 0
+    private var chattingLoadInitial = true
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -48,7 +49,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initSendChatListener()
         initRealTimeChatListener()
         initAdapter()
-        // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
         optionClickListener()
     }
 
@@ -154,22 +154,24 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
-                    // TODO: 보내는 시간 넣어주기
-                    binding.chattingRoomSendTv.text = ""
+                    binding.chattingRoomChattingTextEt.setText("")
             }
         }
     }
 
     private fun calculateDate(): String {
         val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-        return simpleDate.format(Date(now))
+        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
+        var date: String = simpleDate.format(Date(now)).toString()
+        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
+            date = date.substring(0, 11) + "00" + date.substring(13)
+        else if (date.substring(20) == "오후")
+            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13)
+        return date
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document(roomUuid)
-            .collection("Messages").addSnapshotListener { snapshots, _ ->
-
+        db.collection("Rooms").document(roomUuid).collection("Messages").addSnapshotListener { snapshots, _ ->
             for (dc in snapshots?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
@@ -180,14 +182,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                         item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
 
-                    chattingList.add(item)
+                    chattingRoomRVAdapter.addItem(item)
                 }
             }
 
-            Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SIZE = ${chattingList.size}")
-
-            if (chattingList.size != 0)
-                chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+            chattingRoomRVAdapter.itemSort()
+            var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+            binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
         }
     }
 }

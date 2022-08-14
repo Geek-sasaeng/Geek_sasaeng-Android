@@ -24,12 +24,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/item_my_chatting_profile_iv">
 
+        <TextView
+            android:id="@+id/item_my_chatting_nickname_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임"
+            android:textColor="@color/top"
+            android:textSize="11dp"
+            android:textFontWeight="700"
+            android:fontFamily="@font/spoqa_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/item_my_chatting_chatting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_my_chatting_nickname_tv"
             app:cardCornerRadius="5dp"
             app:cardBackgroundColor="@color/gray_0"
             app:cardElevation="0dp" >
@@ -50,18 +63,32 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
+            android:id="@+id/item_my_chatting_time_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_2"
+            android:textSize="12sp"
+            android:text="오전 12:00"
+            android:layout_marginEnd="3dp"
+            android:gravity="right"
+            android:fontFamily="@font/spoqa_medium"
+            android:paddingHorizontal="2dp"
+            app:layout_constraintEnd_toStartOf="@id/item_my_chatting_chatting"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
             android:id="@+id/item_my_chatting_not_read_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/main"
             android:textSize="12sp"
             android:text="0"
-            android:layout_marginEnd="3dp"
+            android:layout_marginEnd="6dp"
             android:gravity="right"
             android:fontFamily="@font/spoqa_medium"
             android:paddingHorizontal="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_my_chatting_chatting"
+            app:layout_constraintEnd_toStartOf="@id/item_my_chatting_time_tv"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
