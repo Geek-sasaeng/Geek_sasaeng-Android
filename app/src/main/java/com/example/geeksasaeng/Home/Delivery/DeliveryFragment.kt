@@ -50,12 +50,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
     private var lastCheckedBox = -1
-
-    //핸들러 설정
-    val handler = Handler(Looper.getMainLooper()) {
-        setPage()
-        true
-    }
+    private lateinit var handler: Handler;
 
     override fun onStart() {
         super.onStart()
@@ -64,6 +59,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun onResume() {
         super.onResume()
+        //핸들러 설정
+        handler = Handler(Looper.getMainLooper()) {
+            setPage()
+            true
+        }
         Log.d("DELIVERY-FRAGMENT", "onResume")
         // remainSec = deliveryAdapter.returnRemainSec()
         // timerTask.start()

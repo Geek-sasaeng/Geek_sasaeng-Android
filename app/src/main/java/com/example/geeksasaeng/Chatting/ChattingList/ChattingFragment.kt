@@ -16,9 +16,16 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     private var chattingList = ArrayList<ChattingListData>()
     private val db = Firebase.firestore //파이어스토어
 
-    override fun initAfterBinding() {
-        initChattingList()
+
+    override fun onResume() {
+        super.onResume()
+        initAdapter()
     }
+
+    override fun initAfterBinding() {
+
+    }
+
 
     private fun initChattingList() {
 

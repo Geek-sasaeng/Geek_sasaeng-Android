@@ -6,26 +6,30 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingListData
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingMemberLeaveView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingPartyLeaveRequest
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
-class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
+class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate), NotLeaderOptionView
+,ChattingMemberLeaveView{
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
-    lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
+    private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
+    private lateinit var chattingService: ChattingService
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
@@ -48,6 +52,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         initSendChatListener()
         initRealTimeChatListener()
         initAdapter()
+        initChattingService()
         // binding.chattingRoomChattingRv.smoothScrollToPosition(30)
         optionClickListener()
     }
@@ -95,10 +100,16 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         }
     }
 
+    private fun initChattingService(){
+        chattingService = ChattingService()
+        chattingService.setChattingMemberLeaveView(this)
+    }
+
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
             val optionDialog = ChattingNotLeaderOptionDialog()
+            optionDialog.notLeaderOptionView = this
             optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
         }
 
@@ -166,6 +177,48 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         return simpleDate.format(Date(now))
     }
 
+    private fun removeFireBasePartyMember(){
+        var participantsId: Int = -1
+        /*
+                    FireBase
+         */
+        // 채팅방 참여자 id 가져오기
+        db.collection("Rooms")
+            .whereArrayContains("roomInfo.participants", getNickname().toString()) //사용자 닉네임을 이용해서 사용자가 참여중인 채팅방 찾아올 수 있다.
+            .whereEqualTo("roomInfo.isFinish", false) //유저가 참여하고 있고, 종료되지 않은 채팅방 데이터만 가져올 쿼리 생성
+            .get()
+            .addOnSuccessListener { documents ->
+                loop@
+                for (document in documents) {
+                    val roomInfo = document.data.getValue("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+                    val participants = roomInfo.getValue("participants") as ArrayList<Any>
+                    for((idx,map) in participants.withIndex()){
+                        val map = map as HashMap<String, String>
+                        val participant = map.get("participant").toString()
+                        if(participant.equals(getNickname())){
+                            participantsId = idx;
+                            break@loop
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("firestore", "Error getting documents: ", exception)
+            }
+        if(participantsId == -1){
+            // TODO Idx not found 오류 만들기
+            return
+        }
+
+        // 채팅방 참여자 삭제
+        db.collection("Rooms")
+            .document(roomUuid)
+            .update("participants", FieldValue.arrayRemove(participantsId))
+            .addOnSuccessListener { Log.d("chatting-member-leave", "파이어베이스 채팅방에서 유저가 삭제됐습니다.") }
+            .addOnFailureListener { e -> Log.w("chatting-member-leave", "파이어베이스 채팅방에서 유저를 삭제하는 도중에 오류가 발생했습니다.", e) }
+
+    }
+
     private fun initRealTimeChatListener() {
         db.collection("Rooms").document(roomUuid)
             .collection("Messages").addSnapshotListener { snapshots, _ ->
@@ -189,5 +242,19 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             if (chattingList.size != 0)
                 chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
         }
+    }
+
+    // 일반 유저가 나가기를 눌렀을 경우
+    override fun NotLeaderExistClick() {
+        val chattingPartyLeaveRequest = ChattingPartyLeaveRequest(roomUuid)
+        chattingService.getChattingPartyMemberLeave(chattingPartyLeaveRequest)
+    }
+
+    override fun chattingMemberLeaveSuccess(result: String) {
+        removeFireBasePartyMember()
+    }
+
+    override fun chattingMemberLeaveFailure(code: Int, message: String) {
+        TODO("Not yet implemented")
     }
 }

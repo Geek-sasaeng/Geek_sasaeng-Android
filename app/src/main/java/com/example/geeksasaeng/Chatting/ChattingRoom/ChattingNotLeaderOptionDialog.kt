@@ -14,6 +14,7 @@ import com.example.geeksasaeng.databinding.DialogChattingRoomOptionNotLeaderPopu
 
 class ChattingNotLeaderOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionNotLeaderPopupBinding
+    lateinit var notLeaderOptionView: NotLeaderOptionView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +38,12 @@ class ChattingNotLeaderOptionDialog: DialogFragment() {
     }
 
     private fun initListener() {
-        // TODO 각 옵션 기능 넣기
+        initExistClickListener()
+    }
+
+    private fun initExistClickListener(){
+        binding.dialogNotLeaderPopupOptionExitTv.setOnClickListener {
+            notLeaderOptionView.NotLeaderExistClick()
+        }
     }
 }

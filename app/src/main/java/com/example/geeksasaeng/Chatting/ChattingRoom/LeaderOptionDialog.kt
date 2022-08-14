@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 
-class ChattingLeaderOptionDialog: DialogFragment() {
+class LeaderOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
 
     override fun onCreateView(
