@@ -48,7 +48,7 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
         }
 
         binding.matchingEndCancelBtn.setOnClickListener { //X버튼
-            this.dismiss()
+           this.dismiss()
         }
     }
 
