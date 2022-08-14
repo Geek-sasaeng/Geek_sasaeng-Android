@@ -43,8 +43,12 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     }
 
     private fun initListener(){
-        binding.matchingEndOkayBtn.setOnClickListener {
+        binding.matchingEndOkayBtn.setOnClickListener { //완료버튼
             chattingService.MatchingEndSender(requireArguments().getString("roomUuid")!!) //★매칭마감 api호출
+        }
+
+        binding.matchingEndCancelBtn.setOnClickListener { //X버튼
+            this.dismiss()
         }
     }
 
