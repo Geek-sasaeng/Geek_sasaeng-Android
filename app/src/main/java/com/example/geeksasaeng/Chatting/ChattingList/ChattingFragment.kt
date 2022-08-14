@@ -8,6 +8,7 @@ import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -27,13 +28,16 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
     private fun initChattingList() {
 
+        Log.d("firestore", "initChattingList => clear 작동됨")
         chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
+        Log.d("firestore", "채팅리스트"+ chattingList.toString())
         chattingList.apply {
 
             // add(ChattingList("roomName", "roomImgUrl", "lastChat", "lastTime", "newMsg"))
             db.collection("Rooms")
                 .whereEqualTo("roomInfo.category", "배달파티")
                 .whereEqualTo("roomInfo.isFinish", false) //배달파티 카테고리고, 종료되지 않은 채팅방 데이터만 가져올 쿼리 생성
+                //.orderBy("updatedAt", Query.Direction.DESCENDING) // 최신 메세지 순 정렬
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
@@ -43,6 +47,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                         val roomName = roomInfo.getValue("title").toString()
                         val roomUuid = document.id
                         val participantsArray = roomInfo.getValue("participants") as ArrayList<HashMap<String,Any>>
+
                         for (member in participantsArray){ //ParticipantInfo로 받고 싶었는데 HashMap을 ParticipantInfo로 cast를 못한뎅,,
                             if (member.getValue("participant") == getNickname()){ // 그 중에 '이 유저가 속하는' 채팅방 정보만 가져온다!
                                 add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", "firebase채팅입니다.", "방금", "+10"))
@@ -71,7 +76,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
     private fun initAdapter() {
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
-        Log.d("firestore", chattingList.toString())
+        Log.d("firestore", "어댑터채팅리스트"+ chattingList.toString())
         binding.chattingListRv.adapter = chattingListRVAdapter
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -79,7 +84,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
             ChattingListRVAdapter.OnItemClickListener {
             override fun onItemClick(chattingList: ChattingListData, position: Int) { //채팅방 입장할때
                 val intent = Intent(activity, ChattingRoomActivity::class.java)
-                updateEnterTime(chattingList.roomUuid)
+                //updateEnterTime(chattingList.roomUuid)
                 intent.putExtra("roomName", chattingList.roomName)
                 intent.putExtra("roomUuid", chattingList.roomUuid)
                 startActivity(intent)

@@ -8,9 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.Retrofit.ChattingDataService
-import com.example.geeksasaeng.Chatting.Retrofit.MatchingEndRequest
-import com.example.geeksasaeng.Chatting.Retrofit.MatchingEndView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 
