@@ -6,5 +6,11 @@ data class ChattingListData(
     val roomImgUrl: String,
     val lastChat: String,
     val lastTime: String,
-    val newMsg: String
+    val newMsg: String,
+)
+
+data class ParticipantsInfo(
+    val enterTime : String,
+    val participant: String,
+    /*val isRemittance: Boolean*/
 )

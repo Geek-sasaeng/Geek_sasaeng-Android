@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -27,7 +28,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private var roomUuid = String()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
-    var topLayoutFlag = false
+    var topLayoutFlag = true
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
@@ -98,8 +99,17 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
-            val optionDialog = ChattingNotLeaderOptionDialog()
-            optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            if(leader){
+                val optionDialog = ChattingLeaderOptionDialog()
+                val bundle = Bundle()
+                bundle.putString("roomUuid", roomUuid)
+                optionDialog.arguments = bundle
+                optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
+            }else{
+                val optionDialog = ChattingNotLeaderOptionDialog()
+                optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            }
+
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {

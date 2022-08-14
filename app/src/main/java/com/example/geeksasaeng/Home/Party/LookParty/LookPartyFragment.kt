@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -343,9 +344,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(getNickname().toString()))
+            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
             .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+
+        //TODO: 지금 걱정은 .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) 여기서 같은 닉네임이면 update를 해줘야하는데 그걸 어떻게 할지 모르겠네...
     }
 
 
