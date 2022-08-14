@@ -6,6 +6,7 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 
 interface DormitoryRetrofitInterfaces {
+    //기숙사 수정하기
     @PATCH("/members/dormitory")
     fun dormitoryUpdate(
         @Header("Authorization") jwt: String?,

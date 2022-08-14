@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="256dp"
-    android:layout_height="250dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="7dp">
 
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/party_close_title"
+            android:id="@+id/matching_end_title"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@color/line"
@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/party_close_tv"
+                android:id="@+id/matching_end_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/spoqa_medium"
@@ -32,11 +32,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/party_close_cancel_btn"
+                android:id="@+id/matching_end_cancel_btn"
                 android:layout_width="26dp"
                 android:layout_height="16dp"
                 android:layout_marginEnd="20dp"
-                android:padding="2dp"
                 android:src="@drawable/ic_exit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,36 +44,36 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/party_close_content_tv"
+            android:id="@+id/matching_end_content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="22dp"
             android:layout_marginRight="40dp"
+            android:textSize="14sp"
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
-            android:textSize="14sp"
+            android:lineHeight="24dp"
             android:text="매칭을 종료할 시\n본 파티에 대한 추가 인원이\n더 이상 모집되지 않습니다.\n계속하시겠습니까?"
             android:textColor="@color/black"
-            android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/party_close_title" />
+            app:layout_constraintTop_toBottomOf="@id/matching_end_title" />
 
         <View
-            android:id="@+id/party_close_line"
+            android:id="@+id/matching_end_line"
             android:layout_width="0dp"
             android:layout_height="1.7dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/gray_0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/party_close_content_tv" />
+            app:layout_constraintTop_toBottomOf="@id/matching_end_content_tv" />
 
         <TextView
-            android:id="@+id/party_close_ok_btn"
+            android:id="@+id/matching_end_okay_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -87,7 +86,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/party_close_line" />
+            app:layout_constraintTop_toBottomOf="@id/matching_end_line" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

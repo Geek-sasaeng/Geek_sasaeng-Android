@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,7 +29,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private var roomUuid = String()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
-    var topLayoutFlag = false
+    var topLayoutFlag = false //TODO: topLayoutFlag
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
@@ -98,8 +99,17 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
-            val optionDialog = ChattingNotLeaderOptionDialog()
-            optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            if(leader){
+                val optionDialog = ChattingLeaderOptionDialog()
+                val bundle = Bundle()
+                bundle.putString("roomUuid", roomUuid)
+                optionDialog.arguments = bundle
+                optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
+            }else{
+                val optionDialog = ChattingNotLeaderOptionDialog()
+                optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            }
+
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
@@ -163,6 +173,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         val now: Long = System.currentTimeMillis()
         val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
         var date: String = simpleDate.format(Date(now)).toString()
+        Log.d("ampm", date.toString())
         if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
             date = date.substring(0, 11) + "00" + date.substring(13)
         else if (date.substring(20) == "오후")

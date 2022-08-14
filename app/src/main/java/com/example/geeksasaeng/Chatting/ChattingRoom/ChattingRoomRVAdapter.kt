@@ -114,8 +114,10 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
     }
 
     fun itemSort() {
-        var items = chattingList.sortedBy { it.time } as MutableList<Chatting>
-        addAllItems(items)
+        if (chattingList.isNotEmpty()){ //emptyList를 sort할 수 없으므로
+            var items = chattingList.sortedBy { it.time } as MutableList<Chatting>
+            addAllItems(items)
+        }
     }
 
     fun addItem(item: Chatting) {
