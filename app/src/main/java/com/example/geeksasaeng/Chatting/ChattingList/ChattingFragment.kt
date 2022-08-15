@@ -64,10 +64,12 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                                     .addOnSuccessListener { doc -> // 메세지를 time기준 내림차순으로 정렬에 성공했다면
                                         Log.d("tnstj", "채팅 내용, 시간 가져오기 성공")
                                         //마지막 채팅 내용과 마지막 채팅 시간을 가져온다.
-                                        lastChat = doc.documents.last().data!!.getValue("content").toString()
-                                        lastMsgTime = doc.documents.last().data!!.getValue("time").toString()
-                                        lastTime = getLastTimeString(lastMsgTime!!)
-                                        Log.d("last", lastChat+"/"+lastTime)
+                                        if(!doc.isEmpty){
+                                            lastChat = doc.documents.last().data!!.getValue("content").toString()
+                                            lastMsgTime = doc.documents.last().data!!.getValue("time").toString()
+                                            lastTime = getLastTimeString(lastMsgTime!!)
+                                            Log.d("last", lastChat+"/"+lastTime)
+                                        }
                                         //firestore에 위에서 정보를 이용하여 chattingList에 추가해준다.
                                         add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10", roomInfo.getValue("updatedAt").toString()))
                                         //TODO: newMsg를 어떻게 카운트 할지가 애매하네....
