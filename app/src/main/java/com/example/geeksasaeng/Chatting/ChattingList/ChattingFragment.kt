@@ -69,7 +69,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                                         lastTime = getLastTimeString(lastMsgTime!!)
                                         Log.d("last", lastChat+"/"+lastTime)
                                         //firestore에 위에서 정보를 이용하여 chattingList에 추가해준다.
-                                        add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10"))
+                                        add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10", roomInfo.getValue("updatedAt").toString()))
                                         //TODO: newMsg를 어떻게 카운트 할지가 애매하네....
                                         initAdapter() // add될때마다 initAdapter안하고 chattingList다 만들고 initAdapter하고 싶은데,, 이게 여기에 두고 싶지 않은데,,, 이방법 밖에 모르겠어
                                     }
@@ -81,7 +81,9 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                 .addOnFailureListener { exception ->
                     Log.d("firestore", "Error getting documents: ", exception)
                 }
+
         }
+
     }
 
     private fun getLastTimeString(lastMsgTime: String): String { //getRemainTime이랑 같은 비슷한
@@ -143,7 +145,9 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     }
 
     private fun initAdapter() {
+
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
+        chattingListRVAdapter.itemSort()
         Log.d("firestore", "어댑터채팅리스트"+ chattingList.toString())
         binding.chattingListRv.adapter = chattingListRVAdapter
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
