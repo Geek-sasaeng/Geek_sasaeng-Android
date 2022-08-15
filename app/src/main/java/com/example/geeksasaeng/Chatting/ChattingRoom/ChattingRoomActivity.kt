@@ -6,30 +6,26 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingListData
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingMemberLeaveView
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingPartyLeaveRequest
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
-class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate), NotLeaderOptionView
-,ChattingMemberLeaveView{
+class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate) {
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
-    private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
-    private lateinit var chattingService: ChattingService
+    lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
@@ -108,9 +104,17 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener{
             // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
-            val optionDialog = ChattingNotLeaderOptionDialog()
-            optionDialog.notLeaderOptionView = this
-            optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            if(leader){
+                val optionDialog = ChattingLeaderOptionDialog()
+                val bundle = Bundle()
+                bundle.putString("roomUuid", roomUuid)
+                optionDialog.arguments = bundle
+                optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
+            }else{
+                val optionDialog = ChattingNotLeaderOptionDialog()
+                optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
+            }
+
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
@@ -165,16 +169,21 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
 
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
-                    // TODO: 보내는 시간 넣어주기
-                    binding.chattingRoomSendTv.text = ""
+                    binding.chattingRoomChattingTextEt.setText("")
             }
         }
     }
 
     private fun calculateDate(): String {
         val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-        return simpleDate.format(Date(now))
+        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
+        var date: String = simpleDate.format(Date(now)).toString()
+        Log.d("ampm", date.toString())
+        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
+            date = date.substring(0, 11) + "00" + date.substring(13)
+        else if (date.substring(20) == "오후")
+            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13)
+        return date
     }
 
     private fun removeFireBasePartyMember(){
@@ -220,9 +229,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document(roomUuid)
-            .collection("Messages").addSnapshotListener { snapshots, _ ->
-
+        db.collection("Rooms").document(roomUuid).collection("Messages").addSnapshotListener { snapshots, _ ->
             for (dc in snapshots?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
@@ -233,14 +240,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                         item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
 
-                    chattingList.add(item)
+                    chattingRoomRVAdapter.addItem(item)
                 }
             }
 
-            Log.d("FIREBASE-RESPONSE", "CHATTING-LIST-SIZE = ${chattingList.size}")
-
-            if (chattingList.size != 0)
-                chattingRoomRVAdapter.addAllItems(chattingList.sortedBy { it.time } as MutableList<Chatting>)
+            chattingRoomRVAdapter.itemSort()
+            var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+            binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
         }
     }
 

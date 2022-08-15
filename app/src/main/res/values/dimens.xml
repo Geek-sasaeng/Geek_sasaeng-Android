@@ -8,15 +8,19 @@
     <dimen name="party_name_popup_height">300dp</dimen>
     <dimen name="party_delete_popup_width">250dp</dimen>
     <dimen name="party_delete_popup_height">256dp</dimen>
+    <dimen name="matching_end_popup_width">256dp</dimen>
+    <dimen name="matching_end_popup_height">250dp</dimen>
     <dimen name="party_popup_width">206dp</dimen>
     <dimen name="party_my_popup_height">183dp</dimen>
     <dimen name="party_other_popup_height">130dp</dimen>
     <dimen name="party_request_width">256dp</dimen>
     <dimen name="party_request_height">212dp</dimen>
-    <dimen name="party_request_complete_width">246dp</dimen>
-    <dimen name="party_request_complete_height">93dp</dimen>
+    <dimen name="party_request_complete_width">206dp</dimen>
+    <dimen name="party_request_complete_height">397dp</dimen>
     <dimen name="chatting_room_option_leader_width">206dp</dimen>
     <dimen name="chatting_room_option_leader_height">397dp</dimen>
     <dimen name="chatting_room_option_not_leader_width">206dp</dimen>
     <dimen name="chatting_room_option_not_leader_height">183dp</dimen>
+    <dimen name="party_close_popup_height">250dp</dimen>
+    <dimen name="chatting_exit_popup_height">236dp</dimen>
 </resources>

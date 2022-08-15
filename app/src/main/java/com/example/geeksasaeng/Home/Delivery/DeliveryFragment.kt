@@ -67,7 +67,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-FRAGMENT", "onResume")
         // remainSec = deliveryAdapter.returnRemainSec()
         // timerTask.start()
-
+        refreshing() // 화면이 다시 시작될 때 파티 목록 리프레시
         flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 

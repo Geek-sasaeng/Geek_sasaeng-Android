@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Home.Party.CreateParty.*
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -125,6 +126,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
     fun getCurrentTime(): String{
         val formatter = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    fun getCurrentDateTime(): String{
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return formatter.format(Calendar.getInstance().time)
     }
 
@@ -330,9 +336,9 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         startActivity(intent)
 
 
-        //firebase에 채팅방 생성하기 위한 데이터 구조 만들기
-        var participantsList = ArrayList<String>()
-        participantsList.add(getNickname().toString()) //TODO: 방장닉네임 알아와서 넣어주기
+        //firestore에 채팅방 생성하기 위한 데이터 구조 만들기
+        var participantsList = ArrayList<ParticipantsInfo>()
+        participantsList.add(ParticipantsInfo(getCurrentDateTime(), getNickname().toString())) //현재 시간으로 enterTime, 자기 닉네임으로 participant
 
         val roomInfo = hashMapOf(
             "roomInfo" to hashMapOf(
@@ -342,11 +348,12 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
                 "maxMatching" to result.maxMatching, //서리가 말한 maxMatching값 추가해둠
                 "isFinish" to false,
                 "participants" to participantsList,
-                "title" to result.chatRoomName
+                "title" to result.chatRoomName,
+                "updatedAt" to getCurrentDateTime() //채팅방의 가장 최근(마지막) 메세지의 전송시간(서리코드) //채팅방 정렬용, 새로운 알림이 오면 updateAt을 갱신시켜서 updatedAt을 기준으로 정렬시킬예정
             )
         )
 
-        //firebase에 채팅방 생성
+        //firestore에 채팅방 생성
         db.collection("Rooms")
             .document(result.uuid)
             .set(roomInfo)
