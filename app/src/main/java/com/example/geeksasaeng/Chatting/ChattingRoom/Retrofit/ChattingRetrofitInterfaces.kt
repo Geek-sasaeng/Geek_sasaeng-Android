@@ -12,9 +12,9 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingPartyMemberLeaveResponse>
 
     // 파티장 나가기
-    @PATCH("/delivery-party/cheif")
+    @PATCH("/delivery-party/chief")
     fun partyLeaderChattingLeave(
         @Header("Authorization") jwt: String?,
         @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
-    ): Call<ChattingPartyMemberLeaveResponse>
+    ): Call<ChattingPartyLeaderLeaveResponse>
 }

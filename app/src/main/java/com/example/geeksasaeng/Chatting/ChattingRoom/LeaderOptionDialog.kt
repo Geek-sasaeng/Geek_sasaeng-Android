@@ -30,9 +30,6 @@ class LeaderOptionDialog: DialogFragment() {
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         dialog?.window?.setWindowAnimations(R.style.AnimationPopupStyle)
-
-        roomUuid = requireArguments().getString("roomUuid")
-
         return binding.root
     }
 

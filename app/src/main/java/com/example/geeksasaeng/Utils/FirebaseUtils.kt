@@ -8,7 +8,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 // 나의 participant Map 가져오기
-fun getMyParticipantMap(roomUuid: String): HashMap<String, String>? {
+/*fun getMyParticipantMap(roomUuid: String): HashMap<String, String>? {
     val db = FirebaseFirestore.getInstance()
     var participant: HashMap<String, String>? = null
     // 채팅방 참여자 hashMap 가져오기
@@ -94,4 +94,4 @@ fun getFireBasePartyAllParticipants(roomUuid: String): ArrayList<Any>? {
                 "파이어베이스 채팅방에서 유저들을 가져오는 도중에 오류가 발생했습니다."
             )
         }
-}
+}*/

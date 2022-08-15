@@ -45,23 +45,23 @@ class ChattingService {
     }
 
     // 파티장 나가기
-    fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest){
-        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
+    fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
+        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
             override fun onResponse(
-                call: Call<ChattingPartyMemberLeaveResponse>,
-                response: Response<ChattingPartyMemberLeaveResponse>
+                call: Call<ChattingPartyLeaderLeaveResponse>,
+                response: Response<ChattingPartyLeaderLeaveResponse>
             ) {
                 if (response.isSuccessful && response.code() == 200) {
-                    val chattingPartyMemberLeaveResponse = response.body()!!
+                    val ChattingPartyLeaderLeaveResponse = response.body()!!
 
-                    when (chattingPartyMemberLeaveResponse.code) {
-                        1000 -> chattingLeaderLeaveView.chattingLeaderLeaveSuccess(chattingPartyMemberLeaveResponse.result!!)
-                        else -> chattingLeaderLeaveView.chattingLeaderLeaveFailure(chattingPartyMemberLeaveResponse.code, chattingPartyMemberLeaveResponse.message)
+                    when (ChattingPartyLeaderLeaveResponse.code) {
+                        1000 -> chattingLeaderLeaveView.chattingLeaderLeaveSuccess(ChattingPartyLeaderLeaveResponse.result!!.result, leaderMap)
+                        else -> chattingLeaderLeaveView.chattingLeaderLeaveFailure(ChattingPartyLeaderLeaveResponse.code, ChattingPartyLeaderLeaveResponse.message)
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ChattingPartyMemberLeaveResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChattingPartyLeaderLeaveResponse>, t: Throwable) {
                 Log.d("CHATTING-MEMBER-LEAVE", "실패")
             }
         })

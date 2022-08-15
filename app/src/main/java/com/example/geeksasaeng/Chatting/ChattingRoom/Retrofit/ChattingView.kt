@@ -6,6 +6,6 @@ interface ChattingMemberLeaveView {
 }
 
 interface ChattingLeaderLeaveView {
-    fun chattingLeaderLeaveSuccess(result: String)
+    fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>)
     fun chattingLeaderLeaveFailure(code: Int, message: String)
 }

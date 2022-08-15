@@ -14,6 +14,7 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -57,7 +58,7 @@ class ChattingRoomActivity :
         var participants: ArrayList<Any>? = null
 
         // 방장인지 아닌지 확인하기
-        val task = db.collection("Rooms")
+        db.collection("Rooms")
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
@@ -73,11 +74,9 @@ class ChattingRoomActivity :
                         break
                     }
                 }
-                if (participantIdx == 0) {
-                    leader = true
-                } else {
-                    leader = false
-                }
+
+                // Idx == 0 이면 방장임
+                leader = participantIdx == 0
             }
             .addOnFailureListener { e ->
                 Log.w(
@@ -271,35 +270,45 @@ class ChattingRoomActivity :
 
     override fun chattingMemberLeaveSuccess(result: String) {
         // 파이어베이스 멤버 삭제
-        // 방장 나가기
         var participants: ArrayList<Any>? = null
+
+        // 나의 participantMap 가져오기
         db.collection("Rooms")
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
                 val roomInfo =
-                    document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+                    document.get("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                 participants = roomInfo.get("participants") as ArrayList<Any>
                 var participantMap: HashMap<String, String>? = null
-                // 나의 participantMap 가져오기
                 for ((idx, map) in participants!!.withIndex()) {
                     val map = map as HashMap<String, String>
                     if (map.get("participant").equals(getNickname())) {
-                        // TOOD 파이어 스토어 삭제하는거 구현
+
+                        // participants 에서 제거하기
+                        db.collection("Rooms")
+                            .document(roomUuid)
+                            .update("roomInfo.participants", FieldValue.arrayRemove(map))
+                            .addOnSuccessListener {
+                                finish()
+                                Log.d("chatting-member-leave", "파이어베이스 채팅방에서 유저가 삭제됐습니다.")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(
+                                    "chatting-member-leave",
+                                    "파이어베이스 채팅방에서 유저를 삭제하는 도중에 오류가 발생했습니다."
+                                )
+                            }
+                        break
+
                     }
                 }
-            }
-        db.collection("Rooms")
-            .document(roomUuid)
-            .update("roomInfo.participants", FieldValue.arrayRemove(participant))
-            .addOnSuccessListener { Log.d("chatting-member-leave", "파이어베이스 채팅방에서 유저가 삭제됐습니다.") }
-            .addOnFailureListener { e ->
+            }.addOnFailureListener { e ->
                 Log.w(
-                    "chatting-member-leave",
-                    "파이어베이스 채팅방에서 유저를 삭제하는 도중에 오류가 발생했습니다."
+                    "chatting-member",
+                    "파이어베이스 채팅방에서 유저 정보를 가져오는 과정 중에 오류가 발생했습니다."
                 )
             }
-        finish()
     }
 
     override fun chattingMemberLeaveFailure(code: Int, message: String) {
@@ -311,7 +320,7 @@ class ChattingRoomActivity :
 
         // 방장 나가기
         var participants: ArrayList<Any>? = null
-        val task = db.collection("Rooms")
+        db.collection("Rooms")
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
@@ -330,37 +339,34 @@ class ChattingRoomActivity :
                         break
                     }
                 }
-                // 방장 삭제하기 API 호출
-                val chattingPartyLeaderLeaveRequest =
-                    ChattingPartyLeaderLeaveRequest(nextLeader, roomUuid)
-                chattingService.getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest)
 
-                // 방장 삭제하기 파이어스토어 호출
-                db.collection("Rooms")
-                    .document(roomUuid)
-                    .update("roomInfo.participants", FieldValue.arrayRemove(leaderMap))
-                    .addOnSuccessListener {
-                        Log.d(
-                            "chatting-member-leave",
-                            "파이어베이스 채팅방에서 유저가 삭제됐습니다."
-                        )
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(
-                            "chatting-member-leave",
-                            "파이어베이스 채팅방에서 유저를 삭제하는 도중에 오류가 발생했습니다."
-                        )
-                    }
-            }
-            .addOnFailureListener { e ->
-                Log.w(
-                    "chatting-member-leave",
-                    "파이어베이스 채팅방에서 유저들을 가져오는 도중에 오류가 발생했습니다."
+                // 방장 삭제하기 API 호출
+                chattingService.setChattingLeaderLeaveView(this)
+                val chattingPartyLeaderLeaveRequest = ChattingPartyLeaderLeaveRequest(nextLeader, roomUuid)
+                chattingService.getChattingPartyLeaderLeave(
+                    chattingPartyLeaderLeaveRequest,
+                    leaderMap!!
                 )
             }
     }
 
-    override fun chattingLeaderLeaveSuccess(result: String) {
+    override fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>) {
+        // 방장 삭제하기 파이어스토어 호출
+        db.collection("Rooms")
+            .document(roomUuid)
+            .update("roomInfo.participants", FieldValue.arrayRemove(leaderMap))
+            .addOnSuccessListener {
+                Log.d(
+                    "chatting-leader-leave",
+                    "파이어베이스 채팅방에서 방장이 삭제됐습니다."
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.w(
+                    "chatting-leader-leave",
+                    "파이어베이스 채팅방에서 방장이 삭제하는 도중에 오류가 발생했습니다."
+                )
+            }
         finish()
     }
 

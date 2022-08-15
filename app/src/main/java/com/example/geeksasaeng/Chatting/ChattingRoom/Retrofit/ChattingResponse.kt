@@ -19,11 +19,15 @@ data class ChattingPartyLeaderLeaveRequest(
     @SerializedName("uuid") val uuid: String
 )
 
+data class ChattingPartyLeaderLeaveResult(
+    @SerializedName("result") val result: String
+)
+
 data class ChattingPartyLeaderLeaveResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
+    @SerializedName("result") val result: ChattingPartyLeaderLeaveResult
 )
 
 
