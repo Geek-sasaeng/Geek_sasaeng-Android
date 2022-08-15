@@ -13,6 +13,7 @@ import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
+import com.google.firebase.messaging.FirebaseMessaging
 import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -56,6 +57,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         // FCM Token 확인하기 위한 코드
         // val token = FirebaseMessaging.getInstance().token.result
         // Log.d("FCM-TOKEN-RESPONSE", token.toString())
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if(task.isSuccessful) {
+                var token = task.result?:""
+                Log.d("TOKEN-RESPONSE", "token = $token")
+            }
+            Log.d("TOKEN-RESPONSE", "FAILED")
+        }
+        Log.d("TOKEN-RESPONSE", "TEST")
 
         setBottomNavi()
     }

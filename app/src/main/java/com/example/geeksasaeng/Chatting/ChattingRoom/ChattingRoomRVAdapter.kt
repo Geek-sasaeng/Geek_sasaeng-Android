@@ -122,7 +122,7 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
 
     fun addItem(item: Chatting) {
         chattingList.add(item)
-        // this.notifyDataSetChanged()
+        this.notifyDataSetChanged()
     }
 
     fun addAllItems(items: MutableList<Chatting>) {

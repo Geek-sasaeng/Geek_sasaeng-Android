@@ -14,11 +14,10 @@ import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,11 +28,12 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private var roomUuid = String()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
-    var topLayoutFlag = false //TODO: topLayoutFlag
+    var topLayoutFlag = false // TODO: topLayoutFlag
     var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
-    private var chattingLoadInitial = true
+    lateinit var bank: String
+    lateinit var accountNumber: String
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -41,12 +41,12 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
         roomUuid = intent.getStringExtra("roomUuid").toString()
+        chattingRoomName = roomUuid
         binding.chattingRoomTitleTv.text = roomName
 
         initTopLayout()
         initClickListener()
         initTextChangedListener()
-        initChatListener()
         initSendChatListener()
         initRealTimeChatListener()
         initAdapter()
@@ -57,22 +57,54 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         // TODO: 입장한 사람이 채팅방 방장인지 일반 유저인지 구분하기
         // 방장 -> var leader = true     |     일반 유저 -> var leader = false
         topLayoutFlag = true
-        leader = true
+        // leader = true
 
         if (topLayoutFlag) {
-            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+            binding.chattingRoomTopLayout.visibility = View.VISIBLE
 
             if (leader) {
                 binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
                 binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
             } else {
-                binding.chattingRoomTopLayoutStatusTv.text = "신한 000-000-000000"
+//                Log.d("FIREBASE-RESPONSE", "ORDER = 1")
+//                getBankAndAccountNumber()
+//                Log.d("FIREBASE-RESPONSE", "ORDER = 8")
+//                binding.chattingRoomTopLayoutStatusTv.text = "$bank $accountNumber"
+//                Log.d("FIREBASE-RESPONSE", "ORDER = 9")
+//                Log.d("FIREBASE-RESPONSE", "getBankAndAccountNumber = $bank $accountNumber")
+//                Log.d("FIREBASE-RESPONSE", "ORDER = 10")
+                binding.chattingRoomTopLayoutStatusTv.text = "은행 12345678900"
                 binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
             }
         } else {
-            binding.chattingRoomTopLayout.visibility = View.VISIBLE
+            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
         }
     }
+
+//    private fun getBankAndAccountNumber() {
+//        Log.d("FIREBASE-RESPONSE", "ORDER = 2")
+//        val getBankAndAccountNumberTask: Task<DocumentSnapshot> =
+//        db.collection("Rooms").document(chattingRoomName).get().addOnSuccessListener { result ->
+//            bank = result.get("roomInfo.bank").toString()
+//            accountNumber = result.get("roomInfo.accountNumber").toString()
+//            // Log.d("FIREBASE-RESPONSE", "1 BANK = ${result.get("roomInfo.bank").toString()} / ACCOUNT-NUMBER = ${result.get("roomInfo.accountNumber").toString()}")
+//            Log.d("FIREBASE-RESPONSE", "ORDER = 3")
+//        }.addOnFailureListener { exception ->
+//            Log.e("firestore", "ERROR getting account number: ", exception)
+//            bank = "은행 및 "
+//            accountNumber = "계좌번호 불러오기 실패"
+//        }
+//        Log.d("FIREBASE-RESPONSE", "ORDER = 4")
+//
+//        try {
+//            Log.d("FIREBASE-RESPONSE", "ORDER = 5")
+//            Tasks.await(getBankAndAccountNumberTask)
+//            Log.d("FIREBASE-RESPONSE", "ORDER = 6")
+//        } catch (e: Exception) {
+//            Log.e("FIRESTORE", "FAIL = ${e.toString()}")
+//        }
+//        Log.d("FIREBASE-RESPONSE", "ORDER = 7")
+//    }
 
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
@@ -144,10 +176,6 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         })
     }
 
-    private fun initChatListener() {
-        chattingRoomName = roomUuid
-    }
-
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
             val uuid = UUID.randomUUID().toString()
@@ -187,10 +215,13 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
 
+                    Log.d("FIREBASE-RESPONSE", "nickname = $nickname")
                     if (nickname == dc.document["nickname"]) {
                         item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
+                    } else if (dc.document["nickname"] != null) {
+                        item = Chatting(2, dc.document["nickname"].toString(), dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     } else {
-                        item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
+                        item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
                     }
 
                     chattingRoomRVAdapter.addItem(item)
