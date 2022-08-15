@@ -168,7 +168,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
                     binding.chattingRoomChattingTextEt.setText("")
             }
 
-           //roomInfo에 updatedAt 갱신신
+           //roomInfo에 updatedAt 갱신
             db.collection("Rooms").document(chattingRoomName)
                 .update("roomInfo.updatedAt", getCurrentDateTime())
                 .addOnSuccessListener { Log.d("firestore-updatedAt", "DocumentSnapshot successfully written!") }

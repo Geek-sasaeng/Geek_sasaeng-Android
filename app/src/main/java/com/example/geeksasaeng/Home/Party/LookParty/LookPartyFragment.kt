@@ -344,11 +344,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
+            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임 //TODO: arrayUnion이 이 값이 있으면 갱신해주고, 없으면 추가해주는 걸로 알고 있는데,, arrayUnion의 의미가 무색해지지만 서비스에는 지장 x듯?
             .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
 
-        //TODO: 지금 걱정은 .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) 여기서 같은 닉네임이면 update를 해줘야하는데 그걸 어떻게 할지 모르겠네...
     }
 
 
