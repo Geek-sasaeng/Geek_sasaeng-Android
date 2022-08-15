@@ -8,13 +8,13 @@ interface ChattingRetrofitInterfaces {
     @PATCH("/delivery-party/member")
     fun partyMemberChattingLeave(
         @Header("Authorization") jwt: String?,
-        @Body chattingPartyLeaveRequest: ChattingPartyLeaveRequest
-    ): Call<ChattingPartyLeaveResponse>
+        @Body chattingPartyMemeberLeaveRequest: ChattingPartyMemberLeaveRequest
+    ): Call<ChattingPartyMemberLeaveResponse>
 
     // 파티장 나가기
     @PATCH("/delivery-party/cheif")
     fun partyLeaderChattingLeave(
         @Header("Authorization") jwt: String?,
-        @Body chattingPartyLeaveRequest: ChattingPartyLeaveRequest
-    ): Call<ChattingPartyLeaveResponse>
+        @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
+    ): Call<ChattingPartyMemberLeaveResponse>
 }

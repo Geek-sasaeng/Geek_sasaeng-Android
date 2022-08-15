@@ -21,11 +21,11 @@ class ChattingService {
     }
 
     // 파티 멤버 나가기
-    fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyLeaveRequest){
-        chattingService.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyLeaveResponse> {
+    fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
+        chattingService.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
             override fun onResponse(
-                call: Call<ChattingPartyLeaveResponse>,
-                response: Response<ChattingPartyLeaveResponse>
+                call: Call<ChattingPartyMemberLeaveResponse>,
+                response: Response<ChattingPartyMemberLeaveResponse>
             ) {
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyMemberLeaveResponse = response.body()!!
@@ -37,7 +37,7 @@ class ChattingService {
                 }
             }
 
-            override fun onFailure(call: Call<ChattingPartyLeaveResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChattingPartyMemberLeaveResponse>, t: Throwable) {
                 Log.d("CHATTING-MEMBER-LEAVE", "실패")
             }
 
@@ -45,11 +45,11 @@ class ChattingService {
     }
 
     // 파티장 나가기
-    fun getChattingPartyLeaderLeave(chattingPartyMemberLeaveRequest: ChattingPartyLeaveRequest){
-        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyLeaveResponse> {
+    fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest){
+        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
             override fun onResponse(
-                call: Call<ChattingPartyLeaveResponse>,
-                response: Response<ChattingPartyLeaveResponse>
+                call: Call<ChattingPartyMemberLeaveResponse>,
+                response: Response<ChattingPartyMemberLeaveResponse>
             ) {
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyMemberLeaveResponse = response.body()!!
@@ -61,10 +61,9 @@ class ChattingService {
                 }
             }
 
-            override fun onFailure(call: Call<ChattingPartyLeaveResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChattingPartyMemberLeaveResponse>, t: Throwable) {
                 Log.d("CHATTING-MEMBER-LEAVE", "실패")
             }
-
         })
     }
 }

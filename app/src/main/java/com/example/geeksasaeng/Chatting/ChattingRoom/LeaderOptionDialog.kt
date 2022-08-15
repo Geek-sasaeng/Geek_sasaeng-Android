@@ -14,6 +14,11 @@ import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBi
 class LeaderOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var roomUuid : String? = null
+    private lateinit var leaderOptionView: LeaderOptionView
+
+    fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
+        this.leaderOptionView = leaderOptionView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,8 +71,7 @@ class LeaderOptionDialog: DialogFragment() {
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
-
+            leaderOptionView.LeaderExistClick()
         }
     }
-
 }
