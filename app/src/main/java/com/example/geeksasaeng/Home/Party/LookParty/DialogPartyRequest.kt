@@ -42,7 +42,7 @@ class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
             // 신청하기 수행
             val joinPartyRequest = JoinPartyRequest(partyId)
             partyDataService.joinPartySender(joinPartyRequest)
-            this.dismiss()
+//            this.dismiss()
         }
 
         binding.partyRequestCancelBtn.setOnClickListener {

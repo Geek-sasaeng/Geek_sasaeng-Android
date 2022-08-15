@@ -19,6 +19,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
     override fun onResume() {
         super.onResume()
+        initChattingList()
         initAdapter()
     }
 

@@ -250,6 +250,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         chattingService.getChattingPartyMemberLeave(chattingPartyLeaveRequest)
     }
 
+
     override fun chattingMemberLeaveSuccess(result: String) {
         removeFireBasePartyMember()
     }
