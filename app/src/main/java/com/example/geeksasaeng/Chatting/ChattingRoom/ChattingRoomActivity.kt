@@ -12,22 +12,22 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingMemberLeav
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingPartyLeaveRequest
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.CustomToastMsg
-import com.example.geeksasaeng.Utils.getNickname
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate), ChattingMemberLeaveView
-, MemberOptionView{
+class ChattingRoomActivity :
+    BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
+    ChattingMemberLeaveView, MemberOptionView {
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
     lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     lateinit var chattingService: ChattingService
+
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     var topLayoutFlag = false
     var leader = false
@@ -56,10 +56,8 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initTopLayout() {
-        // TODO: 입장한 사람이 채팅방 방장인지 일반 유저인지 구분하기
-        // 방장 -> var leader = true     |     일반 유저 -> var leader = false
         topLayoutFlag = true
-//      leader = true
+        leader = checkLeader(roomUuid)
 
         if (topLayoutFlag) {
             binding.chattingRoomTopLayout.visibility = View.INVISIBLE
@@ -79,7 +77,8 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
-        binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.chattingRoomChattingRv.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun initClickListener() {
@@ -98,21 +97,21 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         }
     }
 
-    private fun initChattingService(){
+    private fun initChattingService() {
         chattingService = ChattingService()
         chattingService.setChattingMemberLeaveView(this)
     }
 
     private fun optionClickListener() {
-        binding.chattingRoomOptionBtn.setOnClickListener{
-            // TODO 사용자, 방장일 경우 구분해서 옵션 보여주기
-            if(leader){
+        binding.chattingRoomOptionBtn.setOnClickListener {
+            leader = checkLeader(roomUuid)
+            if (leader) {
                 val optionDialog = LeaderOptionDialog()
                 val bundle = Bundle()
                 bundle.putString("roomUuid", roomUuid)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
-            }else{
+            } else {
                 val optionDialog = MemberOptionDialog()
                 optionDialog.setOptionView(this)
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
@@ -136,16 +135,25 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
     }
 
     private fun initTextChangedListener() {
-        binding.chattingRoomChattingTextEt.addTextChangedListener(object: TextWatcher {
+        binding.chattingRoomChattingTextEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.chattingRoomChattingTextEt.text.isNotEmpty()) {
-                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.main))
+                    binding.chattingRoomSendTv.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.main
+                        )
+                    )
                     binding.chattingRoomSendTv.isEnabled = true
-                }
-                else {
-                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray_2))
+                } else {
+                    binding.chattingRoomSendTv.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.gray_2
+                        )
+                    )
                     binding.chattingRoomSendTv.isEnabled = false
                 }
             }
@@ -173,7 +181,7 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
             db.collection("Rooms").document(chattingRoomName).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
                     binding.chattingRoomChattingTextEt.setText("")
-            }
+                }
         }
     }
 
@@ -185,80 +193,69 @@ class ChattingRoomActivity: BaseActivity<ActivityChattingRoomBinding>(ActivityCh
         if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
             date = date.substring(0, 11) + "00" + date.substring(13)
         else if (date.substring(20) == "오후")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13)
+            date = date.substring(0, 11) + (Integer.parseInt(
+                date.substring(
+                    11,
+                    13
+                )
+            ) + 12).toString() + date.substring(13)
         return date
     }
 
-    private fun removeFireBasePartyMember(){
-        var participantsId: Int = -1
-        /*
-                    FireBase
-         */
-        // 채팅방 참여자 id 가져오기
-        db.collection("Rooms")
-            .document(roomUuid)
-            .get()
-            .addOnSuccessListener { document ->
-                val roomInfo = document.get("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
-                val participants = roomInfo.get("participants") as ArrayList<Any>
-                for((idx,map) in participants.withIndex()) {
-                    val map = map as HashMap<String, String>
-                    val participant = map.get("participant").toString()
-                    if (participant.equals(getNickname())) {
-                        participantsId = idx;
-                        break
-                    }
-                }
-                if(participantsId == -1){
-                    // TODO Idx not found 오류 만들기
-                    return@addOnSuccessListener
-                }
+    private fun removeFireBasePartyMember() {
+        val participant = getMyParticipantMap(roomUuid)
+        if (participant == null) {
+            // TODO Idx not found 오류 만들기
+            return
+        }
 
-                // 채팅방 참여자 삭제
-                db.collection("Rooms")
-                    .document(roomUuid)
-                    .update("roomInfo.participants", FieldValue.arrayRemove(participantsId))
-                    .addOnSuccessListener { Log.d("chatting-member-leave", "파이어베이스 채팅방에서 유저가 삭제됐습니다.") }
-                    .addOnFailureListener { e -> Log.w("chatting-member-leave", "파이어베이스 채팅방에서 유저를 삭제하는 도중에 오류가 발생했습니다.", e) }
-
-            }
-            .addOnFailureListener { exception ->
-                Log.w("firestore", "Error getting documents: ", exception)
-            }
+        deleteMyParticipantMap(roomUuid, participant)
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document(roomUuid).collection("Messages").addSnapshotListener { snapshots, _ ->
-            for (dc in snapshots?.documentChanges!!) {
-                if (dc.type == DocumentChange.Type.ADDED) {
-                    var item: Chatting
-
-                    if (nickname == dc.document["nickname"]) {
-                        item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
-                    } else {
-                        item = Chatting(2, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
+        db.collection("Rooms").document(roomUuid).collection("Messages")
+            .addSnapshotListener { snapshots, _ ->
+                for (dc in snapshots?.documentChanges!!) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        var item: Chatting
+                        if (nickname == dc.document["nickname"]) {
+                            item = Chatting(
+                                1,
+                                nickname,
+                                dc.document["time"].toString(),
+                                R.drawable.ic_default_profile,
+                                dc.document["content"].toString(),
+                                0
+                            )
+                        } else {
+                            item = Chatting(
+                                2,
+                                nickname,
+                                dc.document["time"].toString(),
+                                R.drawable.ic_default_profile2,
+                                dc.document["content"].toString(),
+                                0
+                            )
+                        }
+                        chattingRoomRVAdapter.addItem(item)
                     }
-
-                    chattingRoomRVAdapter.addItem(item)
                 }
-            }
 
-            chattingRoomRVAdapter.itemSort()
-            var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
-            binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
-        }
+                chattingRoomRVAdapter.itemSort()
+                var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+                binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
+            }
     }
 
     // 일반 유저가 나가기를 눌렀을 경우
     override fun MemberExistClick() {
-        removeFireBasePartyMember()
-//        val chattingPartyLeaveRequest = ChattingPartyLeaveRequest(roomUuid)
-//        chattingService.getChattingPartyMemberLeave(chattingPartyLeaveRequest)
+        val chattingPartyLeaveRequest = ChattingPartyLeaveRequest(roomUuid)
+        chattingService.getChattingPartyMemberLeave(chattingPartyLeaveRequest)
     }
 
 
     override fun chattingMemberLeaveSuccess(result: String) {
-//        removeFireBasePartyMember()
+        removeFireBasePartyMember()
     }
 
     override fun chattingMemberLeaveFailure(code: Int, message: String) {
