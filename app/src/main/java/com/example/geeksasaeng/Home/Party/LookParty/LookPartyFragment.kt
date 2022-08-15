@@ -334,8 +334,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                     val intent = Intent(activity, ChattingRoomActivity::class.java)
                     intent.putExtra("roomName", chatName)
                     intent.putExtra("roomUuid", chatUUID)
+                    val fragmentManager = requireActivity().supportFragmentManager;
+                    fragmentManager.beginTransaction().remove(this).commit()
                     startActivity(intent)
-                    requireActivity().finish()
                 }
             }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
