@@ -5,7 +5,7 @@ import retrofit2.http.*
 
 interface ChattingRetrofitInterfaces {
     // 파티 멤버 나가기
-    @PATCH("/delivery-party/leave")
+    @PATCH("/delivery-party/member")
     fun partyMemberChattingLeave(
         @Header("Authorization") jwt: String?,
         @Body chattingPartyLeaveRequest: ChattingPartyLeaveRequest

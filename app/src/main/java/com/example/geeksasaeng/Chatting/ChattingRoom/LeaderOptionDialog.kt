@@ -34,8 +34,8 @@ class LeaderOptionDialog: DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        val width = resources.getDimensionPixelSize(R.dimen.party_request_complete_width)
-        val height = resources.getDimensionPixelSize(R.dimen.party_request_complete_height)
+        val width = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_width)
+        val height = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_height)
         dialog?.window?.setLayout(width,height)
     }
 
