@@ -69,10 +69,7 @@ class ChattingRoomActivity :
         var participants: ArrayList<Any>? = null
 
         // 방장인지 아닌지 확인하기
-        db.collection("Rooms")
-            .document(roomUuid)
-            .get()
-            .addOnSuccessListener { document ->
+        db.collection("Rooms").document(roomUuid).get().addOnSuccessListener { document ->
                 val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                 participants = roomInfo.get("participants") as ArrayList<Any>
                 var participantIdx: Int = -1
@@ -95,7 +92,6 @@ class ChattingRoomActivity :
                 )
             }
 
-
         if (topLayoutFlag) {
             binding.chattingRoomTopLayout.visibility = View.VISIBLE
 
@@ -103,9 +99,7 @@ class ChattingRoomActivity :
                 binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
                 binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
             } else {
-//                getBankAndAccountNumber()
-//                binding.chattingRoomTopLayoutStatusTv.text = "$bank $accountNumber"
-                binding.chattingRoomTopLayoutStatusTv.text = "은행 12345678900"
+                getBankAndAccountNumber()
                 binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
             }
         } else {
@@ -113,24 +107,17 @@ class ChattingRoomActivity :
         }
     }
 
-//    private fun getBankAndAccountNumber() {
-//        val getBankAndAccountNumberTask: Task<DocumentSnapshot> =
-//        db.collection("Rooms").document(chattingRoomName).get().addOnSuccessListener { result ->
-//            bank = result.get("roomInfo.bank").toString()
-//            accountNumber = result.get("roomInfo.accountNumber").toString()
-//        }.addOnFailureListener { exception ->
-//            Log.e("firestore", "ERROR getting account number: ", exception)
-//            bank = "은행 및 "
-//            accountNumber = "계좌번호 불러오기 실패"
-//        }
-//        Log.d("FIREBASE-RESPONSE", "ORDER = 4")
-//
-//        try {
-//            Tasks.await(getBankAndAccountNumberTask)
-//        } catch (e: Exception) {
-//            Log.e("FIRESTORE", "FAIL = ${e.toString()}")
-//        }
-//    }
+    private fun getBankAndAccountNumber() {
+        db.collection("Rooms").document(chattingRoomName).get().addOnSuccessListener { result ->
+            bank = result.get("roomInfo.bank").toString()
+            accountNumber = result.get("roomInfo.accountNumber").toString()
+            binding.chattingRoomTopLayoutStatusTv.text = "$bank $accountNumber"
+        }.addOnFailureListener { _ ->
+            bank = "은행 및 "
+            accountNumber = "계좌번호 불러오기 실패"
+            binding.chattingRoomTopLayoutStatusTv.text = "$bank $accountNumber"
+        }
+    }
 
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
