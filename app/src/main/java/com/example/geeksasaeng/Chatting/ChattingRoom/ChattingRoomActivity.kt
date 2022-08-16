@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
@@ -252,7 +253,7 @@ class ChattingRoomActivity :
 
     // 메시지 전송
     private fun initSendChatListener() {
-        binding.chattingRoomSendTv.setOnClickListener {
+        binding.chattingRoomSendTv.setOnClickListener { //메세지 전송버튼
             val uuid = UUID.randomUUID().toString()
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
             var time = calculateDate()
@@ -271,8 +272,19 @@ class ChattingRoomActivity :
             db.collection("Rooms").document(roomUuid).collection("Messages")
                 .document(uuid).set(data).addOnSuccessListener {
                     binding.chattingRoomChattingTextEt.setText("")
-                }
+            }
+
+           //roomInfo에 updatedAt 갱신
+            db.collection("Rooms").document(chattingRoomName)
+                .update("roomInfo.updatedAt", getCurrentDateTime())
+                .addOnSuccessListener { Log.d("firestore-updatedAt", "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { e -> Log.w("firestore-updatedAt", "Error update document", e) }
         }
+    }
+
+    fun getCurrentDateTime(): String{
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 
     private fun calculateDate(): String {
