@@ -45,7 +45,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     lateinit var partyDataService : PartyDataService
 
     override fun initAfterBinding() {
-        Log.d("FIREBASE-RESPONSE", "initAfterBinding")
         initClickListener()
         binding.lookPartyProgressBar.visibility = View.VISIBLE
         binding.lookLocateText.isSelected = true // 물흐르는 애니메이션
@@ -122,7 +121,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
         }
 
-        // 매칭 신청 버튼 누를경우
+        // 매칭 신청 or 채팅방 가기 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
             if (authorStatus == true || belongStatus == "Y") {
                 showPartyChattingRoom()
@@ -334,6 +333,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                     val intent = Intent(activity, ChattingRoomActivity::class.java)
                     intent.putExtra("roomName", chatName)
                     intent.putExtra("roomUuid", chatUUID)
+                    val fragmentManager = requireActivity().supportFragmentManager;
+                    fragmentManager.beginTransaction().remove(this).commit()
                     startActivity(intent)
                 }
             }
@@ -358,7 +359,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
 
-        //TODO: 지금 걱정은 .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) 여기서 같은 닉네임이면 update를 해줘야하는데 그걸 어떻게 할지 모르겠네...
     }
 
     private fun calculateDate(): String {

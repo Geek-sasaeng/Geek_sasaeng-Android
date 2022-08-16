@@ -7,6 +7,7 @@ data class ChattingListData(
     val lastChat: String,
     val lastTime: String,
     val newMsg: String,
+    val updatedAt : String
 )
 
 data class ParticipantsInfo(

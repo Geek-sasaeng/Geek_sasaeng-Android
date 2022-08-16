@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.Retrofit.ChattingDataService
 import com.example.geeksasaeng.Chatting.Retrofit.MatchingEndView
@@ -43,15 +44,21 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     }
 
     private fun initListener(){
-        binding.matchingEndOkayBtn.setOnClickListener {
+        binding.matchingEndOkayBtn.setOnClickListener { //완료버튼
             chattingService.MatchingEndSender(requireArguments().getString("roomUuid")!!) //★매칭마감 api호출
+        }
+
+        binding.matchingEndCancelBtn.setOnClickListener { //X버튼
+           this.dismiss()
         }
     }
 
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
         this.dismiss()
+        Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show()
         //뒤에 옵션창도 없애고 싶은데,,
+        //매칭마감 회색처리 어떻게 하지..
     }
 
     //매칭마감 실패
