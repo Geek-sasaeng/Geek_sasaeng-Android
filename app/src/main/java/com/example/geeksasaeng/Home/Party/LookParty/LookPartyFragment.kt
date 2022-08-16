@@ -352,7 +352,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 var time = calculateDate()
                 var data = hashMapOf(
                     "content" to "${getNickname()}님이 입장하셨습니다",
+                    "nickname" to getNickname(),
+                    "isSystemMessage" to true,
                     "time" to time,
+                    "userImgUrl" to "이미지 링크"
                 )
                 db.collection("Rooms").document(partyData.uuid).collection("Messages")
                     .document(uuid).set(data).addOnSuccessListener { }

@@ -4,22 +4,12 @@ import android.content.Intent
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
-import com.example.geeksasaeng.Chatting.ChattingRoom.getCurrentDateTime
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.squareup.okhttp.Dispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -42,12 +32,8 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
     }
 
-
     private fun initChattingList() {
-
-        Log.d("firestore", "initChattingList => clear 작동됨")
         chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
-        Log.d("firestore", "채팅리스트" + chattingList.toString())
         //TODO: 이부분이 가져와야하는 정보가 많아서,, 구조가 복잡해졌어 - 이 코드가 뭘 의미하는지 모르겠다 하는거 있으면 언제든 제로한테 물어봐줘여
         db.collection("Rooms")
             .whereEqualTo("roomInfo.category", "배달파티")
@@ -181,10 +167,8 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     }
 
     private fun initAdapter() {
-
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
         chattingListRVAdapter.itemSort()
-        Log.d("firestore", "어댑터채팅리스트"+ chattingList.toString())
         binding.chattingListRv.adapter = chattingListRVAdapter
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -198,5 +182,4 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
             }
         })
     }
-
 }

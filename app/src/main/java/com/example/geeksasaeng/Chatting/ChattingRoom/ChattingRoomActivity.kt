@@ -69,8 +69,7 @@ class ChattingRoomActivity :
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
-                val roomInfo =
-                    document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+                val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                 participants = roomInfo.get("participants") as ArrayList<Any>
                 var participantIdx: Int = -1
                 for ((idx, map) in participants!!.withIndex()) {
@@ -100,13 +99,8 @@ class ChattingRoomActivity :
                 binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
                 binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
             } else {
-//                Log.d("FIREBASE-RESPONSE", "ORDER = 1")
 //                getBankAndAccountNumber()
-//                Log.d("FIREBASE-RESPONSE", "ORDER = 8")
 //                binding.chattingRoomTopLayoutStatusTv.text = "$bank $accountNumber"
-//                Log.d("FIREBASE-RESPONSE", "ORDER = 9")
-//                Log.d("FIREBASE-RESPONSE", "getBankAndAccountNumber = $bank $accountNumber")
-//                Log.d("FIREBASE-RESPONSE", "ORDER = 10")
                 binding.chattingRoomTopLayoutStatusTv.text = "은행 12345678900"
                 binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
             }
@@ -116,13 +110,10 @@ class ChattingRoomActivity :
     }
 
 //    private fun getBankAndAccountNumber() {
-//        Log.d("FIREBASE-RESPONSE", "ORDER = 2")
 //        val getBankAndAccountNumberTask: Task<DocumentSnapshot> =
 //        db.collection("Rooms").document(chattingRoomName).get().addOnSuccessListener { result ->
 //            bank = result.get("roomInfo.bank").toString()
 //            accountNumber = result.get("roomInfo.accountNumber").toString()
-//            // Log.d("FIREBASE-RESPONSE", "1 BANK = ${result.get("roomInfo.bank").toString()} / ACCOUNT-NUMBER = ${result.get("roomInfo.accountNumber").toString()}")
-//            Log.d("FIREBASE-RESPONSE", "ORDER = 3")
 //        }.addOnFailureListener { exception ->
 //            Log.e("firestore", "ERROR getting account number: ", exception)
 //            bank = "은행 및 "
@@ -131,13 +122,10 @@ class ChattingRoomActivity :
 //        Log.d("FIREBASE-RESPONSE", "ORDER = 4")
 //
 //        try {
-//            Log.d("FIREBASE-RESPONSE", "ORDER = 5")
 //            Tasks.await(getBankAndAccountNumberTask)
-//            Log.d("FIREBASE-RESPONSE", "ORDER = 6")
 //        } catch (e: Exception) {
 //            Log.e("FIRESTORE", "FAIL = ${e.toString()}")
 //        }
-//        Log.d("FIREBASE-RESPONSE", "ORDER = 7")
 //    }
 
     private fun initAdapter() {
@@ -223,6 +211,7 @@ class ChattingRoomActivity :
             var data = hashMapOf(
                 "content" to myChatting,
                 "nickname" to nickname,
+                "isSystemMessage" to false,
                 "time" to time,
                 "userImgUrl" to "이미지 링크"
             )
@@ -251,9 +240,9 @@ class ChattingRoomActivity :
         var date: String = simpleDate.format(Date(now)).toString()
         Log.d("ampm", date.toString())
         if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
-            date = date.substring(0, 11) + "00" + date.substring(13)
+            date = date.substring(0, 11) + "00" + date.substring(13, 20)
         else if (date.substring(20) == "오후")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13)
+            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
         return date
     }
 
@@ -264,12 +253,12 @@ class ChattingRoomActivity :
                     var item: Chatting
 
                     Log.d("FIREBASE-RESPONSE", "nickname = $nickname")
-                    if (nickname == dc.document["nickname"]) {
-                        item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
-                    } else if (dc.document["nickname"] != null) {
-                        item = Chatting(2, dc.document["nickname"].toString(), dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
-                    } else {
+                    if (dc.document["isSystemMessage"] == true) {
                         item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
+                    } else if (nickname == dc.document["nickname"]) {
+                        item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), 0)
+                    } else {
+                        item = Chatting(2, dc.document["nickname"].toString(), dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
 
                     chattingRoomRVAdapter.addItem(item)
