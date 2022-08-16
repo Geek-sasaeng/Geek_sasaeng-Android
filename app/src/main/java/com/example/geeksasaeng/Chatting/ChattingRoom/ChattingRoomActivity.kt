@@ -36,13 +36,13 @@ class ChattingRoomActivity :
     lateinit var chattingService: ChattingService
 
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
-    var topLayoutFlag = false
-    var leader = false
+    private var topLayoutFlag = false
+    private var leader = false
     private var chattingRoomName = String()
     private var nickname = getNickname()
-    private var chattingNumber = 0
     lateinit var bank: String
     lateinit var accountNumber: String
+    var preChatNickname: String = ""
 
     // Firebase
     val db = FirebaseFirestore.getInstance()
@@ -244,7 +244,6 @@ class ChattingRoomActivity :
                 if (dc.type == DocumentChange.Type.ADDED) {
                     var item: Chatting
 
-                    Log.d("FIREBASE-RESPONSE", "nickname = $nickname")
                     if (dc.document["isSystemMessage"] == true) {
                         item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
                     } else if (nickname == dc.document["nickname"]) {
@@ -253,14 +252,16 @@ class ChattingRoomActivity :
                         item = Chatting(2, dc.document["nickname"].toString(), dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), 0)
                     }
 
+                    preChatNickname = dc.document["nickname"].toString()
                     chattingRoomRVAdapter.addItem(item)
                 }
             }
 
-                chattingRoomRVAdapter.itemSort()
-                var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
-                binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
-            }
+            chattingRoomRVAdapter.itemSort()
+
+            var scrollSize = chattingRoomRVAdapter.returnPosition() - 1
+            binding.chattingRoomChattingRv.scrollToPosition(scrollSize)
+        }
     }
 
     // 일반 유저가 나가기를 눌렀을 경우
