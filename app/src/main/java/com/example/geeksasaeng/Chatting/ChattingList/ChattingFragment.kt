@@ -8,10 +8,17 @@ import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.squareup.okhttp.Dispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -24,18 +31,21 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     private val db = Firebase.firestore //파이어스토어
 
     override fun initAfterBinding() {
-        initChattingList()
+        CoroutineScope(Dispatchers.IO).launch {
+            runBlocking {
+                initChattingList()
+            }
+        }
+        Log.d("순서","3")
+
     }
 
-    private fun initChattingList() {
+    private suspend fun initChattingList() {
 
         chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
         Log.d("firestore", "채팅리스트"+ chattingList.toString())
-        chattingList.apply {
-
-            // add(ChattingList("roomName", "roomImgUrl", "lastChat", "lastTime", "newMsg"))
-            //TODO: 이부분이 가져와야하는 정보가 많아서,, 구조가 복잡해졌어 - 이 코드가 뭘 의미하는지 모르겠다 하는거 있으면 언제든 제로한테 물어봐줘여
-
+        //TODO: 이부분이 가져와야하는 정보가 많아서,, 구조가 복잡해졌어 - 이 코드가 뭘 의미하는지 모르겠다 하는거 있으면 언제든 제로한테 물어봐줘여
+        try{
             db.collection("Rooms")
                 .whereEqualTo("roomInfo.category", "배달파티")
                 .whereEqualTo("roomInfo.isFinish", false)
@@ -71,18 +81,22 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
                                             Log.d("last", lastChat+"/"+lastTime)
                                         }
                                         //firestore에 위에서 정보를 이용하여 chattingList에 추가해준다.
-                                        add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10", roomInfo.getValue("updatedAt").toString()))
+                                        chattingList.add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10", roomInfo.getValue("updatedAt").toString()))
                                         //TODO: newMsg를 어떻게 카운트 할지가 애매하네....
                                         initAdapter() // add될때마다 initAdapter안하고 chattingList다 만들고 initAdapter하고 싶은데,, 이게 여기에 두고 싶지 않은데,,, 이방법 밖에 모르겠어
                                     }
                                     .addOnFailureListener { exception -> Log.d("firestore", "Error getting documents: 최근메세지 불러오기 실패 ", exception)}
+
                             }
                         }
                     }
+                    Log.d("순서","1")
                 }
                 .addOnFailureListener { exception ->
                     Log.d("firestore", "Error getting documents: ", exception)
-                }
+                }.await() //TODO:동기처리 시도해봤는데,,,,Why 안돼
+                Log.d("순서","2")
+        }catch (e: FirebaseFirestoreException){
 
         }
 
