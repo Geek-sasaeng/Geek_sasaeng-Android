@@ -1,6 +1,5 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.R
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,8 +11,13 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionNotLeaderPopupBinding
 
 
-class ChattingNotLeaderOptionDialog: DialogFragment() {
+class MemberOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionNotLeaderPopupBinding
+    lateinit var memberOptionView: MemberOptionView
+
+    fun setOptionView(memberOptionView: MemberOptionView){
+        this.memberOptionView = memberOptionView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,12 +35,18 @@ class ChattingNotLeaderOptionDialog: DialogFragment() {
     override fun onResume() {
         super.onResume()
         val width =
-            resources.getDimensionPixelSize(com.example.geeksasaeng.R.dimen.chatting_room_option_not_leader_width)
-        val height = resources.getDimensionPixelSize(com.example.geeksasaeng.R.dimen.chatting_room_option_not_leader_height)
+            resources.getDimensionPixelSize(com.example.geeksasaeng.R.dimen.chatting_room_option_member_width)
+        val height = resources.getDimensionPixelSize(com.example.geeksasaeng.R.dimen.chatting_room_option_member_height)
         dialog?.window?.setLayout(width, height)
     }
 
     private fun initListener() {
-        // TODO 각 옵션 기능 넣기
+        initExistClickListener()
+    }
+
+    private fun initExistClickListener(){
+        binding.dialogNotLeaderPopupOptionExitTv.setOnClickListener {
+            memberOptionView.MemberExistClick()
+        }
     }
 }
