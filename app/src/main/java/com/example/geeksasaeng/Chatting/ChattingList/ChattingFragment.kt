@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Chatting.ChattingRoom.getCurrentDateTime
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
@@ -30,76 +31,95 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
     private var chattingList = ArrayList<ChattingListData>()
     private val db = Firebase.firestore //파이어스토어
 
+
+    override fun onResume() {
+        super.onResume()
+        initChattingList()
+        initAdapter()
+    }
+
     override fun initAfterBinding() {
-        CoroutineScope(Dispatchers.IO).launch {
-            runBlocking {
-                initChattingList()
-            }
-        }
-        Log.d("순서","3")
 
     }
 
-    private suspend fun initChattingList() {
 
+    private fun initChattingList() {
+
+        Log.d("firestore", "initChattingList => clear 작동됨")
         chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
-        Log.d("firestore", "채팅리스트"+ chattingList.toString())
+        Log.d("firestore", "채팅리스트" + chattingList.toString())
         //TODO: 이부분이 가져와야하는 정보가 많아서,, 구조가 복잡해졌어 - 이 코드가 뭘 의미하는지 모르겠다 하는거 있으면 언제든 제로한테 물어봐줘여
-        try{
-            db.collection("Rooms")
-                .whereEqualTo("roomInfo.category", "배달파티")
-                .whereEqualTo("roomInfo.isFinish", false)
-                //.orderBy("updatedAt")
-                .get()
-                .addOnSuccessListener { documents -> //배달파티 카테고리고, 종료되지 않은 채팅방 데이터만 가져와 최신 메세지순으로 정렬 성공하면
-                    for (document in documents) {
-                        val roomInfo = document.data.getValue("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+        db.collection("Rooms")
+            .whereEqualTo("roomInfo.category", "배달파티")
+            .whereEqualTo("roomInfo.isFinish", false)
+            //.orderBy("updatedAt")
+            .get()
+            .addOnSuccessListener { documents -> //배달파티 카테고리고, 종료되지 않은 채팅방 데이터만 가져와 최신 메세지순으로 정렬 성공하면
+                for (document in documents) {
+                    val roomInfo =
+                        document.data.getValue("roomInfo") as HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
 
-                        val participants = roomInfo.getValue("participants") as ArrayList<HashMap<String,Any>> //roomInfo의 participants를 HashMap형태의 ArrayList로 얻어온다 (//ParticipantInfo로 받고 싶었는데 HashMap을 ParticipantInfo로 cast를 못한뎅,,)
-                        for (member in participants){
+                    val participants =
+                        roomInfo.getValue("participants") as ArrayList<HashMap<String, Any>> //roomInfo의 participants를 HashMap형태의 ArrayList로 얻어온다 (//ParticipantInfo로 받고 싶었는데 HashMap을 ParticipantInfo로 cast를 못한뎅,,)
+                    for (member in participants) {
 
-                            if (member.getValue("participant") == getNickname()){ // 그 중에 '내가 속하는' 채팅방 정보만 가져온다!
+                        if (member.getValue("participant") == getNickname()) { // 그 중에 '내가 속하는' 채팅방 정보만 가져온다!
 
-                                val roomUuid = document.id
-                                val roomName = roomInfo.getValue("title").toString()
+                            val roomUuid = document.id
+                            val roomName = roomInfo.getValue("title").toString()
 
-                                var lastChat: String = ""
-                                var lastTime: String = ""
-                                var lastMsgTime: String? = null
+                            var lastChat: String = ""
+                            var lastTime: String = ""
+                            var lastMsgTime: String? = null
 
-                                db.collection("Rooms").document(roomUuid).collection("Messages")
-                                    .orderBy("time", Query.Direction.DESCENDING)
-                                    .limit(1)
-                                    .get()
-                                    .addOnSuccessListener { doc -> // 메세지를 time기준 내림차순으로 정렬에 성공했다면
-                                        Log.d("tnstj", "채팅 내용, 시간 가져오기 성공")
-                                        //마지막 채팅 내용과 마지막 채팅 시간을 가져온다.
-                                        if(!doc.isEmpty){
-                                            lastChat = doc.documents.last().data!!.getValue("content").toString()
-                                            lastMsgTime = doc.documents.last().data!!.getValue("time").toString()
-                                            lastTime = getLastTimeString(lastMsgTime!!)
-                                            Log.d("last", lastChat+"/"+lastTime)
-                                        }
-                                        //firestore에 위에서 정보를 이용하여 chattingList에 추가해준다.
-                                        chattingList.add(ChattingListData(roomName, roomUuid,"http://geeksasaeng.shop/s3/neo.jpg", lastChat, lastTime, "+10", roomInfo.getValue("updatedAt").toString()))
-                                        //TODO: newMsg를 어떻게 카운트 할지가 애매하네....
-                                        initAdapter() // add될때마다 initAdapter안하고 chattingList다 만들고 initAdapter하고 싶은데,, 이게 여기에 두고 싶지 않은데,,, 이방법 밖에 모르겠어
+                            db.collection("Rooms").document(roomUuid).collection("Messages")
+                                .orderBy("time", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .get()
+                                .addOnSuccessListener { doc -> // 메세지를 time기준 내림차순으로 정렬에 성공했다면
+                                    Log.d("tnstj", "채팅 내용, 시간 가져오기 성공")
+                                    //마지막 채팅 내용과 마지막 채팅 시간을 가져온다.
+                                    if (!doc.isEmpty) {
+                                        lastChat =
+                                            doc.documents.last().data!!.getValue("content")
+                                                .toString()
+                                        lastMsgTime =
+                                            doc.documents.last().data!!.getValue("time")
+                                                .toString()
+                                        lastTime = getLastTimeString(lastMsgTime!!)
+                                        Log.d("last", lastChat + "/" + lastTime)
                                     }
-                                    .addOnFailureListener { exception -> Log.d("firestore", "Error getting documents: 최근메세지 불러오기 실패 ", exception)}
+                                    //firestore에 위에서 정보를 이용하여 chattingList에 추가해준다.
+                                    chattingList.add(
+                                        ChattingListData(
+                                            roomName,
+                                            roomUuid,
+                                            "http://geeksasaeng.shop/s3/neo.jpg",
+                                            lastChat,
+                                            lastTime,
+                                            "+10",
+                                            roomInfo.getValue("updatedAt").toString()
+                                        )
+                                    )
+                                    //TODO: newMsg를 어떻게 카운트 할지가 애매하네....
+                                    initAdapter() // add될때마다 initAdapter안하고 chattingList다 만들고 initAdapter하고 싶은데,, 이게 여기에 두고 싶지 않은데,,, 이방법 밖에 모르겠어
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.d(
+                                        "firestore",
+                                        "Error getting documents: 최근메세지 불러오기 실패 ",
+                                        exception
+                                    )
+                                }
 
-                            }
                         }
                     }
-                    Log.d("순서","1")
                 }
-                .addOnFailureListener { exception ->
-                    Log.d("firestore", "Error getting documents: ", exception)
-                }.await() //TODO:동기처리 시도해봤는데,,,,Why 안돼
-                Log.d("순서","2")
-        }catch (e: FirebaseFirestoreException){
-
-        }
-
+                initAdapter()
+            }
+            .addOnFailureListener { exception ->
+                Log.d("firestore", "Error getting documents: ", exception)
+            }
     }
 
     private fun getLastTimeString(lastMsgTime: String): String { //getRemainTime이랑 같은 비슷한

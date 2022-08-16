@@ -121,7 +121,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
         }
 
-        // 매칭 신청 버튼 누를경우
+        // 매칭 신청 or 채팅방 가기 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
             if (authorStatus == true || belongStatus == "Y") {
                 showPartyChattingRoom()
@@ -334,6 +334,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                     val intent = Intent(activity, ChattingRoomActivity::class.java)
                     intent.putExtra("roomName", chatName)
                     intent.putExtra("roomUuid", chatUUID)
+                    val fragmentManager = requireActivity().supportFragmentManager;
+                    fragmentManager.beginTransaction().remove(this).commit()
                     startActivity(intent)
                 }
             }

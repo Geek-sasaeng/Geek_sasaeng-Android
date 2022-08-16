@@ -11,9 +11,14 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 
-class ChattingLeaderOptionDialog: DialogFragment() {
+class LeaderOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var roomUuid : String? = null
+    private lateinit var leaderOptionView: LeaderOptionView
+
+    fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
+        this.leaderOptionView = leaderOptionView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,17 +30,14 @@ class ChattingLeaderOptionDialog: DialogFragment() {
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         dialog?.window?.setWindowAnimations(R.style.AnimationPopupStyle)
-
-        roomUuid = requireArguments().getString("roomUuid")
-
         return binding.root
     }
 
 
     override fun onResume() {
         super.onResume()
-        val width = resources.getDimensionPixelSize(R.dimen.party_request_complete_width)
-        val height = resources.getDimensionPixelSize(R.dimen.party_request_complete_height)
+        val width = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_width)
+        val height = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_height)
         dialog?.window?.setLayout(width,height)
     }
 
@@ -66,8 +68,7 @@ class ChattingLeaderOptionDialog: DialogFragment() {
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
-
+            leaderOptionView.LeaderExistClick()
         }
     }
-
 }

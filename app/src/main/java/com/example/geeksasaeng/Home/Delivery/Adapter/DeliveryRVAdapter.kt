@@ -21,6 +21,7 @@ import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    private var deliveryTimerMap: HashMap<Int, DeliveryTimer> = HashMap<Int, DeliveryTimer>()
     private lateinit var mItemClickListener: OnItemClickListener
     var minuteFlag: Boolean = false
 
@@ -92,9 +93,13 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     // 타이머 부분 Binding
     private fun timerBind(viewHolder: ItemViewHolder, position: Int) {
         // 실시간 타이머 ON
-        val leftTime = dateFormat.parse(deliveryList[position]!!.orderTime).time
-        val deliveryTimer = DeliveryTimer(viewHolder.deliveryItemTime, leftTime, 1000)
-        deliveryTimer.start()
+        if(!deliveryTimerMap.containsKey(position)) {
+            val leftTime = dateFormat.parse(deliveryList[position]!!.orderTime).time
+            val deliveryTimer = DeliveryTimer(viewHolder.deliveryItemTime, leftTime, 1000)
+            deliveryTimer.start()
+            deliveryTimerMap.put(position, deliveryTimer)
+            Log.d("time-position", position.toString())
+        }
     }
 
     fun getDeliveryItemId(position: Int): Int? {
