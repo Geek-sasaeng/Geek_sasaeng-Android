@@ -57,6 +57,6 @@
         android:layout_marginEnd="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notice_item_tv" />
+        app:layout_constraintTop_toBottomOf="@id/notice_item_title_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

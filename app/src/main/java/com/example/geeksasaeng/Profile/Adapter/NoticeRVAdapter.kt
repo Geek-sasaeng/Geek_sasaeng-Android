@@ -3,14 +3,15 @@ package com.example.geeksasaeng.Profile.Adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementResult
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemNoticeBinding
 
-class NoticeRVAdapter(private var noticeList: ArrayList<Announcement>) : RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>() {
+class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResult>) : RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>(){
 
     // 클릭 인터페이스 정의
     interface OnItemClickListener{
-        fun onItemClick(announcement: Announcement)
+        fun onItemClick(announcement: ProfileAnnouncementResult)
     }
 
     // 리스너 객체를 전달받는 함수랑 리스너 객체를 저장할 변수
@@ -35,7 +36,7 @@ class NoticeRVAdapter(private var noticeList: ArrayList<Announcement>) : Recycle
     // 뷰홀더
     inner class ViewHolder(val binding: ItemNoticeBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(announcement: Announcement){
+        fun bind(announcement: ProfileAnnouncementResult){
             binding.noticeItemTitleTv.text = announcement.title
             if(announcement.status == "ACTIVE"){
                 binding.noticeItemIconIv.setImageResource(R.drawable.ic_notice)
@@ -47,7 +48,8 @@ class NoticeRVAdapter(private var noticeList: ArrayList<Announcement>) : Recycle
 
 }
 
-data class Announcement(
+/*
+data class Announcement( //얘랑 같아... ProfileAnnouncementResult
     var announcementId : Int,
     var title : String,
     var content : String,
@@ -55,5 +57,4 @@ data class Announcement(
     var createdAt: String,
     var updatedAt: String,
     var status: String
-
-)
+)*/

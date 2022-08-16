@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
-import com.example.geeksasaeng.Profile.Adapter.Announcement
 import com.example.geeksasaeng.Profile.Adapter.NoticeRVAdapter
+import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementResult
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentNoticeBinding
@@ -16,7 +16,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 
 class NoticeFragment : BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding::inflate) {
-    private var announcementArray = ArrayList<Announcement>()
+    private var announcementArray = ArrayList<ProfileAnnouncementResult>()
     private lateinit var noticeAdapter: NoticeRVAdapter
 
     override fun initAfterBinding() {
@@ -29,7 +29,7 @@ class NoticeFragment : BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding
         binding.noticeRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         noticeAdapter.setOnItemClickListener(object : NoticeRVAdapter.OnItemClickListener{
-            override fun onItemClick(announcement: Announcement) {
+            override fun onItemClick(announcement: ProfileAnnouncementResult) {
                 //아이템 클릭할 때 수행할 행동
             }
 
