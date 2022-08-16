@@ -91,8 +91,6 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
 
     inner class SystemChattingViewHolder(val binding: ItemChattingSystemChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
-            // 00 님이 입장하셨습니다
-            // 모든 파티원이 입장을 마쳤습니다! 안내에 따라 메뉴를 입력해주세요
             binding.itemChattingSystemChattingTv.text = chatting.message
         }
     }

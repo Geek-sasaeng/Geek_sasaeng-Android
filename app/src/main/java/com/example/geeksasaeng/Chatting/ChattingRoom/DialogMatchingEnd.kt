@@ -67,35 +67,26 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
         this.dismiss()
-        Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show()
-        Log.d("FIREBASE-RESPONSE", "매칭 마감 성공")
 
-        db.collection("Rooms")
-            .document(uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
-            .addOnSuccessListener {
-                // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                val uuid = UUID.randomUUID().toString()
-                var time = calculateDate()
-                var data = hashMapOf(
-                    "content" to "모든 파티원이 입장을 마쳤습니다 !",
-                    "nickname" to null,
-                    "isSystemMessage" to true,
-                    "time" to time,
-                    "userImgUrl" to null
-                )
-                db.collection("Rooms").document(requireArguments().getString("roomUuid")!!).collection("Messages")
-                    .document(uuid).set(data).addOnSuccessListener { }
-            }
-            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+        // 00 님이 입장했습니다 시스템 메시지 추가 부분
+        val uuid = UUID.randomUUID().toString()
+        var time = calculateDate()
+        var data = hashMapOf(
+            "content" to getString(R.string.chatting_matching_end),
+            "nickname" to null,
+            "isSystemMessage" to true,
+            "time" to time,
+            "userImgUrl" to null
+        )
+
+        db.collection("Rooms").document(requireArguments().getString("roomUuid")!!).collection("Messages")
+            .document(uuid).set(data).addOnSuccessListener { }
 
         //뒤에 옵션창도 없애고 싶은데,,
-        //매칭마감 회색처리 어떻게 하지..
     }
 
     //매칭마감 실패
     override fun onMatchingEndFailure(message: String) {
-        Toast.makeText(activity, "매칭 마감이 실패했습니다", Toast.LENGTH_SHORT).show()
         Log.d("FIREBASE-RESPONSE", "매칭 마감 실패")
     }
 

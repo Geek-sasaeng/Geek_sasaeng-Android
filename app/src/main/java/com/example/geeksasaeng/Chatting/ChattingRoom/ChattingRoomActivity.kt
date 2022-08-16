@@ -165,7 +165,6 @@ class ChattingRoomActivity :
                 val bundle = Bundle()
                 var optionDialog = LeaderOptionDialog()
                 bundle.putString("roomUuid", roomUuid)
-                Log.d("FIREBASE-RESPONSE", "ChattingRoomActivity-roomUuid = $roomUuid")
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {

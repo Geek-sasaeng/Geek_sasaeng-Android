@@ -14,7 +14,6 @@
     <string name="naver_client_id">czrW_igO4TDdAeE5WhGW</string>
     <string name="naver_client_secret">syoXsVLKN1</string>
     <string name="naver_client_name">긱사생</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- ChattingRoom -->
+    <string name="chatting_matching_end">모든 파티원이 입장을 마쳤습니다 !</string>
 </resources>
