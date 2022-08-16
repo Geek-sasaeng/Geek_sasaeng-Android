@@ -113,16 +113,16 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
         else "오후 $hour:$minute"
     }
 
-    fun itemSort() {
-        if (chattingList.isNotEmpty()){ //emptyList를 sort할 수 없으므로
-            var items = chattingList.sortedBy { it.time } as MutableList<Chatting>
-            addAllItems(items)
-        }
-    }
-
     fun addItem(item: Chatting) {
         chattingList.add(item)
         // this.notifyDataSetChanged()
+    }
+
+    fun setUnreadCount(position: Int, unReadCount: Int) {
+        val chatting = chattingList.get(position)
+        chatting.notRead = unReadCount
+        chattingList.set(position, chatting)
+        this.notifyDataSetChanged()
     }
 
     fun addAllItems(items: MutableList<Chatting>) {
