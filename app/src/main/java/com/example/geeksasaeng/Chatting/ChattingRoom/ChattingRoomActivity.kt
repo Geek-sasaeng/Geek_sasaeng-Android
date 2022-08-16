@@ -1,14 +1,18 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
+import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionMyPopup
+import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionOtherPopup
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
@@ -158,15 +162,17 @@ class ChattingRoomActivity :
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener {
             if (leader) {
-                val optionDialog = LeaderOptionDialog()
-                optionDialog.setLeaderOptionView(this)
+                val bundle = Bundle()
+                var optionDialog = LeaderOptionDialog()
+                bundle.putString("roomUuid", roomUuid)
+                Log.d("FIREBASE-RESPONSE", "ChattingRoomActivity-roomUuid = $roomUuid")
+                optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
                 val optionDialog = MemberOptionDialog()
                 optionDialog.setOptionView(this)
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
-
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
