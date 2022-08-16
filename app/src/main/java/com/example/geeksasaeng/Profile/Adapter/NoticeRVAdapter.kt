@@ -1,8 +1,12 @@
 package com.example.geeksasaeng.Profile.Adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Profile.NoticeFragment
 import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementResult
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemNoticeBinding
@@ -40,8 +44,10 @@ class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResul
             binding.noticeItemTitleTv.text = announcement.title
             if(announcement.status == "ACTIVE"){
                 binding.noticeItemIconIv.setImageResource(R.drawable.ic_notice)
+                binding.noticeItemTitleTv.setTextColor(Color.parseColor("#000000"))
             }else{
                 binding.noticeItemIconIv.setImageResource(R.drawable.ic_notice_inactive)
+                binding.noticeItemTitleTv.setTextColor(Color.parseColor("#636363")) //gray_3
             }
         }
     }

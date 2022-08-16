@@ -183,7 +183,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
         chattingListRVAdapter = ChattingListRVAdapter(chattingList)
         chattingListRVAdapter.itemSort()
         Log.d("firestore", "어댑터채팅리스트"+ chattingList.toString())
-        binding.chattingListRv.adapter = chattingListRVAdapter
+        binding.chattingListRv.adapter = chattingListRVAdapter //TODO: 여기서 가끔 binding NullPointerException남
         binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         chattingListRVAdapter.setOnItemClickListener(object:
