@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Chatting.ChattingList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Chatting
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
 import kotlin.collections.ArrayList
 
@@ -30,6 +31,19 @@ class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingListData
         }
 
         holder.bind(chattingList[position]!!)
+    }
+
+    fun itemSort() {
+        if (chattingList.isNotEmpty()){ //emptyList를 sort할 수 없으므로
+            var items = chattingList.sortedBy { it.updatedAt } as MutableList<ChattingListData>
+            addAllItems(items)
+        }
+    }
+
+    fun addAllItems(items: MutableList<ChattingListData>) {
+        chattingList.clear()
+        chattingList.addAll(items)
+        this.notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = chattingList.size

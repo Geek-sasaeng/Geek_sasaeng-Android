@@ -9,6 +9,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     override fun initAfterBinding() {
+        binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
         initClickListener()
     }
 
