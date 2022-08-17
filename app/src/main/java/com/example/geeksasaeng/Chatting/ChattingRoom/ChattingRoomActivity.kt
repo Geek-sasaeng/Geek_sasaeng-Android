@@ -152,6 +152,9 @@ class ChattingRoomActivity :
             if (leader) {
                 val optionDialog = LeaderOptionDialog()
                 optionDialog.setLeaderOptionView(this)
+                val bundle = Bundle()
+                bundle.putString("roomUuid", roomUuid)
+                optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
                 val optionDialog = MemberOptionDialog()
