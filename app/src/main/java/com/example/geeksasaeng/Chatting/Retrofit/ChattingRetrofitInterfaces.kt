@@ -9,7 +9,7 @@ import retrofit2.http.Path
 interface ChattingRetrofitInterfaces {
 
     //배달파티 수동 매칭마감
-    @PATCH("/delivery-party/{partyId}/matching-status")
+    @PATCH("/delivery-party/{roomUuid}/matching-status")
     fun matchingEnd(
         @Header("Authorization") jwt: String?,
         @Path("roomUuid") roomUuid: String
