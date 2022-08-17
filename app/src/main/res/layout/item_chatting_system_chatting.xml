@@ -23,7 +23,8 @@
             android:paddingHorizontal="18dp"
             android:paddingVertical="6dp"
             android:textSize="13sp"
-            android:text="OO님이 입장하셨습니다"
+            android:text="@string/chatting_matching_end"
+            android:gravity="center"
             android:textColor="@color/gray_3"
             android:fontFamily="@font/spoqa_medium" />
 

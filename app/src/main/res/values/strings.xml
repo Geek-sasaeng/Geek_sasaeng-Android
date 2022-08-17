@@ -15,5 +15,5 @@
     <string name="naver_client_secret">syoXsVLKN1</string>
     <string name="naver_client_name">긱사생</string>
     <!-- ChattingRoom -->
-    <string name="chatting_matching_end">모든 파티원이 입장을 마쳤습니다 !</string>
+    <string name="chatting_matching_end">모든 파티원이 입장을 마쳤습니다 !\n파티장을 주문을, 파티원들은 송금을 진행해주세요</string>
 </resources>
