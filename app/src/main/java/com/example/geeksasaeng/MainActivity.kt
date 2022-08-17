@@ -13,7 +13,6 @@ import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
-import com.google.firebase.messaging.FirebaseMessaging
 import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -53,15 +52,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         }else setFragment(R.id.main_frm, HomeFragment())
 
-        //getAppKeyHash() //카카오맵 해시키 얻는 용
+        // getAppKeyHash() //카카오맵 해시키 얻는 용
         // FCM Token 확인하기 위한 코드
-        /*FirebaseMessaging.getInstance().token.addOnCompleteListener {
+        /*
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
                 task ->
             if(task.isSuccessful) {
                 var token = task.result?:""
                 Log.d("FCM-TOKEN-RESPONSE", token.toString())
             }
-        }*/
+        }
+        */
 
         setBottomNavi()
     }

@@ -274,7 +274,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         var orderSec = 0
 
         var currentTime = calculateToday()
-        Log.d("current", calculateToday().toString())
         var todayYear = Integer.parseInt(currentTime.substring(0, 4))
         var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
         var todayDay = Integer.parseInt(currentTime.substring(8, 10))
@@ -326,7 +325,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     // 채팅방으로 이동
     override fun showPartyChattingRoom() {
         val chatUUID = partyData.uuid
-        db.collection("Rooms").document(partyData.uuid).get()
+        db.collection("Rooms").document(chatUUID).get()
             .addOnSuccessListener {doc ->
                 if (doc != null){
                     val value = doc.data!!["roomInfo"] as HashMap<String, Any>
@@ -346,11 +345,34 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임 //TODO: arrayUnion이 이 값이 있으면 갱신해주고, 없으면 추가해주는 걸로 알고 있는데,, arrayUnion의 의미가 무색해지지만 서비스에는 지장 x듯?
-            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!") }
+            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
+            .addOnSuccessListener {
+                // 00 님이 입장했습니다 시스템 메시지 추가 부분
+                val uuid = UUID.randomUUID().toString()
+                var time = calculateDate()
+                var data = hashMapOf(
+                    "content" to "${getNickname()}님이 입장하셨습니다",
+                    "nickname" to getNickname(),
+                    "isSystemMessage" to true,
+                    "time" to time,
+                    "userImgUrl" to "이미지 링크"
+                )
+                db.collection("Rooms").document(partyData.uuid).collection("Messages")
+                    .document(uuid).set(data).addOnSuccessListener { }
+            }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
 
     }
 
-
+    private fun calculateDate(): String {
+        val now: Long = System.currentTimeMillis()
+        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
+        var date: String = simpleDate.format(Date(now)).toString()
+        Log.d("ampm", date.toString())
+        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
+            date = date.substring(0, 11) + "00" + date.substring(13, 20)
+        else if (date.substring(20) == "오후")
+            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
+        return date
+    }
 }
