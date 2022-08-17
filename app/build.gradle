@@ -83,7 +83,7 @@ dependencies {
 
     // Splash Animation
     implementation 'com.airbnb.android:lottie:3.2.0'
-    
+
     // FCM
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
@@ -92,10 +92,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
-    // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
-}
-
 // FCM 세팅
-apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.gms.google-services'
+}

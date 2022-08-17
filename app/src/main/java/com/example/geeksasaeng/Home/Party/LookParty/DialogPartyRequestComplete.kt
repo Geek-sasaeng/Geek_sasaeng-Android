@@ -5,7 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingFragment
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogPartyRequestCompleteBinding
@@ -41,7 +41,7 @@ class DialogPartyRequestComplete: DialogFragment() {
             // 채팅방으로 이동하기
             dialogPartyRequestCompleteView.showPartyChattingRoom()
             this.dismiss()
-            (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingFragment()).commit()
+            (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingListFragment()).commit()
             // TODO: Bottom_navi 아이콘 채팅으로 변경해주기
         }
     }
