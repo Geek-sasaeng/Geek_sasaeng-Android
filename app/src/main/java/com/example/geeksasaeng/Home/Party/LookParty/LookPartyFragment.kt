@@ -158,9 +158,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             //binding.lookHostProfile.setImageURI(Uri.parse(result.chiefProfileImgUrl))
             Glide.with(this)
                 .load(result.chiefProfileImgUrl)
-                .into(binding.lookHostProfile)
+                .into(binding.lookHostProfileIv)
         else // TODO: 기본 이미지 넣을 예정
-            binding.lookHostProfile.setImageResource(R.drawable.ic_default_profile)
+            binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile)
 
         binding.lookHostName.text = result.chief
         binding.lookContent.text = result.content

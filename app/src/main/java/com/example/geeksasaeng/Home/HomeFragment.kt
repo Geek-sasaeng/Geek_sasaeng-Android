@@ -30,7 +30,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
     private fun initData(){
         Glide.with(this)
             .load(getProfileImgUrl())
-            .into(binding.homeUnivLogo) // 프로필 띄워주기
+            .into(binding.homeUnivLogoIv) // 프로필 띄워주기
         binding.homeDormitoryNameTv.text = getDormitory().toString() // 저장되어있는 기숙사 정보 가져와서 설정해주기
     }
 
