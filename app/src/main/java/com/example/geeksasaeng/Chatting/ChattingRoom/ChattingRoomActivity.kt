@@ -70,40 +70,38 @@ class ChattingRoomActivity :
 
         // 방장인지 아닌지 확인하기
         db.collection("Rooms").document(roomUuid).get().addOnSuccessListener { document ->
-                val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
-                participants = roomInfo.get("participants") as ArrayList<Any>
-                var participantIdx: Int = -1
-                for ((idx, map) in participants!!.withIndex()) {
-                    val map = map as HashMap<String, String>
-                    val participantName = map.get("participant").toString()
-                    if (participantName.equals(getNickname())) {
-                        participantIdx = idx
-                        break
-                    }
+            val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+            participants = roomInfo.get("participants") as ArrayList<Any>
+            var participantIdx: Int = -1
+            for ((idx, map) in participants!!.withIndex()) {
+                val map = map as HashMap<String, String>
+                val participantName = map.get("participant").toString()
+                if (participantName.equals(getNickname())) {
+                    participantIdx = idx
+                    break
                 }
-
-                // Idx == 0 이면 방장임
-                leader = participantIdx == 0
-            }
-            .addOnFailureListener { e ->
-                Log.w(
-                    "chatting-member-leave",
-                    "파이어베이스 채팅방에서 유저들을 가져오는 도중에 오류가 발생했습니다."
-                )
             }
 
-        if (topLayoutFlag) {
-            binding.chattingRoomTopLayout.visibility = View.VISIBLE
+            // Idx == 0 이면 방장임
+            if (participantIdx == 0)
+                leader = true
 
-            if (leader) {
-                binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
-                binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
+            if (topLayoutFlag) {
+                binding.chattingRoomTopLayout.visibility = View.VISIBLE
+
+                if (leader == true) {
+                    binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
+                    binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
+                } else {
+                    getBankAndAccountNumber()
+                    binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                }
             } else {
-                getBankAndAccountNumber()
-                binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                binding.chattingRoomTopLayout.visibility = View.INVISIBLE
             }
-        } else {
-            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+
+        }.addOnFailureListener { e ->
+            Log.w("chatting-member-leave", "파이어베이스 채팅방에서 유저들을 가져오는 도중에 오류가 발생했습니다.")
         }
     }
 
@@ -230,7 +228,6 @@ class ChattingRoomActivity :
         val now: Long = System.currentTimeMillis()
         val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
         var date: String = simpleDate.format(Date(now)).toString()
-        Log.d("ampm", date.toString())
         if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
             date = date.substring(0, 11) + "00" + date.substring(13, 20)
         else if (date.substring(20) == "오후" && date.substring(11, 13) == "12")
