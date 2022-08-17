@@ -212,6 +212,7 @@ class ChattingRoomActivity :
                         val messageId = dc.document.id
                         db.collection("Rooms").document(roomUuid).collection("Messages")
                             .document(messageId).update("readUsers", readUsers)
+                        readUsers.add(getNickname()!!)
                     }
                     val notReadCnt = participants.size - readUsers.size
 
@@ -256,7 +257,7 @@ class ChattingRoomActivity :
         binding.chattingRoomSendTv.setOnClickListener { //메세지 전송버튼
             val uuid = UUID.randomUUID().toString()
             var myChatting = binding.chattingRoomChattingTextEt.text.toString()
-            var time = calculateDate()
+            var time = getCurrentDateTime()
             val readUsers = ArrayList<String>();
             readUsers.add(getNickname()!!)
 
@@ -265,7 +266,7 @@ class ChattingRoomActivity :
                 "nickname" to nickname,
                 "time" to time,
                 "userImgUrl" to "이미지 링크",
-                "readUsers" to readUsers
+                "readUsers" to readUsers,
             )
 
             // 파이어 스토어에 추가
@@ -273,12 +274,6 @@ class ChattingRoomActivity :
                 .document(uuid).set(data).addOnSuccessListener {
                     binding.chattingRoomChattingTextEt.setText("")
             }
-
-           //roomInfo에 updatedAt 갱신
-            db.collection("Rooms").document(chattingRoomName)
-                .update("roomInfo.updatedAt", getCurrentDateTime())
-                .addOnSuccessListener { Log.d("firestore-updatedAt", "DocumentSnapshot successfully written!") }
-                .addOnFailureListener { e -> Log.w("firestore-updatedAt", "Error update document", e) }
         }
     }
 

@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingFragment
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Community.CommunityFragment
-import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
-import com.google.firebase.messaging.FirebaseMessaging
 import java.security.MessageDigest
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -96,7 +94,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return@setOnItemSelectedListener true
                 }
                 R.id.chattingFragment -> {
-                    setFragment(R.id.main_frm, ChattingFragment())
+                    setFragment(R.id.main_frm, ChattingListFragment())
                     return@setOnItemSelectedListener true
                 }
                 R.id.profileFragment -> {
