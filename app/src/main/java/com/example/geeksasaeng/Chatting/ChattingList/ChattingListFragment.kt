@@ -59,7 +59,7 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
                             val roomImgUrl = "http://geeksasaeng.shop/s3/neo.jpg"
 
                             val roomData = RoomData(roomName, roomUuid, roomImgUrl)
-                            val chattingData = ChattingData(roomData, "", "", "+10")
+                            val chattingData = ChattingData(roomData, "", "", "")
                             chattingList.add(chattingData)
 
                             // 마지막 채팅 받아오기

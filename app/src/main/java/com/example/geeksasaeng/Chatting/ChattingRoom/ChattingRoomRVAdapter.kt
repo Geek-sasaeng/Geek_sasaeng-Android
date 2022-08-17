@@ -70,7 +70,11 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
     inner class MyChattingViewHolder(val binding: ItemChattingMyChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
             binding.itemMyChattingChattingTv.text = chatting.message
-            binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
+            if(chatting.notRead!! <= 0){
+                binding.itemMyChattingNotReadTv.text = ""
+            }else{
+                binding.itemMyChattingNotReadTv.text = chatting.notRead.toString()
+            }
             binding.itemMyChattingNicknameTv.text = chatting.nickname
             binding.itemMyChattingTimeTv.text = setTime(chatting.time)
             // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
@@ -81,7 +85,11 @@ class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : R
     inner class YourChattingViewHolder(val binding: ItemChattingYourChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
             binding.itemYourChattingChattingTv.text = chatting.message
-            binding.itemYourChattingNotReadTv.text = chatting.notRead?.toString()
+            if(chatting.notRead!! <= 0){
+                binding.itemYourChattingNotReadTv.text = ""
+            }else{
+                binding.itemYourChattingNotReadTv.text = chatting.notRead.toString()
+            }
             binding.itemYourChattingNicknameTv.text = chatting.nickname
             binding.itemYourChattingTimeTv.text = setTime(chatting.time)
             // binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
