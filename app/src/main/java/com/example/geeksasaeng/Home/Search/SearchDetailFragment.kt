@@ -45,6 +45,8 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
+    var filter1CheckFlag: Boolean = false //인원수
+    var filter2CheckFlag: Boolean = false //카테고리
     lateinit var keyword: String
     private var lastCheckedBox = -1
 
@@ -72,64 +74,76 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
         binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "BREAKFAST"
                 lastCheckedBox = R.id.search_detail_cb1
+                filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.search_detail_cb1){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
+                    refreshing()
                 }
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb2.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
                 lastCheckedBox = R.id.search_detail_cb2
+                filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.search_detail_cb2){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
+                    refreshing()
                 }
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb3.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "DINNER"
                 lastCheckedBox = R.id.search_detail_cb3
+                filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb3){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
+                    refreshing()
                 }
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb4.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
                 lastCheckedBox = R.id.search_detail_cb4
+                filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.search_detail_cb4){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
+                    refreshing()
                 }
             }
             Log.d("check",orderTimeCategory.toString())
@@ -197,6 +211,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         isLoading = false
         finalPage = false
         keyword = requireArguments().getString("keyword").toString()
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
         if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
         else getSearchPartyList(dormitoryId, totalCursor, keyword)
     }
@@ -206,6 +221,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     private fun initMoreLoadPosts() {
         binding.searchProgressCover.visibility = View.VISIBLE
         keyword = requireArguments().getString("keyword").toString()
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
         if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
         else getSearchPartyList(dormitoryId, totalCursor, keyword)
         val handler = Handler()
@@ -218,11 +234,17 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.searchDetailSwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            searchArray.clear()
-            initLoadPosts()
-            initAdapter()
-            binding.searchDetailSwipe.isRefreshing = false
+            refreshing()
         })
+    }
+
+    private fun refreshing(){ // 파티목록 새로고침
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
+        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
+        searchArray.clear()
+        initLoadPosts()
+        initAdapter()
+        binding.searchDetailSwipe.isRefreshing = false
     }
 
     // 하단 스크롤 관련
@@ -292,6 +314,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // Adapter 설정
     private fun initAdapter() {
+        Log.d("checkSearchArray", searchArray.toString())
         searchAdapter = DeliveryRVAdapter(searchArray)
         binding.searchDetailPartyRv.adapter = searchAdapter
         binding.searchDetailPartyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -332,12 +355,12 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
 
-                filterCheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
+                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
 
                 maxMatching = position * 2
                 finalPage = false
+                refreshing()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }

@@ -145,6 +145,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun refreshing(){ // 파티목록 새로고침
+        Log.d("deliveryFilterCheck", filterCheckFlag.toString())
         deliveryArray.clear()
         initLoadPosts()
         initAdapter()

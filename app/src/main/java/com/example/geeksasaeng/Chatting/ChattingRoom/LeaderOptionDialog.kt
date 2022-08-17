@@ -55,7 +55,8 @@ class LeaderOptionDialog: DialogFragment() {
         }
 
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
-
+            val dialog = DialogSendAlarm()
+            dialog.show(parentFragmentManager, "CustomDialog")
         }
 
         binding.dialogLeaderPopupOptionMatchingEndTv.setOnClickListener { //매칭마감하기 기능
