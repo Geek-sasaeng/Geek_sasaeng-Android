@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Home.Party.Retrofit.*
@@ -139,6 +140,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         partyDataService.setPartyDetailView(this)
     }
 
+    //상세보기 api 성공시
     override fun partyDetailSuccess(result: PartyDetailResult) {
         partyData = result
 
@@ -152,8 +154,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         if (authorStatus == true || belongStatus == "Y") binding.lookPartyRequestTv.text = "채팅방 가기"
         else binding.lookPartyRequestTv.text = "신청하기"
 
-        if (result?.chiefProfileImgUrl != null)
-            binding.lookHostProfile.setImageURI(Uri.parse(result?.chiefProfileImgUrl))
+        if (result.chiefProfileImgUrl != null)
+            //binding.lookHostProfile.setImageURI(Uri.parse(result.chiefProfileImgUrl))
+            Glide.with(this)
+                .load(result.chiefProfileImgUrl)
+                .into(binding.lookHostProfile)
         else // TODO: 기본 이미지 넣을 예정
             binding.lookHostProfile.setImageResource(R.drawable.ic_default_profile)
 

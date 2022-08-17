@@ -68,14 +68,25 @@
             android:paddingTop="10dp"
             android:paddingBottom="23dp">
 
-            <ImageView
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/look_host_profile"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:src="@drawable/ic_default_profile"
-                android:layout_marginLeft="23dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="13dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="23dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_default_profile"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/look_host_name"
