@@ -8,7 +8,7 @@ data class Chatting(
     // val senderImgUrl: String?,
     val senderImgUrl: Int?,
     val message: String?,
-    val notRead: Int?
+    var notRead: Int?
 )
 
 const val myChatting = 1

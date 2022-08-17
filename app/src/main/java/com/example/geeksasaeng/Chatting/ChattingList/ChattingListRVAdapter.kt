@@ -3,11 +3,10 @@ package com.example.geeksasaeng.Chatting.ChattingList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Chatting.ChattingRoom.Chatting
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
 import kotlin.collections.ArrayList
 
-class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingListData>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
+class ChattingListRVAdapter(private var chatting: ArrayList<ChattingData>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
 
     private lateinit var mItemClickListener : OnItemClickListener
 
@@ -16,7 +15,7 @@ class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingListData
     }
 
     interface OnItemClickListener {
-        fun onItemClick(chattingList: ChattingListData, position: Int)
+        fun onItemClick(chatting: ChattingData, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,33 +26,31 @@ class ChattingListRVAdapter(private var chattingList: ArrayList<ChattingListData
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            mItemClickListener.onItemClick(chattingList[position], position)
+            mItemClickListener.onItemClick(chatting[position]!!, position)
         }
 
-        holder.bind(chattingList[position]!!)
+        holder.bind(chatting[position]!!)
     }
 
-    fun itemSort() {
-        if (chattingList.isNotEmpty()){ //emptyList를 sort할 수 없으므로
-            var items = chattingList.sortedBy { it.updatedAt } as MutableList<ChattingListData>
-            addAllItems(items)
-        }
+    fun setChattingData(position: Int, chattingData: ChattingData) {
+        chatting.set(position, chattingData)
+        this.notifyItemChanged(position)
     }
 
-    fun addAllItems(items: MutableList<ChattingListData>) {
-        chattingList.clear()
-        chattingList.addAll(items)
+    fun addAllItems(items: MutableList<ChattingData>) {
+        chatting.clear()
+        chatting.addAll(items)
         this.notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = chattingList.size
+    override fun getItemCount(): Int = chatting.size
 
     inner class ViewHolder(val binding: ItemChattingListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chattingList: ChattingListData) {
-            binding.itemChattingListTitle.text = chattingList.roomName
-            binding.itemChattingListLastChatting.text = chattingList.lastChat
-            binding.itemChattingListTimeTv.text = chattingList.lastTime
-            binding.itemChattingListChattingNumberTv.text = chattingList.newMsg
+        fun bind(chatting: ChattingData) {
+            binding.itemChattingListTitle.text = chatting.roomData.roomName
+            binding.itemChattingListLastChatting.text = chatting.lastChat
+            binding.itemChattingListTimeTv.text = chatting.lastMsgTime
+            binding.itemChattingListChattingNumberTv.text = chatting.newMsg
         }
     }
 }
