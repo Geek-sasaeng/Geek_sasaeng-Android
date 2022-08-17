@@ -25,8 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class ChattingRoomActivity :
-    BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
+class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView {
 
     private var roomName = String()
