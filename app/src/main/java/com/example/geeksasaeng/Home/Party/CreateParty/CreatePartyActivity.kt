@@ -329,12 +329,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
-        intent.putExtra("deliveryItemId", result.partyId.toString())
-        Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.partyId.toString())
+        intent.putExtra("deliveryItemId", result.id.toString()) //파티 상세보기 띄우기 위해 파티 아이디 넘겨줌
+        Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.id.toString())
         binding.createPartyKakaoMapLocation.removeView(mapView) //카카오맵 종료
         finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
-
 
         //firestore에 채팅방 생성하기 위한 데이터 구조 만들기
         var participantsList = ArrayList<ParticipantsInfo>()
@@ -390,9 +389,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     override fun onCompleteClicked() { //마지막 파티이름 dialog에서 클릭버튼을 누르면
+        Log.d("jwt", getJwt().toString())
         Log.d("jjang", createPartyVM.getAccountNumber().toString()+"/"+createPartyVM.getAccount().toString()+"/"+createPartyVM.getPartyName().toString()+"/"+binding.createPartyContentEt.text.toString()+"/"+  createPartyVM.getCategoryInt()!!.toString()+"/"+ binding.createPartyTogetherCheckBtn.isChecked.toString()+"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude.toString() +"/"+  createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude.toString()+"/"+  createPartyVM.getMaxMatching()!!.toString() +"/"+ createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString() +"/"+  createPartyVM.getStoreUrl()!!.toString() +"/"+ binding.createPartyTitleEt.text.toString())
         val createPartyRequest = CreatePartyRequest(createPartyVM.getAccountNumber().toString(), createPartyVM.getAccount().toString(), createPartyVM.getPartyName().toString(), binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
-            createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl()!!, binding.createPartyTitleEt.text.toString())
-        createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기
+            createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl().toString()!!, binding.createPartyTitleEt.text.toString())
+        createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기 요청
     }
 }

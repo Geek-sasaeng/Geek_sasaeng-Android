@@ -47,10 +47,14 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
 
     override fun partyReportViewSuccess(code: Int) {
         showToast("신고 완료")
+        val dialog = DialogReportPartySuccess()
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     override fun partyReportViewFailure(message: String) {
         showToast(message)
+        val dialog = DialogReportPartyFail()
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     private fun getReportUser(): UserReportRequest {
@@ -65,9 +69,13 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
 
     override fun userReportViewSuccess(code: Int) {
         showToast("신고 완료")
+        val dialog = DialogReportPartySuccess()
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     override fun userReportViewFailure(message: String) {
         showToast(message)
+        val dialog = DialogReportPartyFail()
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 }

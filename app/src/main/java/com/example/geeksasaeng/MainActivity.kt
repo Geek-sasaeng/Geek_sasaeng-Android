@@ -42,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             val bundle = Bundle()
             bundle.putString("deliveryItemId", deliveryItemId)
+            Log.d("jjang", "메인에서의 파티 아이디"+deliveryItemId.toString())
             bundle.putString("status", status)
 
             val lookPartyFragment = LookPartyFragment()

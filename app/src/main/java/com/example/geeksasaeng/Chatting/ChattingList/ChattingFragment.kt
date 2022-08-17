@@ -34,6 +34,7 @@ class ChattingFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBi
 
     private fun initChattingList() {
         chattingList.clear() // ChattingRoomActivity 들어갔다가 나오면 방 하나더 추가되는 문제 해결 위해 clear한 후 추가해주는 방식으로 바꿈
+        Log.d("firestore", "채팅리스트" + chattingList.toString())
         //TODO: 이부분이 가져와야하는 정보가 많아서,, 구조가 복잡해졌어 - 이 코드가 뭘 의미하는지 모르겠다 하는거 있으면 언제든 제로한테 물어봐줘여
         db.collection("Rooms")
             .whereEqualTo("roomInfo.category", "배달파티")
