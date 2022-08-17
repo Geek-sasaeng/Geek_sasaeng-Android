@@ -41,6 +41,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             val bundle = Bundle()
             bundle.putString("deliveryItemId", deliveryItemId)
+            Log.d("jjang", "메인에서의 파티 아이디"+deliveryItemId.toString())
             bundle.putString("status", status)
 
             val lookPartyFragment = LookPartyFragment()
@@ -51,15 +52,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         }else setFragment(R.id.main_frm, HomeFragment())
 
-        //getAppKeyHash() //카카오맵 해시키 얻는 용
+        // getAppKeyHash() //카카오맵 해시키 얻는 용
         // FCM Token 확인하기 위한 코드
-        /*FirebaseMessaging.getInstance().token.addOnCompleteListener {
+        /*
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
                 task ->
             if(task.isSuccessful) {
                 var token = task.result?:""
                 Log.d("FCM-TOKEN-RESPONSE", token.toString())
             }
-        }*/
+        }
+        */
 
         setBottomNavi()
     }
