@@ -27,9 +27,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
     override fun initAfterBinding() {
 //      Splash Animation 적용
         val animationView = binding.animationView
-//        animationView.setRenderMode(RenderMode.HARDWARE)
-//        animationView.enableMergePathsForKitKatAndAbove(true)
-        animationView.scaleType = ImageView.ScaleType.CENTER_CROP
         animationView.playAnimation()
         animationView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {

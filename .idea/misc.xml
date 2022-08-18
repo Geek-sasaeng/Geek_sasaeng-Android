@@ -8,6 +8,7 @@
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/ic_chat.xml" value="0.1" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/ic_chatting_locker.xml" value="0.1" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/ic_logo__1_.xml" value="0.367" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/ic_profile.xml" value="0.298" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/drawable/ic_settings.xml" value="0.1" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_room.xml" value="0.36614583333333334" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.2833333333333333" />
@@ -20,6 +21,8 @@
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/dialog_party_request_complete.xml" value="0.36614583333333334" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_look_party.xml" value="0.22" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/fragment_step_five.xml" value="0.33" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/item_default_loading.xml" value="0.1875" />
+        <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/layout/item_loading.xml" value="0.1875" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/menu/bottom_navi_menu.xml" value="0.2" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/mipmap-anydpi-v26/ic_app_logo.xml" value="0.303" />
         <entry key="..\:/Geek_sasaeng-Android/app/src/main/res/mipmap-anydpi-v26/ic_app_logo_round.xml" value="0.303" />
