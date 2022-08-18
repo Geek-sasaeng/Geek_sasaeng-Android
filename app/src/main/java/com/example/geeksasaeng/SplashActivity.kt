@@ -20,6 +20,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
     var password: String? = null
 
     override fun initAfterBinding() {
+        Log.d("jwt", "Bearer " + getJwt())
 //      Splash Animation 적용
         val animationView = binding.animationView
         animationView.setRenderMode(RenderMode.HARDWARE)
