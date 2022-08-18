@@ -17,6 +17,7 @@ class FirestoreChatData(
 ) {
     private val db = Firebase.firestore //파이어스토어
     private lateinit var chatDataView: ChatDataView
+    var cnt: Int = 0
 
     fun setChatDataView(chatDataView: ChatDataView) {
         this.chatDataView = chatDataView
@@ -27,7 +28,6 @@ class FirestoreChatData(
             .orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshots, _ ->
                 val chattingData = chattingList.get(position)
-                var cnt = 0
                 for ((idx, doc) in snapshots?.documentChanges!!.withIndex()) {
                     if (idx == 0) { // 가장 최근에 보낸 메시지, 시간 가져오기
                         val lastChat = doc.document["content"].toString()

@@ -13,7 +13,7 @@ import okhttp3.internal.notify
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
 
-class ChattingRoomRVAdapter(private var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return chattingList[position].viewType
