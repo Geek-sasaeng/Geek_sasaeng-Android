@@ -1,9 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true"
-        android:drawable="@drawable/ic_icon_profile">
-    </item>
-    <item android:state_selected="false"
-        android:drawable="@drawable/ic_icon_profile">
-    </item>
-</selector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="156.35dp"
+    android:height="158.79dp"
+    android:viewportWidth="156.35"
+    android:viewportHeight="158.79">
+  <path
+      android:pathData="M78.01,47.19m-30.99,0a30.99,30.99 0,1 1,61.98 0a30.99,30.99 0,1 1,-61.98 0"
+      android:fillColor="#3266eb"/>
+  <path
+      android:pathData="M100.21,75.32c-6.12,4.8 -13.82,7.67 -22.2,7.67s-15.99,-2.84 -22.09,-7.59c-21.65,8.8 -36.92,28.24 -36.92,53.04v9.97c0,3.89 3.15,7.04 7.04,7.04h104.27c3.89,0 7.04,-3.15 7.04,-7.04v-9.97c0,-24.89 -15.37,-44.38 -37.13,-53.13Z"
+      android:fillColor="#3266eb"/>
+  <path
+      android:pathData="M93.15,123.88l22.24,21.57h14.92c3.89,0 7.04,-3.15 7.04,-7.04v-9.97c0,-4.78 -0.57,-9.36 -1.64,-13.71l-30.7,-17.58 -11.86,26.72Z"
+      android:fillColor="#215ad8"/>
+  <path
+      android:pathData="M100.67,95.5c-4.82,-0.5 -6.47,2.8 -7.52,4.31 -1.05,-1.51 -2.7,-4.81 -7.52,-4.31 -6.33,0.65 -9.05,6.77 -6.9,14.16 2.26,7.77 14.32,14.23 14.42,14.22 0.1,0.01 12.16,-6.45 14.42,-14.22 2.15,-7.39 -0.57,-13.51 -6.9,-14.16Z"
+      android:fillColor="#2db9ea"/>
+</vector>
