@@ -33,6 +33,7 @@ class LeaderOptionDialog: DialogFragment() {
     ): View? {
         binding = DialogChattingRoomOptionLeaderPopupBinding.inflate(inflater, container, false)
         roomUuid = requireArguments().getString("roomUuid")
+        Log.d("roomUuid", roomUuid.toString())
         initListener()
         initMatchingEndListener()
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
@@ -56,6 +57,9 @@ class LeaderOptionDialog: DialogFragment() {
 
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
             val dialog = DialogSendAlarm()
+            val bundle = Bundle()
+            bundle.putString("roomUuid", roomUuid)
+            dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
         }
 

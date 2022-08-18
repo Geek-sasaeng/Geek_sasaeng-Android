@@ -9,3 +9,8 @@ interface ChattingLeaderLeaveView {
     fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>)
     fun chattingLeaderLeaveFailure(code: Int, message: String)
 }
+
+interface ChattingDeliveryComplicatedView {
+    fun chattingDeliveryComplicatedSuccess(result: String)
+    fun chattingDeliveryComplicatedFailure(message: String)
+}

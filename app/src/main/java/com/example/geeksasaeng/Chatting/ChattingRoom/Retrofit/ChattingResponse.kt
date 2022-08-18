@@ -30,4 +30,22 @@ data class ChattingPartyLeaderLeaveResponse(
     @SerializedName("result") val result: ChattingPartyLeaderLeaveResult
 )
 
+//배달완료 알림보내기
+data class ChattingDeliveryComplicatedRequest(
+    @SerializedName("uuid") val uuid: String,
+)
+
+data class ChattingDeliveryComplicatedResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingDeliveryComplicatedResult
+)
+
+data class ChattingDeliveryComplicatedResult(
+    @SerializedName("body") val body: ArrayList<Any>,
+    @SerializedName("statusCode") val statusCode: String,
+    @SerializedName("statusCodeValue") val statusCodeValue: Int
+
+)
 
