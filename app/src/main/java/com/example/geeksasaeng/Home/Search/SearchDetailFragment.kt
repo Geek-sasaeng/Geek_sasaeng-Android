@@ -71,7 +71,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
 
     private fun initCheckBox(){ //라디오 버튼
-        //TODO: 알아보니까 라디오버튼 선택해제는 좀 어려워서 CHECKBOX로 수정함..! 근데 filterCheckFlag가 어느경우 true여야하는지 모르겠어용 루나..! 고쳐줘용
 
         binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
@@ -221,11 +220,11 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     private fun initMoreLoadPosts() {
         binding.searchProgressCover.visibility = View.VISIBLE
         keyword = requireArguments().getString("keyword").toString()
-        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
-        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
-        else getSearchPartyList(dormitoryId, totalCursor, keyword)
         val handler = Handler()
         handler.postDelayed({
+            filterCheckFlag = filter1CheckFlag||filter2CheckFlag
+            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
+            else getSearchPartyList(dormitoryId, totalCursor, keyword)
             isLoading = false
             binding.searchProgressCover.visibility = View.GONE
         }, 1200)
