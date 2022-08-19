@@ -23,6 +23,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileRecentActivityView {
 
     lateinit var profileRecentActivityService: ProfileDataService
+    lateinit var profileRecentActivityList: ArrayList<ProfileRecentActivityResult>
 
     override fun initAfterBinding() {
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
@@ -30,6 +31,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         clearBackStack()
         initClickListener()
         initRecentActivityService()
+        initRecentActivityClickListener()
     }
 
     private fun clearBackStack() {
@@ -61,33 +63,83 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileRecentActivitySuccess(result: ArrayList<ProfileRecentActivityResult>?) {
-        Log.d("PROFILE-RESPONSE", "SUCCESS")
-        for (i in 0 until result!!.size) {
+        profileRecentActivityList = result!!
+        for (i in 0 until result.size) {
             recentActivityBind(result[i], i)
         }
     }
 
     override fun onProfileAnnouncementFailure(message: String) {
-        Log.d("PROFILE-RESPONSE", "FAILED")
         showToast(message)
     }
 
     private fun recentActivityBind(activity: ProfileRecentActivityResult, index: Int) {
-        if (index == 0) {
-            binding.profilePartyLayoutCv1.visibility = View.VISIBLE
-            // TODO: 임시로 넣은 부분
-            binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_delivery)
-            binding.profilePartyTitleTv1.text = activity.title
-        } else if (index == 1) {
-            binding.profilePartyLayoutCv2.visibility = View.VISIBLE
-            // TODO: 임시로 넣은 부분
-            binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_delivery)
-            binding.profilePartyTitleTv2.text = activity.title
-        } else if (index == 2) {
-            binding.profilePartyLayoutCv3.visibility = View.VISIBLE
-            // TODO: 임시로 넣은 부분
-            binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_delivery)
-            binding.profilePartyTitleTv3.text = activity.title
+        when (index) {
+            0 -> {
+                binding.profilePartyLayoutCv1.visibility = View.VISIBLE
+                // TODO: 임시로 넣은 부분
+                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyTitleTv1.text = activity.title
+            }
+            1 -> {
+                binding.profilePartyLayoutCv2.visibility = View.VISIBLE
+                // TODO: 임시로 넣은 부분
+                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyTitleTv2.text = activity.title
+            }
+            2 -> {
+                binding.profilePartyLayoutCv3.visibility = View.VISIBLE
+                // TODO: 임시로 넣은 부분
+                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyTitleTv3.text = activity.title
+            }
+        }
+    }
+
+    private fun initRecentActivityClickListener() {
+        binding.profilePartyLayoutCv1.setOnClickListener {
+            val activityId = profileRecentActivityList[0].id
+
+            val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putString("deliveryItemId", activityId.toString())
+
+            val lookPartyFragment = LookPartyFragment()
+            lookPartyFragment.arguments = bundle
+
+            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            transaction.commit()
+        }
+
+        binding.profilePartyLayoutCv2.setOnClickListener {
+            val activityId = profileRecentActivityList[1].id
+
+            val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putString("deliveryItemId", activityId.toString())
+
+            val lookPartyFragment = LookPartyFragment()
+            lookPartyFragment.arguments = bundle
+
+            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            transaction.commit()
+        }
+
+        binding.profilePartyLayoutCv3.setOnClickListener {
+            val activityId = profileRecentActivityList[2].id
+
+            val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putString("deliveryItemId", activityId.toString())
+
+            val lookPartyFragment = LookPartyFragment()
+            lookPartyFragment.arguments = bundle
+
+            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            transaction.commit()
         }
     }
 }
