@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Profile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Login.LoginActivity
@@ -15,8 +16,10 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     override fun initAfterBinding() {
-        binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
         initClickListener()
+        binding.profileNoticeBelowTv.setSingleLine(true)
+        binding.profileNoticeBelowTv.ellipsize = TextUtils.TruncateAt.MARQUEE
+        binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
     }
 
     private fun initClickListener() {
