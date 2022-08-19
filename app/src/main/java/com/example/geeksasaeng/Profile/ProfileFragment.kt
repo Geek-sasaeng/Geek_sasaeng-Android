@@ -7,13 +7,15 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityResult
+import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
-class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
+class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileRecentActivityView {
     override fun initAfterBinding() {
         clearBackStack()
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
@@ -40,5 +42,13 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private fun clearBackStack() {
         val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    override fun onProfileRecentActivitySuccess(result: ProfileRecentActivityResult) {
+        // 정보 바인딩
+    }
+
+    override fun onProfileAnnouncementFailure(message: String) {
+        showToast(message)
     }
 }
