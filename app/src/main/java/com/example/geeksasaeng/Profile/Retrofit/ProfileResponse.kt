@@ -46,7 +46,7 @@ data class ProfileMyAccountResponse(
 
 data class ProfileMyAccountResult(
     @SerializedName("dormitoryId") val dormitoryId: Int,
-    @SerializedName("dormitoryName") val dormitoryName: Int,
+    @SerializedName("dormitoryName") val dormitoryName: String,
     @SerializedName("emailAddress") val emailAddress: String,
     @SerializedName("emailId") val emailId: Int,
     @SerializedName("fcmToken") val fcmToken: String,

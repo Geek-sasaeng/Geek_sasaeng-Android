@@ -82,15 +82,14 @@ class ProfileDataService {
                     val resp = response.body()!!
                     when (resp.code) {
                         1000 -> profileMyAccountView.onProfileMyAccountSuccess(resp.result)
-                        4000 -> Log.d("PROFILE-DATA-SERVICE", "서버 오류")
+                        4000 -> Log.d("PROFILE-RESPONSE", "서버 오류")
                         else -> profileMyAccountView.onProfileMyAccountFailure(resp.message)
                     }
                 }
             }
             override fun onFailure(call: Call<ProfileMyAccountResponse>, t: Throwable) {
-                Log.d("MY-ACCOUNT-RESPONSE", "ProfileDataService-onFailure : getMyAccountFailed", t)
+                Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyAccountFailed", t)
             }
-
         })
     }
 }
