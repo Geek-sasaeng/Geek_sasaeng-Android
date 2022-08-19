@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
 import android.graphics.Color
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import com.example.geeksasaeng.Home.Party.Retrofit.*
@@ -9,7 +10,8 @@ import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityPartyReportOptionBinding
 
-class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate), PartyReportView, UserReportView {
+class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate), PartyReportView, UserReportView,
+    DialogReportPartySuccess.SuccessDialogDismissListener, DialogReportPartyFail.FailDialogDismissListener{
 
     var block: Boolean = false
     var reportCategoryId: Int = 0
@@ -55,15 +57,16 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
     }
 
     override fun partyReportViewSuccess(code: Int) {
-
-        showToast("신고 완료")
         val dialog = DialogReportPartySuccess()
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     override fun partyReportViewFailure(message: String) {
-        showToast(message)
         val dialog = DialogReportPartyFail()
+        val bundle = Bundle()
+        bundle.putString("msg", message)
+        bundle.putInt("test", 123)
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
@@ -77,15 +80,23 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         reportUserService.userReportSender(getReportUser())
     }
 
+    //사용자 신고 성공
     override fun userReportViewSuccess(code: Int) {
-        showToast("신고 완료")
-        val dialog = DialogReportPartySuccess()
-        dialog.show(supportFragmentManager, "CustomDialog")
+        /*val dialog = DialogReportPartySuccess()
+        dialog.show(supportFragmentManager, "CustomDialog")*/
     }
 
+    //사용자 신고 실패
     override fun userReportViewFailure(message: String) {
-        showToast(message)
-        val dialog = DialogReportPartyFail()
-        dialog.show(supportFragmentManager, "CustomDialog")
+        /*val dialog = DialogReportPartyFail()
+        dialog.show(supportFragmentManager, "CustomDialog")*/
+    }
+
+    override fun onSuccessDialogDismissed() {
+        finish() //액티비티 종료
+    }
+
+    override fun onFailDialogDismissed() {
+        finish() //액티비티 종료
     }
 }
