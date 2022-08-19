@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Profile
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Login.LoginActivity
@@ -14,6 +15,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     override fun initAfterBinding() {
+        clearBackStack()
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
         initClickListener()
     }
@@ -33,5 +35,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         binding.profileMyAccount.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
         }
+    }
+
+    private fun clearBackStack() {
+        val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 }
