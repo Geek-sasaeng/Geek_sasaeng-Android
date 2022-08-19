@@ -23,27 +23,29 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     private fun initClickListener() {
-        binding.profileNoticeBtn.setOnClickListener {
+        binding.profileNoticeBtn.setOnClickListener { //공지사항
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
             val noticeFragment = NoticeFragment()
             transaction.addToBackStack("profile_announcement").replace(R.id.main_frm, noticeFragment)
             transaction.commit()
         }
 
-        binding.profileInquiryBtn.setOnClickListener {
-            val urlintent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj"))
+        binding.profileMyInfoBtn.setOnClickListener {  //나의 정보
+            val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
+            val fragment = ProfileMyInfoFragment()
+            transaction.addToBackStack("profile_my_info").replace(R.id.main_frm, fragment)
+            transaction.commit()
+        }
+
+        binding.profileInquiryBtn.setOnClickListener { //문의하기
+            val urlintent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
             startActivity(urlintent)
         }
 
-        binding.profileTosBtn.setOnClickListener {
+        binding.profileTosBtn.setOnClickListener { //서비스 이용 약관 보기
             val intent = Intent(activity, Tos2Activity::class.java)
             intent.putExtra("status","profile")
             startActivity(intent)
         }
-//        binding.profileLogoutBtn.setOnClickListener {
-//            (context as MainActivity).finish()
-//            removeAutoLogin()
-//            startActivity(Intent(activity, LoginActivity::class.java))
-//        }
     }
 }

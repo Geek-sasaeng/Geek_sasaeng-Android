@@ -1,8 +1,11 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
 import kotlin.collections.ArrayList
 
@@ -51,6 +54,9 @@ class ChattingListRVAdapter(private var chatting: ArrayList<ChattingData>) : Rec
             binding.itemChattingListLastChatting.text = chatting.lastChat
             binding.itemChattingListTimeTv.text = chatting.lastMsgTime
             binding.itemChattingListChattingNumberTv.text = chatting.newMsg
+            if(chatting.newMsg==""){
+                binding.itemChattingListLastChatting.setTextColor(Color.parseColor("#636363"))
+            }
         }
     }
 }
