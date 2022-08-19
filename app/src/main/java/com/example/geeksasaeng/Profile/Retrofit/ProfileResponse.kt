@@ -31,9 +31,35 @@ data class ProfileAnnouncementResult(
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("updatedAt") val updatedAt: String,
     @SerializedName("status") val status: String,
-
 )
 
 data class ProfileAnnouncementRequest (
     @SerializedName("announcementId") var announcementId: String
+)
+
+data class ProfileMyAccountResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ProfileMyAccountResult
+)
+
+data class ProfileMyAccountResult(
+    @SerializedName("dormitoryId") val dormitoryId: Int,
+    @SerializedName("dormitoryName") val dormitoryName: Int,
+    @SerializedName("emailAddress") val emailAddress: String,
+    @SerializedName("emailId") val emailId: Int,
+    @SerializedName("fcmToken") val fcmToken: String,
+    @SerializedName("id") val id: Int,
+    @SerializedName("informationAgreeStatus") val informationAgreeStatus: String,
+    @SerializedName("loginId") val loginId: String,
+    @SerializedName("memberLoginType") val memberLoginType: String,
+    @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("perDayReportingCount") val perDayReportingCount: Int,
+    @SerializedName("phoneNumber") val phoneNumber: String,
+    @SerializedName("profileImgUrl") val profileImgUrl: String,
+    @SerializedName("reportedCount") val reportedCount: Int,
+    @SerializedName("universityId") val universityId: Int,
+    @SerializedName("universityName") val universityName: String,
 )

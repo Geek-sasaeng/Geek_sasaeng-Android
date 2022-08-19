@@ -9,3 +9,8 @@ interface ProfileAnnouncementView {
     fun onProfileAnnouncementSuccess()
     fun onProfileAnnouncementFailure(message: String)
 }
+
+interface ProfileMyAccountView {
+    fun onProfileMyAccountSuccess(result: ProfileMyAccountResult)
+    fun onProfileMyAccountFailure(message: String)
+}

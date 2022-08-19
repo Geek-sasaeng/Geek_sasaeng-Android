@@ -14,8 +14,16 @@ interface ProfileRecentActivityRetrofitInterfaces {
     ): Call<ProfileRecentActivityResponse>
 }
 
-//공지사항 조회 api
+// 공지사항 조회 api
 interface ProfileAnnouncementRetrofitInterfaces {
     @POST("/announcement/detail")
     fun getAnnouncement(@Body profileAnnouncementRequest: ProfileAnnouncementRequest): Call<ProfileAnnouncementResponse>
+}
+
+// 나의 정보 조회 api
+interface ProfileMyAccountRetrofitInterfaces {
+    @GET("/members")
+    fun getMyAccount(
+        @Header("Authorization") jwt: String?
+    ): Call<ProfileMyAccountResponse>
 }

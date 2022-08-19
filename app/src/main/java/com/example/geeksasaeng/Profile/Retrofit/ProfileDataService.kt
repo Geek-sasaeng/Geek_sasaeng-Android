@@ -10,9 +10,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileDataService {
+
     //뷰 객체 생성
     private lateinit var profileRecentActivityView: ProfileRecentActivityView
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
+    private lateinit var profileMyAccountView: ProfileMyAccountView
 
     private val ProfileDataService = retrofit.create(ProfileAnnouncementRetrofitInterfaces::class.java)
 
@@ -22,6 +24,9 @@ class ProfileDataService {
     }
     fun setProfileAnnouncementView(profileAnnouncementView: ProfileAnnouncementView){
         this.profileAnnouncementView = profileAnnouncementView
+    }
+    fun setMyAccountView(profileMyAccountView: ProfileMyAccountView) {
+        this.profileMyAccountView = profileMyAccountView
     }
 
     // 최근 활동 3개 조회
@@ -45,8 +50,9 @@ class ProfileDataService {
     }
 
     // 공지사항 조회
-    fun profileAnnouncementSender( announcementId :ProfileAnnouncementRequest){
-        ProfileDataService.getAnnouncement(announcementId).enqueue(object : Callback<ProfileAnnouncementResponse> {
+    fun profileAnnouncementSender(announcementId :ProfileAnnouncementRequest){
+        val profileDataService = NetworkModule.getInstance()?.create(ProfileAnnouncementRetrofitInterfaces::class.java)
+        profileDataService?.getAnnouncement(announcementId)?.enqueue(object : Callback<ProfileAnnouncementResponse> {
             override fun onResponse(
                 call: Call<ProfileAnnouncementResponse>,
                 response: Response<ProfileAnnouncementResponse>
@@ -64,6 +70,27 @@ class ProfileDataService {
             override fun onFailure(call: Call<ProfileAnnouncementResponse>, t: Throwable) {
                 Log.d("ANNOUNCE-RESPONSE", "ProfileDataService-onFailure : getAnnounceFailed", t)
             }
+        })
+    }
+
+    // 나의 정보 조회
+    fun profileMyAccountSender() {
+        val profileMyAccountService = NetworkModule.getInstance()?.create(ProfileMyAccountRetrofitInterfaces::class.java)
+        profileMyAccountService?.getMyAccount("Bearer " + getJwt())?.enqueue(object: Callback<ProfileMyAccountResponse> {
+            override fun onResponse(call: Call<ProfileMyAccountResponse>, response: Response<ProfileMyAccountResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> profileMyAccountView.onProfileMyAccountSuccess(resp.result)
+                        4000 -> Log.d("PROFILE-DATA-SERVICE", "서버 오류")
+                        else -> profileMyAccountView.onProfileMyAccountFailure(resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ProfileMyAccountResponse>, t: Throwable) {
+                Log.d("MY-ACCOUNT-RESPONSE", "ProfileDataService-onFailure : getMyAccountFailed", t)
+            }
+
         })
     }
 }
