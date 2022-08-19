@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Profile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
@@ -24,6 +25,11 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             val noticeFragment = NoticeFragment()
             transaction.addToBackStack("profile_announcement").replace(R.id.main_frm, noticeFragment)
             transaction.commit()
+        }
+
+        binding.profileInquiryBtn.setOnClickListener {
+            val urlintent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj"))
+            startActivity(urlintent)
         }
 
         binding.profileTosBtn.setOnClickListener {
