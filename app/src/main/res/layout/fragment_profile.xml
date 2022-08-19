@@ -13,17 +13,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/profile_bell_iv"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_bell"
-            android:backgroundTint="#D9D9D9"
-            android:layout_marginLeft="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
         <TextView
             android:id="@+id/profile_tv"
             android:layout_width="wrap_content"
@@ -40,9 +29,10 @@
 
         <ImageView
             android:id="@+id/profile_pencil_iv"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_pencil_black"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_alarm"
             android:backgroundTint="#D9D9D9"
             android:layout_marginEnd="28dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,8 +52,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <!--프로필-->
             <androidx.cardview.widget.CardView
@@ -77,9 +66,30 @@
                 app:cardElevation="0dp">
 
                 <ImageView
+                    android:id="@+id/profile_user_img_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_default_profile2"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--등급-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_user_grade_cv"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="-6dp"
+                android:src="@color/white"
+                app:layout_constraintStart_toStartOf="@id/profile_user_img_cv"
+                app:layout_constraintTop_toTopOf="@id/profile_user_img_cv"
+                app:cardCornerRadius="37dp">
+
+                <ImageView
+                    android:id="@+id/profile_user_grade_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/white" />
 
             </androidx.cardview.widget.CardView>
 
@@ -110,218 +120,364 @@
                 app:layout_constraintTop_toBottomOf="@id/profile_univ_info_tv"/>
 
             <!--프로필 하단 파티, 심부름, 거래-->
-            <LinearLayout
-                android:id="@+id/profile_category_linear_layout"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile_grade_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv"
-                android:layout_marginTop="15dp">
+                app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv">
 
-                <!--파티-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="38dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/profile_grade_image_cv1"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginBottom="9dp"
+                    app:cardCornerRadius="13dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/profile_grade_seekbar"
+                    app:layout_constraintBottom_toTopOf="@id/profile_grade_seekbar">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/profile_party_img_cv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="13dp"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        app:cardCornerRadius="27.5dp"
-                        app:cardElevation="0dp">
+                    <ImageView
+                        android:id="@+id/profile_grade_iv1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#D9D9D9" />
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_launcher_background"/>
+                </androidx.cardview.widget.CardView>
 
-                    </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/profile_grade_image_cv2"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginBottom="9dp"
+                    app:cardCornerRadius="13dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/profile_grade_seekbar">
 
-                    <TextView
-                        android:id="@+id/profile_party_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="파티"
-                        android:fontFamily="@font/spoqa_medium"
-                        android:textSize="15sp"
-                        android:textColor="@color/top"
-                        android:layout_marginTop="15dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_party_img_cv"
-                        app:layout_constraintStart_toStartOf="@id/profile_party_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_party_img_cv"/>
+                    <ImageView
+                        android:id="@+id/profile_grade_iv2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#D9D9D9" />
 
-                    <TextView
-                        android:id="@+id/profile_party_alarm_number_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3"
-                        android:fontFamily="@font/spoqa_bold"
-                        android:textSize="15sp"
-                        android:textColor="@color/main"
-                        android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_party_tv"
-                        app:layout_constraintStart_toStartOf="@id/profile_party_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_party_img_cv"/>
+                </androidx.cardview.widget.CardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/profile_grade_image_cv3"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginBottom="9dp"
+                    app:cardCornerRadius="13dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/profile_grade_seekbar"
+                    app:layout_constraintBottom_toTopOf="@id/profile_grade_seekbar">
 
-                <!--심부름-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="38dp">
+                    <ImageView
+                        android:id="@+id/profile_grade_iv3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#D9D9D9" />
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/profile_errand_img_cv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="13dp"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        app:cardCornerRadius="27.5dp"
-                        app:cardElevation="0dp">
+                </androidx.cardview.widget.CardView>
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_launcher_background"/>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/profile_errand_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="심부름"
-                        android:fontFamily="@font/spoqa_medium"
-                        android:textSize="15sp"
-                        android:textColor="@color/top"
-                        android:layout_marginTop="15dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_errand_img_cv"
-                        app:layout_constraintStart_toStartOf="@id/profile_errand_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_errand_img_cv"/>
-
-                    <TextView
-                        android:id="@+id/profile_errand_alarm_number_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3"
-                        android:fontFamily="@font/spoqa_bold"
-                        android:textSize="15sp"
-                        android:textColor="@color/main"
-                        android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_errand_tv"
-                        app:layout_constraintStart_toStartOf="@id/profile_errand_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_errand_img_cv"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!--거래-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/profile_deal_img_cv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="13dp"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        app:cardCornerRadius="27.5dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_launcher_background"/>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:id="@+id/profile_deal_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="거래"
-                        android:fontFamily="@font/spoqa_medium"
-                        android:textSize="15sp"
-                        android:textColor="@color/top"
-                        android:layout_marginTop="15dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_deal_img_cv"
-                        app:layout_constraintStart_toStartOf="@id/profile_deal_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_deal_img_cv"/>
-
-                    <TextView
-                        android:id="@+id/profile_deal_alarm_number_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:fontFamily="@font/spoqa_bold"
-                        android:textSize="15sp"
-                        android:textColor="@color/main"
-                        android:layout_marginTop="5dp"
-                        app:layout_constraintTop_toBottomOf="@id/profile_deal_tv"
-                        app:layout_constraintStart_toStartOf="@id/profile_deal_img_cv"
-                        app:layout_constraintEnd_toEndOf="@id/profile_deal_img_cv"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/profile_show_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_category_linear_layout">
+                <SeekBar
+                    android:id="@+id/profile_grade_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"
+                    android:max="3"
+                    android:progress="1"
+                    android:layout_marginHorizontal="35dp"
+                    android:progressDrawable="@drawable/profile_seekbar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
+                    android:id="@+id/profile_grade_tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="내역 전체 보기"
+                    android:text="신입생"
+                    android:textColor="@color/gray_3"
                     android:textSize="12sp"
-                    android:textColor="@color/gray_2"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:layout_marginEnd="4dp"/>
+                    android:textFontWeight="500"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="@id/profile_grade_image_cv1"
+                    app:layout_constraintEnd_toEndOf="@id/profile_grade_image_cv1"
+                    app:layout_constraintTop_toBottomOf="@id/profile_grade_seekbar" />
 
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:backgroundTint="@color/white"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_arrow_right"/>
+                <TextView
+                    android:id="@+id/profile_grade_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="복학생"
+                    android:textColor="@color/gray_3"
+                    android:textSize="12sp"
+                    android:textFontWeight="500"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="@id/profile_grade_image_cv2"
+                    app:layout_constraintEnd_toEndOf="@id/profile_grade_image_cv2"
+                    app:layout_constraintTop_toBottomOf="@id/profile_grade_seekbar" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/profile_grade_tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="졸업생"
+                    android:textColor="@color/gray_3"
+                    android:textSize="12sp"
+                    android:textFontWeight="500"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintStart_toStartOf="@id/profile_grade_image_cv3"
+                    app:layout_constraintEnd_toEndOf="@id/profile_grade_image_cv3"
+                    app:layout_constraintTop_toBottomOf="@id/profile_grade_seekbar" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/profile_party_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="진행 중인 활동"
+                android:textColor="@color/top"
+                android:fontFamily="@font/spoqa_medium"
+                android:textSize="15sp"
+                android:layout_marginTop="49dp"
+                app:layout_constraintTop_toBottomOf="@id/profile_grade_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_party_layout_cv1"
+                android:layout_width="260dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="27dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_party_title_tv">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_party_layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/profile_party_layout_section_cv1"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="18dp"
+                        app:cardCornerRadius="26dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/profile_party_layout_section_iv1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="#D9D9D9" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/profile_party_title_tv1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="한둘셋넷닷한둘셋넷닷총열하나"
+                        android:textColor="@color/top"
+                        android:fontFamily="@font/spoqa_medium"
+                        android:textFontWeight="700"
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="18dp"
+                        app:layout_constraintStart_toEndOf="@id/profile_party_layout_section_cv1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/profile_party_arrow_iv1"/>
+
+                    <ImageView
+                        android:id="@+id/profile_party_arrow_iv1"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_marginEnd="19dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:tint="@color/gray_2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_party_layout_cv2"
+                android:layout_width="260dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_party_layout_cv1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_party_layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/profile_party_layout_section_cv2"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="18dp"
+                        app:cardCornerRadius="26dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/profile_party_layout_section_iv2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="#D9D9D9" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/profile_party_title_tv2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="한둘셋넷닷한둘셋넷닷총열하나"
+                        android:textColor="@color/top"
+                        android:fontFamily="@font/spoqa_medium"
+                        android:textFontWeight="700"
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="18dp"
+                        app:layout_constraintStart_toEndOf="@id/profile_party_layout_section_cv2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/profile_party_arrow_iv2"/>
+
+                    <ImageView
+                        android:id="@+id/profile_party_arrow_iv2"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_marginEnd="19dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:tint="@color/gray_2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_party_layout_cv3"
+                android:layout_width="260dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_party_layout_cv2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_party_layout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/profile_party_layout_section_cv3"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="18dp"
+                        app:cardCornerRadius="26dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/profile_party_layout_section_iv3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="#D9D9D9" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/profile_party_title_tv3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="한둘셋넷닷한둘셋넷닷총열하나"
+                        android:textColor="@color/top"
+                        android:fontFamily="@font/spoqa_medium"
+                        android:textFontWeight="700"
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="18dp"
+                        app:layout_constraintStart_toEndOf="@id/profile_party_layout_section_cv3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/profile_party_arrow_iv3"/>
+
+                    <ImageView
+                        android:id="@+id/profile_party_arrow_iv3"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:layout_marginEnd="19dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:tint="@color/gray_2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <View
-                android:id="@+id/profile_sepate_line"
+                android:id="@+id/profile_line1"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="31dp"
                 android:background="@color/line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_show_all" />
+                app:layout_constraintTop_toBottomOf="@id/profile_party_layout_cv3" />
 
             <!--공지사항-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_notice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="23dp"
-                android:layout_marginEnd="28dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="27dp"
                 android:layout_marginTop="41dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_sepate_line">
+                app:layout_constraintTop_toBottomOf="@id/profile_line1">
 
                 <TextView
                     android:id="@+id/profile_notice_tv"
@@ -330,10 +486,21 @@
                     android:textColor="@color/top"
                     android:textSize="15sp"
                     android:text="공지사항"
+                    android:layout_marginTop="1dp"
                     android:fontFamily="@font/spoqa_medium"
+                    android:textFontWeight="500"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/profile_notice_new_iv"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/ic_profile_notice_new"
+                    android:layout_marginStart="1dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/profile_notice_tv" />
 
                 <ImageButton
                     android:id="@+id/profile_notice_btn"
@@ -367,20 +534,20 @@
                     android:layout_marginStart="17dp"
                     android:layout_width="17dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_notice"
-                    />
+                    android:src="@drawable/ic_notice" />
 
                 <TextView
                     android:id="@+id/profile_notice_below_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="긱사생 이용자분들께 알립니다. 본 공지는 바..."
+                    android:text="긱사생 이용자분들께 알립니다. 긱사생 이용자분들께 알립니다. 긱사생 이용자분들께 알립니다. "
                     android:inputType="text"
                     android:focusable="true"
                     android:singleLine="true"
                     android:ellipsize="marquee"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:textSize="13sp"
+                    android:textFontWeight="500"
                     android:fontFamily="@font/spoqa_medium"
                     android:textColor="@color/top"
                     app:layout_constraintStart_toEndOf="@id/profile_notice_below_iv"
@@ -388,24 +555,68 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="16dp"
-                    />
+                    android:layout_marginEnd="16dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <View
-                android:id="@+id/profile_sepate_line_1"
+                android:id="@+id/profile_bottom_line1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginHorizontal="18dp"
+                android:layout_marginHorizontal="19dp"
                 android:background="@color/line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profile_notice_below" />
 
-            <!--공지사항-->
+            <!--나의 활동 보기-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile_my_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="23dp"
+                android:layout_marginEnd="28dp"
+                android:layout_marginTop="19dp"
+                app:layout_constraintTop_toBottomOf="@id/profile_bottom_line1">
+
+                <TextView
+                    android:id="@+id/profile_my_activity_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/top"
+                    android:textSize="15sp"
+                    android:textFontWeight="500"
+                    android:text="나의 활동 보기"
+                    android:fontFamily="@font/spoqa_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <ImageButton
+                    android:id="@+id/profile_my_activity_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/ic_arrow_right_profile"
+                    app:layout_constraintTop_toTopOf="@id/profile_my_activity_tv"
+                    app:layout_constraintBottom_toBottomOf="@id/profile_my_activity_tv"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/profile_bottom_line2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginHorizontal="18dp"
+                android:background="@color/line"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_activity" />
+
+            <!--나의 정보-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_my_account"
                 android:layout_width="match_parent"
@@ -413,7 +624,7 @@
                 android:layout_marginStart="23dp"
                 android:layout_marginEnd="28dp"
                 android:layout_marginTop="19dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_sepate_line_1">
+                app:layout_constraintTop_toBottomOf="@id/profile_bottom_line2">
 
                 <TextView
                     android:id="@+id/profile_my_account_tv"
@@ -421,7 +632,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/top"
                     android:textSize="15sp"
-                    android:text="나의 계정"
+                    android:textFontWeight="500"
+                    android:text="나의 정보"
                     android:fontFamily="@font/spoqa_medium"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -440,7 +652,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                android:id="@+id/profile_sepate_line_2"
+                android:id="@+id/profile_bottom_line3"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="19dp"
@@ -458,7 +670,7 @@
                 android:layout_marginStart="23dp"
                 android:layout_marginEnd="28dp"
                 android:layout_marginTop="19dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_sepate_line_2">
+                app:layout_constraintTop_toBottomOf="@id/profile_bottom_line3">
 
                 <TextView
                     android:id="@+id/profile_inquiry_tv"
@@ -485,7 +697,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                android:id="@+id/profile_sepate_line_3"
+                android:id="@+id/profile_bottom_line4"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="19dp"
@@ -503,7 +715,7 @@
                 android:layout_marginStart="23dp"
                 android:layout_marginEnd="28dp"
                 android:layout_marginTop="19dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_sepate_line_3">
+                app:layout_constraintTop_toBottomOf="@id/profile_bottom_line4">
 
                 <TextView
                     android:id="@+id/profile_tos_tv"
@@ -511,7 +723,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/top"
                     android:textSize="15sp"
-                    android:text="이용 약관 보기"
+                    android:text="서비스 이용 약관 보기"
                     android:fontFamily="@font/spoqa_medium"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -529,25 +741,8 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/profile_logout_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="임시 로그아웃"
-                android:fontFamily="@font/spoqa_medium"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:background="@color/main"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="30dp"
-                android:layout_marginBottom="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-
             <TextView
+                android:id="@+id/profile_app_ver_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_2"
@@ -561,6 +756,7 @@
                 android:layout_marginBottom="20dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

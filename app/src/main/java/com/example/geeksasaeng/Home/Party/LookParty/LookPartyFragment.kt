@@ -376,8 +376,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         Log.d("ampm", date.toString())
         if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
             date = date.substring(0, 11) + "00" + date.substring(13, 20)
-        else if (date.substring(20) == "오후")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
+        else if (date.substring(20) == "오후" && date.substring(11, 13) == "12")
+            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13))).toString() + date.substring(13, 20)
+        else date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
         return date
     }
 }
