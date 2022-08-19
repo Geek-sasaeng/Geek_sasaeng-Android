@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/report_party_success_title"
+            android:id="@+id/report_party_title"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@color/line"
@@ -22,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/report_party_success_tv"
+                android:id="@+id/report_fail_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/spoqa_medium"
@@ -35,9 +34,9 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/report_party_success_cancel_btn"
-                android:layout_width="15dp"
-                android:layout_height="4dp"
+                android:id="@+id/report_party_cancel_btn"
+                android:layout_width="24dp"
+                android:layout_height="12dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_exit"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +47,7 @@
 
 
         <TextView
-            android:id="@+id/report_party_success_content_tv"
+            android:id="@+id/report_party_content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
@@ -57,15 +56,15 @@
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:lineSpacingExtra="6sp"
-            android:text="고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다."
+            android:text="네트워크 상태가 좋지 않습니다.\n잠시 후에 다시 시도해 주세요."
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/report_party_success_title" />
+            app:layout_constraintTop_toBottomOf="@id/report_party_title" />
 
         <View
-            android:id="@+id/report_party_success_line"
+            android:id="@+id/report_party_line"
             android:layout_width="0dp"
             android:layout_height="1.7dp"
             android:layout_marginLeft="20dp"
@@ -74,10 +73,10 @@
             android:background="@color/gray_0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/report_party_success_content_tv" />
+            app:layout_constraintTop_toBottomOf="@id/report_party_content_tv" />
 
         <TextView
-            android:id="@+id/report_party_success_ok_btn"
+            android:id="@+id/report_party_ok_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -86,11 +85,11 @@
             android:gravity="center"
             android:text="확인"
             android:textColor="@color/main"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/report_party_success_line" />
+            app:layout_constraintTop_toBottomOf="@id/report_party_line" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

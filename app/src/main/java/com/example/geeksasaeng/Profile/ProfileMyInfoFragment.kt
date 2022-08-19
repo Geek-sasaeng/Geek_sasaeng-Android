@@ -1,17 +1,12 @@
 package com.example.geeksasaeng.Profile
 
-import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyAccountResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyAccountView
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.FragmentProfileMyInfoBinding
 
 class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(FragmentProfileMyInfoBinding::inflate), ProfileMyAccountView {

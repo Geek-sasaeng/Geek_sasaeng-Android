@@ -620,7 +620,7 @@
 
             <!--나의 정보-->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/profile_my_account"
+                android:id="@+id/profile_my_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="23dp"
@@ -630,7 +630,7 @@
                 app:layout_constraintTop_toBottomOf="@id/profile_bottom_line2">
 
                 <TextView
-                    android:id="@+id/profile_my_account_tv"
+                    android:id="@+id/profile_my_info_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/top"
@@ -643,13 +643,13 @@
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <ImageButton
-                    android:id="@+id/profile_my_account_btn"
+                    android:id="@+id/profile_my_info_btn"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
-                    app:layout_constraintTop_toTopOf="@id/profile_my_account_tv"
-                    app:layout_constraintBottom_toBottomOf="@id/profile_my_account_tv"
+                    app:layout_constraintTop_toTopOf="@id/profile_my_info_tv"
+                    app:layout_constraintBottom_toBottomOf="@id/profile_my_info_tv"
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -663,7 +663,7 @@
                 android:background="@color/line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_account" />
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info" />
 
             <!--문의하기-->
             <androidx.constraintlayout.widget.ConstraintLayout
