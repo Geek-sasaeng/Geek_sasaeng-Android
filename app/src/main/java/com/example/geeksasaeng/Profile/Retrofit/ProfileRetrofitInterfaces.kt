@@ -12,7 +12,7 @@ interface ProfileRecentActivityRetrofitInterfaces {
 }
 
 //공지사항 조회 api
-interface ProfileRetrofitInterfaces {
+interface ProfileAnnouncementRetrofitInterfaces {
     @POST("/announcement/detail")
     fun getAnnouncement(@Body profileAnnouncementRequest: ProfileAnnouncementRequest): Call<ProfileAnnouncementResponse>
 }

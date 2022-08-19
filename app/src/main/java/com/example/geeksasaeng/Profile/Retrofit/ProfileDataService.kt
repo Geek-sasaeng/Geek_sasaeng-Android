@@ -13,7 +13,7 @@ class ProfileDataService {
     private lateinit var profileRecentActivityView: ProfileRecentActivityView
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
 
-    private val ProfileDataService = retrofit.create(ProfileRetrofitInterfaces::class.java)
+    private val ProfileDataService = retrofit.create(ProfileAnnouncementRetrofitInterfaces::class.java)
 
     // setView
     fun setProfileRecentActivityView(profileRecentActivityView: ProfileRecentActivityView) {
@@ -44,7 +44,7 @@ class ProfileDataService {
     }
 
     // 공지사항 조회
-    fun ProfileAnnouncementSender( announcementId :ProfileAnnouncementRequest){
+    fun profileAnnouncementSender( announcementId :ProfileAnnouncementRequest){
         ProfileDataService.getAnnouncement(announcementId).enqueue(object : Callback<ProfileAnnouncementResponse> {
             override fun onResponse(
                 call: Call<ProfileAnnouncementResponse>,
