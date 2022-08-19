@@ -51,6 +51,7 @@ class StepFiveFragment : BaseFragment<FragmentStepFiveBinding>(FragmentStepFiveB
 
         binding.stepFiveAgree2MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos2Activity::class.java)
+            intent.putExtra("status","signUp")
             intent.putExtra("isSocial", false)
             startActivity(intent)
         }

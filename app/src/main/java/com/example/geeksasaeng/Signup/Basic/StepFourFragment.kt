@@ -115,11 +115,11 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             signUpService.verifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기
         }
 
-        //건너뛰기 버튼
+/*        //건너뛰기 버튼
         binding.stepFourSkipBtn.setOnClickListener {
             val dialog = DialogSignUpPhoneSkip()
             dialog.show(parentFragmentManager, "CustomDialog")
-        }
+        }*/
 
         //다음 버튼
         binding.stepFourNextBtn.setOnClickListener {

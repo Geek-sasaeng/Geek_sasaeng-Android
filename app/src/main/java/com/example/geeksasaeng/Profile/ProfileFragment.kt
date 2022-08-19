@@ -7,6 +7,7 @@ import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
@@ -25,10 +26,15 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }
 
-        binding.profileLogoutBtn.setOnClickListener {
-            (context as MainActivity).finish()
-            removeAutoLogin()
-            startActivity(Intent(activity, LoginActivity::class.java))
+        binding.profileTosBtn.setOnClickListener {
+            val intent = Intent(activity, Tos2Activity::class.java)
+            intent.putExtra("status","profile")
+            startActivity(intent)
         }
+//        binding.profileLogoutBtn.setOnClickListener {
+//            (context as MainActivity).finish()
+//            removeAutoLogin()
+//            startActivity(Intent(activity, LoginActivity::class.java))
+//        }
     }
 }
