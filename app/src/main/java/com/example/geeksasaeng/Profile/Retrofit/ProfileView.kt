@@ -1,7 +1,7 @@
 package com.example.geeksasaeng.Profile.Retrofit
 
 interface ProfileRecentActivityView {
-    fun onProfileRecentActivitySuccess(result: ProfileRecentActivityResult)
+    fun onProfileRecentActivitySuccess(result: ArrayList<ProfileRecentActivityResult>?)
     fun onProfileAnnouncementFailure(message: String)
 }
 

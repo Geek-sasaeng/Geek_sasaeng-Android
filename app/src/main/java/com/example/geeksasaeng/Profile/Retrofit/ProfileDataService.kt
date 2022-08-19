@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,9 +27,9 @@ class ProfileDataService {
     // 최근 활동 3개 조회
     fun profileRecentActivitySender() {
         val profileRecentActivityService = NetworkModule.getInstance()?.create(ProfileRecentActivityRetrofitInterfaces::class.java)
-        profileRecentActivityService?.getRecentActivity()?.enqueue(object : Callback<ProfileRecentActivityResponse> {
+        profileRecentActivityService?.getRecentActivity("Bearer " + getJwt())?.enqueue(object : Callback<ProfileRecentActivityResponse> {
             override fun onResponse(call: Call<ProfileRecentActivityResponse>, response: Response<ProfileRecentActivityResponse>) {
-                if (response.isSuccessful && response.code() == 2000) {
+                if (response.isSuccessful && response.code() == 200) {
                     val resp: ProfileRecentActivityResponse = response.body()!!
                     when (resp.code) {
                         1000 -> profileRecentActivityView.onProfileRecentActivitySuccess(resp.result!!)

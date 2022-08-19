@@ -3,12 +3,15 @@ package com.example.geeksasaeng.Profile.Retrofit
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 // 최근 활동 3개 api
 interface ProfileRecentActivityRetrofitInterfaces {
     @GET("/delivery-parties/recent")
-    fun getRecentActivity(): Call<ProfileRecentActivityResponse>
+    fun getRecentActivity(
+        @Header("Authorization") jwt: String?
+    ): Call<ProfileRecentActivityResponse>
 }
 
 //공지사항 조회 api
