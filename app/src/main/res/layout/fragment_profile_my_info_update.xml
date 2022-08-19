@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/profile_my_info_update_back_btn"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:padding="3dp"
             android:src="@drawable/ic_back"
             android:layout_marginStart="25dp"
