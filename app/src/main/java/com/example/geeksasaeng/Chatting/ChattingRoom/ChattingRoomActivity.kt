@@ -34,6 +34,8 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     private lateinit var chattingService: ChattingService
+    private lateinit var realTimeChatListener: ListenerRegistration
+    private lateinit var changeParticipantsListener: ListenerRegistration
 
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
@@ -61,6 +63,13 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
         initAdapter()
         initChattingService()
         optionClickListener()
+    }
+
+    // 종료 시 리스너 제거
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        realTimeChatListener.remove()
+        changeParticipantsListener.remove()
     }
 
     private fun initFirestore() {
@@ -196,7 +205,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
     }
 
     private fun initChangeParticipantsListener() {
-        db.collection("Rooms").document(roomUuid)
+        changeParticipantsListener = db.collection("Rooms").document(roomUuid)
             .addSnapshotListener { document, error ->
                 val roomInfo =
                     document!!.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
@@ -205,7 +214,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
     }
 
     private fun initRealTimeChatListener() {
-        db.collection("Rooms").document(roomUuid).collection("Messages")
+        realTimeChatListener = db.collection("Rooms").document(roomUuid).collection("Messages")
             .orderBy("time", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, _ ->
                 for ((idx, dc) in snapshots?.documentChanges!!.withIndex()) {
@@ -221,7 +230,6 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                         val messageId = dc.document.id
                         db.collection("Rooms").document(roomUuid).collection("Messages")
                             .document(messageId).update("readUsers", readUsers)
-                        readUsers.add(getNickname()!!)
                     }
                     val notReadCnt = participants.size - readUsers.size
 
@@ -253,9 +261,12 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                         preChatNickname = dc.document["nickname"].toString()
                         chattingRoomRVAdapter.addItem(item)
 
-                        // readUsers가 업데이트 되었을 경우
+                    // readUsers가 업데이트 되었을 경우
                     } else if (dc.type == DocumentChange.Type.MODIFIED) {
-                        chattingRoomRVAdapter.setUnreadCount(idx, notReadCnt)
+                        if(dc.oldIndex == dc.newIndex){
+                            val idx = dc.oldIndex
+                            chattingRoomRVAdapter.setUnreadCount(idx, notReadCnt)
+                        }
                     }
                 }
 

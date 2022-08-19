@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true"
-        android:drawable="@drawable/ic_icon_chat">
-    </item>
-    <item android:state_selected="false"
-        android:drawable="@drawable/ic_icon_chat">
-    </item>
-</selector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="168.32dp"
+    android:height="158.79dp"
+    android:viewportWidth="168.32"
+    android:viewportHeight="158.79">
+  <path
+      android:pathData="M38,45.12h105.88c3.79,0 6.86,3.07 6.86,6.86v89.17h0c-9.74,-9.67 -22.91,-15.09 -36.64,-15.09H38c-3.79,0 -6.86,-3.07 -6.86,-6.86V51.98c0,-3.79 3.07,-6.86 6.86,-6.86Z"
+      android:fillColor="#3266eb"/>
+  <path
+      android:pathData="M26.53,50.09c0,-5.29 4.29,-9.57 9.57,-9.57h94.24v-10.9c0,-3.79 -3.07,-6.86 -6.86,-6.86H17.61c-3.79,0 -6.86,3.07 -6.86,6.86V118.77c4.34,-4.31 10.33,-7.77 15.78,-10.29V50.09Z"
+      android:fillColor="#3266eb"/>
+  <path
+      android:pathData="M113.35,82.7h-41.64l-1.94,1.12 -2.06,2.2 35.23,40.04h11.15c13.73,0 26.9,5.42 36.64,15.09v-38.97l-37.39,-19.48Z"
+      android:fillColor="#215ad8"/>
+  <path
+      android:pathData="M71.71,82.7m-5.19,0a5.19,5.19 0,1 1,10.38 0a5.19,5.19 0,1 1,-10.38 0"
+      android:fillColor="#2db9ea"/>
+  <path
+      android:pathData="M89.96,82.7m-5.19,0a5.19,5.19 0,1 1,10.38 0a5.19,5.19 0,1 1,-10.38 0"
+      android:fillColor="#2db9ea"/>
+  <path
+      android:pathData="M108.15,82.7m-5.19,0a5.19,5.19 0,1 1,10.38 0a5.19,5.19 0,1 1,-10.38 0"
+      android:fillColor="#2db9ea"/>
+</vector>

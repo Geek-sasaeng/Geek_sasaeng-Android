@@ -17,4 +17,5 @@
     <color name="top">#2F2F2F</color>
     <color name= "line">#F8F8F8</color>
     <color name= "error">#FF0000</color>
+    <color name= "main_color">#2DB9EA</color>
 </resources>
