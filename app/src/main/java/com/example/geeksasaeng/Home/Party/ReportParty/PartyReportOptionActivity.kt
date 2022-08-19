@@ -1,17 +1,12 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import com.example.geeksasaeng.Home.Party.Retrofit.*
-import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityPartyReportOptionBinding
 
 class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate), PartyReportView, UserReportView,
-    DialogReportPartySuccess.SuccessDialogDismissListener, DialogReportPartyFail.FailDialogDismissListener{
+    DialogReportParty.DialogDismissListener{
 
     var block: Boolean = false
     var reportCategoryId: Int = 0
@@ -56,16 +51,20 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         reportPartyService.partyReportSender(getReportParty())
     }
 
+    //파티 신고 성공
     override fun partyReportViewSuccess(code: Int) {
-        val dialog = DialogReportPartySuccess()
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", "고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다.")
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
+    //파티 신고 실패
     override fun partyReportViewFailure(message: String) {
-        val dialog = DialogReportPartyFail()
+        val dialog = DialogReportParty()
         val bundle = Bundle()
         bundle.putString("msg", message)
-        bundle.putInt("test", 123)
         dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
@@ -92,11 +91,8 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         dialog.show(supportFragmentManager, "CustomDialog")*/
     }
 
-    override fun onSuccessDialogDismissed() {
-        finish() //액티비티 종료
-    }
 
-    override fun onFailDialogDismissed() {
+    override fun onDialogDismissed() {
         finish() //액티비티 종료
     }
 }
