@@ -24,7 +24,8 @@
             android:layout_marginLeft="10dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_chatting_list_title"
+            app:layout_constraintBottom_toBottomOf="@id/item_chatting_list_title"
             app:layout_constraintStart_toStartOf="parent" >
 
             <ImageView
