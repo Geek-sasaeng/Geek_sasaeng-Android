@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
@@ -29,13 +30,11 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
     }
 
     override fun initAfterBinding() {
-
+        initClickListener()
     }
 
     private fun initChattingList() {
-        Log.d("firestore", "initChattingList => clear 작동됨")
         chattingList.clear()
-        Log.d("firestore", "채팅리스트" + chattingList.toString())
 
         // 채팅 리스트 불러오기
         db.collection("Rooms")
@@ -96,5 +95,21 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
 
     override fun onSuccessGetChatData(position: Int, chattingData: ChattingData) {
         chattingListRVAdapter.setChattingData(position, chattingData)
+    }
+
+    private fun initClickListener() {
+        binding.chattingSectionRb1.setOnClickListener {
+            binding.chattingListPreparingIv.visibility = View.GONE
+            binding.chattingListRv.visibility = View.VISIBLE
+            initChattingList()
+        }
+        binding.chattingSectionRb2.setOnClickListener {
+            binding.chattingListRv.visibility = View.GONE
+            binding.chattingListPreparingIv.visibility = View.VISIBLE
+        }
+        binding.chattingSectionRb3.setOnClickListener {
+            binding.chattingListRv.visibility = View.GONE
+            binding.chattingListPreparingIv.visibility = View.VISIBLE
+        }
     }
 }
