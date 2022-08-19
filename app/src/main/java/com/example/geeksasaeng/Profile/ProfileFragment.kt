@@ -27,10 +27,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyActivity.setOnClickListener {
-            startActivity(Intent(activity, ActivityProfileMyActivityBinding::class.java))
+            startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
         }
 
-        binding.profileMyActivity.setOnClickListener {
+        binding.profileMyAccount.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
         }
     }
