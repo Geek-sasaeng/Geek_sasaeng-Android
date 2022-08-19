@@ -49,6 +49,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var maxMatching: Int? = null
     var finalPage: Boolean? = false
     var filterCheckFlag: Boolean = false
+    var filter1CheckFlag: Boolean = false //인원수
+    var filter2CheckFlag: Boolean = false //카테고리
     private var lastCheckedBox = -1
     private lateinit var handler: Handler;
 
@@ -119,6 +121,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor = 0
         isLoading = false
         finalPage = false
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
         if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
         else getDeliveryAllList(dormitoryId, totalCursor)
     }
@@ -130,6 +133,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
+            filterCheckFlag = filter1CheckFlag||filter2CheckFlag
             if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
             else getDeliveryAllList(dormitoryId, totalCursor)
             isLoading = false
@@ -145,6 +149,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun refreshing(){ // 파티목록 새로고침
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용 - 밑에 로그 찍는용
+        //Log.d("deliveryFilterCheck", filterCheckFlag.toString())
+        Log.d("deliveryFilterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
         deliveryArray.clear()
         initLoadPosts()
         initAdapter()
@@ -254,9 +261,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "BREAKFAST"
                 lastCheckedBox = R.id.delivery_cb1
+                filter2CheckFlag = true
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb1){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
                 }
             }
             refreshing()
@@ -264,16 +273,17 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         binding.deliveryCb2.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.deliveryCb1.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
                 lastCheckedBox = R.id.delivery_cb2
+                filter2CheckFlag = true
             }else{ // 체크가 꺼지면
-                if(lastCheckedBox==R.id.delivery_cb2){
+                if(lastCheckedBox==R.id.delivery_cb2){ //현재 체크되어있는애를 다시 클릭하는 경우
                     orderTimeCategory = null
+                    filter2CheckFlag = false
                 }
             }
             refreshing()
@@ -281,16 +291,17 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         binding.deliveryCb3.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
             if(isChecked){
                 binding.deliveryCb1.isChecked = false
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "DINNER"
                 lastCheckedBox = R.id.delivery_cb3
+                filter2CheckFlag = true
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb3){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
                 }
             }
             refreshing()
@@ -305,9 +316,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
                 lastCheckedBox = R.id.delivery_cb4
+                filter2CheckFlag = true
             }else{ // 체크가 꺼지면
                 if(lastCheckedBox==R.id.delivery_cb4){
                     orderTimeCategory = null
+                    filter2CheckFlag = false
                 }
             }
 
@@ -330,7 +343,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //TODO:스피너
-                Log.d("peopleSpinner", position.toString()+"/"+"")
+                Log.d("peopleSpinner", "$position/")
                 if(position==0){ // 제일 상단 클릭하면 초기화 해주기 위해
                     items[0]= items[6] // 인원선택(마지막값)을 현재선택값으로 넣어준다
                 }else{
@@ -344,7 +357,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 textName.text = items[position]
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
-                filterCheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
+                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
 
                 maxMatching = position * 2
                 finalPage = false

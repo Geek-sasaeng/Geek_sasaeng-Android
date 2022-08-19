@@ -17,4 +17,12 @@ interface ChattingRetrofitInterfaces {
         @Header("Authorization") jwt: String?,
         @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
     ): Call<ChattingPartyLeaderLeaveResponse>
+
+    //배달 완료 알림 보내기
+    @POST("/delivery-party/complicated")
+    fun partyDeliveryComplicated(
+        @Header("Authorization") jwt: String?,
+        @Body chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest
+    ): Call<ChattingDeliveryComplicatedResponse>
+
 }
