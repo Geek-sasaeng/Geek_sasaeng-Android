@@ -16,9 +16,7 @@ class ProfileDataService {
     private lateinit var profileRecentActivityView: ProfileRecentActivityView
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
     private lateinit var profileAnnouncementDetailView: ProfileAnnouncementDetailView
-    private lateinit var profileMyAccountView: ProfileMyAccountView
-
-    private val ProfileDataService = retrofit.create(ProfileAnnouncementRetrofitInterfaces::class.java)
+    private lateinit var profileMyInfoView: ProfileMyInfoView
 
     // setView
     fun setProfileRecentActivityView(profileRecentActivityView: ProfileRecentActivityView) {
@@ -27,8 +25,11 @@ class ProfileDataService {
     fun setProfileAnnouncementView(profileAnnouncementView: ProfileAnnouncementView){
         this.profileAnnouncementView = profileAnnouncementView
     }
-    fun setMyAccountView(profileMyAccountView: ProfileMyAccountView) {
-        this.profileMyAccountView = profileMyAccountView
+    fun setProfileAnnouncementDetailView(profileAnnouncementDetailView: ProfileAnnouncementDetailView){
+        this.profileAnnouncementDetailView = profileAnnouncementDetailView
+    }
+    fun setMyInfoView(profileMyInfoView: ProfileMyInfoView) {
+        this.profileMyInfoView = profileMyInfoView
     }
 
     // 최근 활동 3개 조회
@@ -52,9 +53,9 @@ class ProfileDataService {
     }
 
     // 공지사항 조회
-    fun profileAnnouncementSender(announcementId :ProfileAnnouncementRequest){
-        val profileDataService = NetworkModule.getInstance()?.create(ProfileAnnouncementRetrofitInterfaces::class.java)
-        profileDataService?.getAnnouncement(announcementId)?.enqueue(object : Callback<ProfileAnnouncementResponse> {
+    fun profileAnnouncementSender(){
+        val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
+        profileDataService?.getAnnouncementList("Bearer " + getJwt())?.enqueue(object : Callback<ProfileAnnouncementResponse> {
             override fun onResponse(
                 call: Call<ProfileAnnouncementResponse>,
                 response: Response<ProfileAnnouncementResponse>
@@ -63,7 +64,7 @@ class ProfileDataService {
                     val resp: ProfileAnnouncementResponse = response.body()!!
                     //TODO:SWAGGER업데이트 되면 반영
                     when(resp.code){
-                        1000-> profileAnnouncementView.onProfileAnnouncementSuccess()
+                        1000-> profileAnnouncementView.onProfileAnnouncementSuccess(resp.result)
                         else-> profileAnnouncementView.onProfileAnnouncementFailure(resp.message)
                     }
                 }
@@ -76,13 +77,10 @@ class ProfileDataService {
     }
 
     //공지사항 상세 조회
-    fun profileAnnouncementDetailSender( announcementId :ProfileAnnouncementDetailRequest){
-        val profileDataService = NetworkModule.getInstance()?.create(ProfileAnnouncementDetailRetrofitInterfaces::class.java)
-        profileDataService.getAnnouncementDetail("Bearer " + getJwt(), announcementId).enqueue(object : Callback<ProfileAnnouncementDetailResponse> {
-            override fun onResponse(
-                call: Call<ProfileAnnouncementDetailResponse>,
-                response: Response<ProfileAnnouncementDetailResponse>
-            ) {
+    fun profileAnnouncementDetailSender(announcementId :ProfileAnnouncementDetailRequest){
+        val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
+        profileDataService?.getAnnouncementDetail("Bearer " + getJwt(), announcementId)?.enqueue(object : Callback<ProfileAnnouncementDetailResponse> {
+            override fun onResponse(call: Call<ProfileAnnouncementDetailResponse>, response: Response<ProfileAnnouncementDetailResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: ProfileAnnouncementDetailResponse = response.body()!!
                     //TODO:SWAGGER업데이트 되면 반영
@@ -100,21 +98,21 @@ class ProfileDataService {
     }
 
     // 나의 정보 조회
-    fun profileMyAccountSender() {
-        val profileMyAccountService = NetworkModule.getInstance()?.create(ProfileMyAccountRetrofitInterfaces::class.java)
-        profileMyAccountService?.getMyAccount("Bearer " + getJwt())?.enqueue(object: Callback<ProfileMyAccountResponse> {
-            override fun onResponse(call: Call<ProfileMyAccountResponse>, response: Response<ProfileMyAccountResponse>) {
+    fun profileMyInfoSender() {
+        val profileMyInfoService = NetworkModule.getInstance()?.create(ProfileMyInfoRetrofitInterfaces::class.java)
+        profileMyInfoService?.getMyInfo("Bearer " + getJwt())?.enqueue(object: Callback<ProfileMyInfoResponse> {
+            override fun onResponse(call: Call<ProfileMyInfoResponse>, response: Response<ProfileMyInfoResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
-                        1000 -> profileMyAccountView.onProfileMyAccountSuccess(resp.result)
+                        1000 -> profileMyInfoView.onProfileMyInfoSuccess(resp.result)
                         4000 -> Log.d("PROFILE-RESPONSE", "서버 오류")
-                        else -> profileMyAccountView.onProfileMyAccountFailure(resp.message)
+                        else -> profileMyInfoView.onProfileMyInfoFailure(resp.message)
                     }
                 }
             }
-            override fun onFailure(call: Call<ProfileMyAccountResponse>, t: Throwable) {
-                Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyAccountFailed", t)
+            override fun onFailure(call: Call<ProfileMyInfoResponse>, t: Throwable) {
+                Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyInfoFailed", t)
             }
         })
     }

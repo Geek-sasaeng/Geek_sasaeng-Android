@@ -29,9 +29,9 @@ interface ProfileRecentActivityRetrofitInterfaces {
 }
 
 // 나의 정보 조회 api
-interface ProfileMyAccountRetrofitInterfaces {
+interface ProfileMyInfoRetrofitInterfaces {
     @GET("/members")
-    fun getMyAccount(
+    fun getMyInfo(
         @Header("Authorization") jwt: String?
-    ): Call<ProfileMyAccountResponse>
+    ): Call<ProfileMyInfoResponse>
 }

@@ -36,7 +36,7 @@ class NoticeFragment : BaseFragment<FragmentNoticeBinding>(FragmentNoticeBinding
         super.onStart()
         profileService = ProfileDataService() //서비스 객체 생성
         profileService.setProfileAnnouncementView(this)
-        profileService.ProfileAnnouncementSender() //★ 공지사항 목록 불러오기 api 호출
+        profileService.profileAnnouncementSender() //★ 공지사항 목록 불러오기 api 호출
     }
 
     private fun initClickListener(){

@@ -14,12 +14,12 @@ interface ProfileAnnouncementView {
 
 // 공지사항 상세 조회
 interface ProfileAnnouncementDetailView{
-    fun onProfileAnnouncementDetailSuccess(result: ProfileAnnouncementDeatilResult)
+    fun onProfileAnnouncementDetailSuccess(result: ProfileAnnouncementDetailResult)
     fun onProfileAnnouncementDetailFailure(message: String)
 }
 
 // 내 정보 조회
-interface ProfileMyAccountView {
-    fun onProfileMyAccountSuccess(result: ProfileMyAccountResult)
-    fun onProfileMyAccountFailure(message: String)
+interface ProfileMyInfoView {
+    fun onProfileMyInfoSuccess(result: ProfileMyInfoResult)
+    fun onProfileMyInfoFailure(message: String)
 }

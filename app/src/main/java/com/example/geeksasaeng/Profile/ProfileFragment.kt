@@ -68,7 +68,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
         }
 
-        binding.profileMyAccount.setOnClickListener {
+        binding.profileMyInfo.setOnClickListener {
             (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
         }
     }

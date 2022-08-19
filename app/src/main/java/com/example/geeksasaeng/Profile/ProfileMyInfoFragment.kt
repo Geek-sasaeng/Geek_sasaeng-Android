@@ -3,15 +3,15 @@ package com.example.geeksasaeng.Profile
 import android.net.Uri
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMyAccountResult
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMyAccountView
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMyInfoResult
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMyInfoView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentProfileMyInfoBinding
 
-class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(FragmentProfileMyInfoBinding::inflate), ProfileMyAccountView {
+class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(FragmentProfileMyInfoBinding::inflate), ProfileMyInfoView {
 
-    lateinit var profileMyAccountService: ProfileDataService
+    lateinit var profileMyInfoService: ProfileDataService
 
     override fun initAfterBinding() {
         initClickListener()
@@ -43,12 +43,12 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
     }
 
     private fun initProfileDataService() {
-        profileMyAccountService = ProfileDataService()
-        profileMyAccountService.setMyAccountView(this)
-        profileMyAccountService.profileMyAccountSender()
+        profileMyInfoService = ProfileDataService()
+        profileMyInfoService.setMyInfoView(this)
+        profileMyInfoService.profileMyInfoSender()
     }
 
-    override fun onProfileMyAccountSuccess(result: ProfileMyAccountResult) {
+    override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
         binding.profileMyInfoUserImgIv.setImageURI(Uri.parse(result.profileImgUrl))
         binding.profileMyInfoDormitoryTv.text = result.dormitoryName
         binding.profileMyInfoNicknameTv.text = result.nickname
@@ -57,7 +57,7 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
         binding.profileMyInfoPhoneNumberTv.text = result.phoneNumber
     }
 
-    override fun onProfileMyAccountFailure(message: String) {
+    override fun onProfileMyInfoFailure(message: String) {
         showToast(message)
     }
 }
