@@ -39,13 +39,15 @@
 
     <ImageButton
         android:id="@+id/notice_item_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="32dp"
+        android:paddingStart="32dp"
+        android:paddingVertical="20dp"
         android:backgroundTint="@color/white"
         android:src="@drawable/ic_arrow_right_profile"
-        app:layout_constraintTop_toTopOf="@id/notice_item_icon_iv"
-        app:layout_constraintBottom_toBottomOf="@id/notice_item_icon_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View

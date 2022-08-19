@@ -544,8 +544,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="긱사생 이용자분들께 알립니다. 긱사생 이용자분들께 알립니다. 긱사생 이용자분들께 알립니다. "
-                    android:inputType="text"
-                    android:focusable="true"
                     android:singleLine="true"
                     android:ellipsize="marquee"
                     android:marqueeRepeatLimit="marquee_forever"

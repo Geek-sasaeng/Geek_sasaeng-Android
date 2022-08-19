@@ -5,6 +5,7 @@ import com.example.geeksasaeng.Signup.Retrofit.SignUpResponse
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
+import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,6 +15,7 @@ class ProfileDataService {
     //뷰 객체 생성
     private lateinit var profileRecentActivityView: ProfileRecentActivityView
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
+    private lateinit var profileAnnouncementDetailView: ProfileAnnouncementDetailView
     private lateinit var profileMyAccountView: ProfileMyAccountView
 
     private val ProfileDataService = retrofit.create(ProfileAnnouncementRetrofitInterfaces::class.java)
@@ -68,6 +70,30 @@ class ProfileDataService {
             }
 
             override fun onFailure(call: Call<ProfileAnnouncementResponse>, t: Throwable) {
+                Log.d("ANNOUNCE-RESPONSE", "ProfileDataService-onFailure : getAnnounceFailed", t)
+            }
+        })
+    }
+
+    //공지사항 상세 조회
+    fun profileAnnouncementDetailSender( announcementId :ProfileAnnouncementDetailRequest){
+        val profileDataService = NetworkModule.getInstance()?.create(ProfileAnnouncementDetailRetrofitInterfaces::class.java)
+        profileDataService.getAnnouncementDetail("Bearer " + getJwt(), announcementId).enqueue(object : Callback<ProfileAnnouncementDetailResponse> {
+            override fun onResponse(
+                call: Call<ProfileAnnouncementDetailResponse>,
+                response: Response<ProfileAnnouncementDetailResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp: ProfileAnnouncementDetailResponse = response.body()!!
+                    //TODO:SWAGGER업데이트 되면 반영
+                    when(resp.code){
+                        1000-> profileAnnouncementDetailView.onProfileAnnouncementDetailSuccess(resp.result!!)
+                        else-> profileAnnouncementDetailView.onProfileAnnouncementDetailFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileAnnouncementDetailResponse>, t: Throwable) {
                 Log.d("ANNOUNCE-RESPONSE", "ProfileDataService-onFailure : getAnnounceFailed", t)
             }
         })

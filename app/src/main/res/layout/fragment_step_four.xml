@@ -176,7 +176,7 @@
         app:layout_constraintTop_toBottomOf="@id/step_four_check"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+<!--    <Button
         android:id="@+id/step_four_skip_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@id/step_four_next_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <Button
         android:id="@+id/step_four_next_btn"
