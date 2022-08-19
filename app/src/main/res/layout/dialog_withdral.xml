@@ -54,7 +54,7 @@
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="본 채팅방을 나갈 시\n이후로 채팅에 참여할 수\n없습니다. 계속하시겠습니까?"
+            android:text="회원탈퇴 시 긱사생 서비스를\n더 이상 이용할 수 없습니다.\n계속하시겠습니까?"
             android:textColor="@color/black"
             android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -312,6 +312,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/profile_my_info_withdrawal_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/withdrawal"

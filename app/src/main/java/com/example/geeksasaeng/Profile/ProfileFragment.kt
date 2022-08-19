@@ -9,6 +9,7 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.removeAutoLogin
+import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
@@ -25,10 +26,12 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }
 
-        binding.profileLogoutBtn.setOnClickListener {
-            (context as MainActivity).finish()
-            removeAutoLogin()
-            startActivity(Intent(activity, LoginActivity::class.java))
+        binding.profileMyActivity.setOnClickListener {
+            startActivity(Intent(activity, ActivityProfileMyActivityBinding::class.java))
+        }
+
+        binding.profileMyActivity.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
         }
     }
 }
