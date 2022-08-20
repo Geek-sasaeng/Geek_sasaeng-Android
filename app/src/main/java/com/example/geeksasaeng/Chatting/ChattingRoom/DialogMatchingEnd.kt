@@ -67,6 +67,7 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
         this.dismiss()
+        Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
 
         // 00 님이 입장했습니다 시스템 메시지 추가 부분
         val uuid = UUID.randomUUID().toString()

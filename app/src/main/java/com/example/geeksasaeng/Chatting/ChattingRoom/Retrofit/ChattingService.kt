@@ -88,7 +88,6 @@ class ChattingService {
 
             override fun onFailure(call: Call<ChattingDeliveryComplicatedResponse?>, t: Throwable) {
                 Log.d("CHATTING-배달완료알람", "실패"+ t.toString())
-                //TODO: 주연언니가 RESPONSE값 만들어주면 해결될 예정
             }
 
         })
