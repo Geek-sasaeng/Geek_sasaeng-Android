@@ -60,14 +60,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private var lastCheckedBox = -1
     private lateinit var handler: Handler;
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("LOADING-RESPONSE", "onStart")
-    }
-
     override fun onResume() {
         super.onResume()
-        Log.d("LOADING-RESPONSE", "onResume")
 
         loadingDeliveryListFlag = false
         loadingBannerFlag = false
@@ -87,7 +81,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     override fun onPause() {
         super.onPause()
-        Log.d("LOADING-RESPONSE", "onPause")
         flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
@@ -97,8 +90,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
-        Log.d("LOADING-RESPONSE", "initAfterBinding")
-
         dormitoryId = getDormitoryId()!!
         // 모든 fragment stack 제거
         clearBackStack()
@@ -232,8 +223,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 배달파티 목록 조회 성공
     override fun deliverySuccess(result: DeliveryResult) {
         loadingDeliveryListFlag = true
-        Log.d("LOADING-RESPONSE", "DELIVERY-SUCCESS")
-        Log.d("LOADING-RESPONSE", "delivery-list = $loadingDeliveryListFlag banner = $loadingBannerFlag")
 
         if (loadingDeliveryListFlag && loadingBannerFlag)
             loadingStop()
@@ -403,8 +392,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
         loadingBannerFlag = true
-        Log.d("LOADING-RESPONSE", "BANNER-SUCCESS")
-        Log.d("LOADING-RESPONSE", "delivery-list = $loadingDeliveryListFlag banner = $loadingBannerFlag")
 
         if (loadingDeliveryListFlag && loadingBannerFlag)
             loadingStop()
@@ -476,8 +463,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 배달 필터 성공
     override fun deliveryFilterSuccess(result: DeliveryResult) {
         loadingDeliveryListFlag = true
-        Log.d("LOADING-RESPONSE", "DELIVERY-FILTER-SUCCESS")
-        Log.d("LOADING-RESPONSE", "delivery-list = $loadingDeliveryListFlag banner = $loadingBannerFlag")
 
         if (loadingDeliveryListFlag && loadingBannerFlag)
             loadingStop()
