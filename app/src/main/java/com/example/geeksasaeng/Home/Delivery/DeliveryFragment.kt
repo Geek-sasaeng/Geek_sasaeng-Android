@@ -68,8 +68,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun onResume() {
         super.onResume()
         Log.d("LOADING-RESPONSE", "onResume")
+
         loadingDeliveryListFlag = false
         loadingBannerFlag = false
+
         loadingStart()
 
         //핸들러 설정
@@ -473,7 +475,12 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달 필터 성공
     override fun deliveryFilterSuccess(result: DeliveryResult) {
-        Log.d("DELIVERY-FILTER", "SUCCESS")
+        loadingDeliveryListFlag = true
+        Log.d("LOADING-RESPONSE", "DELIVERY-FILTER-SUCCESS")
+        Log.d("LOADING-RESPONSE", "delivery-list = $loadingDeliveryListFlag banner = $loadingBannerFlag")
+
+        if (loadingDeliveryListFlag && loadingBannerFlag)
+            loadingStop()
 
         finalPage = result.finalPage
 

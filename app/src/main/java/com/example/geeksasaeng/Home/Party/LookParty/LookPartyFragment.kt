@@ -51,7 +51,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     override fun initAfterBinding() {
         initClickListener()
-        // binding.lookPartyProgressBar.visibility = View.VISIBLE
         loadingStart()
         binding.lookLocateText.isSelected = true // 물흐르는 애니메이션
 
@@ -147,7 +146,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         partyData = result
 
         binding.lookPartyWhite.visibility = View.GONE
-        // binding.lookPartyProgressBar.visibility = View.GONE
         loadingStop()
 
         authorStatus = result.authorStatus
