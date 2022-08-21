@@ -511,7 +511,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun loadingStart() {
-        Log.d("LOADING-RESPONSE", "loadingStart")
         loadingAnimationView = binding.animationView
         binding.animationViewLayout.visibility = View.VISIBLE
         loadingAnimationView.visibility = View.VISIBLE
@@ -530,8 +529,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun loadingStop() {
-        // Log.d("LOADING-RESPONSE", "delivery-list = $loadingDeliveryListFlag banner = $loadingBannerFlag")
-        // 로딩화면 제거
         loadingAnimationView.cancelAnimation()
         binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE

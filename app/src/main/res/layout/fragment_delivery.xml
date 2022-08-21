@@ -213,7 +213,6 @@
             app:lottie_loop="true"
             tools:ignore="MissingConstraints" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
