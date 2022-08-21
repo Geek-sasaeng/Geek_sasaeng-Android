@@ -69,7 +69,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         Log.d("DELIVERY-FRAGMENT", "onResume")
         // remainSec = deliveryAdapter.returnRemainSec()
         // timerTask.start()
-        refreshing() // 화면이 다시 시작될 때 파티 목록 리프레시
+/*        deliveryArray.clear()
+        loadPosts()*/
+        // 화면이 다시 시작될 때 파티 목록 리프레시
         flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 
@@ -126,6 +128,13 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         else getDeliveryAllList(dormitoryId, totalCursor)
     }
 
+    private fun loadPosts() {
+        isLoading = false
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
+        if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
+        else getDeliveryAllList(dormitoryId, totalCursor)
+    }
+
     // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우
     // TODO: 로딩 중에 스크롤 막기
     // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
@@ -162,6 +171,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // Adapter 설정
     private fun initAdapter() {
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+        deliveryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 

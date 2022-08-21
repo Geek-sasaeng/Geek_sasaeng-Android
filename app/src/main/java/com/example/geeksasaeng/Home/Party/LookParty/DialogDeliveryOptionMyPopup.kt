@@ -83,9 +83,7 @@ class DialogDeliveryOptionMyPopup: DialogFragment() {
     }
 
     interface PopUpdateClickListener{
-        //TODO: 뷰모델 이용하면서 사실 여기서 매개변수로 안넘겨줘도 ACTIVITY에서 값 알 수 있어..
-        //TODO: 근데 이걸 하는 이유는 정보 갱신을 위함.
-        fun onPopUpdateClicked()
+        fun onPopUpdateClicked() //카카오맵지우는용
     }
 
     override fun onAttach(context: Context) {
