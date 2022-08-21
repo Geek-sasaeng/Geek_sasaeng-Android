@@ -56,18 +56,15 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     override fun onStart() {
         super.onStart()
-        Log.d("LOADING-RESPONSE", "onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("LOADING-RESPONSE", "onResume")
         loadingStart()
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("LOADING-RESPONSE", "onPause")
     }
 
     override fun initAfterBinding() {
