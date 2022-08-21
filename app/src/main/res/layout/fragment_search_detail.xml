@@ -113,11 +113,11 @@
 
     <ImageView
         android:id="@+id/search_detail_back_logo_ic"
-        android:layout_width="72dp"
-        android:layout_height="79dp"
-        android:src="@drawable/ic_logo_search_back"
-        android:layout_marginBottom="164dp"
-        app:tint="#80F8FCFF"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_logo"
+        android:layout_marginBottom="113dp"
+        app:tint="#DBF8FCFF"
         android:tintMode="src_atop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

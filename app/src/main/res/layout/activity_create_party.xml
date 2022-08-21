@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/create_party_back_btn_iv"
             app:layout_constraintBottom_toBottomOf="@id/create_party_back_btn_iv"
-            android:text="다음"
+            android:text="완료"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="#BABABA"
             android:textSize="16sp"
