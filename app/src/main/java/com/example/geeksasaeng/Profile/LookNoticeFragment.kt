@@ -1,7 +1,7 @@
 package com.example.geeksasaeng.Profile
 
 import android.util.Log
-import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementDeatilResult
+import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementDetailResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementDetailRequest
 import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementDetailView
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
@@ -18,7 +18,7 @@ class LookNoticeFragment: BaseFragment<FragmentLookNoticeBinding>(FragmentLookNo
         Log.d("lookNotice", noticeItemId.toString())
         profileService = ProfileDataService() //서비스 객체 생성
         profileService.setProfileAnnouncementDetailView(this)
-        profileService.ProfileAnnouncementDetailSender(ProfileAnnouncementDetailRequest(noticeItemId!!)) //★ 공지 상세보기 api 호출
+        profileService.profileAnnouncementDetailSender(ProfileAnnouncementDetailRequest(noticeItemId!!)) //★ 공지 상세보기 api 호출
         initClickListener()
     }
 
@@ -31,7 +31,7 @@ class LookNoticeFragment: BaseFragment<FragmentLookNoticeBinding>(FragmentLookNo
     }
 
     // 공지 상세보기 성공
-    override fun onProfileAnnouncementDetailSuccess(result: ProfileAnnouncementDeatilResult) {
+    override fun onProfileAnnouncementDetailSuccess(result: ProfileAnnouncementDetailResult) {
         Log.d("lookNotice","상세보기 api 성공")
         binding.lookNoticeTitleTv.text = result.title
         binding.lookNoticeContentTv.text = result.content

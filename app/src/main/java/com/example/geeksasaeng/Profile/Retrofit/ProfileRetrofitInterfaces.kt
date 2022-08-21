@@ -19,3 +19,19 @@ interface ProfileRetrofitInterfaces {
         @Body profileAnnouncementDetailRequest: ProfileAnnouncementDetailRequest
     ): Call<ProfileAnnouncementDetailResponse>
 }
+
+// 최근 활동 3개 api
+interface ProfileRecentActivityRetrofitInterfaces {
+    @GET("/delivery-parties/recent")
+    fun getRecentActivity(
+        @Header("Authorization") jwt: String?
+    ): Call<ProfileRecentActivityResponse>
+}
+
+// 나의 정보 조회 api
+interface ProfileMyInfoRetrofitInterfaces {
+    @GET("/members")
+    fun getMyInfo(
+        @Header("Authorization") jwt: String?
+    ): Call<ProfileMyInfoResponse>
+}

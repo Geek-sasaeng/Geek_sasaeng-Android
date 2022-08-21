@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Delivery
 
+import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
+import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.Delivery.Adapter.BannerVPAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
@@ -34,6 +36,10 @@ import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
+
+    lateinit var loadingAnimationView: LottieAnimationView
+    var loadingBannerFlag = false
+    var loadingDeliveryListFlag = false
     private var deliveryArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var deliveryAdapter: DeliveryRVAdapter
     private lateinit var deliveryService: DeliveryService //서비스 객체
@@ -54,41 +60,37 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     private var lastCheckedBox = -1
     private lateinit var handler: Handler;
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("DELIVERY-FRAGMENT", "onStart")
-    }
-
     override fun onResume() {
         super.onResume()
+
+        loadingDeliveryListFlag = false
+        loadingBannerFlag = false
+
+        loadingStart()
+
         //핸들러 설정
         handler = Handler(Looper.getMainLooper()) {
             setPage()
             true
         }
-        Log.d("DELIVERY-FRAGMENT", "onResume")
-        // remainSec = deliveryAdapter.returnRemainSec()
-        // timerTask.start()
+
         refreshing() // 화면이 다시 시작될 때 파티 목록 리프레시
+        initBanner() // 배너작업
         flag = 1 // 다른 페이지 갔다가 돌아오면 다시 스크롤 시작
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("DELIVERY-FRAGMENT", "onPause")
         flag = 0 // 다른 페이지로 떠나있는 동안 스크롤 동작 필요없음. 멈추기
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("DELIVERY-FRAGMENT", "onDestroy")
         thread.interrupt() //쓰레드 중지
     }
 
     override fun initAfterBinding() {
         dormitoryId = getDormitoryId()!!
-        Log.d("dormitory", "기숙사 정보"+dormitoryId.toString()+"가 DeliveryFragment에 전달됨")
-        Log.d("DELIVERY-FRAGMENT", "initAfterBinding")
         // 모든 fragment stack 제거
         clearBackStack()
 
@@ -97,12 +99,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryProgressCover.visibility = View.GONE
         binding.deliveryBottomView.visibility = View.VISIBLE
 
-        initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
         initTopScrollListener() // 상단 스크롤 작업
-        initAdapter()
-
+        // initAdapter()
 
         binding.deliveryFloatingBtn.setOnClickListener {
             val intent = Intent(context, CreatePartyActivity::class.java)
@@ -113,7 +113,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             initLoadPosts()
 
         initScrollListener()
-
     }
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
@@ -158,7 +157,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliverySwipe.isRefreshing = false
     }
 
-
     // Adapter 설정
     private fun initAdapter() {
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
@@ -182,6 +180,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
             }
         })
     }
+
     // 하단 스크롤 관련
     // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)
     private fun initScrollListener() {
@@ -223,7 +222,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달파티 목록 조회 성공
     override fun deliverySuccess(result: DeliveryResult) {
-        Log.d("DELIVERY-REPSONSE", "SUCCESS")
+        loadingDeliveryListFlag = true
+
+        if (loadingDeliveryListFlag && loadingBannerFlag)
+            loadingStop()
 
         finalPage = result.finalPage
         val result = result.deliveryPartiesVoList
@@ -251,8 +253,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
-    private fun initCheckBox(){ //체크버튼 이벤트 (아침, 점심, 저녁)
-
+    private fun initCheckBox() { //체크버튼 이벤트 (아침, 점심, 저녁)
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
             if(isChecked){
@@ -390,6 +391,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
+        loadingBannerFlag = true
+
+        if (loadingDeliveryListFlag && loadingBannerFlag)
+            loadingStop()
+
         deliveryBannerAdapter = BannerVPAdapter(this)
 
         //더미 img url
@@ -456,7 +462,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달 필터 성공
     override fun deliveryFilterSuccess(result: DeliveryResult) {
-        Log.d("DELIVERY-FILTER", "SUCCESS")
+        loadingDeliveryListFlag = true
+
+        if (loadingDeliveryListFlag && loadingBannerFlag)
+            loadingStop()
 
         finalPage = result.finalPage
 
@@ -491,5 +500,29 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     override fun deliveryFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FILTER-FRAGMENT-FAILURE")
         totalCursor--
+    }
+
+    private fun loadingStart() {
+        loadingAnimationView = binding.animationView
+        binding.animationViewLayout.visibility = View.VISIBLE
+        loadingAnimationView.visibility = View.VISIBLE
+        loadingAnimationView.playAnimation()
+        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                // initAfterBinding()
+            }
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+        })
+    }
+
+    private fun loadingStop() {
+        loadingAnimationView.cancelAnimation()
+        binding.animationViewLayout.visibility = View.GONE
+        loadingAnimationView.visibility = View.GONE
     }
 }

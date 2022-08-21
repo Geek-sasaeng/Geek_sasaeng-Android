@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Search
 
+import android.animation.Animator
 import android.content.Intent
 import android.os.Handler
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
 import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
@@ -31,6 +33,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
 
 class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate), SearchView, SearchFilterView {
+
+    lateinit var loadingAnimationView: LottieAnimationView
     private var searchArray = ArrayList<DeliveryPartiesVoList?>()
     private lateinit var searchAdapter: DeliveryRVAdapter
     private lateinit var searchService: SearchDataService
@@ -50,12 +54,27 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     lateinit var keyword: String
     private var lastCheckedBox = -1
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadingStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun initAfterBinding() {
         keyword = requireArguments().getString("keyword").toString()
 
         searchService = SearchDataService()
         searchService.setSearchPartyView(this)
         binding.searchProgressCover.visibility = View.GONE
+        loadingStart()
+
         binding.searchBottomView.visibility = View.VISIBLE
 
         initSpinner() //필터(spinner) 작업
@@ -227,6 +246,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             else getSearchPartyList(dormitoryId, totalCursor, keyword)
             isLoading = false
             binding.searchProgressCover.visibility = View.GONE
+            loadingStop()
         }, 1200)
     }
 
@@ -285,6 +305,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     override fun onSearchSuccess(result: SearchResult) {
         Log.d("SEARCH-RESPSONSE", "SUCCESS")
+        loadingStop()
 
         finalPage = result.finalPage
         val result = result.searchPartiesVoList
@@ -375,6 +396,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     override fun searchFilterSuccess(result: SearchResult) {
         Log.d("SEARCH-FILTER", "SUCCESS")
+        loadingStop()
 
         finalPage = result.finalPage
         val result = result.searchPartiesVoList
@@ -405,5 +427,29 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     override fun searchFilterFailure(code: Int, message: String) {
         Log.d("DELIVERY-RESPONSE", "DELIVERY-FRAGMENT-FAILURE")
         totalCursor--
+    }
+
+    private fun loadingStart() {
+        loadingAnimationView = binding.animationView
+        binding.animationViewLayout.visibility = View.VISIBLE
+        loadingAnimationView.visibility = View.VISIBLE
+        loadingAnimationView.playAnimation()
+        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                // initAfterBinding()
+            }
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+        })
+    }
+
+    private fun loadingStop() {
+        loadingAnimationView.cancelAnimation()
+        binding.animationViewLayout.visibility = View.GONE
+        loadingAnimationView.visibility = View.GONE
     }
 }
