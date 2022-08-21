@@ -52,6 +52,7 @@ class SearchDataService {
                 Log.d("SEARCH-FRAGMENT", "response.code = ${response.code()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val searchResponse: SearchResponse = response.body()!!
+                    Log.d("why", "성공"+searchResponse.toString())
                     Log.d("SEARCH-FRAGMENT", "response.code = ${searchResponse.code} / response.body = ${searchResponse.result}")
                     when (searchResponse.code) {
                         1000 -> searchFilterView.searchFilterSuccess(response.body()!!.result)

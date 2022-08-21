@@ -99,6 +99,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         binding.deliveryProgressCover.visibility = View.GONE
         binding.deliveryBottomView.visibility = View.VISIBLE
 
+        //initBanner() //배너작업
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
         initTopScrollListener() // 상단 스크롤 작업
@@ -160,6 +161,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // Adapter 설정
     private fun initAdapter() {
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
+        deliveryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 

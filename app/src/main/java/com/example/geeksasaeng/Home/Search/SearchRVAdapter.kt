@@ -109,4 +109,5 @@ class SearchRVAdapter(private var searchList: ArrayList<SearchPartiesVoList?>) :
     fun getSearchItemId(position: Int): Int? {
         return searchList[position]?.id
     }
+
 }
