@@ -123,6 +123,7 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
 
     private fun loadingStart() {
         loadingAnimationView = binding.animationView
+        binding.animationViewLayout.visibility = View.VISIBLE
         loadingAnimationView.visibility = View.VISIBLE
         loadingAnimationView.playAnimation()
         loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
@@ -139,8 +140,8 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
     }
 
     private fun loadingStop() {
-        // 로딩화면 제거
         loadingAnimationView.cancelAnimation()
+        binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE
     }
 }
