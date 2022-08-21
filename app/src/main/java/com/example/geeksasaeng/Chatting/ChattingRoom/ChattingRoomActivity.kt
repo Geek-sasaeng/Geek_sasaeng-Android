@@ -78,8 +78,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
-                val roomInfo =
-                    document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+                val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                 participants = roomInfo.get("participants") as ArrayList<Any>
                 var participantIdx: Int = -1
                 for ((idx, map) in participants!!.withIndex()) {
@@ -218,54 +217,48 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
             .orderBy("time", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, _ ->
                 for ((idx, dc) in snapshots?.documentChanges!!.withIndex()) {
-                    if (dc.document["readUsers"] == null)
-                        continue
+                    Log.d("FIREBASE-RESPONSE", "Message = \n ${dc.document["content"]}")
 
-                    val readUsers = dc.document["readUsers"] as ArrayList<Any>
-
-                    // readUsers에 자신의 닉네임이 없다면 추가해서 업데이트 하기
-                    if (!readUsers.contains(getNickname()!!)) {
-                        readUsers.add(getNickname()!!)
-
-                        val messageId = dc.document.id
-                        db.collection("Rooms").document(roomUuid).collection("Messages")
-                            .document(messageId).update("readUsers", readUsers)
-                    }
-                    val notReadCnt = participants.size - readUsers.size
-
-                    // 새로운 메시지가 추가되었을 경우
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        var item: Chatting
-                        if (dc.document["isSystemMessage"] == true) {
-                            item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
-                        }else if(nickname == dc.document["nickname"]) {
-                            item = Chatting(
-                                1,
-                                nickname,
-                                dc.document["time"].toString(),
-                                R.drawable.ic_default_profile,
-                                dc.document["content"].toString(),
-                                notReadCnt
-                            )
-                        } else {
-                            val msgNickname = dc.document["nickname"] as String
-                            item = Chatting(
-                                2,
-                                msgNickname,
-                                dc.document["time"].toString(),
-                                R.drawable.ic_default_profile2,
-                                dc.document["content"].toString(),
-                                notReadCnt
-                            )
-                        }
+                    if (dc.document["isSystemMessage"] == true) {
+                        if (dc.type == DocumentChange.Type.ADDED)
+                            chattingRoomRVAdapter.addItem(Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null))
                         preChatNickname = dc.document["nickname"].toString()
-                        chattingRoomRVAdapter.addItem(item)
+                    } else {
+                        if (dc.document["readUsers"] == null)
+                            continue
 
-                    // readUsers가 업데이트 되었을 경우
-                    } else if (dc.type == DocumentChange.Type.MODIFIED) {
-                        if(dc.oldIndex == dc.newIndex){
-                            val idx = dc.oldIndex
-                            chattingRoomRVAdapter.setUnreadCount(idx, notReadCnt)
+                        val readUsers = dc.document["readUsers"] as ArrayList<Any>
+
+                        // readUsers에 자신의 닉네임이 없다면 추가해서 업데이트 하기
+                        if (!readUsers.contains(getNickname()!!)) {
+                            readUsers.add(getNickname()!!)
+
+                            val messageId = dc.document.id
+                            db.collection("Rooms").document(roomUuid).collection("Messages")
+                                .document(messageId).update("readUsers", readUsers)
+                        }
+                        val notReadCnt = participants.size - readUsers.size
+
+                        // 새로운 메시지가 추가되었을 경우
+                        if (dc.type == DocumentChange.Type.ADDED) {
+                            var item: Chatting
+                            if (dc.document["isSystemMessage"] == true) {
+                                item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
+                            }else if(nickname == dc.document["nickname"]) {
+                                item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), notReadCnt)
+                            } else {
+                                val msgNickname = dc.document["nickname"] as String
+                                item = Chatting(2, msgNickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), notReadCnt)
+                            }
+                            preChatNickname = dc.document["nickname"].toString()
+                            chattingRoomRVAdapter.addItem(item)
+
+                            // readUsers가 업데이트 되었을 경우
+                        } else if (dc.type == DocumentChange.Type.MODIFIED) {
+                            if(dc.oldIndex == dc.newIndex){
+                                val idx = dc.oldIndex
+                                chattingRoomRVAdapter.setUnreadCount(idx, notReadCnt)
+                            }
                         }
                     }
                 }

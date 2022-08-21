@@ -54,6 +54,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Home.Search.SearchActivity" />
         <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity" />
+        <activity android:name=".Profile.ProfileMyActivityActivity" />
 
         <!--카카오맵 APP KEY 추가-->
         <meta-data
