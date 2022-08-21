@@ -162,7 +162,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 .load(result.chiefProfileImgUrl)
                 .into(binding.lookHostProfileIv)
         else // TODO: 기본 이미지 넣을 예정
-            binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile)
+            binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile2)
 
         binding.lookHostName.text = result.chief
         binding.lookContent.text = result.content
