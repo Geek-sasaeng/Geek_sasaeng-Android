@@ -71,8 +71,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     override fun onStop() {
         super.onStop()
         timerTask?.cancel()
-        if (status != "lookParty")
-            requireActivity().finish()
     }
 
     private fun initClickListener(){
