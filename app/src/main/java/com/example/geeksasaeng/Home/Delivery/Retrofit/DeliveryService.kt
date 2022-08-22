@@ -62,8 +62,9 @@ class DeliveryService {
                 if (response.isSuccessful && response.code() == 200) {
                     val deliveryResponse: DeliveryResponse = response.body()!!
                     Log.d("DELIVERY-RESPONSE", "response.code = ${deliveryResponse.code} / response.body = ${deliveryResponse.message}")
+                    Log.d("why-filter",deliveryResponse.toString())
                     when (deliveryResponse.code) {
-                        1000 -> deliveryView.deliverySuccess(response.body()!!.result)
+                        1000 -> deliveryView.deliverySuccess(deliveryResponse.result)
                         else -> deliveryView.deliveryFailure(deliveryResponse.code, deliveryResponse.message)
                     }
                 }
@@ -95,4 +96,5 @@ class DeliveryService {
             }
         })
     }
+
 }

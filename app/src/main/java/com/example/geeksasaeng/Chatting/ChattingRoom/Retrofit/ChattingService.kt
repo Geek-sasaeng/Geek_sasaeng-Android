@@ -82,6 +82,7 @@ class ChattingService {
                 Log.d("deliveryComplicated", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
+                    chattingDeliveryComplicatedView.chattingDeliveryComplicatedSuccess()
                     Log.d("deliveryComplicate-resp", resp.code.toString())
                 }
             }

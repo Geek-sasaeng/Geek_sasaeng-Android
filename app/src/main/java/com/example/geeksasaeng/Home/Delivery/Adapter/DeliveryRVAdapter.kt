@@ -109,11 +109,11 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     fun setArrayList(list: ArrayList<DeliveryPartiesVoList?>){
-        Log.d("why-1",list.toString()+"/"+mDeliveryList.toString())
+        Log.d("why-1",mDeliveryList.toString()+list.toString())
         //mDeliveryList.clear()
         //mDeliveryList.addAll(list)
         mDeliveryList = list //TODO: 얕은복사-왜 얘만되는진 모르겠지만..!
-        Log.d("why-2",list.toString()+"/"+mDeliveryList.toString())
+        Log.d("why-2",mDeliveryList.toString()+list.toString())
         notifyDataSetChanged()
     }
 }

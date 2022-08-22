@@ -103,7 +103,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
         initTopScrollListener() // 상단 스크롤 작업
-        // initAdapter()
+        initAdapter()
 
         binding.deliveryFloatingBtn.setOnClickListener {
             val intent = Intent(context, CreatePartyActivity::class.java)
@@ -118,6 +118,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
+        Log.d("why-filter", "initLoadPosts 실행됨")
+        deliveryArray.clear() //최초로, 리프레시용으로 데이터를 로드하기 때문에 기존 array에 있는건 지워준다.
         totalCursor = 0
         isLoading = false
         finalPage = false
@@ -130,6 +132,8 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // TODO: 로딩 중에 스크롤 막기
     // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
     private fun initMoreLoadPosts() {
+        Log.d("why-filter", "initMoreLoadePosts 실행됨")
+        Log.d("why-filter", "initMore에서의 totalCursor"+totalCursor.toString())
         binding.deliveryProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
@@ -144,18 +148,17 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.deliverySwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            refreshing()
+            initAdapter()
+            initLoadPosts()
+            binding.deliverySwipe.isRefreshing = false
         })
     }
 
-    private fun refreshing(){ // 파티목록 새로고침
+    private fun refreshing(){ // 파티목록 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
         filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용 - 밑에 로그 찍는용
         //Log.d("deliveryFilterCheck", filterCheckFlag.toString())
         Log.d("deliveryFilterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
-        deliveryArray.clear()
         initLoadPosts()
-        initAdapter()
-        binding.deliverySwipe.isRefreshing = false
     }
 
     // Adapter 설정
@@ -192,7 +195,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
-                if (finalPage == true) {
+                if (finalPage == true && totalCursor!=0) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
                     else binding.deliveryBottomView.visibility = View.VISIBLE
@@ -200,7 +203,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
-                        if (finalPage == false)
+                        if (finalPage == false  && totalCursor!=0)
                             initMoreLoadPosts()
                         else binding.deliveryBottomView.visibility = View.INVISIBLE
 
@@ -218,6 +221,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달 목록 가져오기
     private fun getDeliveryAllList(dormitoryId: Int, cursor: Int) {
+        Log.d("why-filter", "getDeliveryAllList dormitoryId=$dormitoryId cursor=$cursor")
         deliveryService.getDeliveryAllList(dormitoryId, cursor)
         totalCursor += 1
     }
@@ -232,6 +236,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         finalPage = result.finalPage
         val result = result.deliveryPartiesVoList
 
+        Log.d("why-filter", deliveryArray.toString())
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching
             var foodCategory = result?.get(i)?.foodCategory
@@ -246,8 +251,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
-            deliveryAdapter.notifyDataSetChanged()
+           /* deliveryAdapter.notifyDataSetChanged()*/
         }
+        Log.d("why-filter", "필터 x"+deliveryArray.toString())
+        deliveryAdapter.setArrayList(deliveryArray) //RVAdapter의 arraylist를 deliveryArray로 설정하고 notifyDataSetChanged를 해주는 함수이다.
     }
 
     override fun deliveryFailure(code: Int, message: String) {
@@ -255,7 +262,36 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         totalCursor--
     }
 
+    private fun checkDoubleCheck(i: Int){ // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.
+        Log.d("why-filter", "checkDoubleCheck 실행됨")
+        Log.d("why-filter", lastCheckedBox.toString() +"      :      "+ i.toString())
+        if(lastCheckedBox==i){ //만약 제일 마지막으로 체크된 애를 다시 선택해서 선택해제시키는 경우(더블체크)라면
+            lastCheckedBox = -1 //초기화
+            orderTimeCategory = null
+            filter2CheckFlag = false
+            refreshing()
+        }
+    }
+
     private fun initCheckBox() { //체크버튼 이벤트 (아침, 점심, 저녁)
+
+        //setOnClick리스너를 통해 더블체크인지 여부 확인 & 그에 맞는 동작 수행
+        binding.deliveryCb1.setOnClickListener {
+            checkDoubleCheck(R.id.delivery_cb1)
+        }
+
+        binding.deliveryCb2.setOnClickListener {
+            checkDoubleCheck(R.id.delivery_cb2)
+        }
+
+        binding.deliveryCb3.setOnClickListener {
+            checkDoubleCheck(R.id.delivery_cb3)
+        }
+
+        binding.deliveryCb4.setOnClickListener {
+            checkDoubleCheck(R.id.delivery_cb4)
+        }
+
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
             if(isChecked){
@@ -263,15 +299,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "BREAKFAST"
-                lastCheckedBox = R.id.delivery_cb1
                 filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
-                if(lastCheckedBox==R.id.delivery_cb1){
-                    orderTimeCategory = null
-                    filter2CheckFlag = false
-                }
+                lastCheckedBox = R.id.delivery_cb1
             }
-            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -281,15 +313,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
-                lastCheckedBox = R.id.delivery_cb2
                 filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
-                if(lastCheckedBox==R.id.delivery_cb2){ //현재 체크되어있는애를 다시 클릭하는 경우
-                    orderTimeCategory = null
-                    filter2CheckFlag = false
-                }
+                lastCheckedBox = R.id.delivery_cb2
             }
-            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -299,15 +327,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "DINNER"
-                lastCheckedBox = R.id.delivery_cb3
                 filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
-                if(lastCheckedBox==R.id.delivery_cb3){
-                    orderTimeCategory = null
-                    filter2CheckFlag = false
-                }
+                lastCheckedBox = R.id.delivery_cb3
             }
-            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -318,16 +342,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
-                lastCheckedBox = R.id.delivery_cb4
                 filter2CheckFlag = true
+                refreshing()
             }else{ // 체크가 꺼지면
-                if(lastCheckedBox==R.id.delivery_cb4){
-                    orderTimeCategory = null
-                    filter2CheckFlag = false
-                }
+                lastCheckedBox = R.id.delivery_cb4
             }
-
-            refreshing()
             Log.d("check",orderTimeCategory.toString())
         }
 
@@ -348,9 +367,11 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 //TODO:스피너
                 Log.d("peopleSpinner", "$position/")
                 if(position==0){ // 제일 상단 클릭하면 초기화 해주기 위해
-                    items[0]= items[6] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                    items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                    maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
                 }else{
                     items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
+                    maxMatching = position * 2
                 }
                 val image: ImageView = view!!.findViewById(R.id.arrow_iv)
                 image.setImageResource(R.drawable.ic_spinner_up)
@@ -361,10 +382,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
                 filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
-
-                maxMatching = position * 2
                 finalPage = false
-
                 refreshing()
             }
 
@@ -456,6 +474,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     // 배달 목록 필터 적용 후 가져오기
     private fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?) {
+        Log.d("why-filter", "getDeliveryFilterList dormitoryId=$dormitoryId cursor=$cursor / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
         val deliveryDataService = DeliveryService()
         deliveryDataService.setDeliveryFilterView(this)
         deliveryDataService.getDeliveryFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
@@ -486,7 +505,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
-            deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)
+            /*deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)*/
         }
 
         if (finalPage == true) {
@@ -497,6 +516,9 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                 else binding.deliveryBottomView.visibility = View.VISIBLE
             } else binding.deliveryBottomView.visibility = View.VISIBLE
         }
+
+        Log.d("why-filter", "필터 o"+deliveryArray.toString())
+        deliveryAdapter.setArrayList(deliveryArray) //어댑터에 바뀐 ArrayList를 알려주는 용
     }
 
     override fun deliveryFilterFailure(code: Int, message: String) {
