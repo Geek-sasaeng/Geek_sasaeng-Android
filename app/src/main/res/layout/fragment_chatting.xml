@@ -122,7 +122,6 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_logo_preparing"
         android:visibility="gone"
-        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/chatting_section_filter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
