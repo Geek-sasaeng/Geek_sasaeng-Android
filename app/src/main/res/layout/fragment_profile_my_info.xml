@@ -73,19 +73,14 @@
                 android:layout_marginTop="14dp"
                 android:layout_width="166dp"
                 android:layout_height="166dp"
-                app:cardElevation="0dp">
+                app:cardElevation="1dp"
+                app:cardCornerRadius="166dp">
 
                 <ImageView
                     android:id="@+id/profile_my_info_user_img_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_default_profile2"/>
-
-                <ImageView
-                    android:id="@+id/profile_my_info_user_img_change_iv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_profile_change"/>
 
             </androidx.cardview.widget.CardView>
 
