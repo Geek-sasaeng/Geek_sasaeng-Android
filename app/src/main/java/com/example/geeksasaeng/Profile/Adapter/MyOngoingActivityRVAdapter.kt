@@ -50,4 +50,8 @@ class MyOngoingActivityRVAdapter(private var activityList: ArrayList<ProfileMyOn
         activityList.add(item)
         this.notifyDataSetChanged()
     }
+
+    fun getPartyId(position: Int): Int {
+        return activityList[position].id
+    }
 }

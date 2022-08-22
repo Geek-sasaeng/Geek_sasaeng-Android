@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Profile
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -48,18 +49,12 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myOngoingActivityAdapter.setOnItemClickListener(object : MyOngoingActivityRVAdapter.OnItemClickListener{
             override fun onItemClick(data: ProfileMyOngoingActivityResult, pos : Int) {
                 Log.d("PROFILE-RESPONSE", "ITEM-CLICK-CHECK")
-//                var deliveryItemId = myOngoingActivityAdapter.getDeliveryItemId(pos).toString()
-//
-//                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-//
-//                val bundle = Bundle()
-//                bundle.putString("deliveryItemId", deliveryItemId)
-//
-//                val lookPartyFragment = LookPartyFragment()
-//                lookPartyFragment.arguments = bundle
-//
-//                transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
-//                transaction.commit()
+                var activityItemId = myOngoingActivityAdapter.getPartyId(pos)
+
+                val intent = Intent(this@ProfileMyActivityActivity, MainActivity::class.java)
+                intent.putExtra("status", "myActivity")
+                intent.putExtra("deliveryItemId", activityItemId.toString())
+                startActivity(intent)
             }
         })
     }
