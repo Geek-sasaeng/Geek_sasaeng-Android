@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.Search.SearchActivity
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getDormitory
 import com.example.geeksasaeng.Utils.getProfileImgUrl
@@ -28,9 +29,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
     }
 
     private fun initData(){
-        Glide.with(this)
-            .load(getProfileImgUrl())
-            .into(binding.homeUnivLogoIv) // 프로필 띄워주기
+        /*Glide.with(this)
+            .load("https://w1652956794-fa4293447.slack.com/files/U03MCQJF01F/F03U3P27LMB/gachonlogo.jpeg")  //TODO:각 학교 로고 불러와서 띄워주기
+            .into(binding.homeUnivLogoIv) // 프로필 띄워주기*/
+        binding.homeUnivLogoIv.setImageResource(R.drawable.gachon_logo) //가천대 로고 (일단  url이 아니라 이렇게 해둠)
         binding.homeDormitoryNameTv.text = getDormitory().toString() // 저장되어있는 기숙사 정보 가져와서 설정해주기
     }
 

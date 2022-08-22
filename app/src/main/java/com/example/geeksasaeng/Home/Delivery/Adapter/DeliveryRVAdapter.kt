@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Home.Delivery.Timer.DeliveryTimer
+import com.example.geeksasaeng.Home.Search.Retrofit.SearchPartiesVoList
 import com.example.geeksasaeng.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,6 +24,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     private var deliveryTimerMap: HashMap<Int, DeliveryTimer> = HashMap<Int, DeliveryTimer>()
     private lateinit var mItemClickListener: OnItemClickListener
+    private var mDeliveryList = deliveryList
     var minuteFlag: Boolean = false
 
     private val VIEW_TYPE_ITEM = 0
@@ -46,12 +48,12 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         itemBind(viewHolder as ItemViewHolder, position)
         timerBind(viewHolder as ItemViewHolder, position)
         viewHolder.itemView.setOnClickListener {
-            mItemClickListener.onItemClick(deliveryList[position]!!, position)
+            mItemClickListener.onItemClick(mDeliveryList[position]!!, position)
         }
     }
 
     override fun getItemCount(): Int {
-        return if (deliveryList == null) 0 else deliveryList!!.size
+        return if (mDeliveryList == null) 0 else mDeliveryList!!.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -103,6 +105,15 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     fun getDeliveryItemId(position: Int): Int? {
-        return deliveryList[position]?.id
+        return mDeliveryList[position]?.id
+    }
+
+    fun setArrayList(list: ArrayList<DeliveryPartiesVoList?>){
+        Log.d("why-1",list.toString()+"/"+mDeliveryList.toString())
+        //mDeliveryList.clear()
+        //mDeliveryList.addAll(list)
+        mDeliveryList = list //TODO: 얕은복사-왜 얘만되는진 모르겠지만..!
+        Log.d("why-2",list.toString()+"/"+mDeliveryList.toString())
+        notifyDataSetChanged()
     }
 }

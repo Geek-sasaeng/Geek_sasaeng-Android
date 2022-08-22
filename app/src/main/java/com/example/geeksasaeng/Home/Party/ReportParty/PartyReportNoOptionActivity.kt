@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
+import android.os.Bundle
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityPartyReportNoOptionBinding
@@ -45,15 +46,21 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
         reportPartyService.partyReportSender(getReportParty())
     }
 
+    //파티 신고 성공
     override fun partyReportViewSuccess(code: Int) {
-        showToast("신고 완료")
-        val dialog = DialogReportPartySuccess()
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", "고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다.")
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
+    //파티 신고 실패
     override fun partyReportViewFailure(message: String) {
-        showToast(message)
-        val dialog = DialogReportPartyFail()
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", message)
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
@@ -67,15 +74,21 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
         reportUserService.userReportSender(getReportUser())
     }
 
+    //사용자 신고 성공
     override fun userReportViewSuccess(code: Int) {
-        showToast("신고 완료")
-        val dialog = DialogReportPartySuccess()
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", "고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다.")
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
+    //사용자 신고 실패
     override fun userReportViewFailure(message: String) {
-        showToast(message)
-        val dialog = DialogReportPartyFail()
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", message)
+        dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 }

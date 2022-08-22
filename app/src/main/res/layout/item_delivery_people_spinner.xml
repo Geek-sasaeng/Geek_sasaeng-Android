@@ -21,7 +21,7 @@
             android:layout_height="35dp"
             android:fontFamily="@font/spoqa_medium"
             android:textSize="14sp"
-            android:text="10명 이하"
+            android:text="인원 선택"
             android:gravity="center_vertical"
             android:layout_marginStart="13dp" />
 

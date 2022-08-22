@@ -92,6 +92,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
-// FCM 세팅
+    // FCM 세팅
     apply plugin: 'com.google.gms.google-services'
+
+    // recyclerView (보던 페이지로 이동)
+    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+    implementation "androidx.recyclerview:recyclerview:1.2.0-alpha05"
+
 }

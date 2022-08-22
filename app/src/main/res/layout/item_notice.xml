@@ -16,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginVertical="18dp"/>
 
-
     <TextView
         android:id="@+id/notice_item_title_tv"
         android:layout_width="0dp"
@@ -33,22 +32,23 @@
         app:layout_constraintStart_toEndOf="@id/notice_item_icon_iv"
         app:layout_constraintTop_toTopOf="@id/notice_item_icon_iv"
         app:layout_constraintBottom_toBottomOf="@id/notice_item_icon_iv"
-        app:layout_constraintEnd_toStartOf="@id/notice_item_btn"
-        />
+        app:layout_constraintEnd_toStartOf="@id/notice_item_btn" />
 
-
-    <ImageButton
+    <ImageView
         android:id="@+id/notice_item_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="32dp"
+        android:paddingStart="32dp"
+        android:paddingVertical="20dp"
         android:backgroundTint="@color/white"
         android:src="@drawable/ic_arrow_right_profile"
-        app:layout_constraintTop_toTopOf="@id/notice_item_icon_iv"
-        app:layout_constraintBottom_toBottomOf="@id/notice_item_icon_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View
+        android:id="@+id/notice_item_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
@@ -58,5 +58,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/notice_item_title_tv" />
+
+    <View
+        android:id="@+id/notice_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/notice_item_line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

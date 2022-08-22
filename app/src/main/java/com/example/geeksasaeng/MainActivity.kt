@@ -36,6 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
+
         } else if(status == "lookParty"){ //파티생성하기=>방금 만든 파티 상세보기..용
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 

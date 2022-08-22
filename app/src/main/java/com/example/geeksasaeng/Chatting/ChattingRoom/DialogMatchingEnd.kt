@@ -67,10 +67,11 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
         this.dismiss()
+        Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
 
         // 00 님이 입장했습니다 시스템 메시지 추가 부분
         val uuid = UUID.randomUUID().toString()
-        var time = calculateDate()
+        var time = getCurrentDateTime()
         var data = hashMapOf(
             "content" to getString(R.string.chatting_matching_end),
             "nickname" to null,
@@ -90,22 +91,8 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
         Log.d("FIREBASE-RESPONSE", "매칭 마감 실패")
     }
 
-    private fun calculateDate(): String {
-        val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
-        var date: String = simpleDate.format(Date(now)).toString()
-        Log.d("ampm", date.toString())
-        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
-            date = date.substring(0, 11) + "00" + date.substring(13, 20)
-        else if (date.substring(20) == "오후")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
-        return date
-    }
-
-    private fun calculateToday(): String {
-        val nowTime = System.currentTimeMillis();
-        val date = Date(nowTime)
-        var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        return dateFormat.format(date)
+    private fun getCurrentDateTime(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 }

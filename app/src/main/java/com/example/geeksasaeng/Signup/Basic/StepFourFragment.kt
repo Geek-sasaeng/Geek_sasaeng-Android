@@ -69,7 +69,6 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             override fun afterTextChanged(s: Editable?) {
                 val phonepattern = Pattern.compile("^[0-9]{11}\$") //패턴 생성 (숫자로 이루어진 11자리를 조건으로 둠)
                 val macher = phonepattern.matcher(binding.stepFourPhoneEt.text.toString())
-
                 //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화
                 if (macher.matches()) {
                     binding.stepFourPhoneReSendBtnO.visibility = View.VISIBLE
@@ -116,11 +115,11 @@ class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBi
             signUpService.verifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기
         }
 
-        //건너뛰기 버튼
+/*        //건너뛰기 버튼
         binding.stepFourSkipBtn.setOnClickListener {
             val dialog = DialogSignUpPhoneSkip()
             dialog.show(parentFragmentManager, "CustomDialog")
-        }
+        }*/
 
         //다음 버튼
         binding.stepFourNextBtn.setOnClickListener {

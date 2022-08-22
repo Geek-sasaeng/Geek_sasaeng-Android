@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party.LookParty
 
+import android.animation.Animator
 import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
@@ -32,6 +34,8 @@ import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
     DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView {
+
+    lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
     private var status: String? = null
     private var authorStatus: Boolean? = null
@@ -44,10 +48,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
     lateinit var partyDataService : PartyDataService
+    var partyMatchingNumber: Int = 0
 
     override fun initAfterBinding() {
         initClickListener()
-        binding.lookPartyProgressBar.visibility = View.VISIBLE
+        loadingStart()
         binding.lookLocateText.isSelected = true // 물흐르는 애니메이션
 
         // 파티 수정하기, 신고하기 Stack에서 제거
@@ -56,7 +61,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
         status = arguments?.getString("status")
-        Log.d("jjang", "룩파티에서의 파티 아이디"+deliveryItemId.toString())
         val handler = Handler()
         handler.postDelayed({
             initDeliveryPartyData()
@@ -70,11 +74,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             requireActivity().finish()
     }
 
-
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
-            if(status=="lookParty"){
-                //ZERO: 뒤로가기 구현 힘들어서 그냥 onBackPressed이용함
+            if(status == "lookParty"){
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
                 (context as MainActivity).onBackPressed()
             }else{
@@ -122,6 +124,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             dialogFragment.show(childFragmentManager, dialogTag) // parent->child로 바꿈
         }
 
+
         // 매칭 신청 or 채팅방 가기 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
             if (authorStatus == true || belongStatus == "Y") {
@@ -145,7 +148,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         partyData = result
 
         binding.lookPartyWhite.visibility = View.GONE
-        binding.lookPartyProgressBar.visibility = View.GONE
+        loadingStop()
 
         authorStatus = result.authorStatus
         belongStatus = result.belongStatus
@@ -160,10 +163,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 .load(result.chiefProfileImgUrl)
                 .into(binding.lookHostProfileIv)
         else // TODO: 기본 이미지 넣을 예정
-            binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile)
+            binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile2)
 
         binding.lookHostName.text = result.chief
         binding.lookContent.text = result.content
+        partyMatchingNumber = result.maxMatching
         binding.lookMatchingNumber.text = result.currentMatching.toString() + "/" + result.maxMatching
         binding.lookCategoryText.text = result.foodCategory
 
@@ -338,8 +342,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                     val intent = Intent(activity, ChattingRoomActivity::class.java)
                     intent.putExtra("roomName", chatName)
                     intent.putExtra("roomUuid", chatUUID)
-                    val fragmentManager = requireActivity().supportFragmentManager;
-                    fragmentManager.beginTransaction().remove(this).commit()
                     startActivity(intent)
                 }
             }
@@ -353,8 +355,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
             .addOnSuccessListener {
                 // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                val uuid = UUID.randomUUID().toString()
-                var time = calculateDate()
+                var uuid = UUID.randomUUID().toString()
+                var time = getCurrentDateTime()
                 var data = hashMapOf(
                     "content" to "${getNickname()}님이 입장하셨습니다",
                     "nickname" to getNickname(),
@@ -364,20 +366,60 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 )
                 db.collection("Rooms").document(partyData.uuid).collection("Messages")
                     .document(uuid).set(data).addOnSuccessListener { }
+
+                db.collection("Rooms").document(partyData.uuid).get().addOnSuccessListener { result ->
+                    var length = (result.get("roomInfo.participants") as ArrayList<Any>).size
+                    Log.d("FIREBASE-RESPONSE", "Participants = $length")
+                    Log.d("FIREBASE-RESPONSE", "Party-Participants = $partyMatchingNumber")
+
+                    if (length == partyMatchingNumber) {
+                        uuid = UUID.randomUUID().toString()
+                        time = getCurrentDateTime()
+                        data = hashMapOf(
+                            "content" to getString(R.string.chatting_matching_end),
+                            "nickname" to null,
+                            "isSystemMessage" to true,
+                            "time" to time,
+                            "userImgUrl" to null
+                        )
+                        db.collection("Rooms").document(partyData.uuid).collection("Messages")
+                            .document(uuid).set(data).addOnSuccessListener { }
+                    }
+                }
+
+                // Log.d("FIREBASE-RESPONSE", db.collection("Rooms").document(partyData.uuid).get().get("roomInfo.participants").toString())
+                // if (db.collection("Rooms").document(partyData.uuid).get("roomInfo.participants"))
             }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
 
     }
 
-    private fun calculateDate(): String {
-        val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
-        var date: String = simpleDate.format(Date(now)).toString()
-        Log.d("ampm", date.toString())
-        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
-            date = date.substring(0, 11) + "00" + date.substring(13, 20)
-        else if (date.substring(20) == "오후")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
-        return date
+    private fun getCurrentDateTime(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
+    }
+
+    private fun loadingStart() {
+        loadingAnimationView = binding.animationView
+        binding.animationViewLayout.visibility = View.VISIBLE
+        loadingAnimationView.visibility = View.VISIBLE
+        loadingAnimationView.playAnimation()
+        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                // initAfterBinding()
+            }
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+        })
+    }
+
+    private fun loadingStop() {
+        loadingAnimationView.cancelAnimation()
+        binding.animationViewLayout.visibility = View.GONE
+        loadingAnimationView.visibility = View.GONE
     }
 }
