@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Profile
 
 import android.net.Uri
+import android.os.Bundle
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyInfoResult
@@ -12,6 +13,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileMyInfoBinding
 class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(FragmentProfileMyInfoBinding::inflate), ProfileMyInfoView {
 
     lateinit var profileMyInfoService: ProfileDataService
+    private var userId: Int = 0
 
     override fun initAfterBinding() {
         initClickListener()
@@ -20,7 +22,9 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
 
     private fun initClickListener() {
         binding.profileMyInfoBackBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction().remove(this).commit()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+            activity?.supportFragmentManager?.popBackStack()
         }
 
         binding.profilePencilIv.setOnClickListener {
@@ -38,6 +42,11 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
         
         binding.profileMyInfoWithdrawalTv.setOnClickListener {
             val dialog = DialogProfileWithdrawal()
+
+            var bundle = Bundle()
+            bundle.putInt("userId", userId)
+
+            dialog.arguments = bundle
             dialog.show(parentFragmentManager, "ProfileWithdrawalDialog")
         }
     }
@@ -55,6 +64,7 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
         binding.profileMyInfoIdTv.text = result.loginId
         binding.profileMyInfoEmailTv.text = result.emailAddress
         binding.profileMyInfoPhoneNumberTv.text = result.phoneNumber
+        userId = result.id
     }
 
     override fun onProfileMyInfoFailure(message: String) {

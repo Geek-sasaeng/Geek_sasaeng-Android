@@ -82,3 +82,16 @@ data class ProfileMyInfoResult(
     @SerializedName("universityId") val universityId: Int,
     @SerializedName("universityName") val universityName: String,
 )
+
+// 회원 탈퇴
+data class ProfileWithdrawalResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+data class ProfileWithdrawalRequest(
+    @SerializedName("checkPassword") val checkPassword: String,
+    @SerializedName("password") val password: String
+)

@@ -23,3 +23,9 @@ interface ProfileMyInfoView {
     fun onProfileMyInfoSuccess(result: ProfileMyInfoResult)
     fun onProfileMyInfoFailure(message: String)
 }
+
+// 회원 탈퇴
+interface ProfileWithdrawalView {
+    fun onProfileWithdrawalSuccess()
+    fun onProfileWithdrawalFailure(message: String)
+}

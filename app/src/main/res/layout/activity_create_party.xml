@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/create_party_back_btn_iv"
             app:layout_constraintBottom_toBottomOf="@id/create_party_back_btn_iv"
-            android:text="다음"
+            android:text="완료"
             android:fontFamily="@font/spoqa_medium"
             android:textColor="#BABABA"
             android:textSize="16sp"
@@ -89,7 +89,7 @@
                 android:fontFamily="@font/spoqa_regular"
                 android:text="같이 먹고 싶어요"
                 android:textColor="@color/gray_2"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@id/create_party_together_check_btn"
                 app:layout_constraintStart_toEndOf="@id/create_party_together_check_btn"
                 app:layout_constraintTop_toTopOf="@id/create_party_together_check_btn" />
@@ -156,9 +156,10 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:text="주문 예정 시간"
                 android:textColor="@color/top"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/create_party_date2_tv" />
+                app:layout_constraintTop_toTopOf="@id/create_party_date2_tv"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_date2_tv"/>
 
             <TextView
                 android:layout_marginTop="20dp"
@@ -209,9 +210,10 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:text="매칭 인원 선택"
                 android:textColor="@color/top"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/create_party_date_tv"
-                app:layout_constraintTop_toTopOf="@id/create_party_number2_tv" />
+                app:layout_constraintTop_toTopOf="@id/create_party_number2_tv"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_number2_tv" />
 
             <TextView
                 android:id="@+id/create_party_number2_tv"
@@ -238,10 +240,10 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:text="카테고리 선택"
                 android:textColor="@color/top"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:layout_constraintTop_toTopOf="@id/create_party_category2_tv"
-                app:layout_constraintStart_toStartOf="@id/create_party_date_tv"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/create_party_category2_tv"
+                app:layout_constraintStart_toStartOf="@id/create_party_date_tv" />
 
             <TextView
                 android:id="@+id/create_party_category2_tv"
@@ -258,8 +260,7 @@
                 android:fontFamily="@font/spoqa_regular"
                 app:layout_constraintTop_toBottomOf="@id/create_party_number2_tv"
                 app:layout_constraintEnd_toEndOf="@id/create_party_date2_tv"
-                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv"
-                />
+                app:layout_constraintStart_toStartOf="@id/create_party_date2_tv" />
 
             <!--식당링크 선택-->
             <TextView
@@ -269,9 +270,10 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:text="식당 링크"
                 android:textColor="@color/top"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@id/create_party_date_tv"
-                app:layout_constraintTop_toTopOf="@id/create_party_link2_tv" />
+                app:layout_constraintTop_toTopOf="@id/create_party_link2_tv"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_link2_tv"/>
 
             <TextView
                 android:id="@+id/create_party_link2_tv"
@@ -299,10 +301,11 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:text="수령 장소"
                 android:textColor="@color/top"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:layout_constraintTop_toTopOf="@id/create_party_location2_tv"
                 app:layout_constraintStart_toStartOf="@id/create_party_date_tv"
-                app:layout_constraintTop_toBottomOf="@id/create_party_link_tv" />
+                app:layout_constraintTop_toBottomOf="@id/create_party_link_tv"
+                app:layout_constraintBottom_toBottomOf="@id/create_party_location2_tv"/>
 
             <TextView
                 android:id="@+id/create_party_location2_tv"

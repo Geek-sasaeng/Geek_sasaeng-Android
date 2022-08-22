@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="signup"><u>회원가입</u></string>
     <string name="skip"><u>건너뛰기</u></string>
-    <string name="withdrawal"><u>회원탈퇴</u></string>
+    <string name="withdrawal"><u>회원 탈퇴</u></string>
     <string name="title_activity_create_party_dialog">CreatePartyDialogActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -15,6 +15,8 @@
     <string name="naver_client_id">czrW_igO4TDdAeE5WhGW</string>
     <string name="naver_client_secret">syoXsVLKN1</string>
     <string name="naver_client_name">긱사생</string>
+    <!-- Report Party -->
+    <string name="party_report">(선택) 어떤 상황인가요? 긱사생에게 알려주시면 문제 해결에 도움이 됩니다</string>
     <!-- ChattingRoom -->
     <string name="chatting_matching_end">모든 파티원이 입장을 마쳤습니다 !\n파티장을 주문을, 파티원들은 송금을 진행해주세요</string>
 </resources>

@@ -52,7 +52,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Home.Search.SearchActivity" />
+        <activity android:name=".Home.Search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity" />
         <activity android:name=".Profile.ProfileMyActivityActivity" />
 
