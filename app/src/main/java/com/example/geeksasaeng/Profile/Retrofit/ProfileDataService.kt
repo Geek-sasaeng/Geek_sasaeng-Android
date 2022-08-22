@@ -17,6 +17,7 @@ class ProfileDataService {
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
     private lateinit var profileAnnouncementDetailView: ProfileAnnouncementDetailView
     private lateinit var profileMyInfoView: ProfileMyInfoView
+    private lateinit var profileWithdrawalView: ProfileWithdrawalView
 
     // setView
     fun setProfileRecentActivityView(profileRecentActivityView: ProfileRecentActivityView) {
@@ -30,6 +31,9 @@ class ProfileDataService {
     }
     fun setMyInfoView(profileMyInfoView: ProfileMyInfoView) {
         this.profileMyInfoView = profileMyInfoView
+    }
+    fun setProfileWithdrawalView(profileWithdrawalView: ProfileWithdrawalView) {
+        this.profileWithdrawalView = profileWithdrawalView
     }
 
     // 최근 활동 3개 조회
@@ -113,6 +117,26 @@ class ProfileDataService {
             }
             override fun onFailure(call: Call<ProfileMyInfoResponse>, t: Throwable) {
                 Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyInfoFailed", t)
+            }
+        })
+    }
+
+    // 회원 탈퇴
+    fun profileWithdrawalSender(id: Int, body: ProfileWithdrawalRequest) {
+        val profileWithdrawalService = NetworkModule.getInstance()?.create(ProfileWithdrawalRetrofitInterfaces::class.java)
+        profileWithdrawalService?.profileWithdrawal("Bearer " + getJwt(), id, body)?.enqueue(object: Callback<ProfileWithdrawalResponse> {
+            override fun onResponse(call: Call<ProfileWithdrawalResponse>, response: Response<ProfileWithdrawalResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> profileWithdrawalView.onProfileWithdrawalSuccess()
+                        4000 -> Log.d("PROFILE-RESPONSE", "서버 오류")
+                        else -> profileWithdrawalView.onProfileWithdrawalFailure(resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ProfileWithdrawalResponse>, t: Throwable) {
+                Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : profileWithdrawalFailed", t)
             }
         })
     }

@@ -10,6 +10,8 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     }
 
     private fun initClickListener() {
-
+        binding.profileMyActivityBackBtn.setOnClickListener {
+            finish()
+        }
     }
 }

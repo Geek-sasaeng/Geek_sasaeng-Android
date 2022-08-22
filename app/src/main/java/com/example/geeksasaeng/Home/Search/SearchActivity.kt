@@ -1,9 +1,11 @@
 package com.example.geeksasaeng.Home.Search
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.R
@@ -31,8 +33,10 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
     }
 
     fun initClickListener() {
-
         binding.searchBtn.setOnClickListener {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
             supportFragmentManager.popBackStack("SearchDetail", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
             var keyword = binding.searchEt.text.toString()

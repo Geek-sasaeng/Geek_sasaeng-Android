@@ -76,11 +76,19 @@ class PartyReportNoOptionActivity: BaseActivity<ActivityPartyReportNoOptionBindi
 
     //사용자 신고 성공
     override fun userReportViewSuccess(code: Int) {
-
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", "고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다.")
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     //사용자 신고 실패
     override fun userReportViewFailure(message: String) {
-
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", message)
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 }

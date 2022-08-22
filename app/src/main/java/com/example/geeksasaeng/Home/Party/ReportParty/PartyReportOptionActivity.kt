@@ -5,12 +5,12 @@ import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityPartyReportOptionBinding
 
-class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate), PartyReportView, UserReportView,
-    DialogReportParty.DialogDismissListener{
+class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(ActivityPartyReportOptionBinding::inflate), PartyReportView, UserReportView {
+    // DialogReportParty.DialogDismissListener{
 
     var block: Boolean = false
     var reportCategoryId: Int = 0
-    lateinit var reportContent: String
+    var reportContent: String = ""
     var reportedDeliveryPartyId: Int = 0
     var reportedMemberId: Int = 0
 
@@ -20,10 +20,8 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         if (binding.reportOptionCb.isChecked)
             block = true
 
-        binding.reportOptionTv.text = intent.getStringExtra("reportName") + " (선택 옵션)"
-
+        binding.reportOptionTv.text = intent.getStringExtra("reportName")
         reportCategoryId = intent.getIntExtra("reportCategoryId", 0)
-        reportContent = binding.reportOptionEt.text.toString()
         reportedDeliveryPartyId = intent.getIntExtra("reportedDeliveryPartyId", 0)
         reportedMemberId = intent.getIntExtra("reportedMemberId", 0)
     }
@@ -42,6 +40,7 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
     }
 
     private fun getReportParty(): PartyReportRequest {
+        reportContent = binding.reportOptionEt.text.toString()
         return PartyReportRequest(block, reportCategoryId, reportContent, reportedDeliveryPartyId, reportedMemberId)
     }
 
@@ -70,6 +69,7 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
     }
 
     private fun getReportUser(): UserReportRequest {
+        reportContent = binding.reportOptionEt.text.toString()
         return UserReportRequest(block, reportCategoryId, reportContent, reportedMemberId)
     }
 
@@ -81,18 +81,19 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
 
     //사용자 신고 성공
     override fun userReportViewSuccess(code: Int) {
-        /*val dialog = DialogReportPartySuccess()
-        dialog.show(supportFragmentManager, "CustomDialog")*/
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", "고객님께서 요청하신 사항에\n따른 신고가 정상적으로\n처리되었습니다.")
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 
     //사용자 신고 실패
     override fun userReportViewFailure(message: String) {
-        /*val dialog = DialogReportPartyFail()
-        dialog.show(supportFragmentManager, "CustomDialog")*/
-    }
-
-
-    override fun onDialogDismissed() {
-        finish() //액티비티 종료
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg", message)
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
     }
 }

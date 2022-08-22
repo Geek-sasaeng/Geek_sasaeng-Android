@@ -32,8 +32,9 @@ class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResul
 
     override fun onBindViewHolder(holder: NoticeRVAdapter.ViewHolder, position: Int) {
         holder.bind(noticeList[position])
-        holder.binding.noticeItemBtn.setOnClickListener { mItemClickListener.onItemClick(noticeList[position], position) } //화살표에 클릭리스너 달아줌
-        // holder.itemView.setOnClickListener { mItemClickListener.onItemClick(noticeList[position], position) }
+        holder.binding.noticeItemView.setOnClickListener {
+            mItemClickListener.onItemClick(noticeList[position], position)
+        }
     }
 
     override fun getItemCount(): Int = noticeList.size
@@ -58,14 +59,3 @@ class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResul
     }
 
 }
-
-/*
-data class Announcement( //얘랑 같아... ProfileAnnouncementResult
-    var announcementId : Int,
-    var title : String,
-    var content : String,
-    var imgUrl: String,
-    var createdAt: String,
-    var updatedAt: String,
-    var status: String
-)*/
