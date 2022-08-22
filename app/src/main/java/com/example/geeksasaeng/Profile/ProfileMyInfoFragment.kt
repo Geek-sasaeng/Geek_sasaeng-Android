@@ -20,7 +20,9 @@ class ProfileMyInfoFragment: BaseFragment<FragmentProfileMyInfoBinding>(Fragment
 
     private fun initClickListener() {
         binding.profileMyInfoBackBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction().remove(this).commit()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.remove(this)?.commit()
+            activity?.supportFragmentManager?.popBackStack()
         }
 
         binding.profilePencilIv.setOnClickListener {
