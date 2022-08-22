@@ -13,15 +13,15 @@ import retrofit2.Response
 class ProfileDataService {
 
     //뷰 객체 생성
-    private lateinit var profileRecentActivityView: ProfileRecentActivityView
+    private lateinit var profileMyOngoingActivityView: ProfileMyOngoingActivityView
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
     private lateinit var profileAnnouncementDetailView: ProfileAnnouncementDetailView
     private lateinit var profileMyInfoView: ProfileMyInfoView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
 
     // setView
-    fun setProfileRecentActivityView(profileRecentActivityView: ProfileRecentActivityView) {
-        this.profileRecentActivityView = profileRecentActivityView
+    fun setProfileMyOngoingActivityView(profileMyOngoingActivityView: ProfileMyOngoingActivityView) {
+        this.profileMyOngoingActivityView = profileMyOngoingActivityView
     }
     fun setProfileAnnouncementView(profileAnnouncementView: ProfileAnnouncementView){
         this.profileAnnouncementView = profileAnnouncementView
@@ -36,21 +36,21 @@ class ProfileDataService {
         this.profileWithdrawalView = profileWithdrawalView
     }
 
-    // 최근 활동 3개 조회
-    fun profileRecentActivitySender() {
-        val profileRecentActivityService = NetworkModule.getInstance()?.create(ProfileRecentActivityRetrofitInterfaces::class.java)
-        profileRecentActivityService?.getRecentActivity("Bearer " + getJwt())?.enqueue(object : Callback<ProfileRecentActivityResponse> {
-            override fun onResponse(call: Call<ProfileRecentActivityResponse>, response: Response<ProfileRecentActivityResponse>) {
+    // 진행 중인 활동 조회
+    fun profileMyOngoingActivitySender() {
+        val profileMyOngoingActivityService = NetworkModule.getInstance()?.create(ProfileMyOngoingActivityRetrofitInterfaces::class.java)
+        profileMyOngoingActivityService?.getRecentActivity("Bearer " + getJwt())?.enqueue(object : Callback<ProfileMyOngoingActivityResponse> {
+            override fun onResponse(call: Call<ProfileMyOngoingActivityResponse>, response: Response<ProfileMyOngoingActivityResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
-                    val resp: ProfileRecentActivityResponse = response.body()!!
+                    val resp: ProfileMyOngoingActivityResponse = response.body()!!
                     when (resp.code) {
-                        1000 -> profileRecentActivityView.onProfileRecentActivitySuccess(resp.result!!)
+                        1000 -> profileMyOngoingActivityView.onProfileMyOngoingActivitySuccess(resp.result!!)
                         4000 -> Log.d("PROFILE_RECENT_ACTIVITY", "서버 오류")
-                        else -> profileRecentActivityView.onProfileAnnouncementFailure(resp.message)
+                        else -> profileMyOngoingActivityView.onProfileMyOngoingActivityFailure(resp.message)
                     }
                 }
             }
-            override fun onFailure(call: Call<ProfileRecentActivityResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ProfileMyOngoingActivityResponse>, t: Throwable) {
                 Log.d("PROFILE-RECENT-ACTIVITY", "ProfileDataService-onFailure : getRecentActivity", t)
             }
         })
