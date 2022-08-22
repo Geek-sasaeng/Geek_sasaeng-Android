@@ -1,10 +1,7 @@
 package com.example.geeksasaeng.Profile.Retrofit
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface ProfileRetrofitInterfaces {
@@ -34,4 +31,14 @@ interface ProfileMyInfoRetrofitInterfaces {
     fun getMyInfo(
         @Header("Authorization") jwt: String?
     ): Call<ProfileMyInfoResponse>
+}
+
+// 회원 탈퇴 api
+interface ProfileWithdrawalRetrofitInterfaces {
+    @PATCH("/members/account-delete/{id}")
+    fun profileWithdrawal(
+        @Header("Authorization") jwt: String?,
+        @Path("id") id: Int,
+        @Body profileWithdrawalRequest: ProfileWithdrawalRequest
+    ): Call<ProfileWithdrawalResponse>
 }
