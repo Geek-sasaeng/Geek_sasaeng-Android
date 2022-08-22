@@ -48,6 +48,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
     lateinit var partyDataService : PartyDataService
+    var partyMatchingNumber: Int = 0
 
     override fun initAfterBinding() {
         initClickListener()
@@ -166,6 +167,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         binding.lookHostName.text = result.chief
         binding.lookContent.text = result.content
+        partyMatchingNumber = result.maxMatching
         binding.lookMatchingNumber.text = result.currentMatching.toString() + "/" + result.maxMatching
         binding.lookCategoryText.text = result.foodCategory
 
@@ -353,8 +355,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
             .addOnSuccessListener {
                 // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                val uuid = UUID.randomUUID().toString()
-                var time = calculateDate()
+                var uuid = UUID.randomUUID().toString()
+                var time = getCurrentDateTime()
                 var data = hashMapOf(
                     "content" to "${getNickname()}님이 입장하셨습니다",
                     "nickname" to getNickname(),
@@ -364,22 +366,37 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 )
                 db.collection("Rooms").document(partyData.uuid).collection("Messages")
                     .document(uuid).set(data).addOnSuccessListener { }
+
+                db.collection("Rooms").document(partyData.uuid).get().addOnSuccessListener { result ->
+                    var length = (result.get("roomInfo.participants") as ArrayList<Any>).size
+                    Log.d("FIREBASE-RESPONSE", "Participants = $length")
+                    Log.d("FIREBASE-RESPONSE", "Party-Participants = $partyMatchingNumber")
+
+                    if (length == partyMatchingNumber) {
+                        uuid = UUID.randomUUID().toString()
+                        time = getCurrentDateTime()
+                        data = hashMapOf(
+                            "content" to getString(R.string.chatting_matching_end),
+                            "nickname" to null,
+                            "isSystemMessage" to true,
+                            "time" to time,
+                            "userImgUrl" to null
+                        )
+                        db.collection("Rooms").document(partyData.uuid).collection("Messages")
+                            .document(uuid).set(data).addOnSuccessListener { }
+                    }
+                }
+
+                // Log.d("FIREBASE-RESPONSE", db.collection("Rooms").document(partyData.uuid).get().get("roomInfo.participants").toString())
+                // if (db.collection("Rooms").document(partyData.uuid).get("roomInfo.participants"))
             }
             .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
 
     }
 
-    private fun calculateDate(): String {
-        val now: Long = System.currentTimeMillis()
-        val simpleDate = SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa")
-        var date: String = simpleDate.format(Date(now)).toString()
-        Log.d("ampm", date.toString())
-        if (date.substring(20) == "오전" && date.substring(11, 13) == "12")
-            date = date.substring(0, 11) + "00" + date.substring(13, 20)
-        else if (date.substring(20) == "오후" && date.substring(11, 13) == "12")
-            date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13))).toString() + date.substring(13, 20)
-        else date = date.substring(0, 11) + (Integer.parseInt(date.substring(11, 13)) + 12).toString() + date.substring(13, 20)
-        return date
+    private fun getCurrentDateTime(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 
     private fun loadingStart() {
