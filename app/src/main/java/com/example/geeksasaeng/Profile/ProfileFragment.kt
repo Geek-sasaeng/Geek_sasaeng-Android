@@ -3,24 +3,18 @@ package com.example.geeksasaeng.Profile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
-import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityView
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Signup.Retrofit.SocialSignUpRequest
 import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Utils.removeAutoLogin
-import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileRecentActivityView {
@@ -54,8 +48,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileInquiry.setOnClickListener { //문의하기
-            val urlintent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
-            startActivity(urlintent)
+            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
+            startActivity(urlIntent)
         }
         binding.profileMyActivity.setOnClickListener {
             startActivity(Intent(activity, ProfileMyActivityActivity::class.java))

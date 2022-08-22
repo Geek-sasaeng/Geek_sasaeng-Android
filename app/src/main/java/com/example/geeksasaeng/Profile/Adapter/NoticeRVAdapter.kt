@@ -32,7 +32,7 @@ class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResul
 
     override fun onBindViewHolder(holder: NoticeRVAdapter.ViewHolder, position: Int) {
         holder.bind(noticeList[position])
-        holder.binding.noticeItem.setOnClickListener {
+        holder.binding.noticeItemView.setOnClickListener {
             mItemClickListener.onItemClick(noticeList[position], position)
         }
     }
