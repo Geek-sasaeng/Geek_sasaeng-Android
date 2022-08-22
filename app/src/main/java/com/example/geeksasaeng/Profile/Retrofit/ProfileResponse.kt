@@ -12,8 +12,8 @@ data class ProfileMyOngoingActivityResponse(
 
 data class ProfileMyOngoingActivityResult(
     @SerializedName("id") val id: Int,
-    @SerializedName("storeUrl") val storeUrl: String,
-    @SerializedName("title") val title: String
+    @SerializedName("title") val title: String,
+    @SerializedName("createdAt") val createdAt: String
 )
 
 //공지사항 전체조회

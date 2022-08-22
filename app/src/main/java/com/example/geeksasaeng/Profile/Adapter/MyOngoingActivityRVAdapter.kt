@@ -40,8 +40,6 @@ class MyOngoingActivityRVAdapter(private var activityList: ArrayList<ProfileMyOn
 
     inner class ViewHolder(val binding: ItemProfileMyActivityActivityBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(profileMyOngoingActivity: ProfileMyOngoingActivityResult) {
-            // binding.itemProfileMyActivityActivityLayoutSectionIv.setImageURI(Uri.parse(profileMyOngoingActivity.storeUrl))
-            binding.itemProfileMyActivityActivityLayoutSectionIv.setImageResource(R.drawable.ic_default_profile2)
             binding.itemProfileMyActivityActivityTv.text = profileMyOngoingActivity.title
         }
     }

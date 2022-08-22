@@ -68,7 +68,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
         for (i in 0 until result!!.size) {
             // TODO: 여기에는 무슨 이미지를 넣는거지
-            var item = ProfileMyOngoingActivityResult(result[i].id, "이미지 넣을 부분", result[i].title)
+            var item = ProfileMyOngoingActivityResult(result[i].id, result[i].title, result[i].createdAt.substring(0, 10))
             Log.d("PROFILE-RESPONSE", item.toString())
             myOngoingActivityAdapter.addItem(item)
         }
