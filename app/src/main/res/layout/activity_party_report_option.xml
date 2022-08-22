@@ -45,7 +45,7 @@
         android:id="@+id/report_option_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="광고같아요 (선택 옵션)"
+        android:text="광고같아요"
         android:textColor="@color/black"
         android:fontFamily="@font/spoqa_medium"
         android:textSize="16sp"

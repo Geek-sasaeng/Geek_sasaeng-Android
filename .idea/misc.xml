@@ -29,18 +29,19 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/profile_spinner_outline_clicked.xml" value="0.2155" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/profile_spinner_outline_unclicked.xml" value="0.2155" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/round_background_border.xml" value="0.23" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/round_border.xml" value="0.255" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/seekbar.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/seekbar_color.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/signup_btn.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/signup_btn_border.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/spinner_outline_unclicked.xml" value="0.255" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_room.xml" value="0.2" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_create_party.xml" value="0.2724679029957204" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_create_party.xml" value="0.35987978963185574" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_dormitory.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_main.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_party_report_no_option.xml" value="0.20478837109876016" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_party_report_option.xml" value="0.176" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_party_report_option.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_profile_my_activity.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_search.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_search_Result.xml" value="0.20478837109876016" />
