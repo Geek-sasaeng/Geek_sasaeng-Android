@@ -45,6 +45,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("why-filter", "onBindViewHolder 실행됨")
         itemBind(viewHolder as ItemViewHolder, position)
         timerBind(viewHolder as ItemViewHolder, position)
         viewHolder.itemView.setOnClickListener {

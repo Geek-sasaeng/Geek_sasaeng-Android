@@ -159,6 +159,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         //Log.d("deliveryFilterCheck", filterCheckFlag.toString())
         Log.d("deliveryFilterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
         initLoadPosts()
+        binding.deliverySwipe.isRefreshing = false
     }
 
     // Adapter 설정
