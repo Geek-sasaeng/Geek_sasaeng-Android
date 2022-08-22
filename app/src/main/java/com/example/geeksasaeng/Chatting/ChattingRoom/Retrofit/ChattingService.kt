@@ -72,8 +72,9 @@ class ChattingService {
         })
     }
 
-    //배달완료 알림보내기 - 얘는 response가 안 오기도 한다
+    //배달완료 알림보내기
     fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
+        Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
         chattingService.partyDeliveryComplicated("Bearer " + getJwt(),chattingDeliveryComplicatedRequest).enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
             override fun onResponse(
                 call: Call<ChattingDeliveryComplicatedResponse?>,
@@ -82,13 +83,16 @@ class ChattingService {
                 Log.d("deliveryComplicated", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    chattingDeliveryComplicatedView.chattingDeliveryComplicatedSuccess()
-                    Log.d("deliveryComplicate-resp", resp.code.toString())
+                    when(resp.code){
+                        1000->chattingDeliveryComplicatedView.chattingDeliveryComplicatedSuccess()
+                        else->chattingDeliveryComplicatedView.chattingDeliveryComplicatedFailure(resp.message)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<ChattingDeliveryComplicatedResponse?>, t: Throwable) {
-                Log.d("CHATTING-배달완료알람", "실패"+ t.toString())
+                Log.d("delivery-배달완료알람", "실패"+ t.toString())
+                //TODO: 계속 타임아웃 오류나...
             }
 
         })
