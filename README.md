@@ -2,8 +2,7 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-v1.6.21-purple?logo=Kotlin" />
-    <img src="https://img.shields.io/badge/Xcode-v13.4.1-blue?logo=sdk" />
-    <img src="https://img.shields.io/badge/iOS-14.0+-black?logo=android" />  
+    <img src="https://img.shields.io/badge/Android-14.0+-black?logo=android" />  
 
 ## 👩🏻‍💻👨🏻‍💻 Geek_sasaeng-Android 팀원 소개
 

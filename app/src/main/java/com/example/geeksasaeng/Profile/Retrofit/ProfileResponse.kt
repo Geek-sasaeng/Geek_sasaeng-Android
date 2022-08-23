@@ -3,14 +3,14 @@ package com.example.geeksasaeng.Profile.Retrofit
 import com.example.geeksasaeng.Signup.Retrofit.SignUpResult
 import com.google.gson.annotations.SerializedName
 
-data class ProfileRecentActivityResponse(
+data class ProfileMyOngoingActivityResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ArrayList<ProfileRecentActivityResult>?
+    @SerializedName("result") val result: ArrayList<ProfileMyOngoingActivityResult>?
 )
 
-data class ProfileRecentActivityResult(
+data class ProfileMyOngoingActivityResult(
     @SerializedName("id") val id: Int,
     @SerializedName("storeUrl") val storeUrl: String,
     @SerializedName("title") val title: String

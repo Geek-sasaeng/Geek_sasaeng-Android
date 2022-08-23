@@ -61,6 +61,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         deliveryItemId = Integer.parseInt(arguments?.getString("deliveryItemId"))
         status = arguments?.getString("status")
+
         val handler = Handler()
         handler.postDelayed({
             initDeliveryPartyData()
@@ -70,8 +71,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     override fun onStop() {
         super.onStop()
         timerTask?.cancel()
-        if (status == "search")
-            requireActivity().finish()
     }
 
     private fun initClickListener(){
@@ -79,7 +78,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             if(status == "lookParty"){
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
                 (context as MainActivity).onBackPressed()
-            }else{
+            } else {
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
                 (context as MainActivity).supportFragmentManager.popBackStack();
             }
