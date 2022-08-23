@@ -72,14 +72,14 @@
 
         <ImageView
             android:id="@+id/chatting_room_section_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_default_profile2"
+            android:layout_width="16dp"
+            android:layout_height="17dp"
             android:layout_marginVertical="15dp"
             android:layout_marginStart="29dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_icon_coin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/chatting_room_top_layout_status_tv"
