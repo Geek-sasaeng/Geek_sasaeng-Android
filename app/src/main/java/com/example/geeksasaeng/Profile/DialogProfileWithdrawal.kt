@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
+import com.example.geeksasaeng.Profile.Retrofit.ProfileWithdrawalRequest
 import com.example.geeksasaeng.Profile.Retrofit.ProfileWithdrawalView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
@@ -51,15 +52,14 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
         }
     }
 
-    private fun getWithdrawalRequest() {
-
-    }
+//    private fun getWithdrawalRequest(): ProfileWithdrawalRequest {
+//        return ProfileWithdrawalRequest(userId, profileWithdrawalRequest)
+//    }
 
     private fun initService() {
         profileWithdrawalService = ProfileDataService()
         profileWithdrawalService.setProfileWithdrawalView(this)
-        Log.d("PROFILE-RESPONSE", "userId = $userId")
-        // profileWithdrawalService.profileWithdrawalSender(userId, profilewithdrawalrequest)
+        // profileWithdrawalService.profileWithdrawalSender(getWithdrawalRequest())
     }
 
     override fun onResume() {

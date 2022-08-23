@@ -1,9 +1,9 @@
 package com.example.geeksasaeng.Profile.Retrofit
 
-// 최근 활동 3개 조회
-interface ProfileRecentActivityView {
-    fun onProfileRecentActivitySuccess(result: ArrayList<ProfileRecentActivityResult>?)
-    fun onProfileAnnouncementFailure(message: String)
+// 진행 중인 활동 조회
+interface ProfileMyOngoingActivityView {
+    fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?)
+    fun onProfileMyOngoingActivityFailure(message: String)
 }
 
 // 공지사항 전체 조회

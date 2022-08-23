@@ -6,24 +6,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityResult
-import com.example.geeksasaeng.Profile.Retrofit.ProfileRecentActivityView
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityResult
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
-class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileRecentActivityView {
+class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileMyOngoingActivityView {
 
-    lateinit var profileRecentActivityService: ProfileDataService
-    lateinit var profileRecentActivityList: ArrayList<ProfileRecentActivityResult>
+    lateinit var profileMyOngoingActivityService: ProfileDataService
+    lateinit var profileMyOngoingActivityList: ArrayList<ProfileMyOngoingActivityResult>
 
     override fun initAfterBinding() {
-
         binding.profileNoticeBelowTv.setSingleLine(true)
         binding.profileNoticeBelowTv.ellipsize = TextUtils.TruncateAt.MARQUEE
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
@@ -61,40 +61,39 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     private fun initRecentActivityService() {
-        profileRecentActivityService = ProfileDataService() // 서비스 객체 생성
-        profileRecentActivityService.setProfileRecentActivityView(this)
-        profileRecentActivityService.profileRecentActivitySender()
+        profileMyOngoingActivityService = ProfileDataService() // 서비스 객체 생성
+        profileMyOngoingActivityService.setProfileMyOngoingActivityView(this)
+        profileMyOngoingActivityService.profileMyOngoingActivitySender()
     }
 
-    override fun onProfileRecentActivitySuccess(result: ArrayList<ProfileRecentActivityResult>?) {
-        profileRecentActivityList = result!!
+    override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
+        profileMyOngoingActivityList = result!!
+        Log.d("PROFILE-RESPONSE", "profileMyOngoingActivity = ${result!!}")
         for (i in 0 until result.size) {
             recentActivityBind(result[i], i)
         }
     }
 
-    override fun onProfileAnnouncementFailure(message: String) {
+    override fun onProfileMyOngoingActivityFailure(message: String) {
         showToast(message)
     }
 
-    private fun recentActivityBind(activity: ProfileRecentActivityResult, index: Int) {
+    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
         when (index) {
             0 -> {
                 binding.profilePartyLayoutCv1.visibility = View.VISIBLE
                 // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_default_profile2)
                 binding.profilePartyTitleTv1.text = activity.title
-            }
-            1 -> {
+            } 1 -> {
                 binding.profilePartyLayoutCv2.visibility = View.VISIBLE
                 // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_default_profile2)
                 binding.profilePartyTitleTv2.text = activity.title
-            }
-            2 -> {
+            } 2 -> {
                 binding.profilePartyLayoutCv3.visibility = View.VISIBLE
                 // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_delivery)
+                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_default_profile2)
                 binding.profilePartyTitleTv3.text = activity.title
             }
         }
@@ -102,7 +101,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     private fun initRecentActivityClickListener() {
         binding.profilePartyLayoutCv1.setOnClickListener {
-            val activityId = profileRecentActivityList[0].id
+            val activityId = profileMyOngoingActivityList[0].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
@@ -117,7 +116,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profilePartyLayoutCv2.setOnClickListener {
-            val activityId = profileRecentActivityList[1].id
+            val activityId = profileMyOngoingActivityList[1].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
@@ -132,7 +131,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profilePartyLayoutCv3.setOnClickListener {
-            val activityId = profileRecentActivityList[2].id
+            val activityId = profileMyOngoingActivityList[2].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 

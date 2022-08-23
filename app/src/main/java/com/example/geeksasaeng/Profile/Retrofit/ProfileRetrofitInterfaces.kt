@@ -17,12 +17,12 @@ interface ProfileRetrofitInterfaces {
     ): Call<ProfileAnnouncementDetailResponse>
 }
 
-// 최근 활동 3개 api
-interface ProfileRecentActivityRetrofitInterfaces {
-    @GET("/delivery-parties/recent")
+// 진행 중인 활동 조회 api
+interface ProfileMyOngoingActivityRetrofitInterfaces {
+    @GET("/delivery-parties/recent/ongoing")
     fun getRecentActivity(
         @Header("Authorization") jwt: String?
-    ): Call<ProfileRecentActivityResponse>
+    ): Call<ProfileMyOngoingActivityResponse>
 }
 
 // 나의 정보 조회 api
