@@ -66,14 +66,13 @@ class MyOngoingActivityRVAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(
                 holder.setIsRecyclable(false)
             }
         }
-        // holder.bind(activityList[position])
     }
 
     override fun getItemCount(): Int = activityList.size
 
     inner class ActivityViewHolder(val binding: ItemProfileMyActivityActivityBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(profileMyOngoingActivity: ProfileMyOngoingActivityResult) {
-            binding.itemProfileMyActivityActivityLayoutSectionIv.setImageResource(R.drawable.ic_default_profile)
+            binding.itemProfileMyActivityActivityLayoutSectionIv.setImageResource(R.drawable.ic_delivery_party_ic)
             binding.itemProfileMyActivityActivityTv.text = profileMyOngoingActivity.title
         }
     }

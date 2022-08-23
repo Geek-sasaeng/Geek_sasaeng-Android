@@ -81,18 +81,15 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         when (index) {
             0 -> {
                 binding.profilePartyLayoutCv1.visibility = View.VISIBLE
-                // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_default_profile2)
+                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profilePartyTitleTv1.text = activity.title
             } 1 -> {
                 binding.profilePartyLayoutCv2.visibility = View.VISIBLE
-                // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_default_profile2)
+                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profilePartyTitleTv2.text = activity.title
             } 2 -> {
                 binding.profilePartyLayoutCv3.visibility = View.VISIBLE
-                // TODO: 임시로 넣은 부분
-                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_default_profile2)
+                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profilePartyTitleTv3.text = activity.title
             }
         }
