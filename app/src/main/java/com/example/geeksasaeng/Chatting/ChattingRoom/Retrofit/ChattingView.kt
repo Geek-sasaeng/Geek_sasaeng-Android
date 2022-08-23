@@ -11,6 +11,6 @@ interface ChattingLeaderLeaveView {
 }
 
 interface ChattingDeliveryComplicatedView {
-    fun chattingDeliveryComplicatedSuccess(result: String)
+    fun chattingDeliveryComplicatedSuccess()
     fun chattingDeliveryComplicatedFailure(message: String)
 }

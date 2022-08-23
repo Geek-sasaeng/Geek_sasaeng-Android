@@ -355,7 +355,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/delivery_party_update_kakaoMap_location"
                 android:layout_width="0dp"
-                android:layout_height="122dp"
+                android:layout_height="205dp"
                 android:layout_marginTop="15dp"
                 android:backgroundTint="@color/gray_0"
                 android:background="@drawable/round_border"

@@ -32,7 +32,7 @@ data class ChattingPartyLeaderLeaveResponse(
 
 //배달완료 알림보내기
 data class ChattingDeliveryComplicatedRequest(
-    @SerializedName("uuid") val uuid: String,
+    @SerializedName("uuid") val uuid: String
 )
 
 data class ChattingDeliveryComplicatedResponse(

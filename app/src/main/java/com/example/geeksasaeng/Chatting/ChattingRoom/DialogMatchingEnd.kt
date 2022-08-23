@@ -13,6 +13,8 @@ import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.Retrofit.ChattingDataService
 import com.example.geeksasaeng.Chatting.Retrofit.MatchingEndView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.DialogMatchingEndLayoutBinding
 import com.google.firebase.firestore.FieldValue
@@ -66,6 +68,7 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
+        Log.d("matchingEnd", "매칭 마감 실패")
         this.dismiss()
         Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
 
@@ -88,7 +91,10 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     //매칭마감 실패
     override fun onMatchingEndFailure(message: String) {
+        CustomToastMsg.createToast((activity as SignUpNaverActivity), message, "#80A8A8A8", 53)?.show()
         Log.d("FIREBASE-RESPONSE", "매칭 마감 실패")
+        Log.d("matchingEnd", "매칭 마감 실패")
+
     }
 
     private fun getCurrentDateTime(): String {
