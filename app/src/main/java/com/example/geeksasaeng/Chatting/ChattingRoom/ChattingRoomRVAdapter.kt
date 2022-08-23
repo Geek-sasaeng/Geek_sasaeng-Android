@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
+import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         when (viewType){
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                // binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
                 return MyChattingViewHolder(binding)
             }
             yourChatting -> {
