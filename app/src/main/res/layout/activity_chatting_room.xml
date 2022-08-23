@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -30,8 +31,7 @@
             android:layout_height="wrap_content"
             android:text="채팅방 이름"
             android:textColor="@color/black"
-            android:fontFamily="@font/spoqa_medium"
-            android:textStyle="bold"
+            android:fontFamily="@font/spoqa_bold"
             android:textSize="20sp"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,10 @@
         android:id="@+id/chatting_room_chatting_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/chatting_room_bottom_bar"
         app:layout_constraintTop_toBottomOf="@id/chatting_room_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/chatting_room_bottom_bar" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="71dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chatting_room_top_layout"
@@ -72,8 +74,8 @@
 
         <ImageView
             android:id="@+id/chatting_room_section_iv"
-            android:layout_width="16dp"
-            android:layout_height="17dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginVertical="15dp"
             android:layout_marginStart="29dp"
             android:src="@drawable/ic_icon_coin"
@@ -136,14 +138,14 @@
 
         <ImageView
             android:id="@+id/chatting_room_album_iv"
-            android:layout_width="29dp"
-            android:layout_height="29dp"
-            android:src="@drawable/ic_album"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="28dp"
             android:padding="4dp"
-            android:layout_marginStart="23dp"
-            android:layout_marginTop="23dp"
+            android:src="@drawable/ic_album"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/chatting_room_send_tv"
+            app:layout_constraintBottom_toBottomOf="@id/chatting_room_send_tv"/>
 
         <EditText
             android:id="@+id/chatting_room_chatting_text_et"
@@ -154,8 +156,9 @@
             android:textColor="@color/top"
             android:textSize="16sp"
             android:paddingVertical="4dp"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="22dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/spoqa_medium"
