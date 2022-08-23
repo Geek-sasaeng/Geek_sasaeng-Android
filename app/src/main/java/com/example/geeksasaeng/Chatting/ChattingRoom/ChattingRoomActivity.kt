@@ -237,7 +237,9 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                             db.collection("Rooms").document(roomUuid).collection("Messages")
                                 .document(messageId).update("readUsers", readUsers)
                         }
-                        val notReadCnt = participants.size - readUsers.size
+                        var notReadCnt = participants.size - readUsers.size
+                        if(notReadCnt < 0)
+                            notReadCnt = 0
 
                         // 새로운 메시지가 추가되었을 경우
                         if (dc.type == DocumentChange.Type.ADDED) {
