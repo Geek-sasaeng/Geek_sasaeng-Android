@@ -75,10 +75,6 @@ class LeaderOptionDialog: DialogFragment() {
 
         }
 
-        binding.dialogLeaderPopupOptionChattingEndTv.setOnClickListener { //채팅 종료하기
-
-        }
-
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
             leaderOptionView.LeaderExistClick()
         }
