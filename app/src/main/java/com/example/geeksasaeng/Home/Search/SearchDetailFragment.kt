@@ -266,7 +266,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
-        searchArray.clear()
+        searchArray.clear() //리프레시나 최초로 넣어줄 애 로드니까 배열 비워주기
         totalCursor = 0
         isLoading = false
         finalPage = false
@@ -295,17 +295,17 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.searchDetailSwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            searchArray.clear()
             initLoadPosts()
             initAdapter()
-            binding.searchDetailSwipe.isRefreshing = false
+            binding.searchDetailSwipe.isRefreshing = false //TODO: 이건 무슨 코드일까..? 루나 보고있다면 정답을 알려줘~
         })
     }
 
     private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
-        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
-        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
+/*        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
+        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())*/
         initLoadPosts()
+        initAdapter() //일단, 타이머바인딩때문에 넣어둠
     }
 
     // 하단 스크롤 관련
