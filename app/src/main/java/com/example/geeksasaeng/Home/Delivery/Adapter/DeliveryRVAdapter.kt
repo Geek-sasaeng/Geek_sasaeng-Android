@@ -95,15 +95,14 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
     // 타이머 부분 Binding
     private fun timerBind(viewHolder: ItemViewHolder, position: Int) {
-        Log.d("why-filter", "타이머바인드 함수 실행됨")
+        //Log.d("why-filter", "타이머바인드 함수 실행됨")
         // 실시간 타이머 ON
         if(!deliveryTimerMap.containsKey(position)) {
-            Log.d("why-filter", "타이머바인드 함수 실행됨2")
+            //Log.d("why-filter", "타이머바인드 함수 실행됨2")
             val leftTime = dateFormat.parse(deliveryList[position]!!.orderTime).time
             val deliveryTimer = DeliveryTimer(viewHolder.deliveryItemTime, leftTime, 1000)
             deliveryTimer.start()
             deliveryTimerMap.put(position, deliveryTimer)
-            Log.d("time-position", position.toString())
         }
     }
 

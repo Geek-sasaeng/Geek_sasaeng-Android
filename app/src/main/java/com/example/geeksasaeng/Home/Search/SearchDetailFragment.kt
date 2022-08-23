@@ -76,7 +76,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         binding.searchProgressCover.visibility = View.GONE
         loadingStart()
 
-        binding.searchBottomView.visibility = View.VISIBLE
+        binding.searchBottomView.visibility = View.VISIBLE // 하단 불투명 뷰
 
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
@@ -266,6 +266,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
+        searchArray.clear()
         totalCursor = 0
         isLoading = false
         finalPage = false
@@ -323,6 +324,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                         binding.searchBottomView.visibility = View.VISIBLE
                 }
 
+                Log.d("why",isLoading.toString())
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == searchArray.size - 1) {
                         if (finalPage == false)
@@ -364,8 +366,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             searchArray.add(
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
-
-/*            searchAdapter.notifyDataSetChanged()*/
         }
         searchAdapter.setArrayList(searchArray)
     }

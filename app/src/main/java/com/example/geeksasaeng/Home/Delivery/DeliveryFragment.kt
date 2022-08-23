@@ -200,6 +200,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     else binding.deliveryBottomView.visibility = View.VISIBLE
                 }
 
+                Log.d("why",isLoading.toString())
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         if (finalPage == false  && totalCursor!=0)
