@@ -158,6 +158,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용 - 밑에 로그 찍는용
         //Log.d("deliveryFilterCheck", filterCheckFlag.toString())
         Log.d("deliveryFilterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
+        //initAdapter()
         initLoadPosts()
         binding.deliverySwipe.isRefreshing = false
     }
