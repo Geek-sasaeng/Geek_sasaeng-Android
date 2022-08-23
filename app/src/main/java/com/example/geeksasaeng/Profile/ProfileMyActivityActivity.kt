@@ -21,6 +21,7 @@ import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView {
@@ -30,6 +31,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     lateinit var profileDataService: ProfileDataService
 
     override fun initAfterBinding() {
+        binding.profileMyActivityPreActivityTv.text = getNickname()+"님이 진행하셨던\n활동들을 한 눈에 확인해보세요"
         initClickListener()
         initAdapter()
         initActivityListener()
