@@ -17,6 +17,7 @@ data class ProfileMyOngoingActivityResult(
     val viewType: Int = 0
 )
 
+// 진행 중인 활동 활동 아이템 및 날짜 아이템 구분
 const val myOngoingActivity = 1
 const val myOngoingActivityDate = 2
 
@@ -60,6 +61,7 @@ data class ProfileAnnouncementDetailRequest (
     @SerializedName("announcementId") var announcementId: Int
 )
 
+// 내 정보 보기
 data class ProfileMyInfoResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -85,6 +87,27 @@ data class ProfileMyInfoResult(
     @SerializedName("reportedCount") val reportedCount: Int,
     @SerializedName("universityId") val universityId: Int,
     @SerializedName("universityName") val universityName: String,
+)
+
+// 진행했던 활동 보기
+data class ProfileMyPreActivityResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ProfileMyPreActivityResult
+)
+
+data class ProfileMyPreActivityResult(
+    @SerializedName("endedDeliveryPartiesVoList") val endedDeliveryPartiesVoList: ArrayList<EndedDeliveryPartiesVoList>,
+    @SerializedName("finalPage") val finalPage: Boolean
+)
+
+data class EndedDeliveryPartiesVoList(
+    @SerializedName("foodCategory") val foodCategory: String,
+    @SerializedName("id") val id: Int,
+    @SerializedName("maxMatching") val maxMatching: Int,
+    @SerializedName("title") val title: String,
+    @SerializedName("updatedAt") val updatedAt: String
 )
 
 // 회원 탈퇴
