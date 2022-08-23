@@ -11,10 +11,14 @@ data class ProfileMyOngoingActivityResponse(
 )
 
 data class ProfileMyOngoingActivityResult(
-    @SerializedName("id") val id: Int,
-    @SerializedName("title") val title: String,
-    @SerializedName("createdAt") val createdAt: String
+    @SerializedName("id") val id: Int?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("createdAt") val createdAt: String,
+    val viewType: Int = 0
 )
+
+const val myOngoingActivity = 1
+const val myOngoingActivityDate = 2
 
 //공지사항 전체조회
 data class ProfileAnnouncementResponse(

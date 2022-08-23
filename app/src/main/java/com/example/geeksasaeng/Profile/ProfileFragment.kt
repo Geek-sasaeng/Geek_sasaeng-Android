@@ -21,7 +21,7 @@ import com.example.geeksasaeng.databinding.FragmentProfileBinding
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileMyOngoingActivityView {
 
     lateinit var profileMyOngoingActivityService: ProfileDataService
-    lateinit var profileMyOngoingActivityList: ArrayList<ProfileMyOngoingActivityResult>
+    private var profileMyOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
 
     override fun initAfterBinding() {
         binding.profileNoticeBelowTv.setSingleLine(true)
@@ -68,7 +68,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
         profileMyOngoingActivityList = result!!
-        Log.d("PROFILE-RESPONSE", "profileMyOngoingActivity = ${result!!}")
         for (i in 0 until result.size) {
             recentActivityBind(result[i], i)
         }
