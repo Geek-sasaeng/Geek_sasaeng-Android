@@ -1,8 +1,10 @@
 package com.example.geeksasaeng.Home.Party.Retrofit
 
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryRetrofitInterfaces
+import com.example.geeksasaeng.Home.Party.ReportParty.DialogReportParty
 import com.example.geeksasaeng.Utils.ApplicationClass
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
@@ -111,6 +113,7 @@ class PartyDataService {
             }
             override fun onFailure(call: Call<PartyReportResponse>, t: Throwable) {
                 Log.d("PARTY-REPORT-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
+                partyReportView.partyReportViewNetworkFailure()
             }
         })
     }
@@ -137,6 +140,7 @@ class PartyDataService {
             }
             override fun onFailure(call: Call<UserReportResponse>, t: Throwable) {
                 Log.d("USER-REPORT-RESPONSE", "PartyDataService-onFailure : PartyDetailSendFailed", t)
+                userReportView.userReportViewNetworkFailure()
             }
         })
     }

@@ -18,11 +18,13 @@ interface PartyDeleteView {
 interface PartyReportView {
     fun partyReportViewSuccess(code: Int)
     fun partyReportViewFailure(message: String)
+    fun partyReportViewNetworkFailure()
 }
 
 interface UserReportView {
     fun userReportViewSuccess(code: Int)
     fun userReportViewFailure(message: String)
+    fun userReportViewNetworkFailure()
 }
 
 interface JoinPartyView {
