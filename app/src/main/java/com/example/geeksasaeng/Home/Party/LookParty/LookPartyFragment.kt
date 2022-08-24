@@ -73,6 +73,13 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         timerTask?.cancel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (status != "lookParty" && status != null) {
+            requireActivity().finish()
+        }
+    }
+    
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
             if (status == "lookParty") {
