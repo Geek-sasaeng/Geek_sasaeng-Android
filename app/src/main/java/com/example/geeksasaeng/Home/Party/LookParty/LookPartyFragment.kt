@@ -74,11 +74,13 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     }
 
     private fun initClickListener(){
-        binding.lookPartyBackBtn.setOnClickListener {
+        binding.lookPartyBackBtn.setOnClickListener { //뒤로가기
+            Log.d("뒤로가기", status.toString())
             if(status == "lookParty"){
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
                 (context as MainActivity).onBackPressed()
             } else {
+                Log.d("뒤로가기", requireActivity().toString())
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
                 (context as MainActivity).supportFragmentManager.popBackStack();
             }
