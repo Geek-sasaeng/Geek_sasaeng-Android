@@ -48,7 +48,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -106,28 +107,42 @@
                 app:layout_constraintEnd_toEndOf="@id/profile_user_img_cv"
                 app:layout_constraintTop_toBottomOf="@id/profile_user_img_cv"/>
 
+            <!--프로필 하단 파티, 심부름, 거래-->
             <TextView
                 android:id="@+id/profile_nick_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NEO1"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/spoqa_bold"
+                android:text="NEO1"
                 android:textColor="@color/top"
                 android:textSize="17sp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintStart_toStartOf="@id/profile_user_img_cv"
                 app:layout_constraintEnd_toEndOf="@id/profile_user_img_cv"
-                app:layout_constraintTop_toBottomOf="@id/profile_univ_info_tv"/>
+                app:layout_constraintHorizontal_bias="0.492"
+                app:layout_constraintStart_toStartOf="@id/profile_user_img_cv"
+                app:layout_constraintTop_toBottomOf="@id/profile_univ_info_tv" />
 
-            <!--프로필 하단 파티, 심부름, 거래-->
+            <TextView
+                android:id="@+id/profile_level_status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="복학까지 2학기 남았어요"
+                android:textSize="13sp"
+                android:fontFamily="@font/spoqa_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv"
+                android:layout_marginTop="28dp"
+                android:textColor="#29ABE2"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_grade_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="17dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv">
+                app:layout_constraintTop_toBottomOf="@id/profile_level_status_tv">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_grade_image_cv1"
@@ -513,7 +528,8 @@
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_notice_tv"
                     app:layout_constraintBottom_toBottomOf="@id/profile_notice_tv"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="false"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -603,7 +619,8 @@
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_my_activity_tv"
                     app:layout_constraintBottom_toBottomOf="@id/profile_my_activity_tv"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="false"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -650,7 +667,8 @@
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_my_info_tv"
                     app:layout_constraintBottom_toBottomOf="@id/profile_my_info_tv"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="false"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -696,7 +714,8 @@
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_inquiry_tv"
                     app:layout_constraintBottom_toBottomOf="@id/profile_inquiry_tv"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="false"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -742,7 +761,8 @@
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_tos_tv"
                     app:layout_constraintBottom_toBottomOf="@id/profile_tos_tv"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:clickable="false"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
