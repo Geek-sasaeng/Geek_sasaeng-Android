@@ -9,12 +9,19 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
@@ -39,6 +46,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         initClickListener()
         initActivityListener()
         initAdapter()
+        initSpinner()
 
         if (totalCursor == 0)
             initLoadPosts()
@@ -112,6 +120,32 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myPreActivityRVAdapter = MyPreActivityRVAdapter()
         binding.profileMyActivityPreActivityRv.adapter = myPreActivityRVAdapter
         binding.profileMyActivityPreActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun initSpinner() {
+        val items = resources.getStringArray(R.array.profile_dropdown) // spinner아이템 배열
+
+        //어댑터
+        val spinnerAdapter = ProfileMyPreActivitySpinnerAdapter(this, items)
+        binding.profileMyActivityPreActivitySpinner.adapter = spinnerAdapter
+        binding.profileMyActivityPreActivitySpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
+
+        //이벤트 처리
+        binding.profileMyActivityPreActivitySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position==0) items[0]= items[items.size-1]
+                else items[0] = items[position]
+
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+
+                val textName: TextView = view.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(this@ProfileMyActivityActivity, R.color.gray_2))
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun initActivityListener() {

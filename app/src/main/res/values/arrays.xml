@@ -20,6 +20,7 @@
 
     <string-array name= "profile_dropdown">
         <item>최신순</item>
+        <item>최신순</item>
     </string-array>
 
 </resources>
