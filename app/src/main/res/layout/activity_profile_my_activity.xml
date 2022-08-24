@@ -116,8 +116,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/profile_activity_tab"
-                    android:backgroundTint="@color/main">
+                    android:background="@drawable/profile_activity_tab">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -141,26 +140,25 @@
                     android:id="@+id/profile_my_activity_tab2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="13dp"
-                    android:background="@drawable/profile_activity_tab"
-                    android:backgroundTint="@color/gray_1">
+                    android:layout_weight="1"
+                    android:background="@drawable/profile_not_activity_tab">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="심부름"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
+                        android:layout_gravity="center"
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="13dp"
                         android:layout_marginBottom="25dp"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/spoqa_medium"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="심부름"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,8 +167,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/profile_activity_tab"
-                    android:backgroundTint="@color/gray_1">
+                    android:background="@drawable/profile_not_activity_tab">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -287,6 +284,27 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile_my_info_preparing_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_spinner"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_logo_preparing"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

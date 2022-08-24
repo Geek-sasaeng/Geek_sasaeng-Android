@@ -7,16 +7,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
@@ -25,7 +22,6 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView, ProfileMyPreActivityView {
@@ -57,6 +53,39 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     private fun initClickListener() {
         binding.profileMyActivityBackBtn.setOnClickListener {
             finish()
+        }
+
+        binding.profileMyActivityTab1.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.INVISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.VISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.GONE
+        }
+
+        binding.profileMyActivityTab2.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.INVISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
+        }
+
+        binding.profileMyActivityTab3.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.INVISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
         }
     }
 
