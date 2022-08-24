@@ -76,7 +76,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         binding.searchProgressCover.visibility = View.GONE
         loadingStart()
 
-        binding.searchBottomView.visibility = View.VISIBLE
+        binding.searchBottomView.visibility = View.VISIBLE // 하단 불투명 뷰
 
         initSpinner() //필터(spinner) 작업
         initCheckBox() //필터(checkBox) 작업
@@ -94,10 +94,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             lastCheckedBox = -1 //초기화
             orderTimeCategory = null
             filter2CheckFlag = false
-            totalCursor = 0
-            filterCheckFlag = filter1CheckFlag||filter2CheckFlag
-            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
-            else getSearchPartyList(dormitoryId, totalCursor, keyword)
+            refreshing()
         }
     }
 
@@ -177,6 +174,42 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     }
 
+    //스피너 관련 작업
+    private fun initSpinner(){
+        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+        //어댑터
+        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
+        binding.searchDetailPeopleSpinner.adapter = spinnerAdapter
+        binding.searchDetailPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
+
+        //이벤트 처리
+        binding.searchDetailPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //TODO:스피너
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
+                if(position==0){ // 제일 상단 클릭(position==0)하면 초기화 해주기 위해
+                    items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                    maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
+                }else{
+                    items[0] = items[position] // items[0]에 선택한 아이템을 저장해준다. (*items[0]은 현재선택값 저장용)
+                    maxMatching = position * 2
+                }
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
+                val textName: TextView = view!!.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+
+                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
+                finalPage = false
+                refreshing()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
+    }
+
     // 오늘 날짜 계산
     private fun calculateToday(): String {
         nowTime = System.currentTimeMillis()
@@ -233,6 +266,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
+        searchArray.clear() //리프레시나 최초로 넣어줄 애 로드니까 배열 비워주기
         totalCursor = 0
         isLoading = false
         finalPage = false
@@ -261,23 +295,17 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     // 상단 스크롤 관련
     private fun initTopScrollListener() {
         binding.searchDetailSwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */
-            searchArray.clear()
             initLoadPosts()
             initAdapter()
-            binding.searchDetailSwipe.isRefreshing = false
+            binding.searchDetailSwipe.isRefreshing = false //TODO: 이건 무슨 코드일까..? 루나 보고있다면 정답을 알려줘~
         })
     }
 
-    private fun refreshing(){ // 새로고침
-        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
-        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
-        totalCursor = 0
-        isLoading = false
-        finalPage = false
-        keyword = requireArguments().getString("keyword").toString()
-        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
-        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)
-        else getSearchPartyList(dormitoryId, totalCursor, keyword)
+    private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
+/*        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
+        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())*/
+        initLoadPosts()
+        initAdapter() //일단, 타이머바인딩때문에 넣어둠
     }
 
     // 하단 스크롤 관련
@@ -296,6 +324,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                         binding.searchBottomView.visibility = View.VISIBLE
                 }
 
+                Log.d("why",isLoading.toString())
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == searchArray.size - 1) {
                         if (finalPage == false)
@@ -337,8 +366,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             searchArray.add(
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
-
-/*            searchAdapter.notifyDataSetChanged()*/
         }
         searchAdapter.setArrayList(searchArray)
     }
@@ -365,41 +392,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 startActivity(intent)
             }
         })
-    }
-    //스피너 관련 작업
-    private fun initSpinner(){
-        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
-        //어댑터
-        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
-        binding.searchDetailPeopleSpinner.adapter = spinnerAdapter
-        binding.searchDetailPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
-
-        //이벤트 처리
-        binding.searchDetailPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //TODO:스피너
-                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
-                if(position==0){ // 제일 상단 클릭(position==0)하면 초기화 해주기 위해
-                    items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
-                    maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
-                }else{
-                    items[0] = items[position] // items[0]에 선택한 아이템을 저장해준다. (*items[0]은 현재선택값 저장용)
-                    maxMatching = position * 2
-                }
-                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
-                image.setImageResource(R.drawable.ic_spinner_up)
-                image.visibility = View.VISIBLE
-                val textName: TextView = view!!.findViewById(R.id.spinner_text)
-                textName.text = items[position]
-                textName.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
-
-                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
-
-                finalPage = false
-                refreshing()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-        }
     }
 
     // 배달 목록 필터 적용 후 가져오기

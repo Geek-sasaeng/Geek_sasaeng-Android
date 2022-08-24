@@ -3,6 +3,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
 
     private fun initListener(){
         binding.sendAlarmSendBtn.setOnClickListener {
+            Log.d("deliveryAlarm", "배달완료 알림보내기 버튼 눌림")
             chattingService.sendDeliveryComplicatedAlarm(ChattingDeliveryComplicatedRequest(roomUuid!!)) //★ 매칭완료 알람보내기 api 호출
         }
 
@@ -50,12 +52,14 @@ class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
         }
     }
 
-    override fun chattingDeliveryComplicatedSuccess(result: String) {
+    override fun chattingDeliveryComplicatedSuccess() {
         this.dismiss()
+        Log.d("deliveryAlarm", "배달완료 알림보내기 성공")
         CustomToastMsg.createToast(requireContext(), "배달완료 알림 전송이 완료되었습니다", "#8029ABE2", 53)?.show()
     }
 
     override fun chattingDeliveryComplicatedFailure(message: String) {
+        Log.d("deliveryAlarm", "배달완료 알림보내기 실패")
         CustomToastMsg.createToast(requireContext(), message, "#8029ABE2", 53)?.show()
     }
 }

@@ -286,6 +286,9 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 .document(uuid).set(data).addOnSuccessListener {
                     binding.chattingRoomChattingTextEt.setText("")
                 }
+
+            //updatedAt갱신 - 채팅방 목록 정렬용
+            db.collection("Rooms").document(roomUuid).update("roomInfo.updatedAt",time)
         }
     }
 

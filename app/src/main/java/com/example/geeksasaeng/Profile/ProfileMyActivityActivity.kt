@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -34,7 +35,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
 
     override fun initAfterBinding() {
         binding.profileMyInfoProgressCover.visibility = View.GONE
-
+        binding.profileMyActivityPreActivityTv.text = getNickname()+"님이 진행하셨던\n활동들을 한 눈에 확인해보세요"
         initClickListener()
         initActivityListener()
         initAdapter()
