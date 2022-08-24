@@ -24,7 +24,6 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         when (viewType){
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                // binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
                 return MyChattingViewHolder(binding)
             }
             yourChatting -> {
@@ -75,6 +74,10 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         fun bind(chatting: Chatting) {
             binding.itemMyChattingChattingTv.text = chatting.message
 
+            if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
+                binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
+            }
+
             if (chatting.notRead?.toString() == "0")
                 binding.itemMyChattingNotReadTv.visibility = View.INVISIBLE
             else binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
@@ -90,6 +93,10 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     inner class YourChattingViewHolder(val binding: ItemChattingYourChattingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chatting) {
             binding.itemYourChattingChattingTv.text = chatting.message
+
+            if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
+                binding.itemYourChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
+            }
 
             if (chatting.notRead?.toString() == "0")
                 binding.itemYourChattingNotReadTv.visibility = View.INVISIBLE
