@@ -24,6 +24,12 @@ interface ProfileMyInfoView {
     fun onProfileMyInfoFailure(message: String)
 }
 
+// 진행했던 활동 조회
+interface ProfileMyPreActivityView {
+    fun onProfileMyPreActivityViewSuccess(result: ProfileMyPreActivityResult)
+    fun onProfileMyPreActivityViewFailure(message: String)
+}
+
 // 회원 탈퇴
 interface ProfileWithdrawalView {
     fun onProfileWithdrawalSuccess()

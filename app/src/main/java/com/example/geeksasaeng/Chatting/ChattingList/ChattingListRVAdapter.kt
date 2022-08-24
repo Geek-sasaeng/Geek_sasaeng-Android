@@ -50,6 +50,7 @@ class ChattingListRVAdapter(private var chatting: ArrayList<ChattingData>) : Rec
 
     inner class ViewHolder(val binding: ItemChattingListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: ChattingData) {
+            binding.itemChattingListSectionIv.setImageResource(R.drawable.ic_delivery_party_ic)
             binding.itemChattingListTitle.text = chatting.roomData.roomName
             binding.itemChattingListLastChatting.text = chatting.lastChat
             binding.itemChattingListTimeTv.text = chatting.lastMsgTime

@@ -33,7 +33,7 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView {
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView{
 
     lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
@@ -74,15 +74,15 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     }
 
     private fun initClickListener(){
-        binding.lookPartyBackBtn.setOnClickListener { //뒤로가기
-            Log.d("뒤로가기", status.toString())
-            if(status == "lookParty"){
-                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
+        binding.lookPartyBackBtn.setOnClickListener {
+            if (status == "lookParty" || status == "search") { // 파티생성하기 => 방금 만든 파티 상세보기..용 //메인 액티비티 말고 다른 액티비티에서 온 경우
+                Log.d("뒤로가기","onBackPressed()")
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
                 (context as MainActivity).onBackPressed()
             } else {
-                Log.d("뒤로가기", requireActivity().toString())
-                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
-                (context as MainActivity).supportFragmentManager.popBackStack();
+                Log.d("뒤로가기","popBackStack()")
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
+                (context as MainActivity).supportFragmentManager.popBackStack()
             }
         }
 
@@ -353,7 +353,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
+            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString(), false))) //현재시간, 닉네임
             .addOnSuccessListener {
                 // 00 님이 입장했습니다 시스템 메시지 추가 부분
                 var uuid = UUID.randomUUID().toString()
@@ -423,4 +423,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE
     }
+
+/*    override fun onBackPressed() {
+        Log.d("back", "내가만든 onBackpressed실행됨")
+        (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
+        (context as MainActivity).supportFragmentManager.popBackStack()
+    }*/
 }
