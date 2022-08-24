@@ -10,7 +10,7 @@ data class ChattingData(
 data class ParticipantsInfo(
     val enterTime : String,
     val participant: String,
-    /*val isRemittance: Boolean*/
+    val isRemittance: Boolean
 )
 
 data class RoomData(

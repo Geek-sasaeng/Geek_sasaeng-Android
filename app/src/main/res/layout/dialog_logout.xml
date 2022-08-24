@@ -54,7 +54,7 @@
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="로그아웃 시\n~\n~"
+            android:text="@string/logout"
             android:textColor="@color/black"
             android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
