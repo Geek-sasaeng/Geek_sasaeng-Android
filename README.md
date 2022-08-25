@@ -11,9 +11,7 @@
     <tr>
       <td>
         <a href="https://github.com/JM2308">
-            <center>  
-                <img src= "https://user-images.githubusercontent.com/84059402/186575529-e58d3f0c-05c2-4cc8-a584-a6df35e9a26b.png" width=200/>
-            </center>
+            <img src= "https://user-images.githubusercontent.com/84059402/186575529-e58d3f0c-05c2-4cc8-a584-a6df35e9a26b.png" width=200/>
           <br>
           <center>Android Developer-루나/고지민</center>
         </a>
