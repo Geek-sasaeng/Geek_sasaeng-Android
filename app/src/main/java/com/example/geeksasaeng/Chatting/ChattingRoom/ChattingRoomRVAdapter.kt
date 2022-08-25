@@ -127,7 +127,6 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     fun setTime(time: String): String {
         val hour = Integer.parseInt(time.substring(11, 13))
         val minute = DecimalFormat("00").format(Integer.parseInt(time.substring(14, 16)))
-        Log.d("FIREBASE-RESPONSE", "hour = $hour")
         return if (hour == 0)
             "오전 12:$minute"
         else if (hour in 1..11)

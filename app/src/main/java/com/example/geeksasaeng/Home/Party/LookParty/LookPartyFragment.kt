@@ -73,6 +73,13 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         timerTask?.cancel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (status != "lookParty" && status != null) {
+            requireActivity().finish()
+        }
+    }
+    
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
             if (status == "lookParty" || status == "search") { // 파티생성하기 => 방금 만든 파티 상세보기..용 //메인 액티비티 말고 다른 액티비티에서 온 경우

@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileMyOngoingActivityView {
@@ -28,6 +29,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         binding.profileNoticeBelowTv.ellipsize = TextUtils.TruncateAt.MARQUEE
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
 
+        binding.profileNickNameTv.text = getNickname()
+        
         clearBackStack()
         initClickListener()
         initRecentActivityService()
