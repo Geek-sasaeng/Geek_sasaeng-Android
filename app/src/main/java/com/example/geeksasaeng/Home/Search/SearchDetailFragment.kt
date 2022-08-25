@@ -78,9 +78,9 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
         binding.searchBottomView.visibility = View.VISIBLE // 하단 불투명 뷰
 
-        initSpinner() //필터(spinner) 작업
-        initCheckBox() //필터(checkBox) 작업
-        initAdapter() //어뎁터 작업
+        initSpinner() // 필터(spinner) 작업
+        initCheckBox() // 필터(checkBox) 작업
+        initAdapter() // 어댑터 작업
         initTopScrollListener() // 상단 스크롤 작업
 
         if (totalCursor == 0)
@@ -90,16 +90,15 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     }
 
     private fun checkDoubleCheck(i: Int){ // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.
-        if(lastCheckedBox==i){ //만약 제일 마지막으로 체크된 애를 다시 선택하는 경우라면
-            lastCheckedBox = -1 //초기화
+        if (lastCheckedBox == i) { // 만약 제일 마지막으로 체크된 애를 다시 선택하는 경우라면
+            lastCheckedBox = -1 // 초기화
             orderTimeCategory = null
             filter2CheckFlag = false
             refreshing()
         }
     }
 
-    private fun initCheckBox(){ //라디오 버튼
-
+    private fun initCheckBox() { //라디오 버튼
         binding.searchDetailCb1.setOnClickListener {
             checkDoubleCheck(R.id.search_detail_cb1)
         }
@@ -117,61 +116,60 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         }
 
         binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "BREAKFAST"
                 filter2CheckFlag = true
                 refreshing()
-            }else{ // 체크가 꺼지면
+            } else { // 체크가 꺼지면
                 lastCheckedBox = R.id.search_detail_cb1
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
                 filter2CheckFlag = true
                 refreshing()
-            }else{ // 체크가 꺼지면
+            } else { // 체크가 꺼지면
                 lastCheckedBox = R.id.search_detail_cb2
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb3.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb4.isChecked = false
                 orderTimeCategory = "DINNER"
                 filter2CheckFlag = true
                 refreshing()
-            }else{ // 체크가 꺼지면
+            } else { // 체크가 꺼지면
                 lastCheckedBox = R.id.search_detail_cb3
             }
             Log.d("check",orderTimeCategory.toString())
         }
 
         binding.searchDetailCb4.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 binding.searchDetailCb1.isChecked = false
                 binding.searchDetailCb2.isChecked = false
                 binding.searchDetailCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
                 filter2CheckFlag = true
                 refreshing()
-            }else{ // 체크가 꺼지면
+            } else { // 체크가 꺼지면
                 lastCheckedBox = R.id.search_detail_cb4
             }
             Log.d("check",orderTimeCategory.toString())
         }
-
     }
 
     //스피너 관련 작업
@@ -190,7 +188,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 if(position==0){ // 제일 상단 클릭(position==0)하면 초기화 해주기 위해
                     items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
                     maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
-                }else{
+                } else {
                     items[0] = items[position] // items[0]에 선택한 아이템을 저장해준다. (*items[0]은 현재선택값 저장용)
                     maxMatching = position * 2
                 }
@@ -394,14 +392,10 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         loadingAnimationView.visibility = View.VISIBLE
         loadingAnimationView.playAnimation()
         loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-            }
-            override fun onAnimationEnd(animation: Animator?) {
-            }
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
+            override fun onAnimationStart(p0: Animator?) { }
+            override fun onAnimationEnd(animation: Animator?) { }
+            override fun onAnimationCancel(p0: Animator?) { }
+            override fun onAnimationRepeat(p0: Animator?) { }
         })
     }
 
