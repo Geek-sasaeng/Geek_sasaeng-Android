@@ -56,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:text="나가기"
+            android:fontFamily="@font/spoqa_medium"
             android:textColor="@color/top"
             android:textSize="15sp"
             android:gravity="center_vertical"

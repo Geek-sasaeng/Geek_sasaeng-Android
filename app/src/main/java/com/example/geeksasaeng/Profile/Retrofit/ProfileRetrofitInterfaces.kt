@@ -33,6 +33,15 @@ interface ProfileMyInfoRetrofitInterfaces {
     ): Call<ProfileMyInfoResponse>
 }
 
+// 진행했던 활동 조회 api
+interface ProfileMyPreActivityRetrofitInterfaces {
+    @GET("/delivery-parties/end")
+    fun getMyPreActivity(
+        @Header("Authorization") jwt: String?,
+        @Query("cursor") cursor: Int
+    ): Call<ProfileMyPreActivityResponse>
+}
+
 // 회원 탈퇴 api
 interface ProfileWithdrawalRetrofitInterfaces {
     @PATCH("/members/account-delete/{id}")

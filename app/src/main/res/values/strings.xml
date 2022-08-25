@@ -15,6 +15,8 @@
     <string name="naver_client_id">czrW_igO4TDdAeE5WhGW</string>
     <string name="naver_client_secret">syoXsVLKN1</string>
     <string name="naver_client_name">긱사생</string>
+    <!-- Profile -->
+    <string name="logout">로그아웃 시 서비스 사용이 제한\n되며, 로그인이 필요합니다.\n계속하시겠습니까?</string>
     <!-- Report Party -->
     <string name="party_report">(선택) 어떤 상황인가요? 긱사생에게 알려주시면 문제 해결에 도움이 됩니다</string>
     <!-- ChattingRoom -->

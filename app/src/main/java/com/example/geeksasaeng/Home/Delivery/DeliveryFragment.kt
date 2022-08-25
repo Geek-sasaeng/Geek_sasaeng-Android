@@ -156,10 +156,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun refreshing(){ // 파티목록 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
-        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용 - 밑에 로그 찍는용
-        //Log.d("deliveryFilterCheck", filterCheckFlag.toString())
-        Log.d("deliveryFilterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())
-        //initAdapter()
+        initAdapter() //TODO: 리프레시할때 매번 InitAdapter안해도 될것 같은데 일단 타이머 바인드가 안돼서... 어댑터를 새로 만들어주는 중
         initLoadPosts()
         binding.deliverySwipe.isRefreshing = false
     }
@@ -167,7 +164,6 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     // Adapter 설정
     private fun initAdapter() {
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
-        deliveryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.deliveryRv.adapter = deliveryAdapter
         binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -204,6 +200,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
                     else binding.deliveryBottomView.visibility = View.VISIBLE
                 }
 
+                Log.d("why",isLoading.toString())
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
                         if (finalPage == false  && totalCursor!=0)

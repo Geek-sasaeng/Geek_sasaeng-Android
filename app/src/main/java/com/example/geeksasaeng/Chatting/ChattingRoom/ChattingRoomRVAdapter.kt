@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
+import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         when (viewType){
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                // binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
                 return MyChattingViewHolder(binding)
             }
             yourChatting -> {
@@ -118,9 +120,12 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     fun setTime(time: String): String {
         val hour = Integer.parseInt(time.substring(11, 13))
         val minute = DecimalFormat("00").format(Integer.parseInt(time.substring(14, 16)))
-        return if (hour in 0..11)
+        Log.d("FIREBASE-RESPONSE", "hour = $hour")
+        return if (hour == 0)
+            "오전 12:$minute"
+        else if (hour in 1..11)
             "오전 $hour:$minute"
-        else "오후 $hour:$minute"
+        else "오후 ${hour - 12}:$minute"
     }
 
     fun addItem(item: Chatting) {

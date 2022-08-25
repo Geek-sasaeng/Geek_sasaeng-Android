@@ -75,12 +75,12 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
-            if(status == "lookParty"){
-                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
+            if (status == "lookParty") {
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
                 (context as MainActivity).onBackPressed()
             } else {
-                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit();
-                (context as MainActivity).supportFragmentManager.popBackStack();
+                (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
+                (context as MainActivity).supportFragmentManager.popBackStack()
             }
         }
 
@@ -351,7 +351,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         db.collection("Rooms")
             .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString()))) //현재시간, 닉네임
+            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString(), false))) //현재시간, 닉네임
             .addOnSuccessListener {
                 // 00 님이 입장했습니다 시스템 메시지 추가 부분
                 var uuid = UUID.randomUUID().toString()

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.MainActivity
@@ -37,6 +38,7 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
 
     override fun initAfterBinding() {
         initClickListener()
+        initScrollListener()
     }
 
     private fun initChattingList() {
@@ -119,6 +121,20 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
             binding.chattingListRv.visibility = View.GONE
             binding.chattingListPreparingIv.visibility = View.VISIBLE
         }
+    }
+
+    private fun initScrollListener(){
+        binding.chattingListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() // 마지막 스크롤된 항목 위치
+                val itemTotalCount = recyclerView.adapter!!.itemCount - 1 // 항목 전체 개수
+                if (lastVisibleItemPosition >= itemTotalCount - 1) { //마지막 아이템 전 아이템이 되면
+                    binding.chattingListBottomView.visibility = View.INVISIBLE
+                } else binding.chattingListBottomView.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun loadingStart() {

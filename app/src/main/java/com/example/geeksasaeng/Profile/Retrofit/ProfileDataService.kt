@@ -17,6 +17,7 @@ class ProfileDataService {
     private lateinit var profileAnnouncementView: ProfileAnnouncementView
     private lateinit var profileAnnouncementDetailView: ProfileAnnouncementDetailView
     private lateinit var profileMyInfoView: ProfileMyInfoView
+    private lateinit var profileMyPreActivityView: ProfileMyPreActivityView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
 
     // setView
@@ -31,6 +32,9 @@ class ProfileDataService {
     }
     fun setMyInfoView(profileMyInfoView: ProfileMyInfoView) {
         this.profileMyInfoView = profileMyInfoView
+    }
+    fun setMyPreActivityView(profileMyPreActivityView: ProfileMyPreActivityView) {
+        this.profileMyPreActivityView = profileMyPreActivityView
     }
     fun setProfileWithdrawalView(profileWithdrawalView: ProfileWithdrawalView) {
         this.profileWithdrawalView = profileWithdrawalView
@@ -118,6 +122,28 @@ class ProfileDataService {
             override fun onFailure(call: Call<ProfileMyInfoResponse>, t: Throwable) {
                 Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyInfoFailed", t)
             }
+        })
+    }
+
+    // 진행했던 활동 조회
+    fun profileMyPreActivitySender(cursor: Int) {
+        val profileMyPreActivityService = NetworkModule.getInstance()?.create(ProfileMyPreActivityRetrofitInterfaces::class.java)
+        profileMyPreActivityService?.getMyPreActivity("Bearer " + getJwt(), cursor)?.enqueue(object: Callback<ProfileMyPreActivityResponse> {
+            override fun onResponse(call: Call<ProfileMyPreActivityResponse>, response: Response<ProfileMyPreActivityResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> profileMyPreActivityView.onProfileMyPreActivityViewSuccess(resp.result)
+                        4000 -> Log.d("PROFILE-RESPONSE", "서버 오류")
+                        else -> profileMyPreActivityView.onProfileMyPreActivityViewFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileMyPreActivityResponse>, t: Throwable) {
+                Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyPreActivityFailed", t)
+            }
+
         })
     }
 

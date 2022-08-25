@@ -68,6 +68,15 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         dialog.show(supportFragmentManager, "CustomDialog")
     }
 
+    //파티 신고 네트워크 오류
+    override fun partyReportViewNetworkFailure() {
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg","네트워크 상태가 좋지 않습니다.\n잠시 후에 다시 시도해 주세요.")
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
+    }
+
     private fun getReportUser(): UserReportRequest {
         reportContent = binding.reportOptionEt.text.toString()
         return UserReportRequest(block, reportCategoryId, reportContent, reportedMemberId)
@@ -93,6 +102,15 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
         val dialog = DialogReportParty()
         val bundle = Bundle()
         bundle.putString("msg", message)
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "CustomDialog")
+    }
+
+    //사용자 신고 네트워크 오류
+    override fun userReportViewNetworkFailure() {
+        val dialog = DialogReportParty()
+        val bundle = Bundle()
+        bundle.putString("msg","네트워크 상태가 좋지 않습니다.\n잠시 후에 다시 시도해 주세요.")
         dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
     }

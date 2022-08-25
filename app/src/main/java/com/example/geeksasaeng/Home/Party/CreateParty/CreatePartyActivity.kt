@@ -337,7 +337,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
 
         //firestore에 채팅방 생성하기 위한 데이터 구조 만들기
         var participantsList = ArrayList<ParticipantsInfo>()
-        participantsList.add(ParticipantsInfo(getCurrentDateTime(), getNickname().toString())) //현재 시간으로 enterTime, 자기 닉네임으로 participant
+        participantsList.add(ParticipantsInfo(getCurrentDateTime(), getNickname().toString(), true)) //현재 시간으로 enterTime, 자기 닉네임으로 participant
 
         val roomInfo = hashMapOf(
             "roomInfo" to hashMapOf(

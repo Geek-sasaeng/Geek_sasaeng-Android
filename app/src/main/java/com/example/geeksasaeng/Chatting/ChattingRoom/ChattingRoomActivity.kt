@@ -9,7 +9,10 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.geeksasaeng.Chatting.ChattingList.ChattingData
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
+import com.example.geeksasaeng.Chatting.ChattingList.FirestoreChatData
+import com.example.geeksasaeng.Chatting.ChattingList.RoomData
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionMyPopup
 import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionOtherPopup
@@ -137,16 +140,6 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
         binding.chattingRoomBackBtn.setOnClickListener {
             finish()
         }
-
-        binding.chattingRoomTopLayoutBtn.setOnClickListener {
-            binding.chattingRoomTopLayout.visibility = View.GONE
-            topLayoutFlag = false
-
-            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
-                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료")
-                CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
-        }
     }
 
     private fun initChattingService() {
@@ -181,8 +174,10 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
 
             if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
                 CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료")
+            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료") {
+                // TODO: 여기에 파이어베이스 내용 추가하고 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
                 CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+            }
         }
     }
 
@@ -293,6 +288,9 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 .document(uuid).set(data).addOnSuccessListener {
                     binding.chattingRoomChattingTextEt.setText("")
                 }
+
+            //updatedAt갱신 - 채팅방 목록 정렬용
+            db.collection("Rooms").document(roomUuid).update("roomInfo.updatedAt",time)
         }
     }
 
