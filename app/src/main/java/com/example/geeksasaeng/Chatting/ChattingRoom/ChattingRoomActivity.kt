@@ -216,27 +216,28 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
         realTimeChatListener = db.collection("Rooms").document(roomUuid).collection("Messages")
             .orderBy("time", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshots, _ ->
+                // for 문 시작
                 for ((idx, dc) in snapshots?.documentChanges!!.withIndex()) {
                     Log.d("FIREBASE-RESPONSE", "Message = \n ${dc.document["content"]}")
 
+                    // 시스템 메시지 처리
                     if (dc.document["isSystemMessage"] == true) {
                         if (dc.type == DocumentChange.Type.ADDED)
                             chattingRoomRVAdapter.addItem(Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null))
-                        preChatNickname = dc.document["nickname"].toString()
                     } else {
                         if (dc.document["readUsers"] == null)
                             continue
 
                         val readUsers = dc.document["readUsers"] as ArrayList<Any>
-
                         // readUsers에 자신의 닉네임이 없다면 추가해서 업데이트 하기
                         if (!readUsers.contains(getNickname()!!)) {
                             readUsers.add(getNickname()!!)
-
                             val messageId = dc.document.id
                             db.collection("Rooms").document(roomUuid).collection("Messages")
                                 .document(messageId).update("readUsers", readUsers)
                         }
+
+                        // notRead < 0 일때 처리
                         var notReadCnt = participants.size - readUsers.size
                         if(notReadCnt < 0)
                             notReadCnt = 0
@@ -252,10 +253,9 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                                 val msgNickname = dc.document["nickname"] as String
                                 item = Chatting(2, msgNickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), notReadCnt)
                             }
-                            preChatNickname = dc.document["nickname"].toString()
                             chattingRoomRVAdapter.addItem(item)
 
-                            // readUsers가 업데이트 되었을 경우
+                        // readUsers가 업데이트 되었을 경우
                         } else if (dc.type == DocumentChange.Type.MODIFIED) {
                             if(dc.oldIndex == dc.newIndex){
                                 val idx = dc.oldIndex

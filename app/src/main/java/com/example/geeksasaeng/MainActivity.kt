@@ -18,6 +18,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     var status: String? = null
     var deliveryItemId: String? = null
+    var checkBinding: Boolean = false
 
     override fun initAfterBinding() {
 
@@ -63,6 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
         */
+        checkBinding = true
 
         setBottomNavi()
     }
@@ -86,28 +88,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setBottomNavi() {
-        binding.mainBottomNavi.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.homeFrament -> {
-                    setFragment(R.id.main_frm, HomeFragment())
-                    return@setOnItemSelectedListener true
+        if(checkBinding) {
+            binding.mainBottomNavi.setOnItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.homeFrament -> {
+                        setFragment(R.id.main_frm, HomeFragment())
+                        return@setOnItemSelectedListener true
+                    }
+                    R.id.communityFragment -> {
+                        setFragment(R.id.main_frm, CommunityFragment())
+                        return@setOnItemSelectedListener true
+                    }
+                    R.id.chattingFragment -> {
+                        setFragment(R.id.main_frm, ChattingListFragment())
+                        return@setOnItemSelectedListener true
+                    }
+                    R.id.profileFragment -> {
+                        setFragment(R.id.main_frm, ProfileFragment())
+                        return@setOnItemSelectedListener true
+                    }
                 }
-                R.id.communityFragment -> {
-                    setFragment(R.id.main_frm, CommunityFragment())
-                    return@setOnItemSelectedListener true
-                }
-                R.id.chattingFragment -> {
-                    setFragment(R.id.main_frm, ChattingListFragment())
-                    return@setOnItemSelectedListener true
-                }
-                R.id.profileFragment -> {
-                    setFragment(R.id.main_frm, ProfileFragment())
-                    return@setOnItemSelectedListener true
-                }
+                false
             }
-            false
         }
 
         binding.mainBottomNavi.itemIconTintList = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        checkBinding = false
     }
 }

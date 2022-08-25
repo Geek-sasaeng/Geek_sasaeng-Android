@@ -59,6 +59,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var filter2CheckFlag: Boolean = false //카테고리
     private var lastCheckedBox = -1
     private lateinit var handler: Handler;
+    private var checkBinding = false
 
     override fun onResume() {
         super.onResume()
@@ -90,10 +91,10 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        checkBinding = true
         dormitoryId = getDormitoryId()!!
         // 모든 fragment stack 제거
         clearBackStack()
-
         initDeliveryService()
 
         binding.deliveryProgressCover.visibility = View.GONE
@@ -295,63 +296,70 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
         }
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
-            if(isChecked){
-                binding.deliveryCb2.isChecked = false
-                binding.deliveryCb3.isChecked = false
-                binding.deliveryCb4.isChecked = false
-                orderTimeCategory = "BREAKFAST"
-                filter2CheckFlag = true
-                refreshing()
-            }else{ // 체크가 꺼지면
-                lastCheckedBox = R.id.delivery_cb1
+            if (checkBinding) {
+                filterCheckFlag = true
+                if (isChecked) {
+                    binding.deliveryCb2.isChecked = false
+                    binding.deliveryCb3.isChecked = false
+                    binding.deliveryCb4.isChecked = false
+                    orderTimeCategory = "BREAKFAST"
+                    filter2CheckFlag = true
+                    refreshing()
+                } else { // 체크가 꺼지면
+                    lastCheckedBox = R.id.delivery_cb1
+                }
+                Log.d("check", orderTimeCategory.toString())
             }
-            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                binding.deliveryCb1.isChecked = false
-                binding.deliveryCb3.isChecked = false
-                binding.deliveryCb4.isChecked = false
-                orderTimeCategory = "LUNCH"
-                filter2CheckFlag = true
-                refreshing()
-            }else{ // 체크가 꺼지면
-                lastCheckedBox = R.id.delivery_cb2
+            if (checkBinding) {
+                if (isChecked) {
+                    binding.deliveryCb1.isChecked = false
+                    binding.deliveryCb3.isChecked = false
+                    binding.deliveryCb4.isChecked = false
+                    orderTimeCategory = "LUNCH"
+                    filter2CheckFlag = true
+                    refreshing()
+                } else { // 체크가 꺼지면
+                    lastCheckedBox = R.id.delivery_cb2
+                }
+                Log.d("check", orderTimeCategory.toString())
             }
-            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb3.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                binding.deliveryCb1.isChecked = false
-                binding.deliveryCb2.isChecked = false
-                binding.deliveryCb4.isChecked = false
-                orderTimeCategory = "DINNER"
-                filter2CheckFlag = true
-                refreshing()
-            }else{ // 체크가 꺼지면
-                lastCheckedBox = R.id.delivery_cb3
+            if (checkBinding) {
+                if (isChecked) {
+                    binding.deliveryCb1.isChecked = false
+                    binding.deliveryCb2.isChecked = false
+                    binding.deliveryCb4.isChecked = false
+                    orderTimeCategory = "DINNER"
+                    filter2CheckFlag = true
+                    refreshing()
+                } else { // 체크가 꺼지면
+                    lastCheckedBox = R.id.delivery_cb3
+                }
+                Log.d("check", orderTimeCategory.toString())
             }
-            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb4.setOnCheckedChangeListener { buttonView, isChecked ->
-            filterCheckFlag = true
-            if(isChecked){
-                binding.deliveryCb1.isChecked = false
-                binding.deliveryCb2.isChecked = false
-                binding.deliveryCb3.isChecked = false
-                orderTimeCategory = "MIDNIGHT_SNACKS"
-                filter2CheckFlag = true
-                refreshing()
-            }else{ // 체크가 꺼지면
-                lastCheckedBox = R.id.delivery_cb4
+            if (checkBinding) {
+                filterCheckFlag = true
+                if (isChecked) {
+                    binding.deliveryCb1.isChecked = false
+                    binding.deliveryCb2.isChecked = false
+                    binding.deliveryCb3.isChecked = false
+                    orderTimeCategory = "MIDNIGHT_SNACKS"
+                    filter2CheckFlag = true
+                    refreshing()
+                } else { // 체크가 꺼지면
+                    lastCheckedBox = R.id.delivery_cb4
+                }
+                Log.d("check", orderTimeCategory.toString())
             }
-            Log.d("check",orderTimeCategory.toString())
         }
-
     }
 
     //스피너 관련 작업
