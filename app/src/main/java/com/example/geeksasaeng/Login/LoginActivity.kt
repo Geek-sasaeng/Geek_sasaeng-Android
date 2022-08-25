@@ -20,6 +20,7 @@ import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverViewModel
 import com.example.geeksasaeng.Signup.Retrofit.*
 import com.example.geeksasaeng.Utils.*
+import com.google.firebase.messaging.FirebaseMessaging
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.*
 import com.navercorp.nid.profile.NidProfileCallback
@@ -29,7 +30,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     var loginId: String? = ""
     var nickname: String? = ""
     var phoneNumber: String? = ""
-
+    private lateinit var fcmToken: String
 
     private lateinit var signUpNaverVM: SignUpNaverViewModel
 
@@ -37,6 +38,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
         setTextChangedListener()
         initClickListener()
+        getFireBasetoken()
     }
 
     private fun initClickListener() {
@@ -104,14 +106,14 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun socialLogin(accessToken: String) {
         val socialLoginDataService = SocialLoginDataService()
         socialLoginDataService.setSocialLoginView(this)
-        socialLoginDataService.socialLogin(SocialLogin(accessToken))
+        socialLoginDataService.socialLogin(SocialLogin(accessToken, fcmToken))
     }
 
     private fun getLoginUser(): Login {
         val loginId = binding.loginIdEt.text.toString()
         val password = binding.loginPwdEt.text.toString()
         Log.d("login", loginId.toString()+"/"+password)
-        return Login(loginId, password)
+        return Login(loginId, password, fcmToken)
     }
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
@@ -205,6 +207,17 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             }
         })
     }
+    private fun getFireBasetoken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                task ->
+            if(task.isSuccessful) {
+                fcmToken = task.result?:""
+                Log.d("FCM-TOKEN-RESPONSE", fcmToken.toString())
+            }
+        }
+    }
+
+
 
     override fun onSignUpSocialSuccess() {
         // TODO: 성공하면 나오는 화면 생기면 넣어주기

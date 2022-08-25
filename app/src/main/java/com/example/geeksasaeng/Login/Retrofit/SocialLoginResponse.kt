@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class SocialLogin(
     @SerializedName("accessToken") var accessToken: String,
+    @SerializedName("fcmToken") var fcmToken: String
 )
 
 data class SocialLoginResponse(
@@ -19,6 +20,7 @@ data class SocialLoginResponse(
 data class SocialLoginResult(
     @SerializedName("dormitoryId") val dormitoryId: Int,
     @SerializedName("dormitoryName") val dormitoryName: String,
+    @SerializedName("fcmToken") val fcmToken: String,
     @SerializedName("jwt") val jwt: String,
     @SerializedName("loginStatus") val loginStatus: String,
     @SerializedName("nickName") val nickName: String,

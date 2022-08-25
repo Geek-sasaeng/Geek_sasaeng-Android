@@ -67,6 +67,22 @@ class ChattingRoomActivity :
     }
 
     private fun initFirestore() {
+        // Top Layout 설정
+        topLayoutFlag = true
+        // TopLayout 설정
+        if (topLayoutFlag) {
+            binding.chattingRoomTopLayout.visibility = View.VISIBLE
+            if (leader) {
+                binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
+                binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
+            }else{
+                getBankAndAccountNumber()
+                binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+            }
+
+        } else {
+            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+        }
         // 현재 파티원 정보 불러오기, 방장인지 아닌지 확인하기
         db.collection("Rooms")
             .document(roomUuid)
@@ -80,12 +96,8 @@ class ChattingRoomActivity :
                     val map = map as HashMap<String, Any>
                     val participantName = map.get("participant").toString()
                     if (participantName.equals(getNickname())) {
-                        // 송금했는지 확인
-                        checkRemittance = map.get("isRemittance") as Boolean
-                        if (!checkRemittance){
-                            getBankAndAccountNumber()
-                            binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
-                        }
+                        if(map.containsKey("isRemittance"))
+                            checkRemittance = map.get("isRemittance") as Boolean
                         participantIdx = idx
                         break
                     }
@@ -94,17 +106,9 @@ class ChattingRoomActivity :
                 // Idx == 0 이면 방장임
                 leader = participantIdx == 0
 
-                topLayoutFlag = true
-                // TopLayout 설정
-                if (topLayoutFlag) {
-                    binding.chattingRoomTopLayout.visibility = View.VISIBLE
-                    if (leader) {
-                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
-                        binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
-                    }
-
-                } else {
-                    binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+                // 송금 됐을 때 뷰 안보이게 하기
+                if (checkRemittance && !leader){
+                    binding.chattingRoomTopLayout.visibility = View.GONE
                 }
 
                 // 파이어스토어 Listener 설정
