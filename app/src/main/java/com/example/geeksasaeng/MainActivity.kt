@@ -24,6 +24,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         status = intent.getStringExtra("status")
         deliveryItemId = intent.getStringExtra("deliveryItemId")
 
+        Log.d("status", status.toString())
         if (status == "search" || status == "myActivity") { //TODO: search랑 myActivity랑 lookParty랑 코드 같아서 합쳐도 될듯?
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
@@ -102,6 +103,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return@setOnItemSelectedListener true
                 }
                 R.id.profileFragment -> {
+                    Log.d("status", "나의 정보 바텀내비 클릭됨")
                     setFragment(R.id.main_frm, ProfileFragment())
                     return@setOnItemSelectedListener true
                 }

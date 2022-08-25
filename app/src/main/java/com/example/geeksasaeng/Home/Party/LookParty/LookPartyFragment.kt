@@ -82,7 +82,8 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             } else {
                 Log.d("뒤로가기","popBackStack()")
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
-                (context as MainActivity).supportFragmentManager.popBackStack()
+                /*(context as MainActivity).supportFragmentManager.popBackStack()*/
+                (context as MainActivity).onBackPressed() //모지.. 이걸로 해도 되네
             }
         }
 
@@ -316,7 +317,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyRequestTv.text = "채팅방 가기"
         binding.lookMatchingNumber.text = (partyData.currentMatching+1).toString() + "/" + partyData.maxMatching // 현재 매칭 수 + 1
 
-        val dialogPartyRequestComplete = DialogPartyRequestComplete()
+        val dialogPartyRequestComplete = DialogPartyRequestComplete() // 채팅방으로 바로가시겠습니까 메세지 띄우기
         dialogPartyRequestComplete.dialogPartyRequestCompleteView = this
         dialogPartyRequestComplete.show(parentFragmentManager, "partyRequestComplete")
 
