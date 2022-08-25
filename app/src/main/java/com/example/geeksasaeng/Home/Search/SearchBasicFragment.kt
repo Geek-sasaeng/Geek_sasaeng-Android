@@ -37,16 +37,16 @@ class SearchBasicFragment: BaseFragment<FragmentSearchBasicBinding>(FragmentSear
 
         if (searchRankArray.size != 10) {
             searchRankArray.apply {
-                add(DeliveryRank(1, "1위"))
-                add(DeliveryRank(2, "2위"))
-                add(DeliveryRank(3, "3위"))
-                add(DeliveryRank(4, "4위"))
-                add(DeliveryRank(5, "5위"))
-                add(DeliveryRank(6, "6위"))
-                add(DeliveryRank(7, "7위"))
-                add(DeliveryRank(8, "8위"))
-                add(DeliveryRank(9, "9위"))
-                add(DeliveryRank(10, "10위"))
+                add(DeliveryRank(1, "치킨"))
+                add(DeliveryRank(2, "피자"))
+                add(DeliveryRank(3, "마라탕"))
+                add(DeliveryRank(4, "족발"))
+                add(DeliveryRank(5, "보쌈"))
+                add(DeliveryRank(6, "빙수"))
+                add(DeliveryRank(7, "돈까스"))
+                add(DeliveryRank(8, "김치찜"))
+                add(DeliveryRank(9, "냉면"))
+                add(DeliveryRank(10, "부대찌개"))
             }
         }
 

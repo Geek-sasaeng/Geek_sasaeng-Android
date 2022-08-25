@@ -531,21 +531,23 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     }
 
     private fun loadingStart() {
-        loadingAnimationView = binding.animationView
-        binding.animationViewLayout.visibility = View.VISIBLE
-        loadingAnimationView.visibility = View.VISIBLE
-        loadingAnimationView.playAnimation()
-        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-            }
-            override fun onAnimationEnd(animation: Animator?) {
-                // initAfterBinding()
-            }
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-        })
+        if (checkBinding) {
+            loadingAnimationView = binding.animationView
+            binding.animationViewLayout.visibility = View.VISIBLE
+            loadingAnimationView.visibility = View.VISIBLE
+            loadingAnimationView.playAnimation()
+            loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                }
+                override fun onAnimationEnd(animation: Animator?) {
+                    // initAfterBinding()
+                }
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+            })
+        }
     }
 
     private fun loadingStop() {
