@@ -399,10 +399,12 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
 
     //페이지 변경하기
     fun setPage() {
-        if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
-            currentPosition = 0
-        binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
-        currentPosition += 1
+        if (checkBinding) {
+            if (currentPosition == deliveryBannerAdapter.itemCount) //currentPosition이 마지막 페이지 다음페이지면
+                currentPosition = 0
+            binding.deliveryBannerVp.setCurrentItem(currentPosition, true)
+            currentPosition += 1
+        }
     }
 
 
@@ -531,21 +533,23 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     }
 
     private fun loadingStart() {
-        loadingAnimationView = binding.animationView
-        binding.animationViewLayout.visibility = View.VISIBLE
-        loadingAnimationView.visibility = View.VISIBLE
-        loadingAnimationView.playAnimation()
-        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-            }
-            override fun onAnimationEnd(animation: Animator?) {
-                // initAfterBinding()
-            }
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-        })
+        if (checkBinding) {
+            loadingAnimationView = binding.animationView
+            binding.animationViewLayout.visibility = View.VISIBLE
+            loadingAnimationView.visibility = View.VISIBLE
+            loadingAnimationView.playAnimation()
+            loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                }
+                override fun onAnimationEnd(animation: Animator?) {
+                    // initAfterBinding()
+                }
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+            })
+        }
     }
 
     private fun loadingStop() {

@@ -8,14 +8,17 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class LeaderOptionDialog: DialogFragment() {
+class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var roomUuid : String? = null
@@ -58,6 +61,7 @@ class LeaderOptionDialog: DialogFragment() {
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
             val dialog = DialogSendAlarm()
             val bundle = Bundle()
+            dialog.setChattingDeliveryComplicatedView(this)
             bundle.putString("roomUuid", roomUuid)
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
@@ -93,5 +97,15 @@ class LeaderOptionDialog: DialogFragment() {
                 }
             }
         }
+    }
+
+    override fun chattingDeliveryComplicatedSuccess() {
+        Log.d("deliveryAlarm", "배달완료 알림보내기 성공")
+        CustomToastMsg.createToast(requireContext(), "배달완료 알림 전송이 완료되었습니다", "#8029ABE2", 53)?.show()
+    }
+
+    override fun chattingDeliveryComplicatedFailure(message: String) {
+        Log.d("deliveryAlarm", "배달완료 알림보내기 실패")
+        CustomToastMsg.createToast(requireContext(), message, "#8029ABE2", 53)?.show()
     }
 }
