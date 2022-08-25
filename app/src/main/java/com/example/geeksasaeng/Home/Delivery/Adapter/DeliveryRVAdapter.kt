@@ -21,6 +21,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     private var deliveryTimerMap: HashMap<Int, DeliveryTimer> = HashMap<Int, DeliveryTimer>()
     private lateinit var mItemClickListener: OnItemClickListener
@@ -117,5 +118,15 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         mDeliveryList = list //TODO: 얕은복사-왜 얘만되는진 모르겠지만..!
         Log.d("why-2",mDeliveryList.toString()+list.toString())
         notifyDataSetChanged()
+    }
+
+    fun addItem(item: DeliveryPartiesVoList?) {
+        deliveryList.add(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun addAllItems(items: ArrayList<DeliveryPartiesVoList>?) {
+        deliveryList.addAll(items!!)
+        this.notifyDataSetChanged()
     }
 }
