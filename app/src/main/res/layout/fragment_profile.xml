@@ -124,26 +124,41 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/profile_level_status_cv"
-                android:layout_width="177dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv"
-                android:layout_marginTop="13dp"
-                android:backgroundTint="#F1F5F9"
-                android:elevation="0dp"
+                android:paddingHorizontal="22dp"
+                android:paddingVertical="15dp"
+                android:layout_marginTop="15dp"
+                app:cardElevation="0dp"
                 app:cardCornerRadius="90dp"
+                android:backgroundTint="#F1F5F9"
                 >
 
-                <TextView
-                    android:id="@+id/profile_level_status_tv"
-                    android:layout_gravity="center"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="복학까지 2학기 남았어요"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:textColor="#29ABE2" />
+                    >
+
+                    <TextView
+                        android:id="@+id/profile_level_status_tv"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:paddingVertical="15dp"
+                        android:paddingHorizontal="22dp"
+                        android:text="복학까지 2학기 남았어요"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/spoqa_medium"
+                        android:textColor="#29ABE2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -151,18 +166,18 @@
                 android:id="@+id/profile_grade_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="9dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profile_level_status_cv">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_grade_image_cv1"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
                     android:layout_marginStart="40dp"
                     android:layout_marginBottom="9dp"
-                    app:cardCornerRadius="13dp"
+                    app:cardCornerRadius="11dp"
                     app:cardElevation="0dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="@id/profile_grade_seekbar"
@@ -172,16 +187,16 @@
                         android:id="@+id/profile_grade_iv1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#D9D9D9" />
+                        android:background="@color/main" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_grade_image_cv2"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
                     android:layout_marginBottom="9dp"
-                    app:cardCornerRadius="13dp"
+                    app:cardCornerRadius="7dp"
                     app:cardElevation="0dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -198,11 +213,11 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_grade_image_cv3"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
                     android:layout_marginEnd="40dp"
                     android:layout_marginBottom="9dp"
-                    app:cardCornerRadius="13dp"
+                    app:cardCornerRadius="7dp"
                     app:cardElevation="0dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/profile_grade_seekbar"
@@ -277,7 +292,7 @@
                 android:textColor="@color/top"
                 android:fontFamily="@font/spoqa_medium"
                 android:textSize="15sp"
-                android:layout_marginTop="49dp"
+                android:layout_marginTop="35dp"
                 app:layout_constraintTop_toBottomOf="@id/profile_grade_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -555,7 +570,7 @@
                 android:layout_marginTop="11dp"
                 android:layout_marginHorizontal="28dp"
                 android:background="@drawable/round_border"
-                android:backgroundTint="@color/gray_0">
+                android:backgroundTint="#F1F5F9">
 
                 <ImageView
                     android:id="@+id/profile_notice_below_iv"
