@@ -58,7 +58,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var filter1CheckFlag: Boolean = false //인원수
     var filter2CheckFlag: Boolean = false //카테고리
     private var lastCheckedBox = -1
-    private lateinit var handler: Handler;
+    private lateinit var handler: Handler
 
     override fun onResume() {
         super.onResume()

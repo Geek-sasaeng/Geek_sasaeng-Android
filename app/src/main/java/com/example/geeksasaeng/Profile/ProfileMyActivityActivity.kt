@@ -7,18 +7,21 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView, ProfileMyPreActivityView {
@@ -39,6 +42,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         initClickListener()
         initActivityListener()
         initAdapter()
+        initSpinner()
 
         if (totalCursor == 0)
             initLoadPosts()
@@ -49,6 +53,39 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     private fun initClickListener() {
         binding.profileMyActivityBackBtn.setOnClickListener {
             finish()
+        }
+
+        binding.profileMyActivityTab1.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.INVISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.VISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.GONE
+        }
+
+        binding.profileMyActivityTab2.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.INVISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
+        }
+
+        binding.profileMyActivityTab3.setOnClickListener {
+            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
+            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
+            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_activity_tab)
+            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.INVISIBLE
+            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
+            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
         }
     }
 
@@ -112,6 +149,32 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myPreActivityRVAdapter = MyPreActivityRVAdapter()
         binding.profileMyActivityPreActivityRv.adapter = myPreActivityRVAdapter
         binding.profileMyActivityPreActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun initSpinner() {
+        val items = resources.getStringArray(R.array.profile_dropdown) // spinner아이템 배열
+
+        //어댑터
+        val spinnerAdapter = ProfileMyPreActivitySpinnerAdapter(this, items)
+        binding.profileMyActivityPreActivitySpinner.adapter = spinnerAdapter
+        binding.profileMyActivityPreActivitySpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
+
+        //이벤트 처리
+        binding.profileMyActivityPreActivitySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position==0) items[0]= items[items.size-1]
+                else items[0] = items[position]
+
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+
+                val textName: TextView = view.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(this@ProfileMyActivityActivity, R.color.gray_2))
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun initActivityListener() {
