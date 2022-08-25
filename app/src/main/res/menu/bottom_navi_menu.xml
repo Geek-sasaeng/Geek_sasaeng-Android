@@ -18,7 +18,7 @@
         android:enabled="true" />
     <item
         android:id="@+id/profileFragment"
-        android:title="프로필"
+        android:title="나의 정보"
         android:icon="@drawable/bottom_navi_profile"
         android:enabled="true" />
 </menu>
