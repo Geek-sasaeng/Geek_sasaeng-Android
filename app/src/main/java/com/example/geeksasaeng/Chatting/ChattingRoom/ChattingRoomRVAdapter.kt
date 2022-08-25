@@ -74,6 +74,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         fun bind(chatting: Chatting) {
             binding.itemMyChattingChattingTv.text = chatting.message
 
+            Log.d("isLeader", chatting.isLeader.toString())
             if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
                 binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
             }
@@ -94,6 +95,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         fun bind(chatting: Chatting) {
             binding.itemYourChattingChattingTv.text = chatting.message
 
+            Log.d("isLeader", chatting.isLeader.toString())
             if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
                 binding.itemYourChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
             }
