@@ -35,7 +35,8 @@ import com.example.geeksasaeng.databinding.FragmentDeliveryBinding
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
-class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate), DeliveryView, DeliveryFilterView, DeliveryBannerView {
+class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBinding::inflate),
+    DeliveryView, DeliveryFilterView, DeliveryBannerView {
 
     lateinit var loadingAnimationView: LottieAnimationView
     var loadingBannerFlag = false
@@ -59,6 +60,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     var filter2CheckFlag: Boolean = false //카테고리
     private var lastCheckedBox = -1
     private lateinit var handler: Handler
+    private var checkBinding: Boolean = false;
 
     override fun onResume() {
         super.onResume()
@@ -90,6 +92,7 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     override fun initAfterBinding() {
+        checkBinding = true
         dormitoryId = getDormitoryId()!!
         // 모든 fragment stack 제거
         clearBackStack()
@@ -410,44 +413,46 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
 
     //배너 작업
     override fun ondeliveryBannerSuccess(results: Array<DeliveryBannerResult>) {
-        loadingBannerFlag = true
+        if (checkBinding) {
+            loadingBannerFlag = true
 
-        if (loadingDeliveryListFlag && loadingBannerFlag)
-            loadingStop()
+            if (loadingDeliveryListFlag && loadingBannerFlag)
+                loadingStop()
 
-        deliveryBannerAdapter = BannerVPAdapter(this)
+            deliveryBannerAdapter = BannerVPAdapter(this)
 
-        //더미 img url
-        for (j in 1..5) { //fragment already added 고치기 위함
-            for (i in results) {
-                deliveryBannerAdapter.addFragment(i.imgUrl)
-            }
-        }
-
-        binding.deliveryBannerVp.adapter = deliveryBannerAdapter
-        binding.deliveryBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
-
-        //뷰페이저 넘기는 쓰레드
-        if (thread.state == Thread.State.NEW)
-            thread.start() //스레드 시작
-
-        binding.deliveryBannerVp.apply {
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageScrollStateChanged(state: Int) {
-                    super.onPageScrollStateChanged(state)
-                    when (state) {
-                        //뷰페이저가 멈춰져있을때
-                        //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
-                        ViewPager2.SCROLL_STATE_IDLE -> {
-                            flag = 1
-                            currentPosition = binding.deliveryBannerVp.currentItem + 1
-                        }
-                        //뷰페이저 움직이는 중
-                        ViewPager2.SCROLL_STATE_DRAGGING -> flag = 0
-                    }
+            //더미 img url
+            for (j in 1..5) { //fragment already added 고치기 위함
+                for (i in results) {
+                    deliveryBannerAdapter.addFragment(i.imgUrl)
                 }
-            })
+            }
+
+            binding.deliveryBannerVp.adapter = deliveryBannerAdapter
+            binding.deliveryBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            binding.deliveryBannerVp.setCurrentItem(currentPosition, false) // 시작위치 지정
+
+            //뷰페이저 넘기는 쓰레드
+            if (thread.state == Thread.State.NEW)
+                thread.start() //스레드 시작
+
+            binding.deliveryBannerVp.apply {
+                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageScrollStateChanged(state: Int) {
+                        super.onPageScrollStateChanged(state)
+                        when (state) {
+                            //뷰페이저가 멈춰져있을때
+                            //SCROLL_STATE_IDLE 상태는 현재 스크롤을 하지 않는 상태
+                            ViewPager2.SCROLL_STATE_IDLE -> {
+                                flag = 1
+                                currentPosition = binding.deliveryBannerVp.currentItem + 1
+                            }
+                            //뷰페이저 움직이는 중
+                            ViewPager2.SCROLL_STATE_DRAGGING -> flag = 0
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -544,8 +549,15 @@ class DeliveryFragment: BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryBi
     }
 
     private fun loadingStop() {
-        loadingAnimationView.cancelAnimation()
-        binding.animationViewLayout.visibility = View.GONE
-        loadingAnimationView.visibility = View.GONE
+        if (checkBinding) {
+            loadingAnimationView.cancelAnimation()
+            binding.animationViewLayout.visibility = View.GONE
+            loadingAnimationView.visibility = View.GONE
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        checkBinding = false
     }
 }

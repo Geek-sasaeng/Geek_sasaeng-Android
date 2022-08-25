@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Community.CommunityFragment
