@@ -43,6 +43,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
     private var leader = false
+    private var leaderName = String()
     private var chattingRoomName = String()
     private var nickname = getNickname()
     lateinit var bank: String
@@ -87,10 +88,14 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 for ((idx, map) in participants!!.withIndex()) {
                     val map = map as HashMap<String, String>
                     val participantName = map.get("participant").toString()
+                    if(idx==0){ //idx가 0이면 방장이므로
+                        leaderName = participantName
+                    }
                     if (participantName.equals(getNickname())) {
                         participantIdx = idx
                         break
                     }
+
                 }
 
                 // Idx == 0 이면 방장임
@@ -102,11 +107,13 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                     binding.chattingRoomTopLayout.visibility = View.VISIBLE
 
                     if (leader) {
-                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
+                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴판 보기"
                         binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
+                        binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_food_menu)
                     } else {
                         getBankAndAccountNumber()
                         binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                        binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_coin)
                     }
                 } else {
                     binding.chattingRoomTopLayout.visibility = View.INVISIBLE
@@ -216,7 +223,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
 
                     if (dc.document["isSystemMessage"] == true) {
                         if (dc.type == DocumentChange.Type.ADDED)
-                            chattingRoomRVAdapter.addItem(Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null))
+                            chattingRoomRVAdapter.addItem(Chatting(3, null, false, dc.document["time"].toString(), null, dc.document["content"].toString(), null))
                         preChatNickname = dc.document["nickname"].toString()
                     } else {
                         if (dc.document["readUsers"] == null)
@@ -238,12 +245,12 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                         if (dc.type == DocumentChange.Type.ADDED) {
                             var item: Chatting
                             if (dc.document["isSystemMessage"] == true) {
-                                item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
+                                item = Chatting(3, null, false,  dc.document["time"].toString(), null, dc.document["content"].toString(), null)
                             }else if(nickname == dc.document["nickname"]) {
-                                item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), notReadCnt)
+                                item = Chatting(1, nickname, leaderName==nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), notReadCnt)
                             } else {
                                 val msgNickname = dc.document["nickname"] as String
-                                item = Chatting(2, msgNickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), notReadCnt)
+                                item = Chatting(2, msgNickname, leaderName==nickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), notReadCnt)
                             }
                             preChatNickname = dc.document["nickname"].toString()
                             chattingRoomRVAdapter.addItem(item)
@@ -325,6 +332,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                         leaderMap = map
                     } else if (idx == 1) {
                         nextLeader = map.get("participant").toString()
+                        leaderName = nextLeader
                         break
                     }
                 }
