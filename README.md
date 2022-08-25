@@ -23,8 +23,6 @@
           <center>Android Developer-제로/이준영</center>
         </a>
       </td>
-    </tr>
-    <tr>
       <td>
         <a href="https://github.com/hyeong-jun-kim">
           <img src= "https://user-images.githubusercontent.com/84059402/186575691-b4dee57b-92f4-4193-9b58-67382939419c.png" width=200/>
@@ -32,6 +30,7 @@
           <center>Android Developer-네오/김형준</center>
         </a>
       </td>
+    </tr>
   </table>
 </div>
 
