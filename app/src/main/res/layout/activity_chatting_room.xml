@@ -112,17 +112,17 @@
                 android:id="@+id/chatting_room_top_layout_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_border_button"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginVertical="5dp"
-                android:text="주문 완료 / 송금 완료"
-                android:textSize="11sp"
-                android:textFontWeight="500"
-                android:textColor="@color/white"
+                android:background="@drawable/round_border_button"
                 android:fontFamily="@font/spoqa_medium"
+                android:text="주문 완료 / 송금 완료"
+                android:textColor="@color/white"
+                android:textFontWeight="500"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@id/chatting_room_section_iv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/chatting_room_section_iv"
-                app:layout_constraintBottom_toBottomOf="@id/chatting_room_section_iv" />
+                app:layout_constraintTop_toTopOf="@id/chatting_room_section_iv" />
 
         </androidx.cardview.widget.CardView>
 
