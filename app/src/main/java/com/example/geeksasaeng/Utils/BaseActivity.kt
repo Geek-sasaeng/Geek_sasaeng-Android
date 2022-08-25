@@ -8,15 +8,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.viewbinding.ViewBinding
 import com.example.geeksasaeng.R
+import com.google.android.material.internal.ContextUtils.getActivity
 
 
-abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater) -> T): AppCompatActivity(){
+abstract class BaseActivity<T : ViewBinding>(private val inflate: (LayoutInflater) -> T) :
+    AppCompatActivity() {
     protected lateinit var binding: T
         private set
 
-    private var imm : InputMethodManager? = null
+    private var imm: InputMethodManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,7 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
     }
 
     // 키보드 숨기기
-    fun hideKeyboard(v: View){
+    fun hideKeyboard(v: View) {
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
@@ -50,6 +53,7 @@ abstract class BaseActivity<T: ViewBinding>(private val inflate: (LayoutInflater
         startActivity(Intent(this, activity))
     }
 
+    // 액티비티에서 플래그먼트 설정하는 함수
     fun setFragment(id: Int, fragment: Fragment) {
         supportFragmentManager.beginTransaction().replace(id, fragment).commit()
     }

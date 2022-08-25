@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Community.CommunityFragment
@@ -24,7 +25,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         status = intent.getStringExtra("status")
         deliveryItemId = intent.getStringExtra("deliveryItemId")
 
-        if (status == "search" || status == "myActivity") {
+        Log.d("status", status.toString())
+        if (status == "search" || status == "myActivity") { //TODO: search랑 myActivity랑 lookParty랑 코드 같아서 합쳐도 될듯?
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
             val bundle = Bundle()
@@ -34,7 +36,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val lookPartyFragment = LookPartyFragment()
             lookPartyFragment.arguments = bundle
 
-            transaction.addToBackStack("search").replace(R.id.main_frm, lookPartyFragment)
+            //transaction.addToBackStack("search").replace(R.id.main_frm, lookPartyFragment)
+            transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
 
         } else if(status == "lookParty"){ // 파티생성하기 => 방금 만든 파티 상세보기..용
@@ -101,6 +104,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return@setOnItemSelectedListener true
                 }
                 R.id.profileFragment -> {
+                    Log.d("status", "나의 정보 바텀내비 클릭됨")
                     setFragment(R.id.main_frm, ProfileFragment())
                     return@setOnItemSelectedListener true
                 }

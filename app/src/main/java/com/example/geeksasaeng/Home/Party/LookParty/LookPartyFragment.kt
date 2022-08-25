@@ -34,7 +34,7 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView {
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView{
 
     lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
@@ -83,12 +83,15 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     
     private fun initClickListener(){
         binding.lookPartyBackBtn.setOnClickListener {
-            if (status == "lookParty") {
+            if (status == "lookParty" || status == "search") { // 파티생성하기 => 방금 만든 파티 상세보기..용 //메인 액티비티 말고 다른 액티비티에서 온 경우
+                Log.d("뒤로가기","onBackPressed()")
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
                 (context as MainActivity).onBackPressed()
             } else {
+                Log.d("뒤로가기","popBackStack()")
                 (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
-                (context as MainActivity).supportFragmentManager.popBackStack()
+                /*(context as MainActivity).supportFragmentManager.popBackStack()*/
+                (context as MainActivity).onBackPressed() //모지.. 이걸로 해도 되네
             }
         }
 
@@ -322,7 +325,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookPartyRequestTv.text = "채팅방 가기"
         binding.lookMatchingNumber.text = (partyData.currentMatching+1).toString() + "/" + partyData.maxMatching // 현재 매칭 수 + 1
 
-        val dialogPartyRequestComplete = DialogPartyRequestComplete()
+        val dialogPartyRequestComplete = DialogPartyRequestComplete() // 채팅방으로 바로가시겠습니까 메세지 띄우기
         dialogPartyRequestComplete.dialogPartyRequestCompleteView = this
         dialogPartyRequestComplete.show(parentFragmentManager, "partyRequestComplete")
 
@@ -429,4 +432,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE
     }
+
+/*    override fun onBackPressed() {
+        Log.d("back", "내가만든 onBackpressed실행됨")
+        (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
+        (context as MainActivity).supportFragmentManager.popBackStack()
+    }*/
 }

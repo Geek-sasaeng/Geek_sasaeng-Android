@@ -19,7 +19,9 @@ class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(Frag
     fun initClickListener() {
         // 뒤로가기
         binding.reportPartyBackBtn.setOnClickListener {
-            (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, LookPartyFragment()).commit()
+            /*(context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, LookPartyFragment()).commit()*/
+            (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
+            (context as MainActivity).onBackPressed()
         }
 
         reportedDeliveryPartyId = requireArguments().getInt("reportedDeliveryPartyId")

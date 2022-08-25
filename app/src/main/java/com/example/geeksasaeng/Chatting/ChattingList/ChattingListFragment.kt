@@ -18,12 +18,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
-class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChatDataView{
+class ChattingListFragment :
+    BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChatDataView {
 
     lateinit var loadingAnimationView: LottieAnimationView
-    lateinit var chattingListRVAdapter : ChattingListRVAdapter
+    lateinit var chattingListRVAdapter: ChattingListRVAdapter
     private var chattingList = ArrayList<ChattingData>()
     private val db = Firebase.firestore //파이어스토어
+    private var checkBinding: Boolean = false
 
     override fun onResume() {
         super.onResume()
@@ -36,7 +38,13 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
         loadingStart()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        checkBinding = false
+    }
+
     override fun initAfterBinding() {
+        checkBinding = true
         initClickListener()
         initScrollListener()
     }
@@ -87,19 +95,22 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
     }
 
     private fun initAdapter() {
-        chattingListRVAdapter = ChattingListRVAdapter(chattingList)
-        binding.chattingListRv.adapter = chattingListRVAdapter
-        binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        if (checkBinding) {
+            chattingListRVAdapter = ChattingListRVAdapter(chattingList)
+            binding.chattingListRv.adapter = chattingListRVAdapter
+            binding.chattingListRv.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        chattingListRVAdapter.setOnItemClickListener(object:
-            ChattingListRVAdapter.OnItemClickListener {
-            override fun onItemClick(chatting: ChattingData, position: Int) { //채팅방 입장할때
-                val intent = Intent(activity, ChattingRoomActivity::class.java)
-                intent.putExtra("roomName", chatting.roomData.roomName)
-                intent.putExtra("roomUuid", chatting.roomData.roomUuid)
-                startActivity(intent)
-            }
-        })
+            chattingListRVAdapter.setOnItemClickListener(object :
+                ChattingListRVAdapter.OnItemClickListener {
+                override fun onItemClick(chatting: ChattingData, position: Int) { //채팅방 입장할때
+                    val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    intent.putExtra("roomName", chatting.roomData.roomName)
+                    intent.putExtra("roomUuid", chatting.roomData.roomUuid)
+                    startActivity(intent)
+                }
+            })
+        }
     }
 
     override fun onSuccessGetChatData(position: Int, chattingData: ChattingData) {
@@ -123,7 +134,7 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
         }
     }
 
-    private fun initScrollListener(){
+    private fun initScrollListener() {
         binding.chattingListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -145,19 +156,24 @@ class ChattingListFragment: BaseFragment<FragmentChattingBinding>(FragmentChatti
         loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
             }
+
             override fun onAnimationEnd(animation: Animator?) {
                 // initAfterBinding()
             }
+
             override fun onAnimationCancel(p0: Animator?) {
             }
+
             override fun onAnimationRepeat(p0: Animator?) {
             }
         })
     }
 
     private fun loadingStop() {
-        loadingAnimationView.cancelAnimation()
-        binding.animationViewLayout.visibility = View.GONE
-        loadingAnimationView.visibility = View.GONE
+        if (checkBinding) {
+            loadingAnimationView.cancelAnimation()
+            binding.animationViewLayout.visibility = View.GONE
+            loadingAnimationView.visibility = View.GONE
+        }
     }
 }
