@@ -520,10 +520,10 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toEndOf="@id/profile_notice_tv" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_notice_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16.5dp"
+                    android:layout_height="16.5dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_notice_tv"
@@ -611,10 +611,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_my_activity_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16.5dp"
+                    android:layout_height="16.5dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_my_activity_tv"
@@ -659,10 +659,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_my_info_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16.5dp"
+                    android:layout_height="16.5dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_my_info_tv"
@@ -706,10 +706,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_inquiry_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16.5dp"
+                    android:layout_height="16.5dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_inquiry_tv"
@@ -753,10 +753,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/profile_tos_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16.5dp"
+                    android:layout_height="16.5dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/ic_arrow_right_profile"
                     app:layout_constraintTop_toTopOf="@id/profile_tos_tv"
