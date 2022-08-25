@@ -1,0 +1,141 @@
+Index: app/src/main/java/com/example/geeksasaeng/Home/Search/SearchDetailFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.geeksasaeng.Home.Search\r\n\r\nimport android.animation.Animator\r\nimport android.content.Intent\r\nimport android.os.Handler\r\nimport android.util.Log\r\nimport android.view.View\r\nimport android.widget.AdapterView\r\nimport android.widget.ImageView\r\nimport android.widget.RadioGroup\r\nimport android.widget.TextView\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport androidx.swiperefreshlayout.widget.SwipeRefreshLayout\r\nimport com.airbnb.lottie.LottieAnimationView\r\nimport com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter\r\nimport com.example.geeksasaeng.Home.Delivery.Adapter.PeopleSpinnerAdapter\r\nimport com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList\r\nimport com.example.geeksasaeng.Home.Delivery.Timer.DeliveryTimer\r\nimport com.example.geeksasaeng.Home.Delivery.Timer.TimerData\r\nimport com.example.geeksasaeng.Home.Search.Retrofit.SearchDataService\r\nimport com.example.geeksasaeng.Home.Search.Retrofit.SearchFilterView\r\nimport com.example.geeksasaeng.Home.Search.Retrofit.SearchResult\r\nimport com.example.geeksasaeng.Home.Search.Retrofit.SearchView\r\nimport com.example.geeksasaeng.MainActivity\r\nimport com.example.geeksasaeng.R\r\nimport com.example.geeksasaeng.Utils.BaseFragment\r\nimport com.example.geeksasaeng.databinding.FragmentSearchDetailBinding\r\nimport java.text.SimpleDateFormat\r\nimport java.util.*\r\nimport java.util.concurrent.CopyOnWriteArrayList\r\nimport kotlin.collections.ArrayList\r\n\r\nclass SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSearchDetailBinding::inflate), SearchView, SearchFilterView {\r\n\r\n    lateinit var loadingAnimationView: LottieAnimationView\r\n    private var searchArray = ArrayList<DeliveryPartiesVoList?>()\r\n    private lateinit var searchAdapter: DeliveryRVAdapter\r\n    private lateinit var searchService: SearchDataService\r\n    private lateinit var timerTask: DeliveryTimer\r\n    var isLoading = false\r\n    var dormitoryId: Int = 1\r\n    var totalCursor: Int = 0\r\n    var orderTimeCategory: String? = null\r\n    var maxMatching: Int? = null\r\n    var nowTime: Long = 0\r\n    var date: Date? = null\r\n    var dateFormat: SimpleDateFormat = SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\")\r\n    var finalPage: Boolean? = false\r\n    var filterCheckFlag: Boolean = false\r\n    var filter1CheckFlag: Boolean = false //인원수\r\n    var filter2CheckFlag: Boolean = false //카테고리\r\n    lateinit var keyword: String\r\n    private var lastCheckedBox = -1\r\n    private var currentCheckedBox = -1\r\n\r\n    override fun onStart() {\r\n        super.onStart()\r\n    }\r\n\r\n    override fun onResume() {\r\n        super.onResume()\r\n        loadingStart()\r\n    }\r\n\r\n    override fun onPause() {\r\n        super.onPause()\r\n    }\r\n\r\n    override fun initAfterBinding() {\r\n        keyword = requireArguments().getString(\"keyword\").toString()\r\n\r\n        searchService = SearchDataService()\r\n        searchService.setSearchPartyView(this)\r\n        binding.searchProgressCover.visibility = View.GONE\r\n        loadingStart()\r\n\r\n        binding.searchBottomView.visibility = View.VISIBLE // 하단 불투명 뷰\r\n\r\n        initSpinner() //필터(spinner) 작업\r\n        initCheckBox() //필터(checkBox) 작업\r\n        initAdapter() //어뎁터 작업\r\n        initTopScrollListener() // 상단 스크롤 작업\r\n\r\n        if (totalCursor == 0)\r\n            initLoadPosts()\r\n\r\n        initScrollListener()\r\n    }\r\n\r\n    private fun checkDoubleCheck(i: Int){ // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.\r\n        if(lastCheckedBox==i){ //만약 제일 마지막으로 체크된 애를 다시 선택하는 경우라면\r\n            lastCheckedBox = -1 //초기화\r\n            orderTimeCategory = null\r\n            filter2CheckFlag = false\r\n            refreshing()\r\n        }\r\n    }\r\n\r\n    private fun initCheckBox(){ //라디오 버튼\r\n\r\n        binding.searchDetailCb1.setOnClickListener {\r\n            checkDoubleCheck(R.id.search_detail_cb1)\r\n        }\r\n\r\n        binding.searchDetailCb2.setOnClickListener {\r\n            checkDoubleCheck(R.id.search_detail_cb2)\r\n        }\r\n\r\n        binding.searchDetailCb3.setOnClickListener {\r\n            checkDoubleCheck(R.id.search_detail_cb3)\r\n        }\r\n\r\n        binding.searchDetailCb4.setOnClickListener {\r\n            checkDoubleCheck(R.id.search_detail_cb4)\r\n        }\r\n\r\n        binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->\r\n            if(isChecked){\r\n                binding.searchDetailCb2.isChecked = false\r\n                binding.searchDetailCb3.isChecked = false\r\n                binding.searchDetailCb4.isChecked = false\r\n                orderTimeCategory = \"BREAKFAST\"\r\n                filter2CheckFlag = true\r\n                refreshing()\r\n            }else{ // 체크가 꺼지면\r\n                lastCheckedBox = R.id.search_detail_cb1\r\n            }\r\n            Log.d(\"check\",orderTimeCategory.toString())\r\n        }\r\n\r\n        binding.searchDetailCb2.setOnCheckedChangeListener { buttonView, isChecked ->\r\n            if(isChecked){\r\n                binding.searchDetailCb1.isChecked = false\r\n                binding.searchDetailCb3.isChecked = false\r\n                binding.searchDetailCb4.isChecked = false\r\n                orderTimeCategory = \"LUNCH\"\r\n                filter2CheckFlag = true\r\n                refreshing()\r\n            }else{ // 체크가 꺼지면\r\n                lastCheckedBox = R.id.search_detail_cb2\r\n            }\r\n            Log.d(\"check\",orderTimeCategory.toString())\r\n        }\r\n\r\n        binding.searchDetailCb3.setOnCheckedChangeListener { buttonView, isChecked ->\r\n            if(isChecked){\r\n                binding.searchDetailCb1.isChecked = false\r\n                binding.searchDetailCb2.isChecked = false\r\n                binding.searchDetailCb4.isChecked = false\r\n                orderTimeCategory = \"DINNER\"\r\n                filter2CheckFlag = true\r\n                refreshing()\r\n            }else{ // 체크가 꺼지면\r\n                lastCheckedBox = R.id.search_detail_cb3\r\n            }\r\n            Log.d(\"check\",orderTimeCategory.toString())\r\n        }\r\n\r\n        binding.searchDetailCb4.setOnCheckedChangeListener { buttonView, isChecked ->\r\n            if(isChecked){\r\n                binding.searchDetailCb1.isChecked = false\r\n                binding.searchDetailCb2.isChecked = false\r\n                binding.searchDetailCb3.isChecked = false\r\n                orderTimeCategory = \"MIDNIGHT_SNACKS\"\r\n                filter2CheckFlag = true\r\n                refreshing()\r\n            }else{ // 체크가 꺼지면\r\n                lastCheckedBox = R.id.search_detail_cb4\r\n            }\r\n            Log.d(\"check\",orderTimeCategory.toString())\r\n        }\r\n\r\n    }\r\n\r\n    //스피너 관련 작업\r\n    private fun initSpinner(){\r\n        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열\r\n        //어댑터\r\n        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)\r\n        binding.searchDetailPeopleSpinner.adapter = spinnerAdapter\r\n        binding.searchDetailPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.\r\n\r\n        //이벤트 처리\r\n        binding.searchDetailPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{\r\n            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {\r\n                //TODO:스피너\r\n                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경\r\n                if(position==0){ // 제일 상단 클릭(position==0)하면 초기화 해주기 위해\r\n                    items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다\r\n                    maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.\r\n                }else{\r\n                    items[0] = items[position] // items[0]에 선택한 아이템을 저장해준다. (*items[0]은 현재선택값 저장용)\r\n                    maxMatching = position * 2\r\n                }\r\n                val image: ImageView = view!!.findViewById(R.id.arrow_iv)\r\n                image.setImageResource(R.drawable.ic_spinner_up)\r\n                image.visibility = View.VISIBLE\r\n                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경\r\n                val textName: TextView = view!!.findViewById(R.id.spinner_text)\r\n                textName.text = items[position]\r\n                textName.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))\r\n\r\n                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)\r\n                finalPage = false\r\n                refreshing()\r\n            }\r\n            override fun onNothingSelected(parent: AdapterView<*>?) { }\r\n        }\r\n    }\r\n\r\n    // 오늘 날짜 계산\r\n    private fun calculateToday(): String {\r\n        nowTime = System.currentTimeMillis()\r\n        date = Date(nowTime)\r\n        return dateFormat.format(date)\r\n    }\r\n\r\n    // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우\r\n    private fun initLoadPosts() {\r\n        searchArray.clear() //리프레시나 최초로 넣어줄 애 로드니까 배열 비워주기\r\n        totalCursor = 0\r\n        isLoading = false\r\n        finalPage = false\r\n        keyword = requireArguments().getString(\"keyword\").toString()\r\n        filterCheckFlag = filter1CheckFlag||filter2CheckFlag\r\n        if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)\r\n        else getSearchPartyList(dormitoryId, totalCursor, keyword)\r\n    }\r\n\r\n    // 리사이클러뷰에 더 보여줄 데이터를 로드하는 경우\r\n    // TODO: 로딩 중에 스크롤 막기\r\n    private fun initMoreLoadPosts() {\r\n        binding.searchProgressCover.visibility = View.VISIBLE\r\n        keyword = requireArguments().getString(\"keyword\").toString()\r\n        val handler = Handler()\r\n        handler.postDelayed({\r\n            filterCheckFlag = filter1CheckFlag||filter2CheckFlag\r\n            if (filterCheckFlag) getSearchFilterList(dormitoryId, totalCursor, keyword, orderTimeCategory, maxMatching)\r\n            else getSearchPartyList(dormitoryId, totalCursor, keyword)\r\n            isLoading = false\r\n            binding.searchProgressCover.visibility = View.GONE\r\n            loadingStop()\r\n        }, 1200)\r\n    }\r\n\r\n    // 상단 스크롤 관련\r\n    private fun initTopScrollListener() {\r\n        binding.searchDetailSwipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { /* swipe 시 진행할 동작 */\r\n            initLoadPosts()\r\n            initAdapter()\r\n            binding.searchDetailSwipe.isRefreshing = false //TODO: 이건 무슨 코드일까..? 루나 보고있다면 정답을 알려줘~\r\n        })\r\n    }\r\n\r\n    private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)\r\n        initLoadPosts()\r\n        initAdapter() //일단, 타이머바인딩때문에 넣어둠\r\n    }\r\n\r\n    // 하단 스크롤 관련\r\n    // TODO: 하단 스크롤 디자인 관련 수정 필요해보임! (지금은 오류 해결하려고 일단 디자인 이렇게 했어!)\r\n    private fun initScrollListener() {\r\n        binding.searchDetailPartyRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {\r\n            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {\r\n                super.onScrolled(recyclerView, dx, dy)\r\n\r\n                val layoutManager = binding.searchDetailPartyRv.layoutManager\r\n\r\n                if (finalPage == true) {\r\n                    if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= searchArray.size - 2)\r\n                        binding.searchBottomView.visibility = View.INVISIBLE\r\n                    else\r\n                        binding.searchBottomView.visibility = View.VISIBLE\r\n                }\r\n\r\n                Log.d(\"why\",isLoading.toString())\r\n                if (!isLoading) {\r\n                    if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == searchArray.size - 1) {\r\n                        if (finalPage == false)\r\n                            initMoreLoadPosts()\r\n                        else binding.searchBottomView.visibility = View.INVISIBLE\r\n\r\n                        isLoading = true\r\n                    }\r\n                }\r\n            }\r\n        })\r\n    }\r\n\r\n    // 배달 목록 가져오기\r\n    private fun getSearchPartyList(dormitoryId: Int, cursor: Int, keyword: String) {\r\n        val searchDataService = SearchDataService()\r\n        searchDataService.setSearchPartyView(this)\r\n        searchDataService.getSearchPartyList(dormitoryId, cursor, keyword)\r\n        totalCursor += 1\r\n    }\r\n\r\n    override fun onSearchSuccess(result: SearchResult) {\r\n        Log.d(\"SEARCH-RESPONSE\", \"SUCCESS\")\r\n        loadingStop()\r\n        searchArray.clear()\r\n        finalPage = result.finalPage\r\n        val result = result.searchPartiesVoList\r\n\r\n        for (i in 0 until result!!.size) {\r\n            var currentMatching = result?.get(i)?.currentMatching\r\n            var foodCategory = result?.get(i)?.foodCategory\r\n            var id = result?.get(i)?.id\r\n            var maxMatching = result?.get(i)?.maxMatching\r\n            var orderTime = result?.get(i)?.orderTime\r\n            var title = result?.get(i)?.title\r\n            var hashTags = result?.get(i)?.hasHashTag\r\n\r\n            searchArray.add(\r\n                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)\r\n            )\r\n        }\r\n        searchAdapter.setArrayList(searchArray)\r\n    }\r\n\r\n    override fun onSearchFailure(code: Int, message: String) {\r\n        Log.d(\"SEARCH-RESPONSE\", \"SEARCH-DETAIL-FRAGMENT-FAILURE\")\r\n        totalCursor--\r\n    }\r\n\r\n    // Adapter 설정\r\n    private fun initAdapter() {\r\n        Log.d(\"checkSearchArray\", searchArray.toString())\r\n        searchAdapter = DeliveryRVAdapter(searchArray)\r\n        binding.searchDetailPartyRv.adapter = searchAdapter\r\n        binding.searchDetailPartyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)\r\n\r\n        searchAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{\r\n            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {\r\n                var deliveryItemId = searchAdapter.getDeliveryItemId(pos).toString()\r\n\r\n                val intent = Intent(activity, MainActivity::class.java)\r\n                intent.putExtra(\"deliveryItemId\", deliveryItemId)\r\n                intent.putExtra(\"status\", \"search\")\r\n                startActivity(intent)\r\n            }\r\n        })\r\n    }\r\n\r\n    // 배달 목록 필터 적용 후 가져오기\r\n    private fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?) {\r\n        val searchDataService = SearchDataService()\r\n        searchDataService.setSearchFilterView(this)\r\n        searchDataService.getSearchFilterList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)\r\n        totalCursor += 1\r\n    }\r\n\r\n    override fun searchFilterSuccess(result: SearchResult) {\r\n        Log.d(\"SEARCH-FILTER\", \"SUCCESS\")\r\n        loadingStop()\r\n\r\n        finalPage = result.finalPage\r\n        val result = result.searchPartiesVoList\r\n\r\n        searchArray.clear()\r\n        for (i in 0 until result!!.size) {\r\n            var currentMatching = result?.get(i)?.currentMatching\r\n            var foodCategory = result?.get(i)?.foodCategory\r\n            var id = result?.get(i)?.id\r\n            var maxMatching = result?.get(i)?.maxMatching\r\n            var orderTime = result?.get(i)?.orderTime\r\n            var title = result?.get(i)?.title\r\n            var hashTags = result?.get(i)?.hasHashTag\r\n\r\n            searchArray.add(\r\n                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)\r\n            )\r\n\r\n            if (finalPage == true) {\r\n                if ((binding.searchDetailPartyRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= searchArray.size - 2)\r\n                    binding.searchBottomView.visibility = View.INVISIBLE\r\n                else binding.searchBottomView.visibility = View.VISIBLE\r\n            }\r\n        }\r\n\r\n        searchAdapter.setArrayList(searchArray)\r\n    }\r\n\r\n    override fun searchFilterFailure(code: Int, message: String) {\r\n        Log.d(\"DELIVERY-RESPONSE\", \"DELIVERY-FRAGMENT-FAILURE\")\r\n        totalCursor--\r\n    }\r\n\r\n    private fun loadingStart() {\r\n        loadingAnimationView = binding.animationView\r\n        binding.animationViewLayout.visibility = View.VISIBLE\r\n        loadingAnimationView.visibility = View.VISIBLE\r\n        loadingAnimationView.playAnimation()\r\n        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {\r\n            override fun onAnimationStart(p0: Animator?) {\r\n            }\r\n            override fun onAnimationEnd(animation: Animator?) {\r\n            }\r\n            override fun onAnimationCancel(p0: Animator?) {\r\n            }\r\n            override fun onAnimationRepeat(p0: Animator?) {\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun loadingStop() {\r\n        loadingAnimationView.cancelAnimation()\r\n        binding.animationViewLayout.visibility = View.GONE\r\n        loadingAnimationView.visibility = View.GONE\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/geeksasaeng/Home/Search/SearchDetailFragment.kt b/app/src/main/java/com/example/geeksasaeng/Home/Search/SearchDetailFragment.kt
+--- a/app/src/main/java/com/example/geeksasaeng/Home/Search/SearchDetailFragment.kt	(revision 38ec52efdf6dd6e2505aece3ba8ac350e3b97d3f)
++++ b/app/src/main/java/com/example/geeksasaeng/Home/Search/SearchDetailFragment.kt	(date 1661437708126)
+@@ -78,9 +78,9 @@
+ 
+         binding.searchBottomView.visibility = View.VISIBLE // 하단 불투명 뷰
+ 
+-        initSpinner() //필터(spinner) 작업
+-        initCheckBox() //필터(checkBox) 작업
+-        initAdapter() //어뎁터 작업
++        initSpinner() // 필터(spinner) 작업
++        initCheckBox() // 필터(checkBox) 작업
++        initAdapter() // 어댑터 작업
+         initTopScrollListener() // 상단 스크롤 작업
+ 
+         if (totalCursor == 0)
+@@ -90,16 +90,15 @@
+     }
+ 
+     private fun checkDoubleCheck(i: Int){ // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.
+-        if(lastCheckedBox==i){ //만약 제일 마지막으로 체크된 애를 다시 선택하는 경우라면
+-            lastCheckedBox = -1 //초기화
++        if (lastCheckedBox == i) { // 만약 제일 마지막으로 체크된 애를 다시 선택하는 경우라면
++            lastCheckedBox = -1 // 초기화
+             orderTimeCategory = null
+             filter2CheckFlag = false
+             refreshing()
+         }
+     }
+ 
+-    private fun initCheckBox(){ //라디오 버튼
+-
++    private fun initCheckBox() { //라디오 버튼
+         binding.searchDetailCb1.setOnClickListener {
+             checkDoubleCheck(R.id.search_detail_cb1)
+         }
+@@ -117,61 +116,60 @@
+         }
+ 
+         binding.searchDetailCb1.setOnCheckedChangeListener { buttonView, isChecked ->
+-            if(isChecked){
++            if (isChecked) {
+                 binding.searchDetailCb2.isChecked = false
+                 binding.searchDetailCb3.isChecked = false
+                 binding.searchDetailCb4.isChecked = false
+                 orderTimeCategory = "BREAKFAST"
+                 filter2CheckFlag = true
+                 refreshing()
+-            }else{ // 체크가 꺼지면
++            } else { // 체크가 꺼지면
+                 lastCheckedBox = R.id.search_detail_cb1
+             }
+             Log.d("check",orderTimeCategory.toString())
+         }
+ 
+         binding.searchDetailCb2.setOnCheckedChangeListener { buttonView, isChecked ->
+-            if(isChecked){
++            if (isChecked) {
+                 binding.searchDetailCb1.isChecked = false
+                 binding.searchDetailCb3.isChecked = false
+                 binding.searchDetailCb4.isChecked = false
+                 orderTimeCategory = "LUNCH"
+                 filter2CheckFlag = true
+                 refreshing()
+-            }else{ // 체크가 꺼지면
++            } else { // 체크가 꺼지면
+                 lastCheckedBox = R.id.search_detail_cb2
+             }
+             Log.d("check",orderTimeCategory.toString())
+         }
+ 
+         binding.searchDetailCb3.setOnCheckedChangeListener { buttonView, isChecked ->
+-            if(isChecked){
++            if (isChecked) {
+                 binding.searchDetailCb1.isChecked = false
+                 binding.searchDetailCb2.isChecked = false
+                 binding.searchDetailCb4.isChecked = false
+                 orderTimeCategory = "DINNER"
+                 filter2CheckFlag = true
+                 refreshing()
+-            }else{ // 체크가 꺼지면
++            } else { // 체크가 꺼지면
+                 lastCheckedBox = R.id.search_detail_cb3
+             }
+             Log.d("check",orderTimeCategory.toString())
+         }
+ 
+         binding.searchDetailCb4.setOnCheckedChangeListener { buttonView, isChecked ->
+-            if(isChecked){
++            if (isChecked) {
+                 binding.searchDetailCb1.isChecked = false
+                 binding.searchDetailCb2.isChecked = false
+                 binding.searchDetailCb3.isChecked = false
+                 orderTimeCategory = "MIDNIGHT_SNACKS"
+                 filter2CheckFlag = true
+                 refreshing()
+-            }else{ // 체크가 꺼지면
++            } else { // 체크가 꺼지면
+                 lastCheckedBox = R.id.search_detail_cb4
+             }
+             Log.d("check",orderTimeCategory.toString())
+         }
+-
+     }
+ 
+     //스피너 관련 작업
+@@ -190,7 +188,7 @@
+                 if(position==0){ // 제일 상단 클릭(position==0)하면 초기화 해주기 위해
+                     items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                     maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
+-                }else{
++                } else {
+                     items[0] = items[position] // items[0]에 선택한 아이템을 저장해준다. (*items[0]은 현재선택값 저장용)
+                     maxMatching = position * 2
+                 }
+@@ -394,14 +392,10 @@
+         loadingAnimationView.visibility = View.VISIBLE
+         loadingAnimationView.playAnimation()
+         loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+-            override fun onAnimationStart(p0: Animator?) {
+-            }
+-            override fun onAnimationEnd(animation: Animator?) {
+-            }
+-            override fun onAnimationCancel(p0: Animator?) {
+-            }
+-            override fun onAnimationRepeat(p0: Animator?) {
+-            }
++            override fun onAnimationStart(p0: Animator?) { }
++            override fun onAnimationEnd(animation: Animator?) { }
++            override fun onAnimationCancel(p0: Animator?) { }
++            override fun onAnimationRepeat(p0: Animator?) { }
+         })
+     }
+ 
