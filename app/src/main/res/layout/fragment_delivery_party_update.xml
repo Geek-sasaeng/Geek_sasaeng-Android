@@ -352,8 +352,8 @@
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_location2_tv"
                 android:layout_marginEnd="14dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/delivery_party_update_kakaoMap_location"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/delivery_party_update_kakaoMap_location_cv"
                 android:layout_width="0dp"
                 android:layout_height="205dp"
                 android:layout_marginTop="15dp"
@@ -363,7 +363,15 @@
                 app:layout_constraintEnd_toEndOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintTop_toBottomOf="@id/delivery_party_update_location2_tv"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="20dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/delivery_party_update_kakaoMap_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
