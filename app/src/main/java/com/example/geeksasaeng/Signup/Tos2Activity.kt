@@ -1,5 +1,7 @@
 package com.example.geeksasaeng.Signup
 
+import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+import android.os.Build
 import android.view.View
 import androidx.transition.Visibility
 import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
@@ -24,6 +26,11 @@ class Tos2Activity : BaseActivity<ActivityTos2Binding>(ActivityTos2Binding::infl
             isSocial = intent.getBooleanExtra("isSocial", false)
         }
         initClickListener()
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.tos2Number1ContentTv.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+            binding.tos2Number21ContentTv.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+        }*/
+
     }
 
     private fun initClickListener(){

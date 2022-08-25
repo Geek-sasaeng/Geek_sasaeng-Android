@@ -82,10 +82,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_post_1_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_post_1_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_post_1_tv"
@@ -112,10 +112,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_post_2_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_post_2_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_post_2_tv"
@@ -142,10 +142,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_post_3_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_post_3_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_post_3_tv"
@@ -172,10 +172,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_post_4_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_post_4_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_post_4_tv"
@@ -223,10 +223,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_1_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_1_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_1_tv"
@@ -253,10 +253,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_2_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_2_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_2_tv"
@@ -283,10 +283,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_3_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_3_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_3_tv"
@@ -313,10 +313,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_4_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_4_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_4_tv"
@@ -343,10 +343,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_5_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_5_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_5_tv"
@@ -373,10 +373,10 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/report_party_user_6_btn"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:src="@drawable/ic_report_detail"
                     app:layout_constraintTop_toTopOf="@id/report_party_user_6_tv"
                     app:layout_constraintBottom_toBottomOf="@id/report_party_user_6_tv"

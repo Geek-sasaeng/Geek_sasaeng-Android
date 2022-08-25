@@ -324,7 +324,8 @@
                     android:id="@+id/look_party_white"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:background="@color/white" />
+                    android:background="@drawable/round_border"
+                    android:backgroundTint="@color/white"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
