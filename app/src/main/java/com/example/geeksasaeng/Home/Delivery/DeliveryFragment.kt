@@ -59,7 +59,7 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     var filter1CheckFlag: Boolean = false //인원수
     var filter2CheckFlag: Boolean = false //카테고리
     private var lastCheckedBox = -1
-    private lateinit var handler: Handler;
+    private lateinit var handler: Handler
     private var checkBinding: Boolean = false;
 
     override fun onResume() {
@@ -92,13 +92,11 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     }
 
     override fun initAfterBinding() {
-        if(binding == null)
-            super.onStart()
-
         checkBinding = true
         dormitoryId = getDormitoryId()!!
         // 모든 fragment stack 제거
         clearBackStack()
+
         initDeliveryService()
 
         binding.deliveryProgressCover.visibility = View.GONE
@@ -128,13 +126,8 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
         totalCursor = 0
         isLoading = false
         finalPage = false
-        filterCheckFlag = filter1CheckFlag || filter2CheckFlag
-        if (filterCheckFlag) getDeliveryFilterList(
-            dormitoryId,
-            totalCursor,
-            orderTimeCategory,
-            maxMatching
-        )
+        filterCheckFlag = filter1CheckFlag||filter2CheckFlag
+        if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
         else getDeliveryAllList(dormitoryId, totalCursor)
     }
 
@@ -143,17 +136,12 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     // TODO: 새로고침 했을 때 제일 밑으로 가게 만들기
     private fun initMoreLoadPosts() {
         Log.d("why-filter", "initMoreLoadePosts 실행됨")
-        Log.d("why-filter", "initMore에서의 totalCursor" + totalCursor.toString())
+        Log.d("why-filter", "initMore에서의 totalCursor"+totalCursor.toString())
         binding.deliveryProgressCover.visibility = View.VISIBLE
         val handler = Handler()
         handler.postDelayed({
-            filterCheckFlag = filter1CheckFlag || filter2CheckFlag
-            if (filterCheckFlag) getDeliveryFilterList(
-                dormitoryId,
-                totalCursor,
-                orderTimeCategory,
-                maxMatching
-            )
+            filterCheckFlag = filter1CheckFlag||filter2CheckFlag
+            if (filterCheckFlag) getDeliveryFilterList(dormitoryId, totalCursor, orderTimeCategory, maxMatching)
             else getDeliveryAllList(dormitoryId, totalCursor)
             isLoading = false
             binding.deliveryProgressCover.visibility = View.GONE
@@ -169,7 +157,7 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
         })
     }
 
-    private fun refreshing() { // 파티목록 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
+    private fun refreshing(){ // 파티목록 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
         initAdapter() //TODO: 리프레시할때 매번 InitAdapter안해도 될것 같은데 일단 타이머 바인드가 안돼서... 어댑터를 새로 만들어주는 중
         initLoadPosts()
         binding.deliverySwipe.isRefreshing = false
@@ -179,15 +167,13 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     private fun initAdapter() {
         deliveryAdapter = DeliveryRVAdapter(deliveryArray)
         binding.deliveryRv.adapter = deliveryAdapter
-        binding.deliveryRv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.deliveryRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener {
-            override fun onItemClick(data: DeliveryPartiesVoList, pos: Int) {
+        deliveryAdapter.setOnItemClickListener(object : DeliveryRVAdapter.OnItemClickListener{
+            override fun onItemClick(data: DeliveryPartiesVoList, pos : Int) {
                 var deliveryItemId = deliveryAdapter.getDeliveryItemId(pos).toString()
 
-                val transaction: FragmentTransaction =
-                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
                 val bundle = Bundle()
                 bundle.putString("deliveryItemId", deliveryItemId)
@@ -210,16 +196,16 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
 
                 val layoutManager = binding.deliveryRv.layoutManager
 
-                if (finalPage == true && totalCursor != 0) {
+                if (finalPage == true && totalCursor!=0) {
                     if ((layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                         binding.deliveryBottomView.visibility = View.INVISIBLE
                     else binding.deliveryBottomView.visibility = View.VISIBLE
                 }
 
-                Log.d("why", isLoading.toString())
+                Log.d("why",isLoading.toString())
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == deliveryArray.size - 1) {
-                        if (finalPage == false && totalCursor != 0)
+                        if (finalPage == false  && totalCursor!=0)
                             initMoreLoadPosts()
                         else binding.deliveryBottomView.visibility = View.INVISIBLE
 
@@ -229,8 +215,7 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
             }
         })
     }
-
-    private fun initDeliveryService() {
+    private fun initDeliveryService(){
         deliveryService = DeliveryService() //서비스 객체 생성
         deliveryService.setDeliveryView(this)
         deliveryService.setDeliveryBannerView(this)
@@ -265,20 +250,12 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
 
             deliveryArray.add(
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
-                DeliveryPartiesVoList(
-                    currentMatching,
-                    foodCategory,
-                    id,
-                    maxMatching,
-                    orderTime!!,
-                    title,
-                    hashTags
-                )
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
-            /* deliveryAdapter.notifyDataSetChanged()*/
+           /* deliveryAdapter.notifyDataSetChanged()*/
         }
-        Log.d("why-filter", "필터 x" + deliveryArray.toString())
+        Log.d("why-filter", "필터 x"+deliveryArray.toString())
         deliveryAdapter.setArrayList(deliveryArray) //RVAdapter의 arraylist를 deliveryArray로 설정하고 notifyDataSetChanged를 해주는 함수이다.
     }
 
@@ -287,10 +264,10 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
         totalCursor--
     }
 
-    private fun checkDoubleCheck(i: Int) { // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.
+    private fun checkDoubleCheck(i: Int){ // 이 함수는 더블체크로 아이템을 해제하는 경우 수행할 행동을 정해두었다.
         Log.d("why-filter", "checkDoubleCheck 실행됨")
-        Log.d("why-filter", lastCheckedBox.toString() + "      :      " + i.toString())
-        if (lastCheckedBox == i) { //만약 제일 마지막으로 체크된 애를 다시 선택해서 선택해제시키는 경우(더블체크)라면
+        Log.d("why-filter", lastCheckedBox.toString() +"      :      "+ i.toString())
+        if(lastCheckedBox==i){ //만약 제일 마지막으로 체크된 애를 다시 선택해서 선택해제시키는 경우(더블체크)라면
             lastCheckedBox = -1 //초기화
             orderTimeCategory = null
             filter2CheckFlag = false
@@ -319,117 +296,105 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
 
         binding.deliveryCb1.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
-            if (isChecked) {
+            if(isChecked){
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "BREAKFAST"
                 filter2CheckFlag = true
                 refreshing()
-            } else { // 체크가 꺼지면
+            }else{ // 체크가 꺼지면
                 lastCheckedBox = R.id.delivery_cb1
             }
-            Log.d("check", orderTimeCategory.toString())
+            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
+            if(isChecked){
                 binding.deliveryCb1.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "LUNCH"
                 filter2CheckFlag = true
                 refreshing()
-            } else { // 체크가 꺼지면
+            }else{ // 체크가 꺼지면
                 lastCheckedBox = R.id.delivery_cb2
             }
-            Log.d("check", orderTimeCategory.toString())
-
+            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb3.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
+            if(isChecked){
                 binding.deliveryCb1.isChecked = false
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb4.isChecked = false
                 orderTimeCategory = "DINNER"
                 filter2CheckFlag = true
                 refreshing()
-            } else { // 체크가 꺼지면
+            }else{ // 체크가 꺼지면
                 lastCheckedBox = R.id.delivery_cb3
             }
-            Log.d("check", orderTimeCategory.toString())
+            Log.d("check",orderTimeCategory.toString())
         }
 
         binding.deliveryCb4.setOnCheckedChangeListener { buttonView, isChecked ->
             filterCheckFlag = true
-            if (isChecked) {
+            if(isChecked){
                 binding.deliveryCb1.isChecked = false
                 binding.deliveryCb2.isChecked = false
                 binding.deliveryCb3.isChecked = false
                 orderTimeCategory = "MIDNIGHT_SNACKS"
                 filter2CheckFlag = true
                 refreshing()
-            } else { // 체크가 꺼지면
+            }else{ // 체크가 꺼지면
                 lastCheckedBox = R.id.delivery_cb4
             }
-            Log.d("check", orderTimeCategory.toString())
+            Log.d("check",orderTimeCategory.toString())
         }
+
     }
 
     //스피너 관련 작업
     private fun initSpinner() {
-            val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
+        val items = resources.getStringArray(R.array.home_dropdown1) // spinner아이템 배열
 
-            //어댑터
-            val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
-            binding.deliveryPeopleSpinner.adapter = spinnerAdapter
-            binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
+        //어댑터
+        val spinnerAdapter = PeopleSpinnerAdapter(requireContext(), items)
+        binding.deliveryPeopleSpinner.adapter = spinnerAdapter
+        binding.deliveryPeopleSpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
 
-            //이벤트 처리
-            binding.deliveryPeopleSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        //TODO:스피너
-                        Log.d("peopleSpinner", "$position/")
-                        if (position == 0) { // 제일 상단 클릭하면 초기화 해주기 위해
-                            items[0] = items[items.size - 1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
-                            maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
-                        } else {
-                            items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
-                            maxMatching = position * 2
-                        }
-                        val image: ImageView = view!!.findViewById(R.id.arrow_iv)
-                        image.setImageResource(R.drawable.ic_spinner_up)
-                        image.visibility = View.VISIBLE
-                        //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
-                        val textName: TextView = view!!.findViewById(R.id.spinner_text)
-                        textName.text = items[position]
-                        textName.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.gray_2
-                            )
-                        )
+        //이벤트 처리
+        binding.deliveryPeopleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //TODO:스피너
+                Log.d("peopleSpinner", "$position/")
+                if(position==0){ // 제일 상단 클릭하면 초기화 해주기 위해
+                    items[0]= items[items.size-1] // 인원선택(마지막값)을 현재선택값으로 넣어준다
+                    maxMatching = 12 //maxMatching을 최댓값인 12로 설정해준다.
+                }else{
+                    items[0] = items[position] // items[0]은 현재 선택된 아이템 저장용
+                    maxMatching = position * 2
+                }
+                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
+                image.setImageResource(R.drawable.ic_spinner_up)
+                image.visibility = View.VISIBLE
+                //축소된 스피너화면에 맞게 아이템 색상, 화살표 변경
+                val textName: TextView = view!!.findViewById(R.id.spinner_text)
+                textName.text = items[position]
+                textName.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
 
-                        filter1CheckFlag =
-                            position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
-                        finalPage = false
-                        refreshing()
-                    }
+                filter1CheckFlag = position in 1..5 // 1~5사이 아이템을 선택하면 filterCheckFlag true. 아니면 false(false인 경우는 젤 상단 아이템 선택해서 스피너 선택해제하는 경우)
+                finalPage = false
+                refreshing()
+            }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
     //배너 작업
     private fun initBanner() {
-            deliveryService.getDeliveryBanner() //광고 불러오기
+        deliveryService.getDeliveryBanner() //광고 불러오기
     }
 
     //페이지 변경하기
@@ -512,24 +477,11 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
     }
 
     // 배달 목록 필터 적용 후 가져오기
-    private fun getDeliveryFilterList(
-        dormitoryId: Int,
-        cursor: Int,
-        orderTimeCategory: String?,
-        maxMatching: Int?
-    ) {
-        Log.d(
-            "why-filter",
-            "getDeliveryFilterList dormitoryId=$dormitoryId cursor=$cursor / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching"
-        )
+    private fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?) {
+        Log.d("why-filter", "getDeliveryFilterList dormitoryId=$dormitoryId cursor=$cursor / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
         val deliveryDataService = DeliveryService()
         deliveryDataService.setDeliveryFilterView(this)
-        deliveryDataService.getDeliveryFilterList(
-            dormitoryId,
-            cursor,
-            orderTimeCategory,
-            maxMatching
-        )
+        deliveryDataService.getDeliveryFilterList(dormitoryId, cursor, orderTimeCategory, maxMatching)
         totalCursor += 1
     }
 
@@ -554,25 +506,14 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
             var hashTags = result?.get(i)?.hasHashTag
 
             deliveryArray.add(
-                DeliveryPartiesVoList(
-                    currentMatching,
-                    foodCategory,
-                    id,
-                    maxMatching,
-                    orderTime!!,
-                    title,
-                    hashTags
-                )
+                DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
                 // DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, calculateTime(orderTime!!), title, hashTags)
             )
             /*deliveryAdapter.notifyItemChanged(deliveryArray.size - 1)*/
         }
 
         if (finalPage == true) {
-            Log.d(
-                "DELIVERY-FILTER",
-                "getDeliveryFilterList-DeliveryArray-Size = ${deliveryArray.size}"
-            )
+            Log.d("DELIVERY-FILTER", "getDeliveryFilterList-DeliveryArray-Size = ${deliveryArray.size}")
             if (deliveryArray.size >= 2) {
                 if ((binding.deliveryRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= deliveryArray.size - 2)
                     binding.deliveryBottomView.visibility = View.INVISIBLE
@@ -580,7 +521,7 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
             } else binding.deliveryBottomView.visibility = View.VISIBLE
         }
 
-        Log.d("why-filter", "필터 o" + deliveryArray.toString())
+        Log.d("why-filter", "필터 o"+deliveryArray.toString())
         deliveryAdapter.setArrayList(deliveryArray) //어댑터에 바뀐 ArrayList를 알려주는 용
     }
 
@@ -597,14 +538,11 @@ class DeliveryFragment : BaseFragment<FragmentDeliveryBinding>(FragmentDeliveryB
         loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
             }
-
             override fun onAnimationEnd(animation: Animator?) {
                 // initAfterBinding()
             }
-
             override fun onAnimationCancel(p0: Animator?) {
             }
-
             override fun onAnimationRepeat(p0: Animator?) {
             }
         })
