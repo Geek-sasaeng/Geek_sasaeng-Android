@@ -25,6 +25,7 @@ class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
     fun setChattingRoonJoinView(dialogPartyRequestView: DialogPartyRequestView){
         this.dialogPartyRequestView = dialogPartyRequestView
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +37,7 @@ class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
     }
+
 
     private fun initListener(){
         binding.partyRequestOkBtn.setOnClickListener {
@@ -57,6 +59,7 @@ class DialogPartyRequest(val partyId: Int): DialogFragment(), JoinPartyView {
         val height = resources.getDimensionPixelSize(R.dimen.party_request_height)
         dialog?.window?.setLayout(width,height)
     }
+
     private fun initDeliveryPartyData() {
         partyDataService = PartyDataService()
         partyDataService.setJoinPartyView(this)

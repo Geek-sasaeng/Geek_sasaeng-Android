@@ -22,7 +22,8 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,32 +31,45 @@
         </activity>
         <activity
             android:name=".Signup.Basic.SignUpActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Signup.Tos1Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Signup.Tos2Activity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Home.CreateParty.CreatePartyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Login.DormitoryActivity"
-            android:exported="false" />
-        <activity android:name=".Login.LoginActivity" />
-        <activity android:name=".Signup.Naver.SignUpNaverActivity" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Login.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Signup.Naver.SignUpNaverActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Home.Party.ReportParty.PartyReportNoOptionActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Home.Search.SearchActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity" />
-        <activity android:name=".Profile.ProfileMyActivityActivity" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Chatting.ChattingRoom.ChattingRoomActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.ProfileMyActivityActivity"
+            android:screenOrientation="portrait"/>
 
         <!--카카오맵 APP KEY 추가-->
         <meta-data

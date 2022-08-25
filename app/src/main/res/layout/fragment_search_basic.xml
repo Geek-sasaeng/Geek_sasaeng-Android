@@ -11,6 +11,7 @@
         android:text="최근 검색어"
         android:textColor="@color/top"
         android:textSize="18sp"
+        android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="23dp"
         android:layout_marginTop="35dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,6 +46,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/top"
         android:textSize="18sp"
+        android:fontFamily="@font/spoqa_medium"
         android:text="기숙사 이름"
         android:layout_marginTop="21dp"
         android:layout_marginStart="23dp"
@@ -57,6 +59,7 @@
         android:textColor="@color/top"
         android:textSize="18sp"
         android:text="Weekly TOP 10"
+        android:fontFamily="@font/spoqa_medium"
         android:layout_marginStart="18dp"
         app:layout_constraintStart_toEndOf="@id/search_basic_dormitory_name_tv"
         app:layout_constraintTop_toTopOf="@id/search_basic_dormitory_name_tv" />
