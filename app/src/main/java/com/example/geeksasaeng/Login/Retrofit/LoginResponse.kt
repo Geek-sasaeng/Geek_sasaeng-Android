@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class LoginResult(
     @SerializedName("dormitoryId") val dormitoryId: Int,
     @SerializedName("dormitoryName") val dormitoryName: String,
+    @SerializedName("fcmToken") val fcmToken: String,
     @SerializedName("jwt") val jwt: String,
     @SerializedName("loginStatus") val loginStatus: String,
     @SerializedName("nickName") val nickName: String,
@@ -20,7 +21,8 @@ data class LoginResponse(
 
 data class Login(
     @SerializedName("loginId") var loginId: String? = "",
-    @SerializedName("password") var password: String? = ""
+    @SerializedName("password") var password: String? = "",
+    @SerializedName("fcmToken") var fcmToken: String?
 )
 
 data class AutoLoginResult(

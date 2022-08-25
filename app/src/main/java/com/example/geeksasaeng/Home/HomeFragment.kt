@@ -18,7 +18,6 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
     override fun initAfterBinding() {
         initClickListener()
         initData()
-
         val homeVPAdapter = HomeVPAdapter(this)
         binding.homeVp.adapter = homeVPAdapter
         TabLayoutMediator(binding.homeTab, binding.homeVp) {
@@ -38,7 +37,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
 
     fun initClickListener() {
         binding.homeSearchBtn.setOnClickListener {
-            startActivity(Intent(activity, SearchActivity::class.java))
+                startActivity(Intent(activity, SearchActivity::class.java))
         }
     }
 }
