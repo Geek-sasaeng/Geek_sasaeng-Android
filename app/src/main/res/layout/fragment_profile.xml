@@ -90,7 +90,7 @@
                     android:id="@+id/profile_user_grade_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/white" />
+                    android:src="@drawable/ic_level_1" />
 
             </androidx.cardview.widget.CardView>
 
@@ -122,18 +122,30 @@
                 app:layout_constraintStart_toStartOf="@id/profile_user_img_cv"
                 app:layout_constraintTop_toBottomOf="@id/profile_univ_info_tv" />
 
-            <TextView
-                android:id="@+id/profile_level_status_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="복학까지 2학기 남았어요"
-                android:textSize="13sp"
-                android:fontFamily="@font/spoqa_medium"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_level_status_cv"
+                android:layout_width="177dp"
+                android:layout_height="40dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profile_nick_name_tv"
-                android:layout_marginTop="28dp"
-                android:textColor="#29ABE2"/>
+                android:layout_marginTop="13dp"
+                android:backgroundTint="#F1F5F9"
+                android:elevation="0dp"
+                app:cardCornerRadius="90dp"
+                >
+
+                <TextView
+                    android:id="@+id/profile_level_status_tv"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="복학까지 2학기 남았어요"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:textColor="#29ABE2" />
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_grade_layout"
@@ -142,7 +154,7 @@
                 android:layout_marginTop="17dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_level_status_tv">
+                app:layout_constraintTop_toBottomOf="@id/profile_level_status_cv">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_grade_image_cv1"
