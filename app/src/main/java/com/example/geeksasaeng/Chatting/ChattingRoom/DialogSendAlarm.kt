@@ -18,16 +18,11 @@ import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogSendAlarmLayoutBinding
 import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 
-class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
+class DialogSendAlarm: DialogFragment(){
     lateinit var binding: DialogSendAlarmLayoutBinding
     private lateinit var chattingService: ChattingService
+    private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
     private var roomUuid : String? = null
-
-    override fun onStart() {
-        super.onStart()
-        chattingService = ChattingService() //서비스 객체 생성
-        chattingService.setChattingDeliveryComplicatedView(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +31,7 @@ class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
     ): View? {
         roomUuid = requireArguments().getString("roomUuid")
         binding = DialogSendAlarmLayoutBinding.inflate(inflater, container, false)
+        initChattingService()
         initListener()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
@@ -45,6 +41,7 @@ class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
         binding.sendAlarmSendBtn.setOnClickListener {
             Log.d("deliveryAlarm", "배달완료 알림보내기 버튼 눌림")
             chattingService.sendDeliveryComplicatedAlarm(ChattingDeliveryComplicatedRequest(roomUuid!!)) //★ 매칭완료 알람보내기 api 호출
+            this.dismiss()
         }
 
         binding.sendAlarmCancelBtn.setOnClickListener {
@@ -52,14 +49,13 @@ class DialogSendAlarm: DialogFragment(), ChattingDeliveryComplicatedView{
         }
     }
 
-    override fun chattingDeliveryComplicatedSuccess() {
-        this.dismiss()
-        Log.d("deliveryAlarm", "배달완료 알림보내기 성공")
-        CustomToastMsg.createToast(requireContext(), "배달완료 알림 전송이 완료되었습니다", "#8029ABE2", 53)?.show()
+    fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
+        this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
     }
 
-    override fun chattingDeliveryComplicatedFailure(message: String) {
-        Log.d("deliveryAlarm", "배달완료 알림보내기 실패")
-        CustomToastMsg.createToast(requireContext(), message, "#8029ABE2", 53)?.show()
+    fun initChattingService(){
+        chattingService = ChattingService() //서비스 객체 생성
+        chattingService.setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView)
     }
+
 }
