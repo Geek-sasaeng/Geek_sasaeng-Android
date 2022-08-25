@@ -14,13 +14,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
     private val information = arrayListOf("배달파티", "마켓", "헬퍼")
-    private var checkBinding = false
 
     override fun initAfterBinding() {
-        checkBinding = true
         initClickListener()
         initData()
-
         val homeVPAdapter = HomeVPAdapter(this)
         binding.homeVp.adapter = homeVPAdapter
         TabLayoutMediator(binding.homeTab, binding.homeVp) {
@@ -40,9 +37,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
 
     fun initClickListener() {
         binding.homeSearchBtn.setOnClickListener {
-            if (checkBinding) {
                 startActivity(Intent(activity, SearchActivity::class.java))
-            }
         }
     }
 }

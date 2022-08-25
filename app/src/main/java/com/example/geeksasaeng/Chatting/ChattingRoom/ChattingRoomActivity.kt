@@ -5,35 +5,26 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingData
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
-import com.example.geeksasaeng.Chatting.ChattingList.FirestoreChatData
-import com.example.geeksasaeng.Chatting.ChattingList.RoomData
+import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
-import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionMyPopup
-import com.example.geeksasaeng.Home.Party.LookParty.DialogDeliveryOptionOtherPopup
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
-import com.google.firebase.firestore.*
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
+class ChattingRoomActivity :
+    BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView {
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomUuid = String()
+    private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     private lateinit var chattingService: ChattingService
@@ -81,13 +72,20 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
             .document(roomUuid)
             .get()
             .addOnSuccessListener { document ->
-                val roomInfo = document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
+                val roomInfo =
+                    document.get("roomInfo") as java.util.HashMap<String, Any> //roomInfo 필드 값 정보들을 해시맵 형태로 얻어온다.
                 participants = roomInfo.get("participants") as ArrayList<Any>
                 var participantIdx: Int = -1
                 for ((idx, map) in participants!!.withIndex()) {
-                    val map = map as HashMap<String, String>
+                    val map = map as HashMap<String, Any>
                     val participantName = map.get("participant").toString()
                     if (participantName.equals(getNickname())) {
+                        // 송금했는지 확인
+                        checkRemittance = map.get("isRemittance") as Boolean
+                        if (!checkRemittance){
+                            getBankAndAccountNumber()
+                            binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                        }
                         participantIdx = idx
                         break
                     }
@@ -100,14 +98,11 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 // TopLayout 설정
                 if (topLayoutFlag) {
                     binding.chattingRoomTopLayout.visibility = View.VISIBLE
-
                     if (leader) {
                         binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
                         binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
-                    } else {
-                        getBankAndAccountNumber()
-                        binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
                     }
+
                 } else {
                     binding.chattingRoomTopLayout.visibility = View.INVISIBLE
                 }
@@ -133,7 +128,8 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
-        binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.chattingRoomChattingRv.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun initClickListener() {
@@ -176,22 +172,59 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
             else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료") {
                 // TODO: 여기에 파이어베이스 내용 추가하고 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
-                CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+                db.collection("Rooms")
+                    .document(roomUuid).get()
+                    .addOnSuccessListener { document ->
+                        val roomInfo = document.get("roomInfo") as HashMap<String, Any>
+                        val participants =
+                            roomInfo.get("participants") as ArrayList<HashMap<String, Any>>
+                        for ((idx, map) in participants!!.withIndex()) {
+                            if (map.get("participant").toString() == getNickname()) {
+                                map.put("isRemittance", true)
+                                participants[idx] = map
+                                // 송금 완료 처리하기
+                                db.collection("Rooms")
+                                    .document(roomUuid)
+                                    .update("roomInfo.participants", participants)
+                                    .addOnSuccessListener {
+                                        CustomToastMsg.createToast(
+                                            this,
+                                            "송금이 완료되었습니다",
+                                            "#8029ABE2",
+                                            53
+                                        )?.show()
+
+                                    }.addOnFailureListener { it ->
+                                        Log.d("ERROR", it.toString())
+                                    }
+                                break
+                            }
+                        }
+                    }
             }
         }
     }
 
     private fun initTextChangedListener() {
-        binding.chattingRoomChattingTextEt.addTextChangedListener(object: TextWatcher {
+        binding.chattingRoomChattingTextEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.chattingRoomChattingTextEt.text.isNotEmpty()) {
-                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.main))
+                    binding.chattingRoomSendTv.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.main
+                        )
+                    )
                     binding.chattingRoomSendTv.isEnabled = true
-                }
-                else {
-                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray_2))
+                } else {
+                    binding.chattingRoomSendTv.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.gray_2
+                        )
+                    )
                     binding.chattingRoomSendTv.isEnabled = false
                 }
             }
@@ -218,7 +251,16 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                     // 시스템 메시지 처리
                     if (dc.document["isSystemMessage"] == true) {
                         if (dc.type == DocumentChange.Type.ADDED)
-                            chattingRoomRVAdapter.addItem(Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null))
+                            chattingRoomRVAdapter.addItem(
+                                Chatting(
+                                    3,
+                                    null,
+                                    dc.document["time"].toString(),
+                                    null,
+                                    dc.document["content"].toString(),
+                                    null
+                                )
+                            )
                     } else {
                         if (dc.document["readUsers"] == null)
                             continue
@@ -234,25 +276,46 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
 
                         // notRead < 0 일때 처리
                         var notReadCnt = participants.size - readUsers.size
-                        if(notReadCnt < 0)
+                        if (notReadCnt < 0)
                             notReadCnt = 0
 
                         // 새로운 메시지가 추가되었을 경우
                         if (dc.type == DocumentChange.Type.ADDED) {
                             var item: Chatting
                             if (dc.document["isSystemMessage"] == true) {
-                                item = Chatting(3, null, dc.document["time"].toString(), null, dc.document["content"].toString(), null)
-                            }else if(nickname == dc.document["nickname"]) {
-                                item = Chatting(1, nickname, dc.document["time"].toString(), R.drawable.ic_default_profile, dc.document["content"].toString(), notReadCnt)
+                                item = Chatting(
+                                    3,
+                                    null,
+                                    dc.document["time"].toString(),
+                                    null,
+                                    dc.document["content"].toString(),
+                                    null
+                                )
+                            } else if (nickname == dc.document["nickname"]) {
+                                item = Chatting(
+                                    1,
+                                    nickname,
+                                    dc.document["time"].toString(),
+                                    R.drawable.ic_default_profile,
+                                    dc.document["content"].toString(),
+                                    notReadCnt
+                                )
                             } else {
                                 val msgNickname = dc.document["nickname"] as String
-                                item = Chatting(2, msgNickname, dc.document["time"].toString(), R.drawable.ic_default_profile2, dc.document["content"].toString(), notReadCnt)
+                                item = Chatting(
+                                    2,
+                                    msgNickname,
+                                    dc.document["time"].toString(),
+                                    R.drawable.ic_default_profile2,
+                                    dc.document["content"].toString(),
+                                    notReadCnt
+                                )
                             }
                             chattingRoomRVAdapter.addItem(item)
 
-                        // readUsers가 업데이트 되었을 경우
+                            // readUsers가 업데이트 되었을 경우
                         } else if (dc.type == DocumentChange.Type.MODIFIED) {
-                            if(dc.oldIndex == dc.newIndex){
+                            if (dc.oldIndex == dc.newIndex) {
                                 val idx = dc.oldIndex
                                 chattingRoomRVAdapter.setUnreadCount(idx, notReadCnt)
                             }
@@ -290,7 +353,7 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                 }
 
             //updatedAt갱신 - 채팅방 목록 정렬용
-            db.collection("Rooms").document(roomUuid).update("roomInfo.updatedAt",time)
+            db.collection("Rooms").document(roomUuid).update("roomInfo.updatedAt", time)
         }
     }
 
@@ -412,5 +475,12 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
 
     override fun chattingLeaderLeaveFailure(code: Int, message: String) {
         TODO("Not yet implemented")
+    }
+
+    private fun calculateToday(): String {
+        val nowTime = System.currentTimeMillis();
+        val date = Date(nowTime)
+        var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        return dateFormat.format(date)
     }
 }

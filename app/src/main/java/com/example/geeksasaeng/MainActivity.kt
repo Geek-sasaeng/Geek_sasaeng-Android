@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Community.CommunityFragment
@@ -18,7 +19,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     var status: String? = null
     var deliveryItemId: String? = null
-    var checkBinding: Boolean = false
 
     override fun initAfterBinding() {
 
@@ -64,7 +64,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
         */
-        checkBinding = true
 
         setBottomNavi()
     }
@@ -88,7 +87,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setBottomNavi() {
-        if(checkBinding) {
             binding.mainBottomNavi.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.homeFrament -> {
@@ -110,13 +108,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
                 false
             }
-        }
-
         binding.mainBottomNavi.itemIconTintList = null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        checkBinding = false
-    }
 }
