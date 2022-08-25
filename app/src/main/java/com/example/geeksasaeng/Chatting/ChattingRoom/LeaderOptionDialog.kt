@@ -84,8 +84,9 @@ class LeaderOptionDialog: DialogFragment() {
         db.collection("Rooms").document(roomUuid!!).collection("Messages").addSnapshotListener { snapshots, _ ->
             for (dc in snapshots?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
-                    Log.d("FIREBASE-RESPONSE", "dc.document[\"content\"] = ${dc.document["content"]}")
-                    if (dc.document["content"] == getString(R.string.chatting_matching_end)) {
+                    // 지우지마세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 일부러 남겨놓은 부분입니다!!!!!!!!!!!!!!!!!!! -루나
+                    // if (dc.document["content"] == getString(R.string.chatting_matching_end)) {
+                    if (dc.document["content"] == "모든 파티원이 입장을 마쳤습니다 !\n파티장을 주문을, 파티원들은 송금을 진행해주세요") {
                         binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(Color.parseColor("#A8A8A8"))
                         binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
                     }
