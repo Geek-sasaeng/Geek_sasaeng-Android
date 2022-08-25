@@ -107,11 +107,13 @@ class ChattingRoomActivity : BaseActivity<ActivityChattingRoomBinding>(ActivityC
                     binding.chattingRoomTopLayout.visibility = View.VISIBLE
 
                     if (leader) {
-                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
+                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴판 보기"
                         binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
+                        binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_food_menu)
                     } else {
                         getBankAndAccountNumber()
                         binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                        binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_coin)
                     }
                 } else {
                     binding.chattingRoomTopLayout.visibility = View.INVISIBLE

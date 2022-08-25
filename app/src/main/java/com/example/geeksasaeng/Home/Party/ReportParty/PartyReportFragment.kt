@@ -22,7 +22,7 @@ class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(Frag
             /*(context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, LookPartyFragment()).commit()*/
             (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
             (context as MainActivity).onBackPressed()
-        }  
+        }
 
         reportedDeliveryPartyId = requireArguments().getInt("reportedDeliveryPartyId")
         reportedMemberId = requireArguments().getInt("reportedMemberId")
