@@ -25,8 +25,10 @@ class DialogPartyRequestComplete: DialogFragment() {
         binding = DialogPartyRequestCompleteBinding.inflate(inflater, container, false)
         initListener()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
-        // TODO: dialog 위치 변경해주기
         dialog?.window?.setGravity(Gravity.TOP)
+        var params: WindowManager.LayoutParams = dialog?.window?.attributes!!
+        params.y = 200
+        dialog?.window?.attributes = params
 
         return binding.root
     }

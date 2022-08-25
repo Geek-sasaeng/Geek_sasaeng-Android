@@ -30,8 +30,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
 
         binding.profileNickNameTv.text = getNickname()
-        
-        clearBackStack()
+
+        // clearBackStack()
         initClickListener()
         initRecentActivityService()
         initRecentActivityClickListener()

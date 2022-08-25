@@ -7,6 +7,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ImageView
@@ -22,6 +23,8 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
+import java.util.*
+import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView, ProfileMyPreActivityView {
@@ -186,8 +189,9 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
         var preActivityDate = ""
+        Collections.sort(result!!, DateComparator())
 
-        for (i in 0 until result!!.size) {
+        for (i in 0 until result.size) {
             if (preActivityDate != result[i].createdAt.substring(0, 10)) {
                 if (i != 0)
                     myOngoingActivityList.add(ProfileMyOngoingActivityResult(null, null, "${preActivityDate.substring(0, 4)}.${preActivityDate.substring(5, 7)}.${preActivityDate.substring(8, 10)}", 2))
@@ -204,6 +208,17 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myOngoingActivityList.reverse()
         myOngoingActivityRVAdapter.addAllItems(myOngoingActivityList)
         initOngoingActivityNumber(result.size)
+    }
+
+    internal class DateComparator : Comparator<ProfileMyOngoingActivityResult?> {
+        override fun compare(f1: ProfileMyOngoingActivityResult?, f2: ProfileMyOngoingActivityResult?): Int {
+            if (f1!!.createdAt < f2!!.createdAt) {
+                return 1
+            } else if (f1.createdAt > f2.createdAt) {
+                return -1
+            }
+            return 0
+        }
     }
 
     override fun onProfileMyOngoingActivityFailure(message: String) {

@@ -217,53 +217,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         return dateFormat.format(date)
     }
 
-    // 남은 시간 계산
-    // TODO: 흠... 실시간으로 해야하는데 흠...
-    private fun calculateTime(orderTime: String): String {
-        var orderYear = Integer.parseInt(orderTime.substring(0, 4))
-        var orderMonth = Integer.parseInt(orderTime.substring(5, 7))
-        var orderDay = Integer.parseInt(orderTime.substring(8, 10))
-        var orderHours = Integer.parseInt(orderTime.substring(11, 13))
-        var orderMinutes = Integer.parseInt(orderTime.substring(14, 16))
-
-        var currentTime = calculateToday()
-        var todayYear = Integer.parseInt(currentTime.substring(0, 4))
-        var todayMonth = Integer.parseInt(currentTime.substring(5, 7))
-        var todayDay = Integer.parseInt(currentTime.substring(8, 10))
-        var todayHours = Integer.parseInt(currentTime.substring(11, 13))
-        var todayMinutes = Integer.parseInt(currentTime.substring(14, 16))
-
-        var today = Calendar.getInstance().apply {
-            set(Calendar.YEAR, todayYear)
-            set(Calendar.MONTH, todayMonth)
-            set(Calendar.DAY_OF_MONTH, todayDay)
-        }.timeInMillis + (60000 * 60 * todayHours) + (60000 * todayMinutes)
-
-        var order = Calendar.getInstance().apply {
-            set(Calendar.YEAR, orderYear)
-            set(Calendar.MONTH, orderMonth)
-            set(Calendar.DAY_OF_MONTH, orderDay)
-        }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
-
-        var remainTime = order - today
-
-        if (remainTime <= 0) {
-            return "끝끝"
-        }
-
-        var day = remainTime / (24*60*60*1000)
-        var sec = (remainTime % (24*60*60*1000)) / 1000
-        var hour = sec / 3600
-        var minute = (sec % 3600) / 60
-
-        return if (day > 0)
-            "${day}일 ${hour}시간 ${minute}분 남았어요"
-        else if (hour > 0)
-            "${hour}시간 ${minute}분 남았어요"
-        else
-            "${minute}분 남았어요"
-    }
-
     // 리사이클러뷰에 최초로 넣어줄 데이터를 로드하는 경우
     private fun initLoadPosts() {
         searchArray.clear() //리프레시나 최초로 넣어줄 애 로드니까 배열 비워주기
@@ -302,8 +255,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     }
 
     private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
-/*        filterCheckFlag = filter1CheckFlag||filter2CheckFlag //디버깅용
-        Log.d("filterCheck", filterCheckFlag.toString()+":"+filter1CheckFlag.toString()+"/"+filter2CheckFlag.toString())*/
         initLoadPosts()
         initAdapter() //일단, 타이머바인딩때문에 넣어둠
     }
@@ -342,13 +293,12 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
     private fun getSearchPartyList(dormitoryId: Int, cursor: Int, keyword: String) {
         val searchDataService = SearchDataService()
         searchDataService.setSearchPartyView(this)
-        Log.d("why-filterxx", "getSearchPartyList dormitoryId=$dormitoryId cursor=$cursor  keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
         searchDataService.getSearchPartyList(dormitoryId, cursor, keyword)
         totalCursor += 1
     }
 
     override fun onSearchSuccess(result: SearchResult) {
-        Log.d("SEARCH-RESPSONSE", "SUCCESS")
+        Log.d("SEARCH-RESPONSE", "SUCCESS")
         loadingStop()
         searchArray.clear()
         finalPage = result.finalPage
@@ -396,8 +346,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
 
     // 배달 목록 필터 적용 후 가져오기
     private fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?) {
-        Log.d("SEARCH-FRAGMENT", "getSearchFilterList keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
-        Log.d("why-filter", "getSearchFilterList dormitoryId=$dormitoryId cursor=$cursor  keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")
         val searchDataService = SearchDataService()
         searchDataService.setSearchFilterView(this)
         searchDataService.getSearchFilterList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)
@@ -412,7 +360,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         val result = result.searchPartiesVoList
 
         searchArray.clear()
-        Log.d("why","result"+result.toString())
         for (i in 0 until result!!.size) {
             var currentMatching = result?.get(i)?.currentMatching
             var foodCategory = result?.get(i)?.foodCategory
@@ -426,15 +373,12 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
 
-            //searchAdapter.notifyItemChanged(searchArray.size - 1)
-
             if (finalPage == true) {
                 if ((binding.searchDetailPartyRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() >= searchArray.size - 2)
                     binding.searchBottomView.visibility = View.INVISIBLE
                 else binding.searchBottomView.visibility = View.VISIBLE
             }
         }
-        Log.d("why-디테일에서의 array", searchArray.toString())
 
         searchAdapter.setArrayList(searchArray)
     }
@@ -453,7 +397,6 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
             override fun onAnimationStart(p0: Animator?) {
             }
             override fun onAnimationEnd(animation: Animator?) {
-                // initAfterBinding()
             }
             override fun onAnimationCancel(p0: Animator?) {
             }
