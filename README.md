@@ -11,7 +11,7 @@
     <tr>
       <td>
         <a href="https://github.com/JM2308">
-          <img src="https://user-images.githubusercontent.com/87434861/176502862-88891bc8-446e-4543-a5f1-5f12b73b5c1c.PNG" width=200/>
+          <img src= "https://user-images.githubusercontent.com/84059402/186575529-e58d3f0c-05c2-4cc8-a584-a6df35e9a26b.png" width=200/>
           <br>
           <center>Android Developer-루나/고지민</center>
         </a>
@@ -24,6 +24,14 @@
         </a>
       </td>
     </tr>
+    <tr>
+      <td>
+        <a href="https://github.com/hyeong-jun-kim">
+          <img src= "https://user-images.githubusercontent.com/84059402/186575691-b4dee57b-92f4-4193-9b58-67382939419c.png" width=200/>
+          <br>
+          <center>Android Developer-네오/김형준</center>
+        </a>
+      </td>
   </table>
 </div>
 
