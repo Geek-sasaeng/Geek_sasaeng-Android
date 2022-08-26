@@ -336,7 +336,8 @@
                 app:layout_constraintEnd_toEndOf="@id/create_party_location2_tv"
                 app:layout_constraintTop_toBottomOf="@id/create_party_location2_tv"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                app:cardElevation="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/create_party_kakaoMap_location"
