@@ -9,13 +9,14 @@
     tools:context=".Home.CreateParty.CreatePartyActivity">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/create_party_top"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp">
 
         <ImageView
             android:id="@+id/create_party_back_btn_iv"
@@ -54,7 +55,7 @@
             android:textSize="16sp"
             />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 
     <ScrollView
@@ -325,19 +326,27 @@
                 app:layout_constraintTop_toBottomOf="@id/create_party_link2_tv" />
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/create_party_kakaoMap_location"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/create_party_kakaoMap_location_cv"
                 android:layout_width="0dp"
                 android:layout_height="205dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="5dp"
                 android:backgroundTint="@color/gray_0"
-                android:background="@drawable/round_border"
                 app:layout_constraintStart_toStartOf="@id/create_party_location_tv"
                 app:layout_constraintEnd_toEndOf="@id/create_party_location2_tv"
                 app:layout_constraintTop_toBottomOf="@id/create_party_location2_tv"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="20dp"/>
+                app:layout_constraintBottom_toBottomOf="parent">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/create_party_kakaoMap_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                />
+
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
