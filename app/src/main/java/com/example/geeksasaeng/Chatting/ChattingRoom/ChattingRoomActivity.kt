@@ -296,6 +296,7 @@ class ChattingRoomActivity :
 
                         // 새로운 메시지가 추가되었을 경우
                         if (dc.type == DocumentChange.Type.ADDED) {
+                            Log.d("isLeader", leaderName.toString() +": "+ nickname.toString())
                             var item: Chatting
                             if (dc.document["isSystemMessage"] == true) {
                                 item = Chatting(
@@ -311,7 +312,7 @@ class ChattingRoomActivity :
                                 item = Chatting(
                                     1,
                                     nickname,
-                                    leaderName == nickname,
+                                    leaderName ==  nickname,
                                     dc.document["time"].toString(),
                                     R.drawable.ic_default_profile,
                                     dc.document["content"].toString(),
@@ -322,7 +323,7 @@ class ChattingRoomActivity :
                                 item = Chatting(
                                     2,
                                     msgNickname,
-                                    leaderName == nickname,
+                                    leaderName == msgNickname,
                                     dc.document["time"].toString(),
                                     R.drawable.ic_default_profile2,
                                     dc.document["content"].toString(),
