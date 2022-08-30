@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/search_basic_recent_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최근 검색어"
+        android:textColor="@color/top"
+        android:textSize="18sp"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_basic_recent_item_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:paddingStart="28dp"
+        android:paddingEnd="8dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_basic_recent_tv" />
+
+    <View
+        android:id="@+id/search_basic_line"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/line"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@id/search_basic_recent_item_rv"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/search_basic_dormitory_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/top"
+        android:textSize="18sp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="기숙사 이름"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="23dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_basic_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/top"
+        android:textSize="18sp"
+        android:text="Weekly TOP 10"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="18dp"
+        app:layout_constraintStart_toEndOf="@id/search_basic_dormitory_name_tv"
+        app:layout_constraintTop_toTopOf="@id/search_basic_dormitory_name_tv" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_basic_rank_rv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginHorizontal="28dp"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_basic_dormitory_name_tv" />
+
+    <ImageView
+        android:id="@+id/search_basic_back_logo_ic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_logo"
+        android:layout_marginBottom="113dp"
+        app:tint="#DBF8FCFF"
+        android:tintMode="src_atop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

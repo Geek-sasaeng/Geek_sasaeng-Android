@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="23dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/item_my_chatting_profile_iv"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="3.7dp"
+        android:src="@drawable/ic_default_profile2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_my_chatting_profile_iv">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/item_my_chatting_chatting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="@color/gray_0"
+            app:cardElevation="0dp" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/chatting_emoticon_logo_iv"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginStart="7dp"
+                    android:src="@drawable/ic_logo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/chatting_emoticon_message_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_2"
+                    android:text="이모티콘으로 인사해보세요!"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:layout_marginEnd="21dp"
+                    android:layout_marginStart="3dp"
+                    app:layout_constraintStart_toEndOf="@id/chatting_emoticon_logo_iv"
+                    app:layout_constraintTop_toTopOf="@id/chatting_emoticon_logo_iv"
+                    app:layout_constraintBottom_toBottomOf="@id/chatting_emoticon_logo_iv"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/chatting_emoticon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginBottom="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/chatting_emoticon_logo_iv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" >
+                    
+                    <ImageView
+                        android:id="@+id/chatting_emoticon_iv1"
+                        android:layout_width="43dp"
+                        android:layout_height="47dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/chatting_emoticon_iv2"
+                        android:layout_width="43dp"
+                        android:layout_height="47dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/chatting_emoticon_iv3"
+                        android:layout_width="43dp"
+                        android:layout_height="47dp"
+                        android:layout_marginEnd="3dp"
+                        android:src="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/chatting_emoticon_iv4"
+                        android:layout_width="43dp"
+                        android:layout_height="47dp"
+                        android:src="@color/gray_1" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/item_my_chatting_not_read_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/main"
+            android:textSize="12sp"
+            android:text="0"
+            android:layout_marginEnd="3dp"
+            android:gravity="right"
+            android:fontFamily="@font/spoqa_medium"
+            android:paddingHorizontal="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_my_chatting_chatting"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

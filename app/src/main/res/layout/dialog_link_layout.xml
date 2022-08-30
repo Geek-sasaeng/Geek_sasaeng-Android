@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/link_dialog_back_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:id="@+id/link_dialog_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="식당 링크"
+            android:textSize="18sp"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/link_dialog_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/link_dialog_back_btn"
+            />
+
+        <!--edittext밑줄 색상은 backgroundTint로 바꿀 수 있음-->
+        <EditText
+            android:id="@+id/link_dialog_search_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="입력하세요"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_0"
+            android:textSize="15sp"
+            android:fontFamily="@font/spoqa_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/link_dialog_title_tv"
+            android:paddingStart="7dp"
+            android:paddingBottom="13dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="40dp"/>
+
+        <ImageView
+            android:id="@+id/link_dialog_triangle_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_uppertriangle"
+            app:layout_constraintTop_toBottomOf="@id/link_dialog_search_et"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="13dp"/>
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_link_illust"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/link_dialog_content_tv"
+            />
+
+        <TextView
+            android:id="@+id/link_dialog_content_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="원하는 식당의 링크를 복사하여\n입력해주세요"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/top"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/link_dialog_search_et"
+            app:layout_constraintEnd_toEndOf="@id/link_dialog_search_et"
+            app:layout_constraintTop_toBottomOf="@id/link_dialog_triangle_iv"
+            android:layout_marginTop="13dp"
+            android:lineSpacingExtra="6sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ex. 배달의 민족, 요기요"
+            android:textSize="11sp"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_regular"
+            app:layout_constraintTop_toBottomOf="@id/link_dialog_content_tv"
+            app:layout_constraintStart_toStartOf="@id/link_dialog_content_tv"
+            android:layout_marginTop="5dp"/>
+
+
+
+
+        <Button
+            android:id="@+id/link_dialog_skip_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip"
+            android:textColor="#5B5B5B"
+            android:fontFamily="@font/spoqa_regular"
+            android:background="@android:color/transparent"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@id/link_dialog_next_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/link_dialog_next_btn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/main"
+            android:background="@drawable/round_border"
+            android:text="다음"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginTop="40dp"
+            />
+
+        <TextView
+            android:id="@+id/link_dialog_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4/5"
+            android:textSize="13sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="@color/gray_1"
+            app:layout_constraintTop_toBottomOf="@id/link_dialog_next_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
