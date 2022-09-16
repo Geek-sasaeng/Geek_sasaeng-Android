@@ -1,9 +1,12 @@
 package com.example.geeksasaeng.Home
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.Search.SearchActivity
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getDormitory
@@ -14,6 +17,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
     private val information = arrayListOf("배달파티", "마켓", "헬퍼")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("Stack-Log", "onCreate1")
+        clearBackStack()
+        Log.d("Stack-Log", "onCreate2")
+    }
 
     override fun initAfterBinding() {
         initClickListener()
@@ -39,5 +49,18 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
         binding.homeSearchBtn.setOnClickListener {
                 startActivity(Intent(activity, SearchActivity::class.java))
         }
+    }
+
+    private fun clearBackStack() {
+//        val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
+//        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+        val fm = requireActivity().supportFragmentManager
+        Log.d("Stack-Log", "clearBackStack")
+        for (i in 0 until fm.backStackEntryCount) {
+            Log.d("Stack-Log", "stack $i")
+            fm.popBackStack()
+        }
+        Log.d("Stack-Log", "clearBackStack2")
     }
 }

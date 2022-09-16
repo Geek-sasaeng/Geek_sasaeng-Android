@@ -3,10 +3,9 @@ package com.example.geeksasaeng.Profile
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
@@ -35,11 +34,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         initClickListener()
         initRecentActivityService()
         initRecentActivityClickListener()
-    }
-
-    private fun clearBackStack() {
-        val fragmentManager: FragmentManager = (context as MainActivity).supportFragmentManager
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     private fun initClickListener() {
@@ -110,8 +104,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             val lookPartyFragment = LookPartyFragment()
             lookPartyFragment.arguments = bundle
 
-            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
-            transaction.commit()
+            // transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment).commit()
+            transaction.replace(R.id.main_frm, lookPartyFragment).commit()
         }
 
         binding.profilePartyLayoutCv2.setOnClickListener {
