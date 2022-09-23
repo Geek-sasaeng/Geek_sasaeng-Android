@@ -23,7 +23,7 @@ class SearchDataService {
 
     fun getSearchPartyList(dormitoryId: Int, cursor: Int, keyword: String) {
         val searchPartyService = NetworkModule.getInstance()?.create(SearchRetrofitInterface::class.java)
-        searchPartyService?.getSearchPartyList("Bearer " + getJwt(), dormitoryId, cursor, keyword)?.enqueue(object: Callback<SearchResponse> {
+        searchPartyService?.getSearchPartyList(dormitoryId, cursor, keyword)?.enqueue(object: Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 Log.d("SEARCH-RESPONSE", "dormitoryId = $dormitoryId / cursor = $cursor / keyword = $keyword")
                 Log.d("SEARCH-RESPONSE", "response.code = ${response.code()} / response.body = ${response.body()}")
@@ -45,7 +45,7 @@ class SearchDataService {
     // 배달 리스트 필터 적용 후 목록들 불러오기
     fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?){
         val searchPartyService = NetworkModule.getInstance()?.create(SearchRetrofitInterface::class.java)
-        searchPartyService?.getFilterSearchList("Bearer " + getJwt(), dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)?.enqueue(object: Callback<SearchResponse> {
+        searchPartyService?.getFilterSearchList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)?.enqueue(object: Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 // Log.d("DELIVERY-FILTER", "response.code = ${response.code()} / response.body = ${response.body()}")
                 Log.d("SEARCH-FRAGMENT", "getSearchFilterList keyword = $keyword / orderTimeCategory = $orderTimeCategory / maxMatching = $maxMatching")

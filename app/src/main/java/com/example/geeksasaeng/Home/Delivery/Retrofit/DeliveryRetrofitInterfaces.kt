@@ -14,7 +14,6 @@ interface DeliveryRetrofitInterfaces {
     // 기숙사별 배달 리스트 불러오기
     @GET("/{dormitoryId}/delivery-parties")
     fun getAllDeliveryList(
-        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int
     ): Call<DeliveryResponse>
@@ -22,7 +21,6 @@ interface DeliveryRetrofitInterfaces {
     // 기숙사별 배달 리스트 필터 적용 후 불러오기
     @GET("/{dormitoryId}/delivery-parties")
     fun getFilterDeliveryList(
-        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
         @Query("orderTimeCategory") orderTimeCategory: String?,

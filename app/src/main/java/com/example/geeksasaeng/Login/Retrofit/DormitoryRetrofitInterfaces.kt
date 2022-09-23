@@ -9,7 +9,6 @@ interface DormitoryRetrofitInterfaces {
     //기숙사 수정하기
     @PATCH("/members/dormitory")
     fun dormitoryUpdate(
-        @Header("Authorization") jwt: String?,
         @Body dormitoryId: DormitoryRequest
     ): Call<DormitoryResponse>
 }

@@ -8,7 +8,6 @@ interface UpdatePartyRetrofitInterfaces {
     //배달파티 수정하기
     @PUT("/{dormitoryId}/delivery-party/{partyId}")
     fun updateParty(
-        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId:Int,
         @Body updatePartyRequest: UpdatePartyRequest,
         @Path("partyId") partyId:Int

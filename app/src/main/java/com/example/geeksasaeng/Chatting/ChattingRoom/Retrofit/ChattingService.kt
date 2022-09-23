@@ -27,7 +27,7 @@ class ChattingService {
 
     // 파티 멤버 나가기
     fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
-        chattingService.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
+        chattingService.partyMemberChattingLeave(chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
             override fun onResponse(
                 call: Call<ChattingPartyMemberLeaveResponse>,
                 response: Response<ChattingPartyMemberLeaveResponse>
@@ -51,7 +51,7 @@ class ChattingService {
 
     // 파티장 나가기
     fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
-        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
+        chattingService.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
             override fun onResponse(
                 call: Call<ChattingPartyLeaderLeaveResponse>,
                 response: Response<ChattingPartyLeaderLeaveResponse>
@@ -75,7 +75,7 @@ class ChattingService {
     //배달완료 알림보내기
     fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
         Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService.partyDeliveryComplicated("Bearer " + getJwt(),chattingDeliveryComplicatedRequest).enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
+        chattingService.partyDeliveryComplicated(chattingDeliveryComplicatedRequest).enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
             override fun onResponse(
                 call: Call<ChattingDeliveryComplicatedResponse?>,
                 response: Response<ChattingDeliveryComplicatedResponse?>

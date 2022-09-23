@@ -29,7 +29,7 @@ class CreatePartyService {
 
     //기숙사 위치 정보
     fun getDefaultLoc( dormitoryId : Int) {
-        createPartyDataService.getDeliveryPartyDefaultLocation("Bearer " + getJwt(), dormitoryId).enqueue(object :
+        createPartyDataService.getDeliveryPartyDefaultLocation(dormitoryId).enqueue(object :
             Callback<CreatePartyDefaultLocResponse> {
             override fun onResponse(
                 call: Call<CreatePartyDefaultLocResponse>,

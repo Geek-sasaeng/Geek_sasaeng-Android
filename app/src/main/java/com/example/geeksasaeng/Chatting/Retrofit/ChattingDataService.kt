@@ -21,7 +21,7 @@ class ChattingDataService {
 
     fun MatchingEndSender(roomUuid: String){
         Log.d("matchingEND","Bearer " + getJwt()+"/"+roomUuid.toString())
-        ChattingDataService.matchingEnd("Bearer " + getJwt(),roomUuid).enqueue(object : Callback<MatchingEndResponse>{
+        ChattingDataService.matchingEnd(roomUuid).enqueue(object : Callback<MatchingEndResponse>{
             override fun onResponse(
                 call: Call<MatchingEndResponse>,
                 response: Response<MatchingEndResponse>

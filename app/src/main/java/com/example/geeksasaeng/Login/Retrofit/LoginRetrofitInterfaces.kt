@@ -13,6 +13,5 @@ interface LoginRetrofitInterfaces {
     // 자동로그인
     @POST("/login/auto")
     fun autoLogin(
-        @Header("Authorization") jwt: String?
         ): Call<AutoLoginResponse>
 }
