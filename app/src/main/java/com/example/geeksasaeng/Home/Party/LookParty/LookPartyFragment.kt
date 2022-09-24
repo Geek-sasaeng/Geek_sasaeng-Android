@@ -17,6 +17,7 @@ import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
@@ -34,7 +35,7 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView{
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView, MainActivity.onBackPressedListener {
 
     lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
@@ -431,6 +432,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         loadingAnimationView.cancelAnimation()
         binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ProfileFragment()).commit()
     }
 
 /*    override fun onBackPressed() {

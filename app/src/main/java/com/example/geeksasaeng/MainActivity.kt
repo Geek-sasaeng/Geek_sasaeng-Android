@@ -118,4 +118,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.mainBottomNavi.itemIconTintList = null
     }
+
+    interface onBackPressedListener {
+        fun onBackPressed()
+    }
+
+    override fun onBackPressed(){
+        Log.d("Stack-Log", "onBackPressed() - Activity")
+        val fragmentList = supportFragmentManager.fragments
+        for (fragment in fragmentList) {
+            if (fragment is onBackPressedListener) {
+                (fragment as onBackPressedListener).onBackPressed()
+                return
+            }
+        }
+    }
 }

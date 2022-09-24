@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
@@ -105,7 +106,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             lookPartyFragment.arguments = bundle
 
             // transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment).commit()
-            transaction.replace(R.id.main_frm, lookPartyFragment).commit()
+            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment).commit()
         }
 
         binding.profilePartyLayoutCv2.setOnClickListener {
@@ -134,7 +135,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             val lookPartyFragment = LookPartyFragment()
             lookPartyFragment.arguments = bundle
 
-            transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            // transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
+            transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
         }
 

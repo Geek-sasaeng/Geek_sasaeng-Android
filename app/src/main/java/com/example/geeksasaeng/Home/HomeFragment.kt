@@ -20,9 +20,9 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infla
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Stack-Log", "onCreate1")
         clearBackStack()
-        Log.d("Stack-Log", "onCreate2")
+        clearBackStack()
+        (context as MainActivity).supportFragmentManager.popBackStack("lookParty", FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     override fun initAfterBinding() {
