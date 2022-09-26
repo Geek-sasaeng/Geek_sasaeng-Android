@@ -1,6 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatting_add_menu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/chatting_add_menu_back_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_back"
+            android:backgroundTint="#D9D9D9"
+            android:layout_marginLeft="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/chatting_add_menu_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나의 메뉴 입력하기"
+            android:textColor="@color/black"
+            android:fontFamily="@font/spoqa_medium"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/chatting_add_menu_complete_btn_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chatting_add_menu_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/chatting_add_menu_back_btn"
+            android:text="완료"
+            android:fontFamily="@font/spoqa_medium"
+            android:textColor="#BABABA"
+            android:textSize="16sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatting_room_add_menu_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/line"
+        app:layout_constraintTop_toBottomOf="@id/chatting_add_menu_toolbar"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/chatting_room_add_menu_top_layout_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="식당 보기"
+            android:textColor="@color/top"
+            android:textSize="15sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:textFontWeight="500"
+            android:layout_marginStart="28dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/chatting_room_add_menu_top_layout_link_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="링크"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/chatting_room_add_menu_top_layout_tv"
+            app:layout_constraintEnd_toStartOf="@id/chatting_room_add_menu_next_btn"/>
+
+        <ImageView
+            android:id="@+id/chatting_room_add_menu_next_btn"
+            android:layout_width="33dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_next"
+            android:backgroundTint="@color/white"
+            android:layout_marginRight="13.5dp"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="@color/gray_3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/chatting_room_add_menu_food_name_cv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintWidth_percent="0.32"
+        app:layout_constraintHeight_percent="0.029"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="30dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="#F4FBFE"
+        app:layout_constraintTop_toBottomOf="@id/chatting_room_add_menu_top_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatting_room_add_menu_price_cv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="음식 이름"
+            android:textSize="11sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/main"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginStart="7dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/chatting_room_add_menu_price_cv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintWidth_percent="0.23"
+        app:layout_constraintHeight_percent="0.029"
+        android:layout_marginTop="25dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="#F4FBFE"
+        app:layout_constraintTop_toBottomOf="@id/chatting_room_add_menu_top_layout"
+        app:layout_constraintStart_toEndOf="@id/chatting_room_add_menu_food_name_cv"
+        app:layout_constraintEnd_toStartOf="@id/chatting_room_add_menu_number_cv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가격"
+            android:textSize="11sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/main"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginStart="7dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/chatting_room_add_menu_number_cv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintWidth_percent="0.23"
+        app:layout_constraintHeight_percent="0.029"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="30dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="#F4FBFE"
+        app:layout_constraintTop_toBottomOf="@id/chatting_room_add_menu_top_layout"
+        app:layout_constraintStart_toEndOf="@id/chatting_room_add_menu_price_cv"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가격"
+            android:textSize="11sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/main"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginStart="7dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatting_add_menu_menu_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintStart_toStartOf="@id/chatting_room_add_menu_food_name_cv"
+        app:layout_constraintEnd_toEndOf="@id/chatting_room_add_menu_number_cv"
+        app:layout_constraintTop_toBottomOf="@id/chatting_room_add_menu_food_name_cv"
+        app:layout_constraintBottom_toTopOf="@id/chatting_add_menu_bottom_tv">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/chatting_add_menu_bottom_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="추후 추가/수정이 가능합니다"
+        android:textColor="@color/gray_2"
+        android:textSize="15sp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

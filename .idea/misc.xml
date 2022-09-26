@@ -34,8 +34,8 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/signup_btn.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/signup_btn_border.xml" value="0.23" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/drawable/spinner_outline_unclicked.xml" value="0.255" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_add_menu.xml" value="0.10287303058387395" />
-        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_check_menu.xml" value="0.10287303058387395" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_add_menu.xml" value="0.4" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_check_menu.xml" value="0.264" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_chatting_room.xml" value="0.4" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_create_party.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/activity_login.xml" value="0.1" />
@@ -55,6 +55,7 @@
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_location_layout.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_logout.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_num_layout.xml" value="0.4" />
+        <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_num_update_layout.xml" value="0.20478837109876016" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_party_request_complete.xml" value="0.6" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_email_check.xml" value="0.536" />
         <entry key="..\:/Users/jimin/git/Geek_sasaeng-Android/app/src/main/res/layout/dialog_signup_phone_skip.xml" value="0.264" />
