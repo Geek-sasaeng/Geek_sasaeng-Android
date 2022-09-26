@@ -166,7 +166,6 @@
         android:layout_width="23dp"
         android:layout_height="15dp"
         android:src="@drawable/ic_next"
-        android:tint="@color/black"
         android:backgroundTint="@color/white"
         android:layout_marginRight="22dp"
         android:paddingStart="11dp"
