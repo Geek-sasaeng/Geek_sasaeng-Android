@@ -1,10 +1,15 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Gallery
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +26,8 @@ import kotlin.collections.HashMap
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView {
+
+    private val TAG = "CHATTING-ROOM-ACTIVITY"
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
@@ -42,6 +49,10 @@ class ChattingRoomActivity :
     lateinit var accountNumber: String
     var preChatNickname: String = ""
 
+    // Album
+    val PERMISSION_Album = 101 // 앨범 권한 처리
+    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    
     // Firebase
     val db = FirebaseFirestore.getInstance()
 
@@ -50,7 +61,6 @@ class ChattingRoomActivity :
         roomUuid = intent.getStringExtra("roomUuid").toString()
         chattingRoomName = roomUuid
         binding.chattingRoomTitleTv.text = roomName
-
 
         initFirestore()
         initClickListener()
@@ -70,7 +80,6 @@ class ChattingRoomActivity :
     }
 
     private fun initFirestore() {
-
         // 현재 파티원 정보 불러오기, 방장인지 아닌지 확인하기
         db.collection("Rooms")
             .document(roomUuid)
@@ -148,6 +157,13 @@ class ChattingRoomActivity :
     private fun initClickListener() {
         binding.chattingRoomBackBtn.setOnClickListener {
             finish()
+        }
+
+        binding.chattingRoomAlbumIv.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+
         }
     }
 
