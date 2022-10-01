@@ -69,7 +69,7 @@ class DialogPartyName : DialogFragment() {
             val dialogAccount = DialogAccountNumber()
             dialogAccount.show(parentFragmentManager, "CustomDialog")
 
-            //자기자신(현 다이얼로그)은 종료 => 종료가 안되는 것 같기두..?
+            //자기자신(현 다이얼로그)은 종료
             activity?.supportFragmentManager?.beginTransaction()
                 ?.remove(this)?.commit()
         }

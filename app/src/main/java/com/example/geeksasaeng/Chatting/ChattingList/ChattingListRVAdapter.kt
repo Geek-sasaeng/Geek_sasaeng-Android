@@ -35,6 +35,8 @@ class ChattingListRVAdapter(private var chatting: ArrayList<ChattingData>) : Rec
         holder.bind(chatting[position]!!)
     }
 
+    override fun getItemCount(): Int = chatting.size
+
     fun setChattingData(position: Int, chattingData: ChattingData) {
         chatting.set(position, chattingData)
         this.notifyItemChanged(position)
@@ -45,8 +47,6 @@ class ChattingListRVAdapter(private var chatting: ArrayList<ChattingData>) : Rec
         chatting.addAll(items)
         this.notifyDataSetChanged()
     }
-
-    override fun getItemCount(): Int = chatting.size
 
     inner class ViewHolder(val binding: ItemChattingListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: ChattingData) {

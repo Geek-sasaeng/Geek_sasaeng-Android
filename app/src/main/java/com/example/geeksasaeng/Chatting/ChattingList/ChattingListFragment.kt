@@ -9,7 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
+import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Signup.Basic.SignUpActivity
+import com.example.geeksasaeng.Signup.Basic.StepTwoFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
@@ -118,6 +123,7 @@ class ChattingListFragment :
     }
 
     private fun initClickListener() {
+        //필터버튼
         binding.chattingSectionRb1.setOnClickListener {
             binding.chattingListPreparingIv.visibility = View.GONE
             binding.chattingListRv.visibility = View.VISIBLE
@@ -131,6 +137,11 @@ class ChattingListFragment :
         binding.chattingSectionRb3.setOnClickListener {
             binding.chattingListRv.visibility = View.GONE
             binding.chattingListPreparingIv.visibility = View.VISIBLE
+        }
+
+        //보관함 버튼
+       binding.chattingStorageIv.setOnClickListener {
+           (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingStorageFragment()).addToBackStack("chattingStorage").commit()
         }
     }
 
