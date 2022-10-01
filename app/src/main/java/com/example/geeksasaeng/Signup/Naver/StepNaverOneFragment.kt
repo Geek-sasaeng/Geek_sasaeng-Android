@@ -1,8 +1,6 @@
 package com.example.geeksasaeng.Signup.Naver
 
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,19 +12,19 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepThreeFragment
 import com.example.geeksasaeng.Signup.UniversitySpinnerAdapter
 import com.example.geeksasaeng.Signup.Retrofit.*
-import com.example.geeksasaeng.Signup.ToastMsgSignup
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.FragmentStepNaverOneBinding
 import com.example.geeksasaeng.Utils.getUuid
+import java.text.DecimalFormat
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.concurrent.timer
 
-class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentStepNaverOneBinding::inflate), SignUpNickCheckView, SignUpEmailView {
+
+class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentStepNaverOneBinding::inflate),
+    SignUpNickCheckView, SignUpEmailView, VerifyEmailView {
 
     var loginId: String? = ""
     var phoneNumber: String? = ""
@@ -36,7 +34,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     private val progressVM: ProgressNaverViewModel by activityViewModels()
     private val signUpNaverVM: SignUpNaverViewModel by activityViewModels()
-    private lateinit var signUpService : SignupDataService // 닉네임 중복확인용
+    private lateinit var signUpService : SignupDataService // 닉네임 중복확인, 이메일전송, 이메일 인증용
 
     // TODO: 학교 리스트 API 연결
     var universityList: Array<String> = arrayOf("자신의 학교를 선택해주세요", "ㄱ", "가천대학교","자신의 학교를 선택해주세요")
@@ -50,27 +48,55 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     override fun onStart() {
         super.onStart()
         if(isNotFirst){
-            binding.stepNaverOneNicknameSuccessTv.visibility=View.VISIBLE
+            binding.stepNaverOneNicknameSuccessTv.visibility= View.VISIBLE
 
             binding.stepNaverOneNicknameBtnO.visibility = View.VISIBLE
             binding.stepNaverOneNicknameBtnX.visibility = View.INVISIBLE
 
-            binding.stepNaverOneEmailCheckBtnX.visibility = View.GONE
-            binding.stepNaverOneEmailCheckBtnO.visibility = View.VISIBLE
+            binding.stepNaverOneEmailSendBtnX.visibility = View.GONE
+            binding.stepNaverOneEmailSendBtnO.visibility = View.VISIBLE
             isSendEmail = false
             checkingNext()
         }
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpNickCheckView(this@StepNaverOneFragment) // 닉네임 중복확인 뷰 연결
-        signUpService.setSignUpEmailView(this@StepNaverOneFragment) // 이메일 인증 뷰 연결
+        signUpService.setSignUpEmailView(this@StepNaverOneFragment) // 이메일 보내기 뷰 연결
+        signUpService.setVerifyEmailView(this@StepNaverOneFragment) // 이메일 인증 뷰 연결
     }
 
     // 타이머 작동
     private fun startTimer() {
         timerTask = timer(period = 1000) { //1초가 주기
-            if (time != 0) // time이 0이 아니라면
+            val timeForm = DecimalFormat("00") //0을 넣은 곳은 빈자리일 경우, 0으로 채워준다.
+            val min = timeForm.format(time / 60000) //전체시간 나누기 60초
+            val sec = timeForm.format((time % 60000) / 1000)
+
+            activity?.runOnUiThread {
+//                binding.stepNaverOneCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
+//                binding.stepNaverOneCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
+                Log.d("time", "${min}분 ${sec}초 남았어요")
+
+                if (min == "00" && sec == "00"){
+                    timerTask?.cancel()
+//                    binding.stepNaverOneCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
+//                    binding.stepNaverOneCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
+//                    // 인증번호 입력 시간이 만료 되었으므로 버튼 비활성화 시킴
+//                    binding.stepNaverOneCheckMsgTv.visibility = View.GONE
+//                    binding.stepNaverOneCheckMsgTv.visibility = View.VISIBLE
+                }
+            }
+            if (time != 0) //time이 0이 아니라면
                 time -= 1000 //1초씩 줄이기
         }
+    }
+
+    // 타이머 초기화
+    private fun resetTimer() {
+        timerTask?.cancel()
+
+        time = 300000
+//        binding.stepNaverOneCheckMsgTv.visibility=View.VISIBLE
+//        binding.stepNaverOneCheckMsgTv.text = "05분 00초 남았어요"
     }
 
     override fun onStop() {
@@ -162,11 +188,11 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (universityName != null && binding.stepNaverOneEmailEt.text.isNotEmpty()) {
-                    binding.stepNaverOneEmailCheckBtnX.visibility = View.GONE
-                    binding.stepNaverOneEmailCheckBtnO.visibility = View.VISIBLE
+                    binding.stepNaverOneEmailSendBtnX.visibility = View.GONE
+                    binding.stepNaverOneEmailSendBtnO.visibility = View.VISIBLE
                 } else {
-                    binding.stepNaverOneEmailCheckBtnX.visibility = View.VISIBLE
-                    binding.stepNaverOneEmailCheckBtnO.visibility = View.GONE
+                    binding.stepNaverOneEmailSendBtnX.visibility = View.VISIBLE
+                    binding.stepNaverOneEmailSendBtnO.visibility = View.GONE
                 }
 
                 isSendEmail = false
@@ -179,11 +205,11 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
             override fun afterTextChanged(editable: Editable) {
                 if (binding.stepNaverOneEmail2Et.text.isNotEmpty() && binding.stepNaverOneEmailEt.text.isNotEmpty()) {
-                    binding.stepNaverOneEmailCheckBtnX.visibility = View.GONE
-                    binding.stepNaverOneEmailCheckBtnO.visibility = View.VISIBLE
+                    binding.stepNaverOneEmailSendBtnX.visibility = View.GONE
+                    binding.stepNaverOneEmailSendBtnO.visibility = View.VISIBLE
                 } else {
-                    binding.stepNaverOneEmailCheckBtnX.visibility = View.VISIBLE
-                    binding.stepNaverOneEmailCheckBtnO.visibility = View.GONE
+                    binding.stepNaverOneEmailSendBtnX.visibility = View.VISIBLE
+                    binding.stepNaverOneEmailSendBtnO.visibility = View.GONE
                 }
                 isSendEmail = false
                 checkingNext()
@@ -200,9 +226,17 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
         }
 
         // 이메일 인증 전송 버튼
-        binding.stepNaverOneEmailCheckBtnO.setOnClickListener {
+        binding.stepNaverOneEmailSendBtnO.setOnClickListener {
             sendEmail()
         }
+
+        // 재전송버튼
+        binding.stepNaverOneResendBtn.setOnClickListener {
+            sendEmail()
+            binding.stepNaverOneCheckMsgTv.visibility = View.VISIBLE
+            binding.stepNaverOneCheckMsgTv.visibility = View.GONE
+        }
+
 
         // 다음
         binding.stepNaverOneNextBtn.setOnClickListener {
@@ -214,13 +248,24 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
             signUpNaverVM.setUniversityName(universityName)
             signUpNaverVM.setEmail(binding.stepNaverOneEmailEt.text.toString() + binding.stepNaverOneEmail2Et.text.toString())
 
-            val bundle = Bundle()
-            bundle.putInt("time",time)
-            val frag = StepNaverTwoFragment()
-            frag.arguments = bundle
-
-            (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, frag).addToBackStack(null).commit()
+            // 이메일 번호 인증
+            verifyEmail()
         }
+    }
+
+    //이메일 인증
+    private fun verifyEmail() {
+        val verifyEmailRequest = VerifyEmailRequest(signUpNaverVM.getEmail(), binding.stepNaverOneCheckEt.text.toString())
+        signUpService.verifyEmailSender(verifyEmailRequest)
+    }
+
+    override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
+        signUpNaverVM.setEmailId(result.emailId)
+        (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverTwoFragment()).addToBackStack(null).commit()
+    }
+
+    override fun onVerifyEmailFailure(message: String) {
+        CustomToastMsg.createToast((activity as SignUpNaverActivity), "인증번호가 틀렸습니다.", "#80A8A8A8", 53)?.show()
     }
 
     //닉네임 중복확인 결과
@@ -251,11 +296,11 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     override fun onSignUpEmailSuccess(message: String) {
         CustomToastMsg.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
-        //ToastMsgSignup.createToast((activity as SignUpNaverActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
         isSendEmail = true
         //이메일이 성공적으로 진행되었을때 버튼 활성화
-        checkingNext()
+/*        checkingNext()*/
 
+        resetTimer()
         startTimer()
         Log.d("cherry","Signup-success")
     }
@@ -269,7 +314,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
     }
 
     private fun checkingNext(){
-        var check = (binding.stepNaverOneNicknameSuccessTv.visibility==View.VISIBLE) && isSendEmail
+        var check = (binding.stepNaverOneNicknameSuccessTv.visibility==View.VISIBLE) && isSendEmail //TODO: 이메일 보낸 여부가 아니라 이메일 검증 유무로 바꿔야함
 
         if(check){
             binding.stepNaverOneNextBtn.isEnabled = true;

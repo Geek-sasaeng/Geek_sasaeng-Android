@@ -7,12 +7,14 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -143,6 +145,17 @@ class ChattingRoomActivity :
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
         binding.chattingRoomChattingRv.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
+            override fun onUserProfileClicked() {
+                //사용자 프로필
+                Log.d("bottom", "실행됨.")
+                val bottomSheetDialogFragment = ChattingUserBottomFragment()
+                bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
+                bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
+            }
+
+        })
     }
 
     private fun initClickListener() {

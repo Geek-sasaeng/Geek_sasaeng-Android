@@ -11,12 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedRequest
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
-import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
-import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogSendAlarmLayoutBinding
-import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 
 class DialogSendAlarm: DialogFragment(){
     lateinit var binding: DialogSendAlarmLayoutBinding

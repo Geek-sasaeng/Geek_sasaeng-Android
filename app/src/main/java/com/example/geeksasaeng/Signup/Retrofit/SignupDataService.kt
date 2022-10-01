@@ -203,7 +203,8 @@ class SignupDataService() {
                             )
                         }
                     }else{
-                        Log.d("email", response.body()?.message.toString())
+                        Log.d("email-전송실패", "메세지: "+ response.body()?.message.toString())
+                        //TODO: 이멜 전송 실패했을때 토스트 메세지 띄우고 싶음
                     }
                 }
 

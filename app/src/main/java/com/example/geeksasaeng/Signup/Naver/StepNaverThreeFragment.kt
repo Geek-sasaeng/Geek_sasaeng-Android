@@ -4,18 +4,15 @@ import android.content.Intent
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Login.LoginActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.privacyTemrsAgree
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.serviceTemrsAgree
 import com.example.geeksasaeng.Signup.Retrofit.SignUpSocialView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Retrofit.SocialSignUpRequest
 import com.example.geeksasaeng.Signup.Tos1Activity
 import com.example.geeksasaeng.Signup.Tos2Activity
-import com.example.geeksasaeng.databinding.FragmentStepNaverThreeBinding
+import com.example.geeksasaeng.databinding.FragmentStepNaverTwoBinding
 
-class StepNaverThreeFragment :
-    BaseFragment<FragmentStepNaverThreeBinding>(FragmentStepNaverThreeBinding::inflate),
+class StepNaverTwoFragment :
+    BaseFragment<FragmentStepNaverTwoBinding>(FragmentStepNaverTwoBinding::inflate),
     SignUpSocialView {
 
     companion object{
@@ -33,56 +30,56 @@ class StepNaverThreeFragment :
     }
 
     override fun initAfterBinding() {
-        progressVM.setValue(3)
+        progressVM.setValue(2)
         initClickListener()
     }
 
     private fun initClickListener() {
 
-        binding.stepNaverThreeAgree1MoreIv.setOnClickListener {
+        binding.stepNaverTwoAgree1MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos1Activity::class.java)
             intent.putExtra("isSocial", true)
             startActivity(intent)
         }
 
-        binding.stepNaverThreeAgree2MoreIv.setOnClickListener {
+        binding.stepNaverTwoAgree2MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos2Activity::class.java)
             intent.putExtra("isSocial", true)
             startActivity(intent)
         }
 
-        binding.stepNaverThreeAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.stepNaverTwoAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialServiceTemrsAgree = isChecked
             if(socialPrivacyTemrsAgree){
-                binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
-                binding.stepNaverThreeAgree2Cb.isChecked = true
+                binding.stepNaverTwoAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+                binding.stepNaverTwoAgree2Cb.isChecked = true
             }
 
         }
 
-        binding.stepNaverThreeAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.stepNaverTwoAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
             socialPrivacyTemrsAgree = isChecked
             if(socialServiceTemrsAgree){
-                binding.stepNaverThreeAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
-                binding.stepNaverThreeAgree1Cb.isChecked = true
+                binding.stepNaverTwoAgreeAllCb.isChecked = socialServiceTemrsAgree&& socialPrivacyTemrsAgree
+                binding.stepNaverTwoAgree1Cb.isChecked = true
             }
         }
 
-        binding.stepNaverThreeAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.stepNaverTwoAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
-                binding.stepNaverThreeAgree1Cb.isChecked = true
-                binding.stepNaverThreeAgree2Cb.isChecked = true
+                binding.stepNaverTwoAgree1Cb.isChecked = true
+                binding.stepNaverTwoAgree2Cb.isChecked = true
                 socialServiceTemrsAgree = true
                 socialPrivacyTemrsAgree = true
             }else{
-                binding.stepNaverThreeAgree1Cb.isChecked = false
-                binding.stepNaverThreeAgree2Cb.isChecked = false
+                binding.stepNaverTwoAgree1Cb.isChecked = false
+                binding.stepNaverTwoAgree2Cb.isChecked = false
                 socialServiceTemrsAgree = false
                 socialPrivacyTemrsAgree = false
             }
         }
 
-        binding.stepNaverThreeStartBtn.setOnClickListener {
+        binding.stepNaverTwoStartBtn.setOnClickListener {
             if(socialServiceTemrsAgree&& socialPrivacyTemrsAgree){
                 signUpNaverVM.setInformationAgreeStatus("Y")
                 val email = signUpNaverVM.getEmail()
@@ -103,10 +100,10 @@ class StepNaverThreeFragment :
 
     fun checkTermsAgree(){
         if(socialServiceTemrsAgree){
-            binding.stepNaverThreeAgree1Cb.isChecked = true
+            binding.stepNaverTwoAgree1Cb.isChecked = true
         }
         if(socialPrivacyTemrsAgree){
-            binding.stepNaverThreeAgree2Cb.isChecked = true
+            binding.stepNaverTwoAgree2Cb.isChecked = true
         }
     }
 
