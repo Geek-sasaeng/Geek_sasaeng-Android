@@ -178,7 +178,7 @@ class SignupDataService() {
                 }
 
                 override fun onFailure(call: Call<SignUpNickCheckResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    Log.d("NICKNAME-RESPONSE", "SignupDataService-onFailure : Nickname", t)
                 }
             })
     }

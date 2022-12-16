@@ -129,7 +129,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             startActivity(intent)
         }else{
             Log.d("cherry", "첫 로그인이 아님")
-            //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
             saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
@@ -220,7 +219,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
 
     override fun onSignUpSocialSuccess() {
-        // TODO: 성공하면 나오는 화면 생기면 넣어주기
         showToast("성공")
         Log.d("signup", "회원가입에 성공하였습니다.")
     }
