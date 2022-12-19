@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="17.5dp"
+    android:layout_marginBottom="4.5dp"
+    android:layout_marginStart="29dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/item_profile_my_activity_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2022.08.19"
+        android:textColor="#A8A8A8"
+        android:textSize="12sp"
+        android:textFontWeight="500"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
