@@ -20,7 +20,7 @@ class SignupDataService() {
     private lateinit var signUpSmsView: SignUpSmsView
     private lateinit var verifySmsView: VerifySmsView
 
-    private val SignupDataService = retrofit.create(SignupRetrofitInterfaces::class.java)
+    val SignupDataService = NetworkModule.getInstance()?.create(SignupRetrofitInterfaces::class.java)
 
     //setView
     fun setSignUpView(signUpView: SignUpView) {
@@ -269,28 +269,27 @@ class SignupDataService() {
 
     // sms 인증확인
     fun verifySmsSender(verifySmsRequest: VerifySmsRequest) {
-        SignupDataService.verifySms(verifySmsRequest)
-            .enqueue(object : Callback<VerifySmsResponse> {
-                override fun onResponse(
-                    call: Call<VerifySmsResponse>,
-                    response: Response<VerifySmsResponse>
-                ) {
-                    if (response.isSuccessful && response.code() == 200) {
-                        val resp = response.body()!!
-                        when (resp.code) {
-                            1000 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
-                            else -> verifySmsView.onVerifySmsFailure(resp.message)
-                        }
+        SignupDataService.verifySms(verifySmsRequest).enqueue(object : Callback<VerifySmsResponse> {
+            override fun onResponse(
+                call: Call<VerifySmsResponse>,
+                response: Response<VerifySmsResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> verifySmsView.onVerifySmsSuccess(resp.result!!)
+                        else -> verifySmsView.onVerifySmsFailure(resp.message)
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<VerifySmsResponse>, t: Throwable) {
-                    Log.d(
-                        "SignUpSmsSender-RESP",
-                        "SignupDataService-onFailure : SignUpSmsFailed",
-                        t
-                    )
-                }
-            })
+            override fun onFailure(call: Call<VerifySmsResponse>, t: Throwable) {
+                Log.d(
+                    "SignUpSmsSender-RESP",
+                    "SignupDataService-onFailure : SignUpSmsFailed",
+                    t
+                )
+            }
+        })
     }
 }
