@@ -12,7 +12,7 @@ class UpdatePartyService {
     //뷰객체 생성
     private lateinit var updatePartyView: UpdatePartyView
 
-    private val updatePartyService = retrofit.create(UpdatePartyRetrofitInterfaces::class.java)
+    val UpdatePartyService = NetworkModule.getInstance()?.create(UpdatePartyRetrofitInterfaces::class.java)
 
     //setView
     fun setUpdatePartyView(updatePartyView: UpdatePartyView){
@@ -20,7 +20,7 @@ class UpdatePartyService {
     }
 
     fun updatePartySender(dormitoryId: Int, partyId:Int, updatePartyRequest: UpdatePartyRequest){
-        updatePartyService.updateParty("Bearer " + getJwt(), dormitoryId, updatePartyRequest, partyId).enqueue(object:
+        UpdatePartyService.updateParty("Bearer " + getJwt(), dormitoryId, updatePartyRequest, partyId).enqueue(object:
             Callback<UpdatePartyResponse>{
             override fun onResponse(
                 call: Call<UpdatePartyResponse>,

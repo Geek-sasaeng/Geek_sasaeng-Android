@@ -16,7 +16,7 @@ class CreatePartyService {
     private lateinit var createPartyDefaultLocView: CreatePartyDefaultLocView //기숙사 deafult위치 불러오기
     private lateinit var createPartyView: CreatePartyView // 파티 생성하기 등록
 
-    private val createPartyDataService = retrofit.create(CreatePartyRetrofitInterfaces::class.java)
+    val CreatePartyDataService = NetworkModule.getInstance()?.create(CreatePartyRetrofitInterfaces::class.java)
 
     //setView
     fun setCreatePartyDefaultLocView(createPartyDefaultLocView: CreatePartyDefaultLocView){
@@ -29,7 +29,7 @@ class CreatePartyService {
 
     //기숙사 위치 정보
     fun getDefaultLoc( dormitoryId : Int) {
-        createPartyDataService.getDeliveryPartyDefaultLocation("Bearer " + getJwt(), dormitoryId).enqueue(object :
+        CreatePartyDataService.getDeliveryPartyDefaultLocation("Bearer " + getJwt(), dormitoryId).enqueue(object :
             Callback<CreatePartyDefaultLocResponse> {
             override fun onResponse(
                 call: Call<CreatePartyDefaultLocResponse>,
@@ -52,7 +52,7 @@ class CreatePartyService {
 
     //파티 생성하기
     fun createPartySender(dormitoryId: Int, createPartyRequest: CreatePartyRequest){
-        createPartyDataService.createParty("Bearer " + getJwt(), dormitoryId, createPartyRequest).enqueue(object:
+        CreatePartyDataService.createParty("Bearer " + getJwt(), dormitoryId, createPartyRequest).enqueue(object:
         Callback<CreatePartyResponse>{
             override fun onResponse(
                 call: Call<CreatePartyResponse>,
@@ -73,9 +73,7 @@ class CreatePartyService {
             override fun onFailure(call: Call<CreatePartyResponse>, t: Throwable) {
                 Log.d("jjang", "파티 생성하기 onFailure"+t.toString())
             }
-
         })
     }
-
 }
 

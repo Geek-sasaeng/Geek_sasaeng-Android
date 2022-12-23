@@ -16,7 +16,8 @@ class DeliveryService {
     private lateinit var deliveryBannerView: DeliveryBannerView
     private lateinit var deliveryView: DeliveryView
     private lateinit var deliveryFilterView: DeliveryFilterView
-    private val deliveryDataService = retrofit.create(DeliveryRetrofitInterfaces::class.java)
+
+    val DeliveryDataService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
 
     //setView
     fun setDeliveryBannerView(deliveryBannerView: DeliveryBannerView){
@@ -30,7 +31,7 @@ class DeliveryService {
     }
 
     fun getDeliveryBanner(){
-        deliveryDataService.getCommercials().enqueue(object : Callback<DeliveryBannerResponse> {
+        DeliveryDataService.getCommercials().enqueue(object : Callback<DeliveryBannerResponse> {
             override fun onResponse(
                 call: Call<DeliveryBannerResponse>,
                 response: Response<DeliveryBannerResponse>
@@ -54,8 +55,7 @@ class DeliveryService {
 
     // 배달 리스트 목록들 불러오기
     fun getDeliveryAllList(dormitoryId: Int, cursor: Int){
-        val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
-        deliveryPartyService?.getAllDeliveryList("Bearer " + getJwt(), dormitoryId, cursor)?.enqueue(object:
+        DeliveryDataService?.getAllDeliveryList("Bearer " + getJwt(), dormitoryId, cursor)?.enqueue(object:
             Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 Log.d("DELIVERY-RESPONSE", "response.code = ${response.code()} / response.body = ${response.body()}")
@@ -77,8 +77,7 @@ class DeliveryService {
 
     // 배달 리스트 필터 적용 후 목록들 불러오기
     fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?){
-        val deliveryPartyService = NetworkModule.getInstance()?.create(DeliveryRetrofitInterfaces::class.java)
-        deliveryPartyService?.getFilterDeliveryList("Bearer " + getJwt(), dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
+        DeliveryDataService?.getFilterDeliveryList("Bearer " + getJwt(), dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 // Log.d("DELIVERY-FILTER", "response.code = ${response.code()} / response.body = ${response.body()}")
                 Log.d("DELIVERY-FILTER", "response.code = ${response.code()}")

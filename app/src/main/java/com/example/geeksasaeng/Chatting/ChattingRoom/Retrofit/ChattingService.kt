@@ -12,7 +12,7 @@ class ChattingService {
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
 
-    private var chattingService = retrofit.create(ChattingRetrofitInterfaces::class.java)
+    var ChattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
     //setView
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
@@ -27,7 +27,7 @@ class ChattingService {
 
     // 파티 멤버 나가기
     fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
-        chattingService.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
+        ChattingService.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest).enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
             override fun onResponse(
                 call: Call<ChattingPartyMemberLeaveResponse>,
                 response: Response<ChattingPartyMemberLeaveResponse>
@@ -51,7 +51,7 @@ class ChattingService {
 
     // 파티장 나가기
     fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
-        chattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
+        ChattingService.partyLeaderChattingLeave("Bearer " + getJwt(), chattingPartyLeaderLeaveRequest).enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
             override fun onResponse(
                 call: Call<ChattingPartyLeaderLeaveResponse>,
                 response: Response<ChattingPartyLeaderLeaveResponse>
@@ -75,7 +75,7 @@ class ChattingService {
     //배달완료 알림보내기
     fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
         Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService.partyDeliveryComplicated("Bearer " + getJwt(),chattingDeliveryComplicatedRequest).enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
+        ChattingService.partyDeliveryComplicated("Bearer " + getJwt(),chattingDeliveryComplicatedRequest).enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
             override fun onResponse(
                 call: Call<ChattingDeliveryComplicatedResponse?>,
                 response: Response<ChattingDeliveryComplicatedResponse?>
@@ -94,7 +94,6 @@ class ChattingService {
                 Log.d("delivery-배달완료알람", "실패"+ t.toString())
                 //TODO: 계속 타임아웃 오류나...
             }
-
         })
     }
 }

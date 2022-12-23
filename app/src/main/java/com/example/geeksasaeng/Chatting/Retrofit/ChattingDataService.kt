@@ -12,7 +12,7 @@ class ChattingDataService {
     // 뷰 객체 생성
     private lateinit var matchingEndView: MatchingEndView
 
-    private val ChattingDataService = retrofit.create(ChattingRetrofitInterfaces::class.java)
+    val ChattingDataService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
     //setView
     fun setMatchingEndView(matchingEndView: MatchingEndView){
