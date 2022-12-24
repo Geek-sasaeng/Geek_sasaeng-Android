@@ -216,8 +216,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
-
-
     override fun onSignUpSocialSuccess() {
         showToast("성공")
         Log.d("signup", "회원가입에 성공하였습니다.")
