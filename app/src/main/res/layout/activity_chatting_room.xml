@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="#D1F6F9FB"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/chatting_room_toolbar"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -87,7 +87,7 @@
             android:id="@+id/chatting_room_top_layout_status_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="메뉴판 보기 / 계좌번호"
+            android:text="계좌번호"
             android:textColor="@color/top"
             android:textSize="14sp"
             android:fontFamily="@font/spoqa_medium"
@@ -98,7 +98,7 @@
             app:layout_constraintStart_toEndOf="@id/chatting_room_section_iv" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/chatting_room_top_layout_btn"
+            android:id="@+id/chatting_room_top_layout_remittance_complete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
@@ -109,14 +109,45 @@
             app:cardBackgroundColor="@color/main">
 
             <TextView
-                android:id="@+id/chatting_room_top_layout_btn_tv"
+                android:id="@+id/chatting_room_top_layout_remittance_complete_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/round_border_button"
                 android:fontFamily="@font/spoqa_medium"
-                android:text="주문 완료 / 송금 완료"
+                android:text="송금 완료"
+                android:textColor="@color/white"
+                android:textFontWeight="500"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@id/chatting_room_section_iv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/chatting_room_section_iv" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/chatting_room_top_layout_order_complete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chatting_room_section_iv"
+            app:layout_constraintBottom_toBottomOf="@id/chatting_room_section_iv"
+            app:cardCornerRadius="5dp"
+            app:cardBackgroundColor="@color/main"
+            android:visibility="invisible"
+            >
+
+            <TextView
+                android:id="@+id/chatting_room_top_layout_order_complete_btn_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/round_border_button"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="주문 완료"
                 android:textColor="@color/white"
                 android:textFontWeight="500"
                 android:textSize="11sp"

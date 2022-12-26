@@ -109,12 +109,15 @@ class ChattingRoomActivity :
                 if (topLayoutFlag) {
                     binding.chattingRoomTopLayout.visibility = View.VISIBLE
                     if (leader) {
-                        binding.chattingRoomTopLayoutStatusTv.text = "메뉴 보기"
-                        binding.chattingRoomTopLayoutBtnTv.text = "주문 완료"
-                        binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_food_menu)
+                        binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
+                        binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
+                        binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
                     } else {
+                        binding.chattingRoomTopLayoutStatusTv.visibility = View.VISIBLE
+                        binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.VISIBLE
+                        binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.INVISIBLE
                         getBankAndAccountNumber()
-                        binding.chattingRoomTopLayoutBtnTv.text = "송금 완료"
+                        binding.chattingRoomTopLayoutRemittanceCompleteBtnTv.text = "송금 완료"
                         binding.chattingRoomSectionIv.setImageResource(R.drawable.ic_icon_coin)
                     }
 
@@ -190,44 +193,45 @@ class ChattingRoomActivity :
             finish()
         }
 
-        binding.chattingRoomTopLayoutBtn.setOnClickListener {
+        binding.chattingRoomTopLayoutOrderCompleteBtn.setOnClickListener {
             binding.chattingRoomTopLayout.visibility = View.GONE
             topLayoutFlag = false
+            CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+        }
 
-            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
-                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료") {
-                // TODO: 여기에 파이어베이스 내용 추가하고 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
-                db.collection("Rooms")
-                    .document(roomUuid).get()
-                    .addOnSuccessListener { document ->
-                        val roomInfo = document.get("roomInfo") as HashMap<String, Any>
-                        val participants =
-                            roomInfo.get("participants") as ArrayList<HashMap<String, Any>>
-                        for ((idx, map) in participants!!.withIndex()) {
-                            if (map.get("participant").toString() == getNickname()) {
-                                map.put("isRemittance", true)
-                                participants[idx] = map
-                                // 송금 완료 처리하기
-                                db.collection("Rooms")
-                                    .document(roomUuid)
-                                    .update("roomInfo.participants", participants)
-                                    .addOnSuccessListener {
-                                        CustomToastMsg.createToast(
-                                            this,
-                                            "송금이 완료되었습니다",
-                                            "#8029ABE2",
-                                            53
-                                        )?.show()
+        binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener {
+            binding.chattingRoomTopLayout.visibility = View.GONE
+            topLayoutFlag = false
+            // TODO: 여기에 파이어베이스 내용 추가하고 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
+            db.collection("Rooms")
+                .document(roomUuid).get()
+                .addOnSuccessListener { document ->
+                    val roomInfo = document.get("roomInfo") as HashMap<String, Any>
+                    val participants =
+                        roomInfo.get("participants") as ArrayList<HashMap<String, Any>>
+                    for ((idx, map) in participants!!.withIndex()) {
+                        if (map.get("participant").toString() == getNickname()) {
+                            map.put("isRemittance", true)
+                            participants[idx] = map
+                            // 송금 완료 처리하기
+                            db.collection("Rooms")
+                                .document(roomUuid)
+                                .update("roomInfo.participants", participants)
+                                .addOnSuccessListener {
+                                    CustomToastMsg.createToast(
+                                        this,
+                                        "송금이 완료되었습니다",
+                                        "#8029ABE2",
+                                        53
+                                    )?.show()
 
-                                    }.addOnFailureListener { it ->
-                                        Log.d("ERROR", it.toString())
-                                    }
-                                break
-                            }
+                                }.addOnFailureListener { it ->
+                                    Log.d("ERROR", it.toString())
+                                }
+                            break
                         }
                     }
-            }
+                }
         }
     }
 
