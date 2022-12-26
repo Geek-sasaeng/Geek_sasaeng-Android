@@ -20,9 +20,8 @@ class ProfileDataService {
     private lateinit var profileMyPreActivityView: ProfileMyPreActivityView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
 
-    val ProfileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
+    private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
-    // setView
     fun setProfileMyOngoingActivityView(profileMyOngoingActivityView: ProfileMyOngoingActivityView) {
         this.profileMyOngoingActivityView = profileMyOngoingActivityView
     }
@@ -44,7 +43,7 @@ class ProfileDataService {
 
     // 진행 중인 활동 조회
     fun profileMyOngoingActivitySender() {
-        ProfileDataService?.getRecentActivity("Bearer " + getJwt())?.enqueue(object : Callback<ProfileMyOngoingActivityResponse> {
+        profileDataService?.getRecentActivity("Bearer " + getJwt())?.enqueue(object : Callback<ProfileMyOngoingActivityResponse> {
             override fun onResponse(call: Call<ProfileMyOngoingActivityResponse>, response: Response<ProfileMyOngoingActivityResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: ProfileMyOngoingActivityResponse = response.body()!!
@@ -63,7 +62,7 @@ class ProfileDataService {
 
     // 공지사항 조회
     fun profileAnnouncementSender(){
-        ProfileDataService?.getAnnouncementList("Bearer " + getJwt())?.enqueue(object : Callback<ProfileAnnouncementResponse> {
+        profileDataService?.getAnnouncementList("Bearer " + getJwt())?.enqueue(object : Callback<ProfileAnnouncementResponse> {
             override fun onResponse(
                 call: Call<ProfileAnnouncementResponse>,
                 response: Response<ProfileAnnouncementResponse>
@@ -77,7 +76,6 @@ class ProfileDataService {
                     }
                 }
             }
-
             override fun onFailure(call: Call<ProfileAnnouncementResponse>, t: Throwable) {
                 Log.d("ANNOUNCE-RESPONSE", "ProfileDataService-onFailure : getAnnounceFailed", t)
             }
@@ -86,7 +84,7 @@ class ProfileDataService {
 
     //공지사항 상세 조회
     fun profileAnnouncementDetailSender(announcementId :ProfileAnnouncementDetailRequest){
-        ProfileDataService?.getAnnouncementDetail("Bearer " + getJwt(), announcementId)?.enqueue(object : Callback<ProfileAnnouncementDetailResponse> {
+        profileDataService?.getAnnouncementDetail("Bearer " + getJwt(), announcementId)?.enqueue(object : Callback<ProfileAnnouncementDetailResponse> {
             override fun onResponse(call: Call<ProfileAnnouncementDetailResponse>, response: Response<ProfileAnnouncementDetailResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: ProfileAnnouncementDetailResponse = response.body()!!
@@ -97,7 +95,6 @@ class ProfileDataService {
                     }
                 }
             }
-
             override fun onFailure(call: Call<ProfileAnnouncementDetailResponse>, t: Throwable) {
                 Log.d("ANNOUNCE-RESPONSE", "ProfileDataService-onFailure : getAnnounceFailed", t)
             }
@@ -106,7 +103,7 @@ class ProfileDataService {
 
     // 나의 정보 조회
     fun profileMyInfoSender() {
-        ProfileDataService?.getMyInfo("Bearer " + getJwt())?.enqueue(object: Callback<ProfileMyInfoResponse> {
+        profileDataService?.getMyInfo("Bearer " + getJwt())?.enqueue(object: Callback<ProfileMyInfoResponse> {
             override fun onResponse(call: Call<ProfileMyInfoResponse>, response: Response<ProfileMyInfoResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
@@ -125,7 +122,7 @@ class ProfileDataService {
 
     // 진행했던 활동 조회
     fun profileMyPreActivitySender(cursor: Int) {
-        ProfileDataService?.getMyPreActivity("Bearer " + getJwt(), cursor)?.enqueue(object: Callback<ProfileMyPreActivityResponse> {
+        profileDataService?.getMyPreActivity("Bearer " + getJwt(), cursor)?.enqueue(object: Callback<ProfileMyPreActivityResponse> {
             override fun onResponse(call: Call<ProfileMyPreActivityResponse>, response: Response<ProfileMyPreActivityResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
@@ -136,17 +133,15 @@ class ProfileDataService {
                     }
                 }
             }
-
             override fun onFailure(call: Call<ProfileMyPreActivityResponse>, t: Throwable) {
                 Log.d("PROFILE-RESPONSE", "ProfileDataService-onFailure : getMyPreActivityFailed", t)
             }
-
         })
     }
 
     // 회원 탈퇴
     fun profileWithdrawalSender(id: Int, body: ProfileWithdrawalRequest) {
-        ProfileDataService?.profileWithdrawal("Bearer " + getJwt(), id, body)?.enqueue(object: Callback<ProfileWithdrawalResponse> {
+        profileDataService?.profileWithdrawal("Bearer " + getJwt(), id, body)?.enqueue(object: Callback<ProfileWithdrawalResponse> {
             override fun onResponse(call: Call<ProfileWithdrawalResponse>, response: Response<ProfileWithdrawalResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!

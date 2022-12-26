@@ -58,7 +58,7 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     private fun initListener(){
         binding.matchingEndOkayBtn.setOnClickListener { //완료버튼
-            chattingService.MatchingEndSender(uuid) //★매칭마감 api호출
+            chattingService.matchingEndSender(uuid) //★매칭마감 api호출
         }
 
         binding.matchingEndCancelBtn.setOnClickListener { //X버튼

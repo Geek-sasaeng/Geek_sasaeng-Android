@@ -7,5 +7,6 @@ interface LoginView {
 
 interface SocialLoginView {
     fun onSocialLoginSuccess(code : Int, result : SocialLoginResult)
-    fun onSocialLoginToRegister(message: String, accessToken: String)
+    fun onSocialLoginToRegister(message : String, accessToken : String)
+    fun onLoginFailure(message : String)
 }

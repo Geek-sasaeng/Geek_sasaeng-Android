@@ -8,9 +8,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.HomeFragment
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -49,7 +49,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         // 네이버 로그인
         binding.loginNaverBtn.setOnClickListener {
-            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+//            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
 
             val profileCallback = object : NidProfileCallback<NidProfileResponse> {
                 override fun onSuccess(response: NidProfileResponse) {
@@ -92,7 +92,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginSignupBtn.setOnClickListener {
-
             changeActivity(SignUpActivity::class.java)
         }
     }
@@ -104,7 +103,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     private fun socialLogin(accessToken: String) {
-        val socialLoginDataService = SocialLoginDataService()
+        val socialLoginDataService = LoginDataService()
         socialLoginDataService.setSocialLoginView(this)
         socialLoginDataService.socialLogin(SocialLogin(accessToken, fcmToken))
     }
