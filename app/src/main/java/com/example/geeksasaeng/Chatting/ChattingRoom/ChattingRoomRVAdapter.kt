@@ -21,7 +21,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType){
+        when (viewType) {
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return MyChattingViewHolder(binding)

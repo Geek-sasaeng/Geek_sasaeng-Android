@@ -22,9 +22,6 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -45,7 +42,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     private var dialogPartyRequest: DialogPartyRequest? = null
     private var remainTime : Long = 0
     private var timerTask : Timer? = null
-    private val db = Firebase.firestore //파이어스토어
 
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
@@ -344,65 +340,12 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     // 채팅방으로 이동
     override fun showPartyChattingRoom() {
-        val chatUUID = partyData.uuid
-        db.collection("Rooms").document(chatUUID).get()
-            .addOnSuccessListener {doc ->
-                if (doc != null){
-                    val value = doc.data!!["roomInfo"] as HashMap<String, Any>
-                    val chatName = value["title"].toString()
-                    val intent = Intent(activity, ChattingRoomActivity::class.java)
-                    intent.putExtra("roomName", chatName)
-                    intent.putExtra("roomUuid", chatUUID)
-                    startActivity(intent)
-                }
-            }
-            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+        // TODO: 채팅방 이동
     }
 
-    // 파이어 베이스 participants 추가
     fun joinPartyChattingRoom(){
-        db.collection("Rooms")
-            .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString(), false))) //현재시간, 닉네임
-            .addOnSuccessListener {
-                // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                var uuid = UUID.randomUUID().toString()
-                var time = getCurrentDateTime()
-                var data = hashMapOf(
-                    "content" to "${getNickname()}님이 입장하셨습니다",
-                    "nickname" to getNickname(),
-                    "isSystemMessage" to true,
-                    "time" to time,
-                    "userImgUrl" to "이미지 링크"
-                )
-                db.collection("Rooms").document(partyData.uuid).collection("Messages")
-                    .document(uuid).set(data).addOnSuccessListener { }
-
-                db.collection("Rooms").document(partyData.uuid).get().addOnSuccessListener { result ->
-                    var length = (result.get("roomInfo.participants") as ArrayList<Any>).size
-                    Log.d("FIREBASE-RESPONSE", "Participants = $length")
-                    Log.d("FIREBASE-RESPONSE", "Party-Participants = $partyMatchingNumber")
-
-                    if (length == partyMatchingNumber) {
-                        uuid = UUID.randomUUID().toString()
-                        time = getCurrentDateTime()
-                        data = hashMapOf(
-                            "content" to getString(R.string.chatting_matching_end),
-                            "nickname" to null,
-                            "isSystemMessage" to true,
-                            "time" to time,
-                            "userImgUrl" to null
-                        )
-                        db.collection("Rooms").document(partyData.uuid).collection("Messages")
-                            .document(uuid).set(data).addOnSuccessListener { }
-                    }
-                }
-
-                // Log.d("FIREBASE-RESPONSE", db.collection("Rooms").document(partyData.uuid).get().get("roomInfo.participants").toString())
-                // if (db.collection("Rooms").document(partyData.uuid).get("roomInfo.participants"))
-            }
-            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
-
+        // TODO: 참가자 추가
+        // TODO: 채팅방 입장 API 연결?
     }
 
     private fun getCurrentDateTime(): String {

@@ -17,9 +17,6 @@ import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.DialogMatchingEndLayoutBinding
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +24,6 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     lateinit var binding: DialogMatchingEndLayoutBinding
     private lateinit var chattingService: ChattingDataService
-    private val db = Firebase.firestore //파이어스토어
     lateinit var uuid: String
 
     override fun onStart() {
@@ -71,28 +67,12 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
         Log.d("matchingEnd", "매칭 마감 실패")
         this.dismiss()
         Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
-
-        // 00 님이 입장했습니다 시스템 메시지 추가 부분
-        val uuid = UUID.randomUUID().toString()
-        var time = getCurrentDateTime()
-        var data = hashMapOf(
-            "content" to getString(R.string.chatting_matching_end),
-            "nickname" to null,
-            "isSystemMessage" to true,
-            "time" to time,
-            "userImgUrl" to null
-        )
-
-        db.collection("Rooms").document(requireArguments().getString("roomUuid")!!).collection("Messages")
-            .document(uuid).set(data).addOnSuccessListener { }
-
-        //뒤에 옵션창도 없애고 싶은데,,
+        // TODO: 매칭 마감 성공
     }
 
     //매칭마감 실패
     override fun onMatchingEndFailure(message: String) {
         CustomToastMsg.createToast((activity as SignUpNaverActivity), message, "#80A8A8A8", 53)?.show()
-        Log.d("FIREBASE-RESPONSE", "매칭 마감 실패")
         Log.d("matchingEnd", "매칭 마감 실패")
 
     }

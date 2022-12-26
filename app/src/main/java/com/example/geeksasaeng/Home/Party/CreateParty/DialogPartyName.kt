@@ -76,12 +76,12 @@ class DialogPartyName : DialogFragment() {
 
         binding.partyNameDialogNextBtn.setOnClickListener {
             //자기자신(현 다이얼로그)은 종료
-            if(binding.partyNameDialogEt.text.toString()!=""){
+            if (binding.partyNameDialogEt.text.toString()!="") {
                 createPartyVM.setPartyName(binding.partyNameDialogEt.text.toString())
-                dialogPartyNameClickListener?.onCompleteClicked()//frag-> activity 정보전달
+                dialogPartyNameClickListener?.onCompleteClicked() // frag-> activity 정보전달
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.remove(this)?.commit()
-            }else{
+            } else {
                 //TODO: 뭔가를 써야한다는 안내메세지 띄우기
             }
         }

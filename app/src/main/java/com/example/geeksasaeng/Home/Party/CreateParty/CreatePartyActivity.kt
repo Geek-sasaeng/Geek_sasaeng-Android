@@ -16,8 +16,6 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -36,8 +34,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private lateinit var createPartyVM: CreatePartyViewModel
 
     private var nextable: Boolean = false
-    private val db = Firebase.firestore //파이어스토어
-
 
     override fun initAfterBinding() {
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
@@ -153,7 +149,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             if(nextable){
                 DialogAccountNumber().show(supportFragmentManager, "CustomDialog") // 계좌정보 입력 다이얼로그 띄우기
             }else{ // 활성화가 안되어 있는 상태라면
-
                 //사용자에게 뭐가 부족한지 알려주기 위해
                 if(!(binding.createPartyTitleEt.text.length in 1..20)){
                     CustomToastMsg.createToast(this, "제목을 입력해주세요", "#8029ABE2", 58)?.show()
@@ -335,41 +330,10 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
 
-        //firestore에 채팅방 생성하기 위한 데이터 구조 만들기
-        var participantsList = ArrayList<ParticipantsInfo>()
-        participantsList.add(ParticipantsInfo(getCurrentDateTime(), getNickname().toString(), true)) //현재 시간으로 enterTime, 자기 닉네임으로 participant
-
-        val roomInfo = hashMapOf(
-            "roomInfo" to hashMapOf(
-                "accountNumber" to result.accountNumber,
-                "bank" to result.bank,
-                "category" to "배달파티",
-                "maxMatching" to result.maxMatching, //서리가 말한 maxMatching값 추가해둠
-                "isFinish" to false,
-                "participants" to participantsList,
-                "title" to result.chatRoomName,
-                "updatedAt" to getCurrentDateTime() //채팅방의 가장 최근(마지막) 메세지의 전송시간(서리코드) //채팅방 정렬용, 새로운 알림이 오면 updateAt을 갱신시켜서 updatedAt을 기준으로 정렬시킬예정
-            )
-        )
-
-        //firestore에 채팅방 생성
-        db.collection("Rooms")
-            .document(result.uuid)
-            .set(roomInfo)
-            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!")
-                // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                val uuid = UUID.randomUUID().toString()
-                var time = getCurrentDateTime()
-                var data = hashMapOf(
-                    "content" to "${getNickname()}님이 입장하셨습니다",
-                    "nickname" to getNickname(),
-                    "isSystemMessage" to true,
-                    "time" to time,
-                    "userImgUrl" to "이미지 링크"
-                )
-                db.collection("Rooms").document(result.uuid).collection("Messages")
-                    .document(uuid).set(data).addOnSuccessListener { }
-            }.addOnFailureListener { e -> Log.w("firebase", "Error writing document", e) }
+        // TODO: 채팅방 생성하기
+        /*
+            accountNumber, bank, category, deliveryPartyId, maxMatching, title 전달하기
+         */
     }
 
     override fun onCreatePartyFailure(message: String) {

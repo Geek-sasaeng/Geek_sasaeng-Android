@@ -13,9 +13,6 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class ChattingListFragment :
@@ -24,7 +21,6 @@ class ChattingListFragment :
     lateinit var loadingAnimationView: LottieAnimationView
     lateinit var chattingListRVAdapter: ChattingListRVAdapter
     private var chattingList = ArrayList<ChattingData>()
-    private val db = Firebase.firestore //파이어스토어
     private var checkBinding: Boolean = false
 
     override fun onResume() {
@@ -51,47 +47,7 @@ class ChattingListFragment :
 
     private fun initChattingList() {
         chattingList.clear()
-
-        // 채팅 리스트 불러오기
-        db.collection("Rooms")
-            .whereEqualTo("roomInfo.category", "배달파티")
-            .whereEqualTo("roomInfo.isFinish", false)
-            .orderBy("roomInfo.updatedAt", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { documents ->
-                var position = 0
-                for (document in documents) {
-                    val roomInfo =
-                        document.data.getValue("roomInfo") as HashMap<String, Any>
-
-                    val participants =
-                        roomInfo.getValue("participants") as ArrayList<HashMap<String, Any>>
-
-                    for (member in participants) {
-                        if (member.getValue("participant") == getNickname()) {
-                            val roomUuid = document.id
-                            val roomName = roomInfo.getValue("title").toString()
-                            val roomImgUrl = "http://geeksasaeng.shop/s3/neo.jpg"
-
-                            val roomData = RoomData(roomName, roomUuid, roomImgUrl)
-                            val chattingData = ChattingData(roomData, "", "", "")
-                            chattingList.add(chattingData)
-
-                            // 마지막 채팅 받아오기
-                            val chatData = FirestoreChatData(roomUuid, position, chattingList)
-                            chatData.setChatDataView(this)
-                            chatData.getLastChatData()
-
-                            position += 1
-                        }
-                    }
-                }
-                initAdapter()
-                loadingStop()
-            }
-            .addOnFailureListener { exception ->
-                Log.d("firestore", "Error getting documents: ", exception)
-            }
+        // TODO: 채팅 리스트 불러오기
     }
 
     private fun initAdapter() {
