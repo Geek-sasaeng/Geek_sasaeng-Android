@@ -13,6 +13,7 @@ import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListServic
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
+import kotlinx.coroutines.delay
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
@@ -25,12 +26,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     override fun onResume() {
         super.onResume()
         initChattingList()
-        initAdapter()
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        loadingStart()
     }
 
     override fun onDestroyView() {
@@ -40,8 +35,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 
     override fun initAfterBinding() {
         checkBinding = true
+        loadingStart()
+        initAdapter()
         initClickListener()
         initScrollListener()
+//        initChattingList()
     }
 
     private fun initChattingList() {
@@ -85,8 +83,8 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         binding.chattingSectionRb1.setOnClickListener {
             binding.chattingListPreparingIv.visibility = View.GONE
             binding.chattingListRv.visibility = View.VISIBLE
+            loadingStart()
             initChattingList()
-//            loadingStart()
         }
         binding.chattingSectionRb2.setOnClickListener {
             binding.chattingListRv.visibility = View.GONE
@@ -121,7 +119,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                // initAfterBinding()
             }
 
             override fun onAnimationCancel(p0: Animator?) {
@@ -144,6 +141,9 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         result.parties?.let { chattingList.addAll(it) }
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
+
+        // 로딩화면 제거
+        loadingStop()
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
