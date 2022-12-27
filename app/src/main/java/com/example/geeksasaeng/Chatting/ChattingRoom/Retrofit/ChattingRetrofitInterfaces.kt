@@ -4,6 +4,13 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ChattingRetrofitInterfaces {
+    // 채팅방 생성
+    @POST("/party-chat-room")
+    fun createChatting(
+        @Header("Authorization") jwt: String?,
+        @Body createChattingRequest: CreateChattingRequest
+    ): Call<CreateChattingResponse>
+
     // 파티 멤버 나가기
     @PATCH("/delivery-party/member")
     fun partyMemberChattingLeave(

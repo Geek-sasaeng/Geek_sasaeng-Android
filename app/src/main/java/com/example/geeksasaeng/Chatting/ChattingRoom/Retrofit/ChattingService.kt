@@ -9,13 +9,16 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ChattingService {
+    private lateinit var createChattingView: CreateChattingView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
-    //setView
+    fun setCreateChattingView(createChattingView: CreateChattingView) {
+        this.createChattingView = createChattingView
+    }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
     }
@@ -26,29 +29,40 @@ class ChattingService {
         this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
     }
 
-    // 파티 멤버 나가기
-    fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
-        chattingService?.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest)
-            ?.enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
-                override fun onResponse(
-                    call: Call<ChattingPartyMemberLeaveResponse>,
-                    response: Response<ChattingPartyMemberLeaveResponse>
-                ) {
-                    if (response.isSuccessful && response.code() == 200) {
-                        val chattingPartyMemberLeaveResponse = response.body()!!
-
-                        when (chattingPartyMemberLeaveResponse.code) {
-                            1000 -> chattingMemberLeaveView.chattingMemberLeaveSuccess(chattingPartyMemberLeaveResponse.result!!)
-                            else -> chattingMemberLeaveView.chattingMemberLeaveFailure(chattingPartyMemberLeaveResponse.code, chattingPartyMemberLeaveResponse.message)
-                        }
+    // 채팅방 생성
+    fun createChatting(createChattingRequest: CreateChattingRequest) {
+        chattingService?.createChatting("Bearer " + getJwt(), createChattingRequest)?.enqueue(object : Callback<CreateChattingResponse> {
+            override fun onResponse(call: Call<CreateChattingResponse>, response: Response<CreateChattingResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val createChattingResponse = response.body()!!
+                    when (createChattingResponse.code) {
+                        1000 -> createChattingView.createChattingSuccess(createChattingResponse.result)
+                        else -> createChattingView.createChattingFailure(createChattingResponse.code, createChattingResponse.message)
                     }
                 }
-
-                override fun onFailure(call: Call<ChattingPartyMemberLeaveResponse>, t: Throwable) {
-                    Log.d("CHATTING-MEMBER-LEAVE", "실패")
+            }
+            override fun onFailure(call: Call<CreateChattingResponse>, t: Throwable) {
+                Log.d("CHATTING-CREATE", "실패")
+            }
+        })
+    }
+    
+    // 파티 멤버 나가기
+    fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
+        chattingService?.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest)?.enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {
+            override fun onResponse(call: Call<ChattingPartyMemberLeaveResponse>, response: Response<ChattingPartyMemberLeaveResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val chattingPartyMemberLeaveResponse = response.body()!!
+                    when (chattingPartyMemberLeaveResponse.code) {
+                        1000 -> chattingMemberLeaveView.chattingMemberLeaveSuccess(chattingPartyMemberLeaveResponse.result!!)
+                        else -> chattingMemberLeaveView.chattingMemberLeaveFailure(chattingPartyMemberLeaveResponse.code, chattingPartyMemberLeaveResponse.message)
+                    }
                 }
-
-            })
+            }
+            override fun onFailure(call: Call<ChattingPartyMemberLeaveResponse>, t: Throwable) {
+                Log.d("CHATTING-MEMBER-LEAVE", "실패")
+            }
+        })
     }
 
     // 파티장 나가기
