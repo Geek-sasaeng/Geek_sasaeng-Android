@@ -12,7 +12,6 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.*
 import okhttp3.internal.notify
 import java.text.DecimalFormat
-import kotlin.collections.ArrayList
 
 class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

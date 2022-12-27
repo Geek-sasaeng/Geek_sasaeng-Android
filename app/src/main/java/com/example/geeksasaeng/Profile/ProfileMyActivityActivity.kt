@@ -25,7 +25,6 @@ import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import java.util.*
 import kotlin.Comparator
-import kotlin.collections.ArrayList
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView, ProfileMyPreActivityView {
 
