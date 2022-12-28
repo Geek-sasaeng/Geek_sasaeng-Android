@@ -30,11 +30,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     private var timerTask : Timer? = null
     private var isFirst: Boolean = true
 
-
-    //TODO:verifyChceck없애도 되나
-    var verifyCheck = 0
-
-
     override fun initAfterBinding() {
         progressVM.setValue(2)
 
@@ -56,7 +51,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     private fun initClickListener() {
-
         // 재전송버튼
         binding.stepNaverTwoSendBtn.setOnClickListener {
             sendEmail()
@@ -108,20 +102,7 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     override fun onVerifyEmailFailure(message: String) {
-        /*if (verifyCheck == 0) {
-            binding.stepNaverTwoCheckMsgTv.visibility = View.GONE
-            binding.stepNaverTwoResultMsgTv.visibility = View.VISIBLE
-            binding.stepNaverTwoResultMsgTv.text = "인증번호가 틀렸습니다"
-            binding.stepNaverTwoResultMsgTv.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.error
-                )
-            )
-        }*/
         CustomToastMsg.createToast((activity as SignUpNaverActivity), "인증번호가 틀렸습니다.", "#80A8A8A8", 53)?.show()
-
-        verifyCheck = -1
     }
 
     private fun sendEmail() {

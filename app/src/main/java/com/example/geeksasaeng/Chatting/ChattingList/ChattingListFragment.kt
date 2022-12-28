@@ -1,41 +1,32 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.animation.Animator
-import android.content.Intent
 import android.util.Log
 import android.view.View
-import androidx.fragment.app.activityViewModels
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
-import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
 import com.example.geeksasaeng.Utils.BaseFragment
-import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import java.util.*
+import kotlinx.coroutines.delay
+import java.util.logging.Handler
 
-class ChattingListFragment :
-    BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChatDataView {
-
+class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
-    lateinit var chattingListRVAdapter: ChattingListRVAdapter
-    private var chattingList = ArrayList<ChattingData>()
-    private val db = Firebase.firestore //파이어스토어
+    private lateinit var chattingListRVAdapter: ChattingListRVAdapter
+    lateinit var chattingListService: ChattingListService
+    var cursor = 0
+    private var chattingList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
 
     override fun onResume() {
         super.onResume()
         initChattingList()
-        initAdapter()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        loadingStart()
     }
 
     override fun onDestroyView() {
@@ -45,84 +36,56 @@ class ChattingListFragment :
 
     override fun initAfterBinding() {
         checkBinding = true
+        loadingStart()
+        initAdapter()
         initClickListener()
         initScrollListener()
+//        initChattingList()
     }
 
     private fun initChattingList() {
         chattingList.clear()
-
-        // 채팅 리스트 불러오기
-        db.collection("Rooms")
-            .whereEqualTo("roomInfo.category", "배달파티")
-            .whereEqualTo("roomInfo.isFinish", false)
-            .orderBy("roomInfo.updatedAt", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { documents ->
-                var position = 0
-                for (document in documents) {
-                    val roomInfo =
-                        document.data.getValue("roomInfo") as HashMap<String, Any>
-
-                    val participants =
-                        roomInfo.getValue("participants") as ArrayList<HashMap<String, Any>>
-
-                    for (member in participants) {
-                        if (member.getValue("participant") == getNickname()) {
-                            val roomUuid = document.id
-                            val roomName = roomInfo.getValue("title").toString()
-                            val roomImgUrl = "http://geeksasaeng.shop/s3/neo.jpg"
-
-                            val roomData = RoomData(roomName, roomUuid, roomImgUrl)
-                            val chattingData = ChattingData(roomData, "", "", "")
-                            chattingList.add(chattingData)
-
-                            // 마지막 채팅 받아오기
-                            val chatData = FirestoreChatData(roomUuid, position, chattingList)
-                            chatData.setChatDataView(this)
-                            chatData.getLastChatData()
-
-                            position += 1
-                        }
-                    }
-                }
-                initAdapter()
-                loadingStop()
-            }
-            .addOnFailureListener { exception ->
-                Log.d("firestore", "Error getting documents: ", exception)
-            }
+        chattingListService = ChattingListService()
+        chattingListService.setChattingListView(this)
+        getChattingList()
     }
 
     private fun initAdapter() {
         if (checkBinding) {
             chattingListRVAdapter = ChattingListRVAdapter(chattingList)
             binding.chattingListRv.adapter = chattingListRVAdapter
-            binding.chattingListRv.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+//        chattingListRVAdapter.setChattingData(position, chattingList)
 
             chattingListRVAdapter.setOnItemClickListener(object :
                 ChattingListRVAdapter.OnItemClickListener {
-                override fun onItemClick(chatting: ChattingData, position: Int) { //채팅방 입장할때
-                    val intent = Intent(activity, ChattingRoomActivity::class.java)
-                    intent.putExtra("roomName", chatting.roomData.roomName)
-                    intent.putExtra("roomUuid", chatting.roomData.roomUuid)
-                    startActivity(intent)
+                override fun onItemClick(chatting: ChattingList, position: Int) {
+                    // 채팅방 입장할때
+                    // 채팅방 Activity로 이동
+                    // val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    // intent.putExtra("roomName", chatting.roomData.roomName)
+                    // intent.putExtra("roomUuid", chatting.roomData.roomUuid)
+                    // startActivity(intent)
                 }
             })
         }
     }
 
-    override fun onSuccessGetChatData(position: Int, chattingData: ChattingData) {
-        chattingListRVAdapter.setChattingData(position, chattingData)
+    private fun getChattingList() {
+        chattingListService.getChattingList(cursor)
     }
+
+//    override fun onSuccessGetChatData(position: Int, chattingList: ChattingList) {
+//        chattingListRVAdapter.setChattingData(position, chattingList)
+//    }
 
     private fun initClickListener() {
         binding.chattingSectionRb1.setOnClickListener {
             binding.chattingListPreparingIv.visibility = View.GONE
             binding.chattingListRv.visibility = View.VISIBLE
-            initChattingList()
             loadingStart()
+            initChattingList()
         }
         binding.chattingSectionRb2.setOnClickListener {
             binding.chattingListRv.visibility = View.GONE
@@ -138,8 +101,7 @@ class ChattingListFragment :
         binding.chattingListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val lastVisibleItemPosition =
-                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() // 마지막 스크롤된 항목 위치
+                val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() // 마지막 스크롤된 항목 위치
                 val itemTotalCount = recyclerView.adapter!!.itemCount - 1 // 항목 전체 개수
                 if (lastVisibleItemPosition >= itemTotalCount - 1) { //마지막 아이템 전 아이템이 되면
                     binding.chattingListBottomView.visibility = View.INVISIBLE
@@ -153,20 +115,6 @@ class ChattingListFragment :
         binding.animationViewLayout.visibility = View.VISIBLE
         loadingAnimationView.visibility = View.VISIBLE
         loadingAnimationView.playAnimation()
-        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                // initAfterBinding()
-            }
-
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-        })
     }
 
     private fun loadingStop() {
@@ -175,5 +123,18 @@ class ChattingListFragment :
             binding.animationViewLayout.visibility = View.GONE
             loadingAnimationView.visibility = View.GONE
         }
+    }
+
+    override fun getChattingListSuccess(result: ChattingListResult) {
+        result.parties?.let { chattingList.addAll(it) }
+        chattingListRVAdapter.notifyDataSetChanged()
+        var finalPage = result.finalPage
+
+        // 로딩화면 제거
+        loadingStop()
+    }
+
+    override fun getChattingListFailure(code: Int, msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT)
     }
 }

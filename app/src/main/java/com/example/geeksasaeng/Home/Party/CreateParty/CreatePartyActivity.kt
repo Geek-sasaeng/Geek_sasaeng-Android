@@ -10,14 +10,18 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingRequest
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingResult
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingView
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Party.CreateParty.*
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.gson.annotations.SerializedName
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -25,9 +29,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //TODO: 여기서는 잘하면 CreatePartyDefaultLocView 이거 없이도 가능할지도? 7.30-31에 이 부분 다시 봐보기
-class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView,
+class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView, CreateChattingView,
     DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener,
-    DialogPartyName.DialogPartyNameClickListener{
+    DialogPartyName.DialogPartyNameClickListener {
 
     lateinit var mapView : MapView
     lateinit var mapPoint: MapPoint
@@ -36,8 +40,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     private lateinit var createPartyVM: CreatePartyViewModel
 
     private var nextable: Boolean = false
-    private val db = Firebase.firestore //파이어스토어
-
 
     override fun initAfterBinding() {
         createPartyVM = ViewModelProvider(this).get(CreatePartyViewModel::class.java)
@@ -57,7 +59,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         initKakaoMap()
     }
 
-/*    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+/*
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         val title = binding.createPartyTitleEt.text
         val content = binding.createPartyContentEt.text
@@ -71,7 +74,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         val content = savedInstanceState.getCharSequence("content")
         binding.createPartyTitleEt.setText(title)
         binding.createPartyContentEt.setText(content)
-    }*/
+    }
+*/
 
     private fun initTextWatcher(){
         binding.createPartyTitleEt.addTextChangedListener ( object: TextWatcher {
@@ -95,7 +99,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         Log.d("kakaodefault", "onstart")
         createPartyService.getDefaultLoc(getDormitoryId()!!) //★ default 기숙사 위치 불러오는 함수 호출
     }
-
 
     private fun checking()  {
         //TODO: 왜 등록이 안되는지 정보가 좀 부족한것 같아..!
@@ -153,7 +156,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             if(nextable){
                 DialogAccountNumber().show(supportFragmentManager, "CustomDialog") // 계좌정보 입력 다이얼로그 띄우기
             }else{ // 활성화가 안되어 있는 상태라면
-
                 //사용자에게 뭐가 부족한지 알려주기 위해
                 if(!(binding.createPartyTitleEt.text.length in 1..20)){
                     CustomToastMsg.createToast(this, "제목을 입력해주세요", "#8029ABE2", 58)?.show()
@@ -224,7 +226,6 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
             binding.createPartyKakaoMapLocation.removeView(mapView) // 맵 사용해야하니까 지우기
             DialogLocation().show(supportFragmentManager, "CustomDialog")
         }
-
     }
 
     //다이얼로그에서 next버튼 클릭시 값 받아오기
@@ -322,58 +323,37 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         }
     }
 
+    // 채팅 생성하기
+    private fun createChatting(deliveryItemId: Int) {
+        val chattingService = ChattingService()
+        chattingService.setCreateChattingView(this)
+
+        val createChattingRequest = CreateChattingRequest(createPartyVM.getAccountNumber().toString(),
+            createPartyVM.getAccount().toString(), createPartyVM.getCategory()!!,
+            deliveryItemId, createPartyVM.getMaxMatching()!!, binding.createPartyTitleEt.text.toString())
+
+        chattingService.createChatting(createChattingRequest)
+    }
+
     // 파티 등록하기 성공/실패
     override fun onCreatePartySuccess(result: CreatePartyResult) {
         Log.d("jjang", "파티 생성 성공(서버로 정보 보냄)")
         //TODO:파티보기로 이동
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
+        val deliveryItemId = result.id
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
-        intent.putExtra("deliveryItemId", result.id.toString()) //파티 상세보기 띄우기 위해 파티 아이디 넘겨줌
+        intent.putExtra("deliveryItemId", deliveryItemId.toString()) //파티 상세보기 띄우기 위해 파티 아이디 넘겨줌
         Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.id.toString())
         binding.createPartyKakaoMapLocation.removeView(mapView) //카카오맵 종료
         finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
 
-        //firestore에 채팅방 생성하기 위한 데이터 구조 만들기
-        var participantsList = ArrayList<ParticipantsInfo>()
-        participantsList.add(ParticipantsInfo(getCurrentDateTime(), getNickname().toString(), true)) //현재 시간으로 enterTime, 자기 닉네임으로 participant
-
-        val roomInfo = hashMapOf(
-            "roomInfo" to hashMapOf(
-                "accountNumber" to result.accountNumber,
-                "bank" to result.bank,
-                "category" to "배달파티",
-                "maxMatching" to result.maxMatching, //서리가 말한 maxMatching값 추가해둠
-                "isFinish" to false,
-                "participants" to participantsList,
-                "title" to result.chatRoomName,
-                "updatedAt" to getCurrentDateTime() //채팅방의 가장 최근(마지막) 메세지의 전송시간(서리코드) //채팅방 정렬용, 새로운 알림이 오면 updateAt을 갱신시켜서 updatedAt을 기준으로 정렬시킬예정
-            )
-        )
-
-        //firestore에 채팅방 생성
-        db.collection("Rooms")
-            .document(result.uuid)
-            .set(roomInfo)
-            .addOnSuccessListener { Log.d("firebase", "DocumentSnapshot successfully written!")
-                // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                val uuid = UUID.randomUUID().toString()
-                var time = getCurrentDateTime()
-                var data = hashMapOf(
-                    "content" to "${getNickname()}님이 입장하셨습니다",
-                    "nickname" to getNickname(),
-                    "isSystemMessage" to true,
-                    "time" to time,
-                    "userImgUrl" to "이미지 링크"
-                )
-                db.collection("Rooms").document(result.uuid).collection("Messages")
-                    .document(uuid).set(data).addOnSuccessListener { }
-            }.addOnFailureListener { e -> Log.w("firebase", "Error writing document", e) }
+        createChatting(deliveryItemId)
     }
 
     override fun onCreatePartyFailure(message: String) {
-        Log.d("jjang",message)
+        Log.d("jjang", message)
     }
 
     override fun onCompleteClicked() { //마지막 파티이름 dialog에서 클릭버튼을 누르면
@@ -382,5 +362,13 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         val createPartyRequest = CreatePartyRequest(createPartyVM.getAccountNumber().toString(), createPartyVM.getAccount().toString(), createPartyVM.getPartyName().toString(), binding.createPartyContentEt.text.toString(), createPartyVM.getCategoryInt()!!, binding.createPartyTogetherCheckBtn.isChecked, createPartyVM.getMapPoint()!!.mapPointGeoCoord.latitude, createPartyVM.getMapPoint()!!.mapPointGeoCoord.longitude,
             createPartyVM.getMaxMatching()!!, createPartyVM.getDate2().toString()+ " " + createPartyVM.getTime2().toString(), createPartyVM.getStoreUrl().toString()!!, binding.createPartyTitleEt.text.toString())
         createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기 요청
+    }
+
+    override fun createChattingSuccess(result: CreateChattingResult) {
+        Log.d("CREATE-CHATTING", result.toString())
+    }
+
+    override fun createChattingFailure(code: Int, message: String) {
+        Log.d("CREATE-CHATTING", "code = $code, message = $message")
     }
 }

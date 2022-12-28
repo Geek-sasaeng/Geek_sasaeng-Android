@@ -93,18 +93,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             when (item.itemId) {
                 R.id.homeFrament -> {
                     setFragment(R.id.main_frm, HomeFragment())
+                    Log.d("Stack-Log", "HomeFragment()")
                     return@setOnItemSelectedListener true
                 }
                 R.id.communityFragment -> {
                     setFragment(R.id.main_frm, CommunityFragment())
+                    Log.d("Stack-Log", "CommunityFragment()")
                     return@setOnItemSelectedListener true
                 }
                 R.id.chattingFragment -> {
                     setFragment(R.id.main_frm, ChattingListFragment())
+                    Log.d("Stack-Log", "ChattingFragment()")
                     return@setOnItemSelectedListener true
                 }
                 R.id.profileFragment -> {
                     Log.d("status", "나의 정보 바텀내비 클릭됨")
+                    Log.d("Stack-Log", "ProfileFragment()")
                     setFragment(R.id.main_frm, ProfileFragment())
                     return@setOnItemSelectedListener true
                 }
@@ -113,5 +117,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
         binding.mainBottomNavi.itemIconTintList = null
+    }
+
+    interface onBackPressedListener {
+        fun onBackPressed()
+    }
+
+    override fun onBackPressed(){
+        Log.d("Stack-Log", "onBackPressed() - Activity")
+        val fragmentList = supportFragmentManager.fragments
+        for (fragment in fragmentList) {
+            if (fragment is onBackPressedListener) {
+                (fragment as onBackPressedListener).onBackPressed()
+                return
+            }
+        }
     }
 }

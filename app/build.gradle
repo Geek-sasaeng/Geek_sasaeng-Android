@@ -5,10 +5,10 @@ plugins {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
+//def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     buildFeatures {
         viewBinding true
@@ -27,7 +27,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
+//        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
         /*buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵*/
     }
 
