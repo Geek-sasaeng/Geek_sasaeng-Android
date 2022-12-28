@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingRequest
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingResult
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingView
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Party.CreateParty.*
@@ -363,8 +364,8 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기 요청
     }
 
-    override fun createChattingSuccess(result: String) {
-        Log.d("CREATE-CHATTING", result)
+    override fun createChattingSuccess(result: CreateChattingResult) {
+        Log.d("CREATE-CHATTING", result.toString())
     }
 
     override fun createChattingFailure(code: Int, message: String) {

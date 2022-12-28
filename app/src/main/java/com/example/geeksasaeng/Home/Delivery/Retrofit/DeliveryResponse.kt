@@ -26,7 +26,7 @@ data class DeliveryResponse(
 )
 
 data class DeliveryResult (
-    @SerializedName("deliveryPartiesVoList") var deliveryPartiesVoList: Array<DeliveryPartiesVoList>,
+    @SerializedName("deliveryPartiesVoList") var deliveryPartiesVoList: ArrayList<DeliveryPartiesVoList>,
     @SerializedName("finalPage") var finalPage: Boolean
 )
 

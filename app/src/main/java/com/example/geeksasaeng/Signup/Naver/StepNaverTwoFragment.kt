@@ -51,7 +51,6 @@ class StepNaverTwoFragment : BaseFragment<FragmentStepNaverTwoBinding>(FragmentS
     }
 
     private fun initClickListener() {
-
         // 재전송버튼
         binding.stepNaverTwoSendBtn.setOnClickListener {
             sendEmail()

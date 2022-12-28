@@ -1,6 +1,5 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -39,8 +38,6 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
 
     fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
         chattingList.addAll(items)
-        Log.d("CHATTING-LIST", "chattingList = $chattingList")
-        Log.d("CHATTING-LIST", "chatting = ${chattingList.size}")
         this.notifyDataSetChanged()
     }
 
@@ -48,8 +45,6 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
 
     inner class ViewHolder(val binding: ItemChattingListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: ChattingList) {
-            Log.d("CHATTING-LIST", "chattingViewHolder = ${chattingList.size}")
-            Log.d("CHATTING-LIST", "roomTitle = ${chatting.roomTitle}")
             binding.itemChattingListTitle.text = chatting.roomTitle
             // 배달파티인지, 거래인지 등을 구분하기 위함
             binding.itemChattingListSectionIv.setImageResource(R.drawable.ic_delivery_party_ic)

@@ -10,6 +10,7 @@ import retrofit2.Response
 
 class ChattingService {
     private lateinit var createChattingView: CreateChattingView
+    private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
@@ -18,6 +19,9 @@ class ChattingService {
 
     fun setCreateChattingView(createChattingView: CreateChattingView) {
         this.createChattingView = createChattingView
+    }
+    fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
+        this.chattingMemberAddView = chattingMemberAddView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -46,7 +50,25 @@ class ChattingService {
             }
         })
     }
-    
+
+    // 채팅방 멤버 추가
+    fun addChattingMember(chattingMemberAddRequest: ChattingMemberAddRequest) {
+        chattingService?.chattingMemberAdd("Bearer " + getJwt(), chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
+            override fun onResponse(call: Call<ChattingMemberAddResponse>, response: Response<ChattingMemberAddResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingMemberAddView.chattingMemberAddSuccess(resp.result)
+                        else -> chattingMemberAddView.chattingMemberFailure(resp.code, resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ChattingMemberAddResponse>, t: Throwable) {
+                Log.d("CHATTING-ADD-MEMBER", "실패")
+            }
+        })
+    }
+
     // 파티 멤버 나가기
     fun getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest: ChattingPartyMemberLeaveRequest){
         chattingService?.partyMemberChattingLeave("Bearer " + getJwt(), chattingPartyMemberLeaveRequest)?.enqueue(object : Callback<ChattingPartyMemberLeaveResponse> {

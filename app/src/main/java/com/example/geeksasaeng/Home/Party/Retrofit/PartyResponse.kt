@@ -28,6 +28,8 @@ data class PartyDetailResult(
     @SerializedName("matchingStatus") val matchingStatus: String,
     @SerializedName("maxMatching") val maxMatching: Int,
     @SerializedName("orderTime") val orderTime: String,
+    @SerializedName("partyChatRoomId") val partyChatRoomId: String,
+    @SerializedName("partyChatRoomTitle") val partyChatRoomTitle: String,
     @SerializedName("storeUrl") val storeUrl: String?,
     @SerializedName("title") val title: String,
     @SerializedName("updatedAt") val updatedAt: String,

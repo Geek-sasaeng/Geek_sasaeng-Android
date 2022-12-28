@@ -113,9 +113,12 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 bundle.putString("matchingStatus", partyData.matchingStatus)
                 bundle.putInt("maxMatching", partyData.maxMatching)
                 bundle.putString("orderTime", partyData.orderTime)
+                bundle.putString("partyChatRoomId", partyData.partyChatRoomId)
+                bundle.putString("partyChatRoomTitle", partyData.partyChatRoomTitle)
                 bundle.putString("storeUrl", partyData.storeUrl)
                 bundle.putString("title", partyData.title)
                 bundle.putString("updatedAt", partyData.updatedAt)
+
                 dialogFragment = DialogDeliveryOptionMyPopup()
                 dialogTag = "DeliveryPartyMyOption"
             }
@@ -137,7 +140,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             if (authorStatus == true || belongStatus == "Y") {
                 showPartyChattingRoom()
             } else {
-                dialogPartyRequest = DialogPartyRequest(partyData.id)
+                dialogPartyRequest = DialogPartyRequest(partyData.id, partyData.partyChatRoomId)
                 dialogPartyRequest!!.setChattingRoonJoinView(this)
                 dialogPartyRequest!!.show(parentFragmentManager, "partyRequest")
             }
@@ -187,7 +190,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookLocateText.text = getAddress(result.latitude,  result.longitude)
         val mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude)
         drawMap(mapPoint)
-
 
         binding.lookTimeDate.text = "${result.orderTime.substring(5, 7)}월 ${result.orderTime.substring(8, 10)}일"
         binding.lookTimeTime.text = "${result.orderTime.substring(11, 13)}시 ${result.orderTime.substring(14, 16)}분"
@@ -346,6 +348,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     fun joinPartyChattingRoom(){
         // TODO: 참가자 추가
         // TODO: 채팅방 입장 API 연결?
+        Log.d("CHATTING-ENTER", "TEST")
     }
 
     private fun getCurrentDateTime(): String {

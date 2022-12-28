@@ -14,6 +14,7 @@ import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import kotlinx.coroutines.delay
+import java.util.logging.Handler
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
@@ -114,19 +115,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         binding.animationViewLayout.visibility = View.VISIBLE
         loadingAnimationView.visibility = View.VISIBLE
         loadingAnimationView.playAnimation()
-        loadingAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-            }
-
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-        })
     }
 
     private fun loadingStop() {
