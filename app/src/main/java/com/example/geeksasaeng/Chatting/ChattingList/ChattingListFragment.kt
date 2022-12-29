@@ -4,17 +4,13 @@ import android.animation.Animator
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
-import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepTwoFragment
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
