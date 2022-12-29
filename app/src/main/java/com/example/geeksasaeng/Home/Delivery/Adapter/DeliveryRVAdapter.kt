@@ -18,7 +18,6 @@ import com.example.geeksasaeng.Home.Search.Retrofit.SearchPartiesVoList
 import com.example.geeksasaeng.R
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoList?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

@@ -1,14 +1,11 @@
 package com.example.geeksasaeng.Home.Party.ReportParty
 
 import android.content.Intent
-import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
-import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentDeliveryPartyReportBinding
 
 class PartyReportFragment: BaseFragment<FragmentDeliveryPartyReportBinding>(FragmentDeliveryPartyReportBinding::inflate) {
-
     var reportedDeliveryPartyId: Int = 0
     var reportedMemberId: Int = 0
 

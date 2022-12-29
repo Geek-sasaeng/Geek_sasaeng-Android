@@ -261,6 +261,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
 
     override fun onVerifyEmailSuccess(result: VerifyEmailResult) {
         signUpNaverVM.setEmailId(result.emailId)
+        //이메일 인증 성공시 다음화면(=StepNaveerTwoFragment)으로 이동
         (context as SignUpNaverActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_naver_vp, StepNaverTwoFragment()).addToBackStack(null).commit()
     }
 

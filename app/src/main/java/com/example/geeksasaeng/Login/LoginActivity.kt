@@ -9,9 +9,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.HomeFragment
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
-import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
+// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
@@ -50,7 +50,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         // 네이버 로그인
         binding.loginNaverBtn.setOnClickListener {
-            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+//            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
 
             val profileCallback = object : NidProfileCallback<NidProfileResponse> {
                 override fun onSuccess(response: NidProfileResponse) {
@@ -93,7 +93,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
 
         binding.loginSignupBtn.setOnClickListener {
-
             changeActivity(SignUpActivity::class.java)
         }
     }
@@ -105,7 +104,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     }
 
     private fun socialLogin(accessToken: String) {
-        val socialLoginDataService = SocialLoginDataService()
+        val socialLoginDataService = LoginDataService()
         socialLoginDataService.setSocialLoginView(this)
         socialLoginDataService.socialLogin(SocialLogin(accessToken, fcmToken))
     }
@@ -130,7 +129,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
             startActivity(intent)
         }else{
             Log.d("cherry", "첫 로그인이 아님")
-            //TODO: 자동로그인할때는 DORMITORY, PROFILEIMG어디서 불러오지..?
             saveNickname(result.nickName)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
@@ -219,10 +217,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
-
-
     override fun onSignUpSocialSuccess() {
-        // TODO: 성공하면 나오는 화면 생기면 넣어주기
         showToast("성공")
         Log.d("signup", "회원가입에 성공하였습니다.")
     }

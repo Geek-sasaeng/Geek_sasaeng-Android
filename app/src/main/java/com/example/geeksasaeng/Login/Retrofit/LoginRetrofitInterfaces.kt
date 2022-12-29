@@ -13,4 +13,8 @@ interface LoginRetrofitInterfaces {
     @POST("/login/auto")
     fun autoLogin(
         ): Call<AutoLoginResponse>
+
+    // 네이버 로그인, accessToken 전달
+    @POST("/login/social")
+    fun naverLogin(@Body accessToken: SocialLogin): Call<SocialLoginResponse>
 }

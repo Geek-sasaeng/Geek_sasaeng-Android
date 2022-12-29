@@ -14,16 +14,12 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCo
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var roomUuid : String? = null
     private lateinit var leaderOptionView: LeaderOptionView
-    private val db = Firebase.firestore
 
     fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
         this.leaderOptionView = leaderOptionView
@@ -82,18 +78,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
     }
 
     private fun initMatchingEndListener() {
-        db.collection("Rooms").document(roomUuid!!).collection("Messages").addSnapshotListener { snapshots, _ ->
-            for (dc in snapshots?.documentChanges!!) {
-                if (dc.type == DocumentChange.Type.ADDED) {
-                    // 지우지마세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 일부러 남겨놓은 부분입니다!!!!!!!!!!!!!!!!!!! -루나
-                    // if (dc.document["content"] == getString(R.string.chatting_matching_end)) {
-                    if (dc.document["content"] == "모든 파티원이 입장을 마쳤습니다 !\n파티장을 주문을, 파티원들은 송금을 진행해주세요") {
-                        binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(Color.parseColor("#A8A8A8"))
-                        binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
-                    }
-                }
-            }
-        }
+        // TODO: 매칭 마감 확인
     }
 
     override fun chattingDeliveryComplicatedSuccess() {

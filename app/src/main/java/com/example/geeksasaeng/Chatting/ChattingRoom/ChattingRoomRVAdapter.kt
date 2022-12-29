@@ -14,7 +14,6 @@ import com.example.geeksasaeng.databinding.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.internal.notify
 import java.text.DecimalFormat
-import kotlin.collections.ArrayList
 
 class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -25,7 +24,7 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType){
+        when (viewType) {
             myChatting -> {
                 val binding = ItemChattingMyChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return MyChattingViewHolder(binding)

@@ -15,32 +15,24 @@ interface ProfileRetrofitInterfaces {
     fun getAnnouncementDetail(
         @Body profileAnnouncementDetailRequest: ProfileAnnouncementDetailRequest
     ): Call<ProfileAnnouncementDetailResponse>
-}
 
-// 진행 중인 활동 조회 api
-interface ProfileMyOngoingActivityRetrofitInterfaces {
+    // 진행 중인 활동 조회 api
     @GET("/delivery-parties/recent/ongoing")
     fun getRecentActivity(
     ): Call<ProfileMyOngoingActivityResponse>
-}
 
-// 나의 정보 조회 api
-interface ProfileMyInfoRetrofitInterfaces {
+    // 나의 정보 조회 api
     @GET("/members")
     fun getMyInfo(
     ): Call<ProfileMyInfoResponse>
-}
 
-// 진행했던 활동 조회 api
-interface ProfileMyPreActivityRetrofitInterfaces {
+    // 진행했던 활동 조회 api
     @GET("/delivery-parties/end")
     fun getMyPreActivity(
         @Query("cursor") cursor: Int
     ): Call<ProfileMyPreActivityResponse>
-}
 
-// 회원 탈퇴 api
-interface ProfileWithdrawalRetrofitInterfaces {
+    // 회원 탈퇴 api
     @PATCH("/members/account-delete/{id}")
     fun profileWithdrawal(
         @Path("id") id: Int,

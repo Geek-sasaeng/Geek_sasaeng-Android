@@ -17,13 +17,11 @@ import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.ProfileFragment
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentLookPartyBinding
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -34,7 +32,7 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.timer
 
 class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPartyBinding::inflate), PartyDetailView,
-    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView{
+    DialogDeliveryOptionMyPopup.PopUpdateClickListener, DialogPartyRequestView, DialogPartyRequestCompleteView, MainActivity.onBackPressedListener {
 
     lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
@@ -44,7 +42,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     private var dialogPartyRequest: DialogPartyRequest? = null
     private var remainTime : Long = 0
     private var timerTask : Timer? = null
-    private val db = Firebase.firestore //파이어스토어
 
     lateinit var partyData: PartyDetailResult
     lateinit var mapView : MapView
@@ -116,9 +113,12 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
                 bundle.putString("matchingStatus", partyData.matchingStatus)
                 bundle.putInt("maxMatching", partyData.maxMatching)
                 bundle.putString("orderTime", partyData.orderTime)
+                bundle.putString("partyChatRoomId", partyData.partyChatRoomId)
+                bundle.putString("partyChatRoomTitle", partyData.partyChatRoomTitle)
                 bundle.putString("storeUrl", partyData.storeUrl)
                 bundle.putString("title", partyData.title)
                 bundle.putString("updatedAt", partyData.updatedAt)
+
                 dialogFragment = DialogDeliveryOptionMyPopup()
                 dialogTag = "DeliveryPartyMyOption"
             }
@@ -140,7 +140,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             if (authorStatus == true || belongStatus == "Y") {
                 showPartyChattingRoom()
             } else {
-                dialogPartyRequest = DialogPartyRequest(partyData.id)
+                dialogPartyRequest = DialogPartyRequest(partyData.id, partyData.partyChatRoomId)
                 dialogPartyRequest!!.setChattingRoonJoinView(this)
                 dialogPartyRequest!!.show(parentFragmentManager, "partyRequest")
             }
@@ -190,7 +190,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         binding.lookLocateText.text = getAddress(result.latitude,  result.longitude)
         val mapPoint = MapPoint.mapPointWithGeoCoord(result.latitude,result.longitude)
         drawMap(mapPoint)
-
 
         binding.lookTimeDate.text = "${result.orderTime.substring(5, 7)}월 ${result.orderTime.substring(8, 10)}일"
         binding.lookTimeTime.text = "${result.orderTime.substring(11, 13)}시 ${result.orderTime.substring(14, 16)}분"
@@ -343,65 +342,13 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
     // 채팅방으로 이동
     override fun showPartyChattingRoom() {
-        val chatUUID = partyData.uuid
-        db.collection("Rooms").document(chatUUID).get()
-            .addOnSuccessListener {doc ->
-                if (doc != null){
-                    val value = doc.data!!["roomInfo"] as HashMap<String, Any>
-                    val chatName = value["title"].toString()
-                    val intent = Intent(activity, ChattingRoomActivity::class.java)
-                    intent.putExtra("roomName", chatName)
-                    intent.putExtra("roomUuid", chatUUID)
-                    startActivity(intent)
-                }
-            }
-            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
+        // TODO: 채팅방 이동
     }
 
-    // 파이어 베이스 participants 추가
     fun joinPartyChattingRoom(){
-        db.collection("Rooms")
-            .document(partyData.uuid)
-            .update("roomInfo.participants", FieldValue.arrayUnion(ParticipantsInfo(calculateToday(), getNickname().toString(), false))) //현재시간, 닉네임
-            .addOnSuccessListener {
-                // 00 님이 입장했습니다 시스템 메시지 추가 부분
-                var uuid = UUID.randomUUID().toString()
-                var time = getCurrentDateTime()
-                var data = hashMapOf(
-                    "content" to "${getNickname()}님이 입장하셨습니다",
-                    "nickname" to getNickname(),
-                    "isSystemMessage" to true,
-                    "time" to time,
-                    "userImgUrl" to "이미지 링크"
-                )
-                db.collection("Rooms").document(partyData.uuid).collection("Messages")
-                    .document(uuid).set(data).addOnSuccessListener { }
-
-                db.collection("Rooms").document(partyData.uuid).get().addOnSuccessListener { result ->
-                    var length = (result.get("roomInfo.participants") as ArrayList<Any>).size
-                    Log.d("FIREBASE-RESPONSE", "Participants = $length")
-                    Log.d("FIREBASE-RESPONSE", "Party-Participants = $partyMatchingNumber")
-
-                    if (length == partyMatchingNumber) {
-                        uuid = UUID.randomUUID().toString()
-                        time = getCurrentDateTime()
-                        data = hashMapOf(
-                            "content" to getString(R.string.chatting_matching_end),
-                            "nickname" to null,
-                            "isSystemMessage" to true,
-                            "time" to time,
-                            "userImgUrl" to null
-                        )
-                        db.collection("Rooms").document(partyData.uuid).collection("Messages")
-                            .document(uuid).set(data).addOnSuccessListener { }
-                    }
-                }
-
-                // Log.d("FIREBASE-RESPONSE", db.collection("Rooms").document(partyData.uuid).get().get("roomInfo.participants").toString())
-                // if (db.collection("Rooms").document(partyData.uuid).get("roomInfo.participants"))
-            }
-            .addOnFailureListener { e -> Log.w("firebase", "Error update document", e) }
-
+        // TODO: 참가자 추가
+        // TODO: 채팅방 입장 API 연결?
+        Log.d("CHATTING-ENTER", "TEST")
     }
 
     private fun getCurrentDateTime(): String {
@@ -431,6 +378,10 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         loadingAnimationView.cancelAnimation()
         binding.animationViewLayout.visibility = View.GONE
         loadingAnimationView.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ProfileFragment()).commit()
     }
 
 /*    override fun onBackPressed() {

@@ -21,7 +21,7 @@ class NetworkModule {
                     val client: OkHttpClient = OkHttpClient.Builder()
 /*                        .readTimeout(30000, TimeUnit.MILLISECONDS)
                         .connectTimeout(30000, TimeUnit.MILLISECONDS)*/
-                        .addNetworkInterceptor(AuthorizationTokenInterceptor()) // JWT 자동 헤더 전송
+                        .addNetworkInterceptor(AuthorizationTokenInterceptor()) // JWT 자동 헤더 전송 ="Bearer getJwt()"
                         .build()
 
                     retrofit = Retrofit.Builder()
