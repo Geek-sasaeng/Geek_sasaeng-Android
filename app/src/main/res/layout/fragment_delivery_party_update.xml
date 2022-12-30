@@ -32,7 +32,7 @@
             app:layout_constraintBottom_toBottomOf="@id/delivery_party_update_back_btn_iv"
             android:text="파티 수정하기"
             android:fontFamily="@font/spoqa_bold"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/top"/>
 
         <TextView

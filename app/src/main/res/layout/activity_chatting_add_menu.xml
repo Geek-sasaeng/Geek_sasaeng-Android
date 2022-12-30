@@ -32,7 +32,7 @@
             android:textColor="@color/black"
             android:fontFamily="@font/spoqa_medium"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

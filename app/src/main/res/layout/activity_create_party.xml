@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="@id/create_party_back_btn_iv"
             android:text="파티 생성하기"
             android:fontFamily="@font/spoqa_bold"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/top"/>
 
         <TextView

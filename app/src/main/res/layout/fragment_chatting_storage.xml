@@ -13,7 +13,7 @@
         android:text="보관함"
         android:textColor="@color/top"
         android:fontFamily="@font/spoqa_bold"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

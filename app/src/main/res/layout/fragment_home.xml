@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:text="제1기숙사"
             android:textColor="@color/black"
-            android:fontFamily="@font/spoqa_medium"
-            android:textSize="20sp" />
+            android:fontFamily="@font/spoqa_bold"
+            android:textSize="18sp" />
 
         <ImageButton
             android:id="@+id/home_search_btn"
