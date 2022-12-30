@@ -55,8 +55,8 @@ class ChattingRoomActivity :
     
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
-        roomUuid = intent.getStringExtra("roomUuid").toString()
-        chattingRoomName = roomUuid
+//        roomUuid = intent.getStringExtra("roomUuid").toString()
+//        chattingRoomName = roomUuid
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
@@ -65,14 +65,14 @@ class ChattingRoomActivity :
         initSendChatListener()
         initAdapter()
         initChattingService()
-        optionClickListener()
+//        optionClickListener()
     }
 
     // 종료 시 리스너 제거
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        realTimeChatListener.remove()
-        changeParticipantsListener.remove()
+//        realTimeChatListener.remove()
+//        changeParticipantsListener.remove()
     }
 
     private fun getBankAndAccountNumber() {
@@ -118,7 +118,6 @@ class ChattingRoomActivity :
                 optionDialog.setOptionView(this)
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
-
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {

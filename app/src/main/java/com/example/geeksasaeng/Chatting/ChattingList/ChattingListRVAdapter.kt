@@ -36,6 +36,10 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
 //        this.notifyItemChanged(position)
 //    }
 
+    fun getRoomData(position: Int): ChattingList {
+        return chattingList[position]!!
+    }
+
     fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
         chattingList.addAll(items)
         this.notifyDataSetChanged()
