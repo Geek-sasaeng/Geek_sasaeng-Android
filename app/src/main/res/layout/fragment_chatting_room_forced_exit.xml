@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Chatting.ChattingRoom.ChattingRoomForcedExitFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatting_room_forced_exit_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/chatting_room_forced_exit_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_back"
+            android:backgroundTint="#D9D9D9"
+            android:layout_marginLeft="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/chatting_room_forced_exit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="강제 퇴장시키기"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_bold"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatting_room_forced_exit_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chatting_room_forced_exit_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/hatting_room_forced_exit_caution_tv">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/hatting_room_forced_exit_caution_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*송금을 완료한 사용자는 강제 퇴장이 불가합니다"
+        android:textSize="12sp"
+        android:textColor="@color/main"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chatting_room_forced_exit_bottom_bar"
+        android:layout_marginBottom="28dp"/>
+
+    <View
+        android:id="@+id/chatting_room_forced_exit_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/chatting_room_forced_exit_member_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="0/6 명"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/chatting_room_forced_exit_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chatting_room_forced_exit_bottom_bar"
+        app:layout_constraintVertical_bias="0.515" />
+
+    <TextView
+        android:id="@+id/look_party_request_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="퇴장시킬 파티원을 선택해 주세요"
+        android:fontFamily="@font/spoqa_bold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:paddingVertical="5dp"
+        android:layout_marginRight="11dp"
+        app:layout_constraintTop_toTopOf="@id/chatting_room_forced_exit_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/chatting_room_forced_exit_bottom_bar"
+        app:layout_constraintEnd_toStartOf="@id/chatting_room_forced_exit_next_btn" />
+
+    <ImageView
+        android:id="@+id/chatting_room_forced_exit_next_btn"
+        android:layout_width="12dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_next"
+        android:backgroundTint="@color/white"
+        android:layout_marginRight="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chatting_room_forced_exit_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="@id/chatting_room_forced_exit_bottom_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

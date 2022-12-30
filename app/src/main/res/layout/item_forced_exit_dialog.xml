@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_chatting_room_forced_exit_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginVertical="7.5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/item_forced_exit_dialog_image_cv"
+            android:layout_width="18.91dp"
+            android:layout_height="19.9dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" >
+
+            <ImageView
+                android:id="@+id/item_chatting_room_forced_exit_image_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_default_profile2" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/item_forced_exit_dialog_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘도파이팅긱사생달려"
+            android:textColor="@color/top"
+            android:textSize="14sp"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginStart="9dp"
+            app:layout_constraintStart_toEndOf="@id/item_forced_exit_dialog_image_cv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_forced_exit_dialog_image_cv"
+            app:layout_constraintBottom_toBottomOf="@id/item_forced_exit_dialog_image_cv"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
