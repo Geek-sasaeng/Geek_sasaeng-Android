@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
@@ -14,6 +13,7 @@ class ChattingService {
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
+    private lateinit var matchingEndView: MatchingEndView
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
@@ -31,6 +31,9 @@ class ChattingService {
     }
     fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
         this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
+    }
+    fun setMatchingEndView(matchingEndView: MatchingEndView){
+        this.matchingEndView = matchingEndView
     }
 
     // 채팅방 생성
@@ -135,5 +138,26 @@ class ChattingService {
                     //TODO: 계속 타임아웃 오류나...
                 }
             })
+    }
+
+    //배달파티 수동 매칭마감
+    fun matchingEndSender(roomUuid: String){
+        Log.d("matchingEND","Bearer " + getJwt()+"/"+roomUuid.toString())
+        chattingService?.matchingEnd(roomUuid)?.enqueue(object : Callback<MatchingEndResponse>{
+            override fun onResponse(call: Call<MatchingEndResponse>, response: Response<MatchingEndResponse>) {
+                Log.d("matchingEND", response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("matchingEND", resp.toString())
+                    when(resp.code){
+                        1000->matchingEndView.onMatchingEndSuccess()
+                        else->matchingEndView.onMatchingEndFailure(resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<MatchingEndResponse>, t: Throwable) {
+                Log.d("MATCHINGEND-RESPONSE", "ChattingDataService-onFailure : MatchingEndFailed", t)
+            }
+        })
     }
 }

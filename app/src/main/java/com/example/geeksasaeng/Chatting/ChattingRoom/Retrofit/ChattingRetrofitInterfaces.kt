@@ -36,4 +36,10 @@ interface ChattingRetrofitInterfaces {
         @Body chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest
     ): Call<ChattingDeliveryComplicatedResponse>
 
+    //배달파티 수동 매칭마감
+    @PATCH("/delivery-party/{roomUuid}/matching-status")
+    fun matchingEnd(
+        @Path("roomUuid") roomUuid: String
+    ): Call<MatchingEndResponse>
+
 }

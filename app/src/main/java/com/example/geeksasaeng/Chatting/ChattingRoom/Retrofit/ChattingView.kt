@@ -24,3 +24,8 @@ interface ChattingDeliveryComplicatedView {
     fun chattingDeliveryComplicatedSuccess()
     fun chattingDeliveryComplicatedFailure(message: String)
 }
+
+interface MatchingEndView {
+    fun onMatchingEndSuccess()
+    fun onMatchingEndFailure(message: String)
+}
