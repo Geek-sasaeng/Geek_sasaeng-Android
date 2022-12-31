@@ -177,6 +177,20 @@ class ChattingRoomActivity :
         }
     }
 
+    private fun webSocketSendMsg() {
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
     private fun getCurrentDateTime(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return formatter.format(Calendar.getInstance().time)
