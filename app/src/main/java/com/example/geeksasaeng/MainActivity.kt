@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomForcedExitFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
@@ -97,7 +98,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return@setOnItemSelectedListener true
                 }
                 R.id.communityFragment -> {
-                    setFragment(R.id.main_frm, CommunityFragment())
+                    setFragment(R.id.main_frm, ChattingRoomForcedExitFragment())
                     Log.d("Stack-Log", "CommunityFragment()")
                     return@setOnItemSelectedListener true
                 }

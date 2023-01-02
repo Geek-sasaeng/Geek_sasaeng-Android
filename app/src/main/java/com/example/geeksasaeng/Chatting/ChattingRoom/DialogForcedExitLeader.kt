@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.databinding.DialogForcedExitBinding
+import com.example.geeksasaeng.databinding.DialogChattingRoomForcedExitLeaderBinding
 
 
-class DialogForcedExit: DialogFragment() {
+class DialogForcedExitLeader: DialogFragment() {
 
-    lateinit var binding: DialogForcedExitBinding
+    lateinit var binding: DialogChattingRoomForcedExitLeaderBinding
 
     override fun onResume() {
         super.onResume()
@@ -28,7 +28,7 @@ class DialogForcedExit: DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DialogForcedExitBinding.inflate(inflater, container, false)
+        binding = DialogChattingRoomForcedExitLeaderBinding.inflate(inflater, container, false)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root

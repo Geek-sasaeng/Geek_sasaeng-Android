@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class CreateChattingRequest(
     @SerializedName("accountNumber") val accountNumber: String,
@@ -99,3 +100,9 @@ data class MatchingEndResult(
     @SerializedName("deliveryPartyId") val deliveryPartyId: Int,
     @SerializedName("matchingStatus") val matchingStatus: String
 )
+
+data class MemberData(
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("profileImgUrl") val profileImgUrl: String,
+    @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean
+): Serializable

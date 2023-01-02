@@ -1,8 +1,10 @@
 package com.example.geeksasaeng.Utils
 
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
+import org.json.JSONArray
+import org.json.JSONException
+
 
 // 닉네임
 fun removeNickname() {
@@ -87,6 +89,29 @@ fun setAutoLogin(jwt: String){
     editor.apply()
 }
 
+// 강제퇴장 리스트
+fun removeForcedExitCheckList(){
+    val editor = mSharedPreferences.edit()
+    editor.remove("forcedExitList")
+    editor.commit()
+}
+
+fun saveForcedExitCheckList(forcedExitCheckList: MutableList<Boolean>){
+
+    val editor = mSharedPreferences.edit()
+    val a = JSONArray()
+    for (i in 0 until forcedExitCheckList.size) {
+        a.put(forcedExitCheckList[i])
+    }
+    if (!forcedExitCheckList.isEmpty()) {
+        editor.putString("forcedExitList", a.toString())
+    } else {
+        editor.putString("forcedExitList", null)
+    }
+    editor.apply()
+}
+
+
 fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
 fun getNickname(): String? = mSharedPreferences.getString("nickname", null)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
@@ -96,3 +121,19 @@ fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun isAutoLogin(): Boolean? = mSharedPreferences.getBoolean("autoLogin", false)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null) // TODO: ?? save가 없는뎅..
 fun getPassword(): String? = mSharedPreferences.getString("password", null) // TODO: ??
+fun getForcedExitCheckList(): MutableList<Boolean> {
+    val json = mSharedPreferences.getString("forcedExitList", null)
+    val forcedExitCheckList = ArrayList<Boolean>()
+    if (json != null) {
+        try {
+            val a = JSONArray(json)
+            for (i in 0 until a.length()) {
+                val check = a.optString(i)
+                forcedExitCheckList.add(check.toBoolean())
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+    }
+    return forcedExitCheckList
+}
