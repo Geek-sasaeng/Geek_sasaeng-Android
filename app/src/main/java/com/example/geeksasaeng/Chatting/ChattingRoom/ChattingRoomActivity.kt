@@ -17,9 +17,12 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,6 +58,7 @@ class ChattingRoomActivity :
 
     // Chatting
     private var chatClient = OkHttpClient()
+    private lateinit var webSocket: WebSocket
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
@@ -74,14 +78,14 @@ class ChattingRoomActivity :
     private fun webSocketStart() {
         val request = Request.Builder().url("ws://geeksasaeng.shop:8080/chatting").build()
         val listener = ChatWebSocketListener()
-        // val webSocket: WebSocket = chatClient.newWebSocket(request, listener)
+        webSocket = chatClient.newWebSocket(request, listener)
         chatClient.newWebSocket(request, listener)
         chatClient.dispatcher.executorService.shutdown()
     }
 
     fun webSocketPrint(message: String) {
         runOnUiThread {
-            Log.d("WebSocket-Test", message)
+            Log.d("WebSocketListener-Test", message)
             // textResult.setText(textResult.getText().toString() + "\n" + message)
         }
     }
@@ -201,7 +205,23 @@ class ChattingRoomActivity :
             var chatId = "none"
             var jwt = getJwt()
 
-            var chatData = ChatRequest(content, chatRoomId, isSystemMessage, memberId, profileImgUrl, chatType, chatId, jwt)
+            // var chatData = ChatRequest(content, chatRoomId, isSystemMessage, memberId, profileImgUrl, chatType, chatId, jwt)
+
+            // 전송할 데이터를 JSON Type 변수에 저장
+            val jsonObject = JSONObject()
+            jsonObject.put("content", content)
+            jsonObject.put("chatRoomId", chatRoomId)
+            jsonObject.put("isSystemMessage", isSystemMessage)
+            jsonObject.put("memberId", memberId)
+            jsonObject.put("profileImgUrl", profileImgUrl)
+            jsonObject.put("chatType", chatType)
+            jsonObject.put("chatId", chatId)
+            jsonObject.put("jwt", jwt)
+
+            val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+
+            Log.d("WebSocketListener-Test", chatData.toString())
+            // webSocket.send(chatData)
         }
     }
 

@@ -18,24 +18,24 @@ class ChatWebSocketListener : WebSocketListener() {
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         chattingRoom.webSocketPrint("Receiving : $text")
-        Log.d("Socket","Receiving : $text")
+        Log.d("WebSocketListener-Test","Receiving : $text")
     }
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         chattingRoom.webSocketPrint("Receiving bytes : $bytes")
-        Log.d("Socket", "Receiving bytes : $bytes")
+        Log.d("WebSocketListener-Test", "Receiving bytes : $bytes")
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         chattingRoom.webSocketPrint("Closing : $code / $reason")
-        Log.d("Socket","Closing : $code / $reason")
+        Log.d("WebSocketListener-Test","Closing : $code / $reason")
         webSocket.close(NORMAL_CLOSURE_STATUS, null)
         webSocket.cancel()
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         chattingRoom.webSocketPrint("Error : " + t.message)
-        Log.d("Socket","Error : " + t.message)
+        Log.d("WebSocketListener-Test","Error : " + t.message)
     }
 
     companion object {
