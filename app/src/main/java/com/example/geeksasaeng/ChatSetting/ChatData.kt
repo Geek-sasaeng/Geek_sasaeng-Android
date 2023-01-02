@@ -3,10 +3,12 @@ package com.example.geeksasaeng.ChatSetting
 data class ChatRequest (
     var content: String,
     var chatRoomId: String,
-    var isSystemMessage: Boolean,
-    var chatType: String,
-    var chatId: String,
-    var jwt: String
+    var isSystemMessage: Boolean?,
+    var memberId: Int?,
+    var profileImgUrl: String?,
+    var chatType: String?,
+    var chatId: String?,
+    var jwt: String?
 )
 
 data class ChatResponse (

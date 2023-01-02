@@ -1,27 +1,27 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Gallery
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.geeksasaeng.ChatSetting.ChatRequest
+import com.example.geeksasaeng.ChatSetting.ChatWebSocketListener
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -31,7 +31,7 @@ class ChattingRoomActivity :
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
-    private var roomUuid = String()
+    private var roomId = String()
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -52,11 +52,13 @@ class ChattingRoomActivity :
     // Album
     val PERMISSION_Album = 101 // 앨범 권한 처리
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    
+
+    // Chatting
+    private var chatClient = OkHttpClient()
+
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
-//        roomUuid = intent.getStringExtra("roomUuid").toString()
-//        chattingRoomName = roomUuid
+        roomId = intent.getStringExtra("roomId").toString()
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
@@ -66,6 +68,22 @@ class ChattingRoomActivity :
         initAdapter()
         initChattingService()
 //        optionClickListener()
+        webSocketStart()
+    }
+
+    private fun webSocketStart() {
+        val request = Request.Builder().url("ws://geeksasaeng.shop:8080/chatting").build()
+        val listener = ChatWebSocketListener()
+        // val webSocket: WebSocket = chatClient.newWebSocket(request, listener)
+        chatClient.newWebSocket(request, listener)
+        chatClient.dispatcher.executorService.shutdown()
+    }
+
+    fun webSocketPrint(message: String) {
+        runOnUiThread {
+            Log.d("WebSocket-Test", message)
+            // textResult.setText(textResult.getText().toString() + "\n" + message)
+        }
     }
 
     // 종료 시 리스너 제거
@@ -110,7 +128,7 @@ class ChattingRoomActivity :
                 val optionDialog = LeaderOptionDialog()
                 optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
-                bundle.putString("roomUuid", roomUuid)
+//                bundle.putString("roomUuid", roomUuid)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
@@ -174,22 +192,18 @@ class ChattingRoomActivity :
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
             // TODO: 메시지 전송
+            var content = binding.chattingRoomChattingTextEt.text.toString()
+            var chatRoomId = roomId
+            var isSystemMessage = false
+            var memberId = getMemberId()
+            var profileImgUrl = getProfileImgUrl()
+            var chatType = "publish"
+            var chatId = "none"
+            var jwt = getJwt()
+
+            var chatData = ChatRequest(content, chatRoomId, isSystemMessage, memberId, profileImgUrl, chatType, chatId, jwt)
         }
     }
-
-    private fun webSocketSendMsg() {
-        
-    }
-
-
-
-
-
-
-
-
-
-
 
     private fun getCurrentDateTime(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -198,8 +212,8 @@ class ChattingRoomActivity :
 
     // 일반 유저 나가기
     override fun MemberExistClick() {
-        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
-        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
+//        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
+//        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
     }
 
     // 방장 나가기
