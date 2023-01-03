@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList
+package com.example.geeksasaeng.Chatting.ChattingList
 
 data class ChattingData(
     val roomData: RoomData,

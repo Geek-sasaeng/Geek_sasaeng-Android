@@ -1,9 +1,9 @@
-package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList
+package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit.ChattingList
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
 

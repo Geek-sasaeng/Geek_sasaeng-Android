@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList
+package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.animation.Animator
 import android.content.Intent
@@ -8,10 +8,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit.ChattingList
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit.ChattingListResult
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit.ChattingListService
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit.ChattingListView
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding

@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit
+package com.example.geeksasaeng.Chatting.ChattingList.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.Utils.NetworkModule

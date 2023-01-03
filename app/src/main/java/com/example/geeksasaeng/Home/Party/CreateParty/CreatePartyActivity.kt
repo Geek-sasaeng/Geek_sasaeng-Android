@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.ParticipantsInfo
+import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingRequest
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingResult
