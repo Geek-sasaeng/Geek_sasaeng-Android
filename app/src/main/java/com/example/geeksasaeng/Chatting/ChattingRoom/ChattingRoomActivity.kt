@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,7 @@ import kotlin.concurrent.thread
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
-    WebSocketListenerInterface {
+    WebSocketListenerInterface, SendChattingView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -138,6 +139,7 @@ class ChattingRoomActivity :
     private fun initChattingService() {
         chattingService = ChattingService()
         chattingService.setChattingMemberLeaveView(this)
+        chattingService.setSendChattingView(this)
     }
 
     private fun optionClickListener() {
@@ -209,6 +211,12 @@ class ChattingRoomActivity :
     // 메시지 전송
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
+            thread {
+                kotlin.run {
+                    WebSocketManager.connect()
+                }
+            }
+
             // TODO: 메시지 전송
             var content = binding.chattingRoomChattingTextEt.text.toString()
             var chatRoomId = roomId
@@ -218,8 +226,6 @@ class ChattingRoomActivity :
             var chatType = "publish"
             var chatId = "none"
             var jwt = getJwt()
-
-            // var chatData = ChatRequest(content, chatRoomId, isSystemMessage, memberId, profileImgUrl, chatType, chatId, jwt)
 
             // 전송할 데이터를 JSON Type 변수에 저장
             val jsonObject = JSONObject()
@@ -240,15 +246,13 @@ class ChattingRoomActivity :
 
             binding.chattingRoomChattingTextEt.setText("")
 
-            thread {
-                kotlin.run {
-                    WebSocketManager.connect()
-                }
-            }
-
             if ( WebSocketManager .sendMessage( " Client send " )) {
                 Log.d("WebSocketListener-Test", " Send from the client \n " )
             }
+
+            var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+
+            chattingService.sendChatting(sendChatData)
         }
     }
 
@@ -306,5 +310,15 @@ class ChattingRoomActivity :
 
     override fun onMessage(text: String?) {
         Log.d("WebSocketListener-Test", "Message = $text")
+    }
+
+    override fun sendChattingSuccess(result: String) {
+        Log.d("SEND-CHATTING", "Send Chatting Success")
+        Toast.makeText(this, "채팅 전송 성공", Toast.LENGTH_LONG)
+    }
+
+    override fun sendChattingFailure(code: Int, message: String) {
+        Log.d("SEND-CHATTING", "Send Chatting Failure")
+        Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
     }
 }

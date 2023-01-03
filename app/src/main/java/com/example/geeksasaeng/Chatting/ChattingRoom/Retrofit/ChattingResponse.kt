@@ -31,7 +31,7 @@ data class SendChattingRequest(
     @SerializedName("content") val content: String,
     @SerializedName("isSystemMessage") val isSystemMessage: Boolean?,
     @SerializedName("jwt") val jwt: String?,
-    @SerializedName("memberId") val memberId: String?,
+    @SerializedName("memberId") val memberId: Int?,
     @SerializedName("profileImgUrl") val profileImgUrl: String?,
 )
 
