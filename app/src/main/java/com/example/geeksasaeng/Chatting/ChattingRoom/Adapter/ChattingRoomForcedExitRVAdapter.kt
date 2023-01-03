@@ -73,7 +73,6 @@ class ChattingRoomForcedExitRVAdapter(var memberList: MutableList<MemberData>) :
     // Item 하나에 대한 뷰를 바인딩 하고 있는 역할
     inner class ViewHolder(val binding: ItemChattingRoomForcedExitListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(member : MemberData, position: Int){
-            Log.d("forcedExit", "체크박스리스트"+ mcheckboxList)
             if(position >= mcheckboxList.size) //뷰가 바인딩 될 때, 체크박스리스트에 객체를 하나씩 추가해준다.
                 mcheckboxList.add(position, false)
             binding.itemChattingRoomForcedExitCheckBox.isChecked = mcheckboxList[position] //체크 상태 유지
@@ -85,12 +84,10 @@ class ChattingRoomForcedExitRVAdapter(var memberList: MutableList<MemberData>) :
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         mcheckboxList = getForcedExitCheckList()
-        Log.d("forcedExit", "onAttachedToRecyclerView : "+mcheckboxList)
     }
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
         saveForcedExitCheckList(mcheckboxList)
-        Log.d("forcedExit", "onDetachedFromRecyclerView : "+mcheckboxList)
     }
 
 }

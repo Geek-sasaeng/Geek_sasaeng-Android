@@ -7,7 +7,12 @@ interface CreateChattingView {
 
 interface ChattingMemberAddView {
     fun chattingMemberAddSuccess(result: ChattingMemberAddResult)
-    fun chattingMemberFailure(code: Int, message: String)
+    fun chattingMemberAddFailure(code: Int, message: String)
+}
+
+interface ChattingMemberForcedExitView {
+    fun chattingMemberForcedExitSuccess(result: ChattingMemberForcedExitResult)
+    fun chattingMemberForcedExitFailure(code: Int, message: String)
 }
 
 interface ChattingMemberLeaveView {

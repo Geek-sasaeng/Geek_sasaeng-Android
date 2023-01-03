@@ -4,6 +4,8 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ChattingRetrofitInterfaces {
+
+    // <<party-chat-room>> //
     // 채팅방 생성
     @POST("/party-chat-room")
     fun createChatting(
@@ -18,6 +20,14 @@ interface ChattingRetrofitInterfaces {
         @Body chattingMemberAddRequest: ChattingMemberAddRequest
     ): Call<ChattingMemberAddResponse>
 
+    //방장이 배달 파티 채팅 멤버를 강제퇴장
+    @DELETE("/party-chat-room/members")
+    fun chattingMemberForcedExit(
+        @Header("Authorization") jwt: String,
+        @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
+    ): Call<ChattingMemberForcedExitResponse>
+
+    // <<delivery-party>>//
     // 파티 멤버 나가기
     @PATCH("/delivery-party/member")
     fun partyMemberChattingLeave(

@@ -42,6 +42,22 @@ data class ChattingMemberAddResult(
     @SerializedName("remittance") val remittance: Boolean
 )
 
+data class ChattingMemberForcedExitRequest(
+    @SerializedName("removedMemberId") val removedMemberId: String,
+    @SerializedName("roomId") val roomId: String
+)
+
+data class ChattingMemberForcedExitResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingMemberForcedExitResult
+)
+
+data class ChattingMemberForcedExitResult(
+    @SerializedName("message") val message: String
+)
+
 data class ChattingPartyMemberLeaveRequest(
     @SerializedName("uuid") val uuid: String,
 )

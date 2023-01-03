@@ -56,11 +56,9 @@ class ChattingRoomForcedExitFragment : BaseFragment<FragmentChattingRoomForcedEx
                 mForcedExitMemberList = forcedExitMemberList
                 Log.d("forcedExit", "forcedExit 멤버 수 : " + mForcedExitMemberList.size)
                 if(mForcedExitMemberList.size==0){
-                    Log.d("forcedExit", "forcedExit bottombar 비활성화" )
                     binding.chattingRoomForcedExitBottomBar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_unactivated))
                     binding.chattingRoomForcedExitBottomBarTv.text = "퇴장시킬 파티원을 선택해 주세요"
                 }else{
-                    Log.d("forcedExit", "forcedExit bottombar 활성화" )
                     //하단 바 활성화
                     binding.chattingRoomForcedExitBottomBar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main))
                     //안내문구 변경 (퇴장시킬 파티원을 선택해 주세요->다음)
@@ -76,9 +74,12 @@ class ChattingRoomForcedExitFragment : BaseFragment<FragmentChattingRoomForcedEx
         binding.chattingRoomForcedExitNext.setOnClickListener {
             if(mForcedExitMemberList.size>0){
                 //다음버튼 누를 시, 다이얼로그 띄우기
-                val dialog = DialogForcedExitLeader()
+                val dialog = DialogForcedExit()
                 val bundle = Bundle()
-                bundle.putParcelableArrayList("list", mForcedExitMemberList as ArrayList<out Parcelable?>?) //강제퇴장리스트 넘겨주기
+                // TODO: 나중에 넘길때는 mForcedExitMemberList를 체크한 순서가 아니라, 채팅방 멤버 정렬 순으로 넣어주는게 더 좋아보여!
+                // 나중에 실제 데이터 들어오면 그거 속성값 중에 하나 정렬순서로 삼아서 하면 될 것 같기두?
+                bundle.putParcelableArrayList("forcedExitList", mForcedExitMemberList as ArrayList<out Parcelable?>?) //강제퇴장리스트 넘겨주기
+                dialog.arguments = bundle
                 dialog.show(parentFragmentManager, "DialogForcedExitLeader")
             }
         }

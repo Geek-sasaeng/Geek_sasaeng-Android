@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import android.util.Log
+import com.example.geeksasaeng.Chatting.ChattingRoom.DialogForcedExit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
@@ -10,6 +11,7 @@ import retrofit2.Response
 class ChattingService {
     private lateinit var createChattingView: CreateChattingView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
+    private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
@@ -22,6 +24,9 @@ class ChattingService {
     }
     fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
         this.chattingMemberAddView = chattingMemberAddView
+    }
+    fun setChattingMemberForcedExitView(chattingMemberForcedExitView: ChattingMemberForcedExitView) {
+        this.chattingMemberForcedExitView = chattingMemberForcedExitView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -62,11 +67,31 @@ class ChattingService {
                     val resp = response.body()!!
                     when (resp.code) {
                         1000 -> chattingMemberAddView.chattingMemberAddSuccess(resp.result)
-                        else -> chattingMemberAddView.chattingMemberFailure(resp.code, resp.message)
+                        else -> chattingMemberAddView.chattingMemberAddFailure(resp.code, resp.message)
                     }
                 }
             }
             override fun onFailure(call: Call<ChattingMemberAddResponse>, t: Throwable) {
+                Log.d("CHATTING-ADD-MEMBER", "실패")
+            }
+        })
+    }
+
+    // 방장이 배달 파티 채팅 멤버를 강제퇴장
+    fun chattingMemberForcedExit(chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest) {
+        chattingService?.chattingMemberForcedExit("Bearer " + getJwt(), chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
+
+            override fun onResponse(call: Call<ChattingMemberForcedExitResponse>, response: Response<ChattingMemberForcedExitResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingMemberForcedExitView.chattingMemberForcedExitSuccess(resp.result)
+                        else -> chattingMemberForcedExitView.chattingMemberForcedExitFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChattingMemberForcedExitResponse>, t: Throwable) {
                 Log.d("CHATTING-ADD-MEMBER", "실패")
             }
         })

@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent" >
 
             <ImageView
-                android:id="@+id/item_chatting_room_forced_exit_image_iv"
+                android:id="@+id/item__forced_exit_dialog_image_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_default_profile2" />
