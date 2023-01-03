@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Chatting.ChattingList.Retrofit
+package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit
 
 import retrofit2.Call
 import retrofit2.http.GET

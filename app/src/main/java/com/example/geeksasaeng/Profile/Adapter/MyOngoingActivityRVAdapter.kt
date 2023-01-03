@@ -4,8 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingData
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingListRVAdapter
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.ChattingData
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.ChattingListRVAdapter
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
 import com.example.geeksasaeng.Chatting.ChattingRoom.Chatting
 import com.example.geeksasaeng.Chatting.ChattingRoom.myChatting

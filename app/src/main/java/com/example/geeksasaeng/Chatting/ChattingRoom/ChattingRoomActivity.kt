@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.ChatSetting.ChatRequest
 import com.example.geeksasaeng.ChatSetting.ChatWebSocketListener
+import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
+import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
@@ -25,10 +27,12 @@ import okhttp3.WebSocket
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView {
+    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
+    WebSocketListenerInterface {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -58,29 +62,37 @@ class ChattingRoomActivity :
 
     // Chatting
     private var chatClient = OkHttpClient()
-    private lateinit var webSocket: WebSocket
+    // private lateinit var webSocket: WebSocket
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
+        Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
-
         initTextChangedListener()
         initSendChatListener()
         initAdapter()
         initChattingService()
 //        optionClickListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("WebSocketListener-Test", "onResume")
         webSocketStart()
     }
 
     private fun webSocketStart() {
-        val request = Request.Builder().url("ws://geeksasaeng.shop:8080/chatting").build()
-        val listener = ChatWebSocketListener()
-        webSocket = chatClient.newWebSocket(request, listener)
-        chatClient.newWebSocket(request, listener)
-        chatClient.dispatcher.executorService.shutdown()
+//        val request = Request.Builder().url("ws://geeksasaeng.shop:8080/chatting").build()
+//        val listener = ChatWebSocketListener()
+//        webSocket = chatClient.newWebSocket(request, listener)
+//        chatClient.newWebSocket(request, listener)
+//        chatClient.dispatcher.executorService.shutdown()
+
+        Log.d("WebSocketListener-Test", "webSocketStart")
+        WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
     }
 
     fun webSocketPrint(message: String) {
@@ -95,6 +107,8 @@ class ChattingRoomActivity :
         super.onDetachedFromWindow()
 //        realTimeChatListener.remove()
 //        changeParticipantsListener.remove()
+        Log.d("WebSocketListener-Test", "END")
+        WebSocketManager.close()
     }
 
     private fun getBankAndAccountNumber() {
@@ -221,7 +235,20 @@ class ChattingRoomActivity :
             val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
 
             Log.d("WebSocketListener-Test", chatData.toString())
-            // webSocket.send(chatData)
+            WebSocketManager.sendMessage(chatData.toString())
+            // webSocket.send(chatData.toString())
+
+            binding.chattingRoomChattingTextEt.setText("")
+
+            thread {
+                kotlin.run {
+                    WebSocketManager.connect()
+                }
+            }
+
+            if ( WebSocketManager .sendMessage( " Client send " )) {
+                Log.d("WebSocketListener-Test", " Send from the client \n " )
+            }
         }
     }
 
@@ -262,5 +289,22 @@ class ChattingRoomActivity :
         val date = Date(nowTime)
         var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         return dateFormat.format(date)
+    }
+
+    // WebSocketListenerInterface 관련
+    override fun onConnectSuccess() {
+        Log.d("WebSocketListener-Test", "Connect Success")
+    }
+
+    override fun onConnectFailed() {
+        Log.d("WebSocketListener-Test", "Connect Failed")
+    }
+
+    override fun onClose() {
+        Log.d("WebSocketListener-Test", "Connect Closed")
+    }
+
+    override fun onMessage(text: String?) {
+        Log.d("WebSocketListener-Test", "Message = $text")
     }
 }

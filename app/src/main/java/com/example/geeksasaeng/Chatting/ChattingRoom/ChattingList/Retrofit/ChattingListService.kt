@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Chatting.ChattingList.Retrofit
+package com.example.geeksasaeng.Chatting.ChattingRoom.ChattingList.Retrofit
 
 import android.util.Log
 import com.example.geeksasaeng.Utils.NetworkModule
@@ -10,7 +10,8 @@ import retrofit2.Response
 class ChattingListService {
     private lateinit var getChattingListView: ChattingListView
 
-    private val chattingListService = NetworkModule.getInstance()?.create(ChattingListRetrofitInterfaces::class.java)
+    private val chattingListService = NetworkModule.getInstance()?.create(
+        ChattingListRetrofitInterfaces::class.java)
 
     fun setChattingListView(getChattingListView: ChattingListView) {
         this.getChattingListView = getChattingListView
