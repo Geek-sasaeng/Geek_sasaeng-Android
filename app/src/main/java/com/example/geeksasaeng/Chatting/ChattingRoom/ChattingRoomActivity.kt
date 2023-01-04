@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.ChatSetting.ChatRequest
-import com.example.geeksasaeng.ChatSetting.ChatWebSocketListener
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
 import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
@@ -63,7 +62,6 @@ class ChattingRoomActivity :
 
     // Chatting
     private var chatClient = OkHttpClient()
-    // private lateinit var webSocket: WebSocket
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
@@ -86,12 +84,6 @@ class ChattingRoomActivity :
     }
 
     private fun webSocketStart() {
-//        val request = Request.Builder().url("ws://geeksasaeng.shop:8080/chatting").build()
-//        val listener = ChatWebSocketListener()
-//        webSocket = chatClient.newWebSocket(request, listener)
-//        chatClient.newWebSocket(request, listener)
-//        chatClient.dispatcher.executorService.shutdown()
-
         Log.d("WebSocketListener-Test", "webSocketStart")
         WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
     }
@@ -242,7 +234,6 @@ class ChattingRoomActivity :
 
             Log.d("WebSocketListener-Test", chatData.toString())
             WebSocketManager.sendMessage(chatData.toString())
-            // webSocket.send(chatData.toString())
 
             binding.chattingRoomChattingTextEt.setText("")
 
