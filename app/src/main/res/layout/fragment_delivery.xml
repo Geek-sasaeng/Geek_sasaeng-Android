@@ -188,6 +188,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--긱사생 깃발 애니메이션-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/animation_view_layout"
         android:layout_width="match_parent"

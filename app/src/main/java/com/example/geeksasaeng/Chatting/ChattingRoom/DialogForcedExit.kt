@@ -60,7 +60,7 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
     private fun sendForcedExitMember() { //★ 강제퇴장 api 호출
         mchattingService = ChattingService()
         mchattingService.setChattingMemberForcedExitView(this)
-        // TODO: 리스트에 있는 멤버하나하나 별로 강제퇴장 API 호출해줘야해?? (memberId,roomId필요) - TEST 필요
+        // TODO: 리스트에 있는 멤버하나하나 별로 강제퇴장 API 호출해줘야해?? (memberId,roomId필요) - 채팅방 만들어 진 후, TEST 필요
         val chattingMemberForcedExitRequest = ChattingMemberForcedExitRequest("string","string")
         mchattingService.chattingMemberForcedExit(chattingMemberForcedExitRequest)
     }

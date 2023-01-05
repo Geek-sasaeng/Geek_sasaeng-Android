@@ -1,7 +1,5 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
-import android.animation.Animator
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,20 +9,17 @@ import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import kotlinx.coroutines.delay
-import java.util.logging.Handler
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
-    var cursor = 0
+    var cursor: Int = 0
     private var chattingList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
 
@@ -139,9 +134,9 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         result.parties?.let { chattingList.addAll(it) }
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
-
         // 로딩화면 제거
         loadingStop()
+        cursor++
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
