@@ -15,6 +15,11 @@ interface ChattingMemberForcedExitView {
     fun chattingMemberForcedExitFailure(code: Int, message: String)
 }
 
+interface ChattingOrderCompleteView {
+    fun chattingOrderCompleteSuccess(result: String)
+    fun chattingOrderCompleteFailure(code: Int, message: String)
+}
+
 interface ChattingMemberLeaveView {
     fun chattingMemberLeaveSuccess(result: String)
     fun chattingMemberLeaveFailure(code: Int, message: String)

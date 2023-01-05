@@ -27,6 +27,13 @@ interface ChattingRetrofitInterfaces {
         @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
     ): Call<ChattingMemberForcedExitResponse>
 
+    //주문 완료
+    @PATCH("/party-chat-room/order")
+    fun chattingOrderComplete(
+        @Header("Authorization") jwt: String,
+        @Body chattingOrderCompleteRequest: ChattingOrderCompleteRequest
+    ): Call<ChattingOrderCompleteResponse>
+
     // <<delivery-party>>//
     // 파티 멤버 나가기
     @PATCH("/delivery-party/member")

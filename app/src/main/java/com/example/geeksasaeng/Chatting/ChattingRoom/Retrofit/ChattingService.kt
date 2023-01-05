@@ -12,6 +12,7 @@ class ChattingService {
     private lateinit var createChattingView: CreateChattingView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
+    private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
@@ -27,6 +28,9 @@ class ChattingService {
     }
     fun setChattingMemberForcedExitView(chattingMemberForcedExitView: ChattingMemberForcedExitView) {
         this.chattingMemberForcedExitView = chattingMemberForcedExitView
+    }
+    fun setChattingOrderCompleteView(chattingOrderCompleteView: ChattingOrderCompleteView) {
+        this.chattingOrderCompleteView = chattingOrderCompleteView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -92,7 +96,32 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<ChattingMemberForcedExitResponse>, t: Throwable) {
-                Log.d("CHATTING-ADD-MEMBER", "실패")
+                Log.d("CHATTING-MEMBER-FORCED-EXIT", "실패")
+            }
+        })
+    }
+
+    // 방장 - 주문완료
+    fun chattingOrderComplete(chattingOrderCompleteRequest: ChattingOrderCompleteRequest) {
+        chattingService?.chattingOrderComplete("Bearer " + getJwt(), chattingOrderCompleteRequest)?.enqueue(object: Callback<ChattingOrderCompleteResponse> {
+
+            override fun onResponse(
+                call: Call<ChattingOrderCompleteResponse>,
+                response: Response<ChattingOrderCompleteResponse>
+            ) {
+                Log.d("orderComplete", "response:"+response)
+                if (response.isSuccessful && response.code() == 200) {
+                    Log.d("ORDER-COMPLETE", "진입성공1")
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingOrderCompleteView.chattingOrderCompleteSuccess(resp.result)
+                        else -> chattingOrderCompleteView.chattingOrderCompleteFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChattingOrderCompleteResponse>, t: Throwable) {
+                Log.d("ORDER-COMPLETE", "실패")
             }
         })
     }

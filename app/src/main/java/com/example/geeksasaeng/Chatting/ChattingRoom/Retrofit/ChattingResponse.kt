@@ -47,6 +47,7 @@ data class ChattingMemberForcedExitRequest(
     @SerializedName("roomId") val roomId: String
 )
 
+// 강제퇴장
 data class ChattingMemberForcedExitResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -56,6 +57,19 @@ data class ChattingMemberForcedExitResponse(
 
 data class ChattingMemberForcedExitResult(
     @SerializedName("message") val message: String
+)
+
+// 주문 완료
+
+data class ChattingOrderCompleteResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+data class ChattingOrderCompleteRequest(
+    @SerializedName("roomId") val roomId: String
 )
 
 data class ChattingPartyMemberLeaveRequest(
