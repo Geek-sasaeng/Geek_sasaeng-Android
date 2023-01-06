@@ -11,7 +11,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.ChatSetting.ChatRequest
+import com.example.geeksasaeng.BuildConfig
+import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
 import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
@@ -24,9 +25,8 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.rabbitmq.client.*
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,8 +64,15 @@ class ChattingRoomActivity :
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     // Chatting
+    // WebSocket
     private var chatClient = OkHttpClient()
-
+    // RabbitMQ
+    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+    private val factory = ConnectionFactory()
+    lateinit var conn: Connection
+    lateinit var channel: Channel
+    // QUEUE_NAME = MemberID!
+    val QUEUE_NAME = "110"
 
     override fun initAfterBinding() {
         //TODO: 리더인지 여부 파악 필요
@@ -91,6 +98,38 @@ class ChattingRoomActivity :
             binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
             binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
         }
+
+        // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
+        // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
+        Thread {
+             initRabbitMQSetting()
+        }.start()
+
+        // initRabbitMQSetting()
+
+        var rabbitMQSetting = RabbitMQSetting()
+        rabbitMQSetting.main()
+    }
+
+    fun initRabbitMQSetting() {
+        factory.setUri(rabbitMQUri)
+        // RabbitMQ 연결
+        val conn: Connection = factory.newConnection()
+        // Send and Receive 가능하도록 해주는 부분!
+        val channel = conn.createChannel()
+        // durable = true로 설정!!
+        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        Log.d("RabbitMQ-Test", " [*] Waiting for messages. To exit press CTRL+C")
+
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            val message = String(delivery.body, Charsets.UTF_8)
+            Log.d("RabbitMQ-Test", "")
+            println(" [x] Received '$message'")
+        }
+        channel.basicConsume(
+            QUEUE_NAME, true, deliverCallback
+        ) { consumerTag: String? -> }
     }
 
     override fun onResume() {
@@ -102,13 +141,6 @@ class ChattingRoomActivity :
     private fun webSocketStart() {
         Log.d("WebSocketListener-Test", "webSocketStart")
         WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
-    }
-
-    fun webSocketPrint(message: String) {
-        runOnUiThread {
-            Log.d("WebSocketListener-Test", message)
-            // textResult.setText(textResult.getText().toString() + "\n" + message)
-        }
     }
 
     // 종료 시 리스너 제거
