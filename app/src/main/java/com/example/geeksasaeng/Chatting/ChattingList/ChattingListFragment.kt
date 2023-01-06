@@ -140,10 +140,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         var finalPage = result.finalPage
         // 로딩화면 제거
         loadingStop()
-        cursor++
+        Log.d("chattingList", "getChattingListSuccess")
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+        Log.d("chattingList", "getChattingListFailure")
     }
 }
