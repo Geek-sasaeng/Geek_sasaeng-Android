@@ -185,7 +185,7 @@ class ChattingRoomActivity :
             Log.d("orderComplete","버튼 클릭됨")
             Log.d("orderComplete", getJwt().toString())
             Log.d("orderComplete-request",ChattingOrderCompleteRequest("").toString() )
-            chattingService.chattingOrderComplete(ChattingOrderCompleteRequest("1159"))
+            chattingService.chattingOrderComplete(ChattingOrderCompleteRequest(roomId))
         }
 
         binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener {
