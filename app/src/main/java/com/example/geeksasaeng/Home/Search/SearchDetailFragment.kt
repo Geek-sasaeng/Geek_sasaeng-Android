@@ -251,7 +251,7 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
         })
     }
 
-    private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,, 일단은 이 변수명 좀 썼으면 좋겠어여 refreshing이 직관적이고,, 코드의 변경가능성도 있어서욥!)
+    private fun refreshing(){ // 새로고침(initLoadPost랑 하는 일은 같은데,,)
         initLoadPosts()
         initAdapter() //일단, 타이머바인딩때문에 넣어둠
     }
@@ -314,6 +314,16 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                 DeliveryPartiesVoList(currentMatching, foodCategory, id, maxMatching, orderTime!!, title, hashTags)
             )
         }
+
+        //검색결과가 없으면 검색결과없음 화면 띄워주기
+        if(searchArray.isEmpty()){
+            binding.searchDetailBackLogoIc.visibility = View.INVISIBLE
+            binding.searchNoResultLayout.visibility = View.VISIBLE
+        }else{
+            binding.searchDetailBackLogoIc.visibility = View.VISIBLE
+            binding.searchNoResultLayout.visibility= View.GONE
+        }
+
         searchAdapter.setArrayList(searchArray)
     }
 
@@ -375,6 +385,15 @@ class SearchDetailFragment: BaseFragment<FragmentSearchDetailBinding>(FragmentSe
                     binding.searchBottomView.visibility = View.INVISIBLE
                 else binding.searchBottomView.visibility = View.VISIBLE
             }
+        }
+
+        //검색결과가 없으면 검색결과없음 화면 띄워주기
+        if(searchArray.isEmpty()){
+            binding.searchDetailBackLogoIc.visibility = View.INVISIBLE
+            binding.searchNoResultLayout.visibility = View.VISIBLE
+        }else{
+            binding.searchDetailBackLogoIc.visibility = View.VISIBLE
+            binding.searchNoResultLayout.visibility= View.GONE
         }
 
         searchAdapter.setArrayList(searchArray)

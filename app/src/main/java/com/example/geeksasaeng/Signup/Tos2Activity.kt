@@ -1,13 +1,8 @@
 package com.example.geeksasaeng.Signup
 
-import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
-import android.os.Build
 import android.view.View
-import androidx.transition.Visibility
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.privacyTemrsAgree
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment.Companion.serviceTemrsAgree
-import com.example.geeksasaeng.Signup.Naver.StepNaverThreeFragment.Companion.socialPrivacyTemrsAgree
+import com.example.geeksasaeng.Signup.Basic.StepFourFragment.Companion.privacyTemrsAgree
+import com.example.geeksasaeng.Signup.Naver.StepNaverTwoFragment.Companion.socialPrivacyTemrsAgree
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityTos2Binding
 

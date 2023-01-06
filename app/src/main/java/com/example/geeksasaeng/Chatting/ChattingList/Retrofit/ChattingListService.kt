@@ -18,8 +18,9 @@ class ChattingListService {
     }
 
     fun getChattingList(cursor: Int) {
-        chattingListService?.getChattingList("Bearer " + getJwt(), cursor)?.enqueue(object : Callback<ChattingListResponse> {
+        chattingListService?.getChattingList(cursor)?.enqueue(object : Callback<ChattingListResponse> {
             override fun onResponse(call: Call<ChattingListResponse>, response: Response<ChattingListResponse>) {
+                Log.d("chattingList", "cursor: "+cursor.toString()+"response : "+response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {

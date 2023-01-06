@@ -51,7 +51,7 @@ class DeliveryService {
 
     // 배달 리스트 목록들 불러오기
     fun getDeliveryAllList(dormitoryId: Int, cursor: Int){
-        deliveryDataService?.getAllDeliveryList("Bearer " + getJwt(), dormitoryId, cursor)?.enqueue(object:
+        deliveryDataService?.getAllDeliveryList(dormitoryId, cursor)?.enqueue(object:
             Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 Log.d("DELIVERY-RESPONSE", "response.code = ${response.code()} / response.body = ${response.body()}")
@@ -73,7 +73,7 @@ class DeliveryService {
 
     // 배달 리스트 필터 적용 후 목록들 불러오기
     fun getDeliveryFilterList(dormitoryId: Int, cursor: Int, orderTimeCategory: String?, maxMatching: Int?){
-        deliveryDataService?.getFilterDeliveryList("Bearer " + getJwt(), dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
+        deliveryDataService?.getFilterDeliveryList(dormitoryId, cursor, orderTimeCategory, maxMatching)?.enqueue(object: Callback<DeliveryResponse> {
             override fun onResponse(call: Call<DeliveryResponse>, response: Response<DeliveryResponse>) {
                 // Log.d("DELIVERY-FILTER", "response.code = ${response.code()} / response.body = ${response.body()}")
                 Log.d("DELIVERY-FILTER", "response.code = ${response.code()}")

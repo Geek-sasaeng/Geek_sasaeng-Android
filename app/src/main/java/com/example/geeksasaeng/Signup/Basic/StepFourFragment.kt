@@ -1,214 +1,145 @@
 package com.example.geeksasaeng.Signup.Basic
 
-import android.app.ProgressDialog.show
-import android.content.res.ColorStateList
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.DialogSignUpPhoneSkip
-import com.example.geeksasaeng.Signup.Retrofit.*
-import com.example.geeksasaeng.Signup.ToastMsgSignup
-import com.example.geeksasaeng.Utils.CustomToastMsg
+import com.example.geeksasaeng.Signup.Retrofit.SignUpRequest
+import com.example.geeksasaeng.Signup.Retrofit.SignUpView
+import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
+import com.example.geeksasaeng.Signup.Tos1Activity
+import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
-import com.example.geeksasaeng.Utils.getUuid
-import java.text.DecimalFormat
-import java.util.*
-import java.util.regex.Pattern
-import kotlin.concurrent.timer
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT
+import okhttp3.internal.notifyAll
 
-class StepFourFragment: BaseFragment<FragmentStepFourBinding>(FragmentStepFourBinding::inflate), SignUpSmsView, VerifySmsView {
-
-    var phoneNumber: String? = ""
-    var phoneNumberId: Int? = null
-
+class StepFourFragment : BaseFragment<FragmentStepFourBinding>(FragmentStepFourBinding::inflate), SignUpView{
+    companion object{
+        var serviceTemrsAgree: Boolean = false
+        var privacyTemrsAgree: Boolean = false
+    }
     private val progressVM: ProgressViewModel by activityViewModels()
     private val signUpVM: SignUpViewModel by activityViewModels()
-
-    private var time = 300000 //5분은 300초 = 300*1000
-    private var timerTask : Timer? = null
-
-    private lateinit var signUpService :SignupDataService
-    private var isNotFirst: Boolean = false
+    private lateinit var signUpService : SignupDataService
 
     override fun onStart() {
         super.onStart()
         progressVM.setValue(4)
-        if (isNotFirst){
-            binding.stepFourNextBtn.isEnabled = true
-            binding.stepFourNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
-            binding.stepFourNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
-        }
-        signUpService = SignupDataService() //서비스 객체 생성
-        signUpService.setSignUpSmsView(this@StepFourFragment)
-        signUpService.setVerifySmsView(this@StepFourFragment)
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-        timerTask?.cancel() //화면 꺼질때
+        checkTermsAgree()
+        signUpSetting()
     }
 
     override fun initAfterBinding() {
-        initTextWatcher()
         initClickListener()
     }
 
-    private fun initTextWatcher() {
-        //인증번호 전송 버튼 관련 - 휴대폰 et
-        binding.stepFourPhoneEt.addTextChangedListener(object: TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                val phonepattern = Pattern.compile("^[0-9]{11}\$") //패턴 생성 (숫자로 이루어진 11자리를 조건으로 둠)
-                val macher = phonepattern.matcher(binding.stepFourPhoneEt.text.toString())
-                //조건이 맞으면 인증번호 보내기 버튼 활성화, 안맞으면 비활성화
-                if (macher.matches()) {
-                    binding.stepFourPhoneReSendBtnO.visibility = View.VISIBLE
-                    binding.stepFourPhoneReSendBtnX.visibility = View.GONE
-                } else {
-                    binding.stepFourPhoneReSendBtnO.visibility = View.GONE
-                    binding.stepFourPhoneReSendBtnX.visibility = View.VISIBLE
-                }
-                checkingNext() // 휴대폰 번호 바꾸면 다시 다음버튼 활성화/비활성화 조건 체크 위함
-            }
-
-        })
-    }
-
     private fun initClickListener() {
-        //인증번호 전송 버튼
-        binding.stepFourPhoneReSendBtnO.setOnClickListener {
-            binding.stepFourCheckMsgTv.visibility = View.VISIBLE //몇초 남았어요 보이게 만들기
-            startTimer()
+        binding.stepFourAgree1MoreIv.setOnClickListener {
+            val intent = Intent(activity, Tos1Activity::class.java)
+            intent.putExtra("isSocial", false)
+            startActivity(intent)
+        }
 
-            binding.stepFourPhoneReSendBtnO.text = "재전송 하기"
-            binding.stepFourPhoneReSendBtnX.text = "재전송 하기"
+        binding.stepFourAgree2MoreIv.setOnClickListener {
+            val intent = Intent(activity, Tos2Activity::class.java)
+            intent.putExtra("status","signUp")
+            intent.putExtra("isSocial", false)
+            startActivity(intent)
+        }
 
-            binding.stepFourPhoneCheckBtnO.visibility = View.VISIBLE
-            binding.stepFourPhoneCheckBtnX.visibility = View.GONE
+        binding.stepFourAgree1Cb.setOnCheckedChangeListener { buttonView, isChecked ->
+            serviceTemrsAgree = isChecked
+            if(privacyTemrsAgree){
+                binding.stepFourAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFourAgree2Cb.isChecked = true
+            }
+        }
 
-            if (binding.stepFourPhoneReSendBtnO.text == "재전송 하기") {
-                //10초 이내에 재전송시 10초 지나고 가능, 하루에 최대 5번까지 가능
-                // TODO: 하루에 최대 5번까지 가능하게 만들어야해
-                if (time < 4900) { //10초가 지났으면
-                    resetTimer()
-                    startTimer()
-                    sendSms() //인증문자 보내는 작업
-                }
+        binding.stepFourAgree2Cb.setOnCheckedChangeListener { buttonView, isChecked ->
+            privacyTemrsAgree = isChecked
+            if(serviceTemrsAgree){
+                binding.stepFourAgreeAllCb.isChecked = privacyTemrsAgree&& serviceTemrsAgree
+                binding.stepFourAgree1Cb.isChecked=true
             }
 
-            sendSms() //인증문자 보내는 작업
         }
 
-        //인증번호 확인 버튼
-        binding.stepFourPhoneCheckBtnO.setOnClickListener {
-            val code = binding.stepFourCheckEt.text.toString() //사용자가 입력한 인증번호 가져오기
-            val verifySmsRequest= VerifySmsRequest(phoneNumber!!, code)
-            signUpService.verifySmsSender(verifySmsRequest) //★인증번호 맞는지 확인하기
-        }
-
-/*        //건너뛰기 버튼
-        binding.stepFourSkipBtn.setOnClickListener {
-            val dialog = DialogSignUpPhoneSkip()
-            dialog.show(parentFragmentManager, "CustomDialog")
-        }*/
-
-        //다음 버튼
-        binding.stepFourNextBtn.setOnClickListener {
-            timerTask?.cancel()
-
-            isNotFirst = true
-            phoneNumber = binding.stepFourPhoneEt.text.toString()
-            signUpVM.setPhoneNumber(phoneNumber)
-            signUpVM.setPhoneNumberId(phoneNumberId)
-
-            (context as SignUpActivity).supportFragmentManager.beginTransaction().replace(R.id.sign_up_vp, StepFiveFragment()).addToBackStack("stepFive").commit()
-        }
-    }
-
-    // 타이머 작동
-    private fun startTimer() {
-        timerTask = timer(period = 1000) { //1초가 주기
-            val timeForm = DecimalFormat("00") //0을 넣은 곳은 빈자리일 경우, 0으로 채워준다.
-            val min = timeForm.format(time / 60000) //전체시간 나누기 60초
-            val sec = timeForm.format((time % 60000) / 1000)
-
-            activity?.runOnUiThread {
-                binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
-                binding.stepFourCheckMsgTv.text = "${min}분 ${sec}초 남았어요"
-
-                if (min == "00" && sec == "00"){
-                    timerTask?.cancel()
-                    binding.stepFourCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
-                    binding.stepFourCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
-                    // 인증번호 입력 시간이 만료 되었으므로 버튼 비활성화 시킴
-                    binding.stepFourPhoneCheckBtnO.visibility = View.GONE
-                    binding.stepFourPhoneCheckBtnX.visibility = View.VISIBLE
-                }
+        binding.stepFourAgreeAllCb.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.stepFourAgree1Cb.isChecked = true
+                binding.stepFourAgree2Cb.isChecked = true
+                serviceTemrsAgree = true
+                privacyTemrsAgree = true
+            } else {
+                binding.stepFourAgree1Cb.isChecked = false
+                binding.stepFourAgree2Cb.isChecked = false
+                serviceTemrsAgree = false
+                privacyTemrsAgree = false
             }
-            if (time != 0) //time이 0이 아니라면
-                time -= 1000 //1초씩 줄이기
+        }
+
+        binding.stepFourStartBtn.setOnClickListener {
+            if(serviceTemrsAgree && privacyTemrsAgree){
+                signUp()
+            }else{
+                showToast("이용 약관을 모두 체크하셔야 회원가입 진행을 하실 수 있습니다.")
+            }
         }
     }
 
-    // 타이머 초기화
-    private fun resetTimer() {
-        timerTask?.cancel()
-
-        time = 300000
-        binding.stepFourCheckMsgTv.text = "05분 00초 남았어요"
-    }
-
-    //인증번호 문자 보내는 작업
-    private fun sendSms(){
-        phoneNumber = binding.stepFourPhoneEt.text.toString() //사용자가 입력한 휴대폰 번호 가져오기
-        val signUpSmsRequest= SignUpSmsRequest(phoneNumber!!, getUuid().toString())
-        signUpService.signUpSmsSender(signUpSmsRequest) //★인증문자보내기
-    }
-
-    // sms인증문자 보내기 성공/실패
-    override fun onSignUpSmsSuccess(message: String) {
-        CustomToastMsg.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2", 53)?.show()
-        //ToastMsgSignup.createToast((activity as SignUpActivity), "인증번호가 전송되었습니다.", "#8029ABE2")?.show()
-    }
-
-    override fun onSignUpSmsFailure(code: Int, message: String) {
-        when (code) {
-            2015 -> CustomToastMsg.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8", 53)?.show()//ToastMsgSignup.createToast((activity as SignUpActivity), "일일 최대 전송 횟수를 초과했습니다", "#80A8A8A8")?.show()
-            else -> Log.d("SMS-RESPONSE", "Error code = $code / Error msg = $message")
+    fun checkTermsAgree(){
+        if(serviceTemrsAgree){
+            binding.stepFourAgree1Cb.isChecked = true
+        }
+        if(privacyTemrsAgree){
+            binding.stepFourAgree2Cb.isChecked = true
         }
     }
-
-    // sms인증번호 확인 성공/실패
-    override fun onVerifySmsSuccess(result: VerifySmsResult) {
-        timerTask?.cancel()
-        phoneNumberId = result.phoneNumberId
-        binding.stepFourCheckMsgTv.text = "성공적으로 인증이 완료되었습니다"
-        checkingNext()
+    fun signUpSetting(){
+        signUpService = SignupDataService() //서비스 객체 생성
+        signUpService.setSignUpView(this)
     }
 
-    override fun onVerifySmsFailure(message: String) {
-        //TODO: 만약에 시간 만료후, 확인버튼을 누르면 어떻게 되는지 확인하기
-        ToastMsgSignup.createToast((activity as SignUpActivity), message, "#80A8A8A8")?.show()
+    fun signUp(){
+        signUpVM.setInformationAgreeStatus("Y")
+        val checkPassword = signUpVM.getCheckPassword()!!
+        val emailId = signUpVM.getEmailId()
+        val informationAgreeStatus = signUpVM.getInformationAgreeStatus()
+        val loginId = signUpVM.getLoginId()
+        val nickName = signUpVM.getNickname()
+        val password = signUpVM.getPassword()!!
+        val phoneNumberId = signUpVM.getPhoneNumberId()
+        val universityName = signUpVM.getUniversityName()
+        val signUpRequest = SignUpRequest(checkPassword, emailId,informationAgreeStatus, loginId,
+            nickName, password, phoneNumberId, universityName)
+        signUpService.signUpSender(signUpRequest)
+    }
+    //회원가입 성공/실패
+    override fun onSignUpSuccess() {
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+        Log.d("signup", "회원가입에 성공하셨습니다.")
+        showToast("회원가입에 성공하셨습니다.")
+        activity?.finish()
     }
 
-    private fun checkingNext(){
-        if (binding.stepFourCheckMsgTv.text.toString() == "성공적으로 인증이 완료되었습니다") {
-            binding.stepFourNextBtn.isEnabled = true
-            binding.stepFourNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
-            binding.stepFourNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
-        } else {
-            binding.stepFourNextBtn.isEnabled = false
-            binding.stepFourNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
-            binding.stepFourNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
-        }
+    override fun onSignUpFailure(message:String) {
+        // 2006 : 중복되는 유저 아이디
+        // 2007 : 중복되는 유저 이메일
+        // 2008 : 존재하지 않는 학교 이름
+        // 2201 : 회원 정보 동의 Status가 Y가 아닌 경우
+        // 2205 : 존재하지 않는 회원 ID
+        // 4000 : 서버 오류
+        showToast("서버 오류")
+        showToast(message)
     }
 }

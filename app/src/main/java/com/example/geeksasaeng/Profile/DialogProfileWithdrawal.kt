@@ -4,21 +4,15 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileWithdrawalRequest
 import com.example.geeksasaeng.Profile.Retrofit.ProfileWithdrawalView
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Basic.SignUpActivity
-import com.example.geeksasaeng.Signup.Basic.StepFiveFragment
 import com.example.geeksasaeng.Utils.removeAutoLogin
-import com.example.geeksasaeng.databinding.DialogLogoutBinding
-import com.example.geeksasaeng.databinding.DialogSignupPhoneSkipBinding
 import com.example.geeksasaeng.databinding.DialogWithdralBinding
 
 class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {

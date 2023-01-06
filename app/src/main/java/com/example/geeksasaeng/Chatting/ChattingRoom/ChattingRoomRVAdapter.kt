@@ -8,12 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Chatting.ChattingRoom.*
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.*
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.internal.notify
 import java.text.DecimalFormat
 
 class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private lateinit var mCilckListener : OnUserProfileClickListener
 
     override fun getItemViewType(position: Int): Int {
         return chattingList[position].viewType
@@ -105,10 +109,21 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
 
             binding.itemYourChattingNicknameTv.text = chatting.nickname
             binding.itemYourChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
+            binding.itemYourChattingProfileIv.setOnClickListener {
+                mCilckListener.onUserProfileClicked()
+            }
 
             binding.itemYourChattingTimeTv.text = setTime(chatting.time)
             // binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
         }
+    }
+
+    interface OnUserProfileClickListener{
+        fun onUserProfileClicked()
+    }
+
+    fun setOnUserProfileClickListener(clickListener: OnUserProfileClickListener){
+        mCilckListener = clickListener
     }
 
     inner class SystemChattingViewHolder(val binding: ItemChattingSystemChattingBinding): RecyclerView.ViewHolder(binding.root) {

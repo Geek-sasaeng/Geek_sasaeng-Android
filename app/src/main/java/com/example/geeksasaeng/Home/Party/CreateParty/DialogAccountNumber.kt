@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Home.Party.CreateParty
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,13 @@ import com.example.geeksasaeng.databinding.DialogAccountNumberLayoutBinding
 class DialogAccountNumber : DialogFragment() {
     lateinit var binding: DialogAccountNumberLayoutBinding
     private val createPartyVM: CreatePartyViewModel by activityViewModels()
+    private var dialogAccountNumberClickListener: DialogAccountNumberClickListener? =null
+
+    interface DialogAccountNumberClickListener{
+        //TODO: 뷰모델 이용하면서 사실 여기서 매개변수로 안넘겨줘도 ACTIVITY에서 값 알 수 있어..
+        //TODO: 근데 이걸 하는 이유는 정보 갱신을 위함.
+        fun onCompleteClicked()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +48,14 @@ class DialogAccountNumber : DialogFragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogAccountNumberClickListener = activity as DialogAccountNumber.DialogAccountNumberClickListener
+    }
+
     override fun onDetach() {
         super.onDetach()
+        dialogAccountNumberClickListener = null
     }
 
     override fun onResume() {
@@ -58,7 +72,7 @@ class DialogAccountNumber : DialogFragment() {
                 ?.remove(this)?.commit()
         }
 
-        binding.accountDialogNextBtn.setOnClickListener {
+        binding.accountDialogCompleteBtn.setOnClickListener { // 완료 버튼 누르면
 
             if(binding.accountDialogBankEt.text.toString()!=""){//뭔가가 입력되었다면
                 createPartyVM.setAccount(binding.accountDialogBankEt.text.toString())
@@ -71,13 +85,15 @@ class DialogAccountNumber : DialogFragment() {
             }else{//아무것도 없다면
                 createPartyVM.setAccountNumber(null)
             }
+            //아무것도 없을 때 null로 설정하는거 왜 해줬지? 필요 없을 것 같은데
 
-            val dialogPartyName = DialogPartyName()
-            dialogPartyName.show(parentFragmentManager, "CustomDialog")
+            if((binding.accountDialogBankEt.text.toString()!="")&&(binding.accountDialogBankNumberEt.text.toString()!="")){
+                dialogAccountNumberClickListener?.onCompleteClicked() // frag-> activity 정보전달
+                //자기자신(현 다이얼로그)은 종료
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.remove(this)?.commit()
 
-            //자기자신(현 다이얼로그)은 종료
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.remove(this)?.commit()
+            }
         }
     }
 }

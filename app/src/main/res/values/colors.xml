@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name= "main">#29ABE2</color>
+    <color name= "main_unactivated">#8029ABE2</color>
     <color name= "status_bar">#CD71C9EF</color>
     <color name="gray">#5B5B5B</color>
     <color name="gray_0">#EFEFEF</color>
@@ -18,4 +19,5 @@
     <color name= "line">#F8F8F8</color>
     <color name= "error">#FF0000</color>
     <color name= "main_color">#2DB9EA</color>
+
 </resources>

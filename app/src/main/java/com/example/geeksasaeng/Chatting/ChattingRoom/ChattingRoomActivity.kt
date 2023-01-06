@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
@@ -19,6 +20,8 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -32,7 +35,7 @@ import kotlin.concurrent.thread
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
-    WebSocketListenerInterface, SendChattingView {
+    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -72,6 +75,8 @@ class ChattingRoomActivity :
     val QUEUE_NAME = "110"
 
     override fun initAfterBinding() {
+        //TODO: 리더인지 여부 파악 필요
+        leader=true
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
         Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
@@ -82,7 +87,17 @@ class ChattingRoomActivity :
         initSendChatListener()
         initAdapter()
         initChattingService()
-//        optionClickListener()
+        optionClickListener()
+        initTopLayout()
+    }
+
+    private fun initTopLayout(){
+        if(leader){ //리더면 상단 바 구성을 다르게 해줘야하므로
+            binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
+            binding.chattingRoomSectionIv.visibility = View.INVISIBLE
+            binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
+            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
+        }
 
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
@@ -146,6 +161,17 @@ class ChattingRoomActivity :
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
         binding.chattingRoomChattingRv.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
+            override fun onUserProfileClicked() {
+                //사용자 프로필
+                Log.d("bottom", "실행됨.")
+                val bottomSheetDialogFragment = ChattingUserBottomFragment()
+                bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
+                bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
+            }
+
+        })
     }
 
     private fun initClickListener() {
@@ -187,15 +213,17 @@ class ChattingRoomActivity :
             finish()
         }
 
-        binding.chattingRoomTopLayoutBtn.setOnClickListener {
+        binding.chattingRoomTopLayoutOrderCompleteBtn.setOnClickListener { // 주문완료 버튼
+            Log.d("orderComplete","버튼 클릭됨")
+            Log.d("orderComplete", getJwt().toString())
+            Log.d("orderComplete-request",ChattingOrderCompleteRequest("").toString() )
+            chattingService.chattingOrderComplete(ChattingOrderCompleteRequest(roomId))
+        }
+
+        binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener {
             binding.chattingRoomTopLayout.visibility = View.GONE
             topLayoutFlag = false
-
-            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
-                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료") {
-                // TODO: 여기에 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
-            }
+            CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
         }
     }
 
@@ -310,6 +338,19 @@ class ChattingRoomActivity :
 
     override fun chattingLeaderLeaveFailure(code: Int, message: String) {
         TODO("Not yet implemented")
+    }
+
+    //주문 완료 성공
+    override fun chattingOrderCompleteSuccess(result: String) {
+        binding.chattingRoomTopLayout.visibility = View.GONE
+        topLayoutFlag = false
+        CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+        Log.d("orderComplete","성공" + result)
+    }
+
+    //주문 완료 실패
+    override fun chattingOrderCompleteFailure(code: Int, message: String) {
+        Log.d("orderComplete","실패 : "+message)
     }
 
     private fun calculateToday(): String {

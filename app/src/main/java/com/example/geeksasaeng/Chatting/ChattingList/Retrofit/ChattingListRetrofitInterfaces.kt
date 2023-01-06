@@ -8,7 +8,6 @@ import retrofit2.http.Query
 interface ChattingListRetrofitInterfaces {
     @GET("/party-chat-room")
     fun getChattingList(
-        @Header("Authorization") jwt: String,
         @Query("cursor") cursor: Int
     ): Call<ChattingListResponse>
 }

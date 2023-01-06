@@ -7,32 +7,27 @@ interface PartyRetrofitInterface {
     // 배달파티 상세조회
     @GET("delivery-party/{partyId}")
     fun getDeliveryPartyDetail(
-        @Header("Authorization") jwt: String?,
         @Path("partyId") partyId: Int
     ): Call<PartyDetailResponse>
 
     //배달 파티 삭제
     @PATCH("delivery-party/{partyId}")
     fun sendDeleteDeliveryParty(
-        @Header("Authorization") jwt: String?,
         @Path("partyId") partyId: Int
     ): Call<PartyDeleteResponse>
 
     @POST("reports/delivery-parties")
     fun reportDeliveryParty(
-        @Header("Authorization") jwt: String?,
         @Body reportPartyRequest: PartyReportRequest
     ): Call<PartyReportResponse>
 
     @POST("reports/members")
     fun reportDeliveryUser(
-        @Header("Authorization") jwt: String?,
         @Body reportUserRequest: UserReportRequest
     ): Call<UserReportResponse>
 
     @POST("/delivery-party-member")
     fun joinDeliveryParty(
-        @Header("Authorization") jwt: String?,
         @Body joinPartyRequest: JoinPartyRequest
     ): Call<JoinPartyResponse>
 }

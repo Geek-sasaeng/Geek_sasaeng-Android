@@ -24,7 +24,7 @@ class DormitoryDataService {
     //기숙사수정하기
     fun dormitorySender(dormitoryId: DormitoryRequest){
         Log.d("cherrydorm", "Bearer " + getJwt()+ dormitoryId.toString())
-        DormitoryDataService.dormitoryUpdate("Bearer " + getJwt(), dormitoryId).enqueue(object : Callback<DormitoryResponse> {
+        DormitoryDataService.dormitoryUpdate(dormitoryId).enqueue(object : Callback<DormitoryResponse> {
             override fun onResponse(
                 call: Call<DormitoryResponse>,
                 response: Response<DormitoryResponse>

@@ -9,13 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
-import com.example.geeksasaeng.Chatting.Retrofit.ChattingDataService
-import com.example.geeksasaeng.Chatting.Retrofit.MatchingEndView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.MatchingEndView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
-import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.DialogMatchingEndLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,12 +21,12 @@ import java.util.*
 class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     lateinit var binding: DialogMatchingEndLayoutBinding
-    private lateinit var chattingService: ChattingDataService
+    private lateinit var chattingService: ChattingService
     lateinit var uuid: String
 
     override fun onStart() {
         super.onStart()
-        chattingService = ChattingDataService() //서비스 객체생성
+        chattingService = ChattingService() //서비스 객체생성
         chattingService.setMatchingEndView(this)
     }
 

@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="31dp"
         android:text="이메일 입력"
         android:textSize="18sp"
         android:textColor="@color/black"
@@ -84,29 +84,30 @@
             android:id="@+id/step_two_email2_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="\@"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray_1"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="160dp"
             android:backgroundTint="@color/gray_1"
-            android:fontFamily="@font/spoqa_medium"
-            android:textSize="15sp"
-            android:maxLines="1"
             android:editable="false"
+            android:fontFamily="@font/spoqa_medium"
+            android:hint="\@"
+            android:maxLines="1"
             android:paddingLeft="13dp"
             android:paddingRight="10dp"
             android:paddingBottom="20dp"
-            android:layout_marginRight="160dp"
-            android:layout_marginLeft="27dp"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.085"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_two_email_check_btn_o"
+            android:id="@+id/step_two_email_send_btn_o"
             android:layout_width="125dp"
             android:layout_height="53dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:text="인증번호 전송"
             android:fontFamily="@font/spoqa_medium"
             android:background="@drawable/signup_btn"
@@ -120,10 +121,10 @@
             style="@style/Widget.AppCompat.Button.Borderless" />
 
         <Button
-            android:id="@+id/step_two_email_check_btn_x"
+            android:id="@+id/step_two_email_send_btn_x"
             android:layout_width="116dp"
             android:layout_height="46dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:text="인증번호 전송"
             android:fontFamily="@font/spoqa_medium"
             android:background="@drawable/round_border_button_gray0"
@@ -135,6 +136,114 @@
             style="@style/Widget.AppCompat.Button.Borderless" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/step_two_email_check_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="31dp"
+        android:text="인증번호 입력"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_two_email" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/step_two_email_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="3dp"
+        app:layout_constraintTop_toBottomOf="@id/step_two_email_check_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/step_two_email_check_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="입력하세요"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_1"
+            android:fontFamily="@font/spoqa_medium"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:maxLength="6"
+            android:textSize="15sp"
+            android:paddingLeft="13dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
+            android:layout_marginRight="160dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/step_two_email_check_btn_o"
+            android:layout_width="116dp"
+            android:layout_height="46dp"
+            android:textSize="13sp"
+            android:text="확인"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/signup_btn"
+            android:textColor="@color/main"
+            android:visibility="gone"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:id="@+id/step_two_email_check_btn_x"
+            android:layout_width="116dp"
+            android:layout_height="46dp"
+            android:textSize="13sp"
+            android:text="확인"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/round_border_button_gray0"
+            android:textColor="@color/gray_2"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/step_two_email_check_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="00분 00초 남았어요"
+        android:textColor="@color/main"
+        android:textSize="13dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@id/step_two_email_check"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/step_two_result_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="결과"
+        android:textColor="@color/main"
+        android:textSize="13dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:visibility="gone"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@id/step_two_email_check"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/step_two_next_btn"
@@ -154,5 +263,7 @@
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="20dp"
         style="@style/Widget.AppCompat.Button.Borderless" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

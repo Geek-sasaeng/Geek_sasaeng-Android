@@ -35,4 +35,15 @@
     <style name="AnimationPopupStyle">
         <item name="android:windowEnterAnimation">@anim/dialog_look_party_popup</item>
     </style>
+
+    <!--아래 두개는 바텀시트 배경 투명하게 하기 위해 정의한 스타일들 -->
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
 </resources>

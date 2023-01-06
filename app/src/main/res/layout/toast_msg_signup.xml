@@ -12,9 +12,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:paddingStart="28dp"
-            android:paddingEnd="28dp">
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="28dp">
 
             <TextView
                 android:id="@+id/toast_msg_signup_tv"

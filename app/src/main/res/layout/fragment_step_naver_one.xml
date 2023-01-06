@@ -209,7 +209,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/step_naver_one_email_check_btn_o"
+            android:id="@+id/step_naver_one_email_send_btn_o"
             android:layout_width="125dp"
             android:layout_height="53dp"
             android:textSize="15sp"
@@ -226,10 +226,10 @@
             style="@style/Widget.AppCompat.Button.Borderless" />
 
         <Button
-            android:id="@+id/step_naver_one_email_check_btn_x"
+            android:id="@+id/step_naver_one_email_send_btn_x"
             android:layout_width="116dp"
             android:layout_height="46dp"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:text="인증번호 전송"
             android:fontFamily="@font/spoqa_medium"
             android:background="@drawable/round_border_button_gray0"
@@ -241,6 +241,95 @@
             style="@style/Widget.AppCompat.Button.Borderless" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/step_naver_one_email_check_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="31dp"
+        android:text="인증번호 입력"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/spoqa_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_email2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/step_naver_one_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="3dp"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_email_check_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/step_naver_one_check_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="입력하세요"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_1"
+            android:fontFamily="@font/spoqa_medium"
+            android:inputType="numberDecimal"
+            android:textSize="15sp"
+            android:paddingLeft="13dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/step_naver_one_resend_btn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/step_naver_one_resend_btn"
+            android:layout_width="125dp"
+            android:layout_height="53dp"
+            android:textSize="13sp"
+            android:text="재전송 하기"
+            android:fontFamily="@font/spoqa_medium"
+            android:background="@drawable/signup_btn"
+            android:textColor="@color/main"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="27dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/step_naver_one_check_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00분 00초 남았어요"
+        android:visibility="invisible"
+        android:textColor="@color/main"
+        android:textSize="13dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_check"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/step_naver_one_result_msg_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="결과"
+        android:textColor="@color/main"
+        android:textSize="13dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:visibility="gone"
+        android:layout_marginStart="40dp"
+        app:layout_constraintTop_toBottomOf="@id/step_naver_one_check"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/step_naver_one_next_btn"

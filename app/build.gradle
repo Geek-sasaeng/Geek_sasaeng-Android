@@ -5,7 +5,7 @@ plugins {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
+def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
 
 android {
     compileSdk 32
@@ -27,12 +27,14 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
-        /*buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵*/
-        // buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
+        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
+        //buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵
+//
         buildConfigField("String", "RABBITMQ_ID", properties['rabbitMQ_ID'])
         buildConfigField "String", "RABBITMQ_PWD", properties['rabbitMQ_pwd']
         buildConfigField "String", "RABBITMQ_ADDRESS", properties['rabbitMQ_address']
+        // buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
+
     }
 
     buildTypes {

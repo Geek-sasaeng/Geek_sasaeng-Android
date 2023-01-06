@@ -32,7 +32,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
     }
 
 //    fun setChattingData(position: Int, chattingList: ChattingList) {
-//        chatting.set(position, chattingLata)
+//        chatting.set(position, chattingList)
 //        this.notifyItemChanged(position)
 //    }
 
@@ -41,6 +41,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
     }
 
     fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
+        chattingList.clear()
         chattingList.addAll(items)
         this.notifyDataSetChanged()
     }

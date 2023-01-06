@@ -16,6 +16,7 @@ import com.example.geeksasaeng.Home.Party.Retrofit.JoinPartyView
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogPartyRequestBinding
+import com.google.gson.annotations.SerializedName
 
 interface DialogPartyRequestView{
     fun partyJoinAPISuccess()
@@ -96,7 +97,7 @@ class DialogPartyRequest(val partyId: Int, val partyChatRoomId: String): DialogF
         Log.d("CHATTING-MEMBER", "result = $result")
     }
 
-    override fun chattingMemberFailure(code: Int, message: String) {
+    override fun chattingMemberAddFailure(code: Int, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT)
     }
 }

@@ -43,7 +43,7 @@ class PartyDataService {
 
     //파티보기 상세조회
     fun partyDetailSender(partyId: Int) {
-        PartyService?.getDeliveryPartyDetail("Bearer " + getJwt(), partyId)?.enqueue(object : Callback<PartyDetailResponse> {
+        PartyService?.getDeliveryPartyDetail(partyId)?.enqueue(object : Callback<PartyDetailResponse> {
             override fun onResponse(call: Call<PartyDetailResponse>, response: Response<PartyDetailResponse>) {
                 Log.d("PARTY-DETAIL-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
                 Log.d("PARTY-DETAIL-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -68,7 +68,7 @@ class PartyDataService {
 
     // 파티 삭제하기
     fun partyDeleteSender(partyId: Int) {
-        PartyService?.sendDeleteDeliveryParty("Bearer " + getJwt(), partyId)?.enqueue(object : Callback<PartyDeleteResponse> {
+        PartyService?.sendDeleteDeliveryParty(partyId)?.enqueue(object : Callback<PartyDeleteResponse> {
             override fun onResponse(call: Call<PartyDeleteResponse>, response: Response<PartyDeleteResponse>) {
                 Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
                 Log.d("PARTY-DELETE-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -93,7 +93,7 @@ class PartyDataService {
 
     // 파티 신고하기
     fun partyReportSender(partyReportRequest: PartyReportRequest) {
-        PartyService?.reportDeliveryParty("Bearer " + getJwt(), partyReportRequest)?.enqueue(object : Callback<PartyReportResponse> {
+        PartyService?.reportDeliveryParty(partyReportRequest)?.enqueue(object : Callback<PartyReportResponse> {
             override fun onResponse(call: Call<PartyReportResponse>, response: Response<PartyReportResponse>) {
                 Log.d("PARTY-REPORT-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
                 Log.d("PARTY-REPORT-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -119,7 +119,7 @@ class PartyDataService {
 
     // 사용자 신고하기
     fun userReportSender(userReportRequest: UserReportRequest) {
-        PartyService?.reportDeliveryUser("Bearer " + getJwt(), userReportRequest)?.enqueue(object : Callback<UserReportResponse> {
+        PartyService?.reportDeliveryUser(userReportRequest)?.enqueue(object : Callback<UserReportResponse> {
             override fun onResponse(call: Call<UserReportResponse>, response: Response<UserReportResponse>) {
                 Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : response.code = " + response.code())
                 Log.d("USER-REPORT-RESPONSE", "PartyDataService-onResponse : response.isSuccessful = " + response.isSuccessful)
@@ -145,7 +145,7 @@ class PartyDataService {
 
     // 배달 파티 참여하기
     fun joinPartySender(joinPartyRequest: JoinPartyRequest) {
-        PartyService?.joinDeliveryParty("Bearer " + getJwt(), joinPartyRequest)?.enqueue(object: Callback<JoinPartyResponse> {
+        PartyService?.joinDeliveryParty(joinPartyRequest)?.enqueue(object: Callback<JoinPartyResponse> {
             override fun onResponse(call: Call<JoinPartyResponse>, response: Response<JoinPartyResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val joinPartyResponse: JoinPartyResponse = response.body()!!
