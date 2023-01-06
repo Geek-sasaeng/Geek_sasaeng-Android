@@ -153,6 +153,7 @@ class ChattingRoomActivity :
         binding.chattingRoomTopLayoutOrderCompleteBtn.setOnClickListener { // 주문완료 버튼
             Log.d("orderComplete","버튼 클릭됨")
             Log.d("orderComplete", getJwt().toString())
+            Log.d("orderComplete-request",ChattingOrderCompleteRequest("").toString() )
             chattingService.chattingOrderComplete(ChattingOrderCompleteRequest("1159"))
         }
 

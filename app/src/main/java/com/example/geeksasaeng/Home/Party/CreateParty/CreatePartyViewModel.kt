@@ -20,7 +20,6 @@ class CreatePartyViewModel: ViewModel() {
     var mapPoint: MutableLiveData<MapPoint?> = MutableLiveData<MapPoint?>() //위치
     var account : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 정보
     var accountNumber : MutableLiveData<String?> = MutableLiveData<String?>() //계좌은행 번호
-    var partyName: MutableLiveData<String?> = MutableLiveData<String?>() //파티 이름
 
 
 /*    fun setHashTag(value: Boolean?){
@@ -149,13 +148,6 @@ class CreatePartyViewModel: ViewModel() {
         return accountNumber.value.toString()
     }
 
-    fun setPartyName(value: String?){
-        partyName.value = value
-    }
-
-    fun getPartyName() : String?{
-        return partyName.value.toString()
-    }
 
 
 }
