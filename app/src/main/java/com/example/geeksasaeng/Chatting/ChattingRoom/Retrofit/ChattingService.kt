@@ -11,6 +11,7 @@ import retrofit2.Response
 class ChattingService {
     private lateinit var createChattingView: CreateChattingView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
+    private lateinit var sendChattingView: SendChattingView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
@@ -22,6 +23,9 @@ class ChattingService {
     }
     fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
         this.chattingMemberAddView = chattingMemberAddView
+    }
+    fun setSendChattingView(sendChattingView: SendChattingView) {
+        this.sendChattingView = sendChattingView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -65,6 +69,23 @@ class ChattingService {
             }
             override fun onFailure(call: Call<ChattingMemberAddResponse>, t: Throwable) {
                 Log.d("CHATTING-ADD-MEMBER", "실패")
+            }
+        })
+    }
+
+    fun sendChatting(sendChattingRequest: SendChattingRequest) {
+        chattingService?.sendChatting("Bearer " + getJwt(), sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
+            override fun onResponse(call: Call<SendChattingResponse>, response: Response<SendChattingResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val sendChattingResponse = response.body()!!
+                    when (sendChattingResponse.code) {
+                        1000 -> sendChattingView.sendChattingSuccess(sendChattingResponse.result!!)
+                        else -> sendChattingView.sendChattingFailure(sendChattingResponse.code, sendChattingResponse.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<SendChattingResponse>, t: Throwable) {
+                Log.d("CHATTING-SEND", "실패")
             }
         })
     }

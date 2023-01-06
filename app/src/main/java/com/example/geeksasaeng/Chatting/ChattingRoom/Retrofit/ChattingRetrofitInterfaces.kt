@@ -18,6 +18,13 @@ interface ChattingRetrofitInterfaces {
         @Body chattingMemberAddRequest: ChattingMemberAddRequest
     ): Call<ChattingMemberAddResponse>
 
+    // 채팅 전송
+    @POST("/party-chat-room/chat")
+    fun sendChatting(
+        @Header("Authorization") jwt: String,
+        @Body sendChattingRequest: SendChattingRequest
+    ): Call<SendChattingResponse>
+
     // 파티 멤버 나가기
     @PATCH("/delivery-party/member")
     fun partyMemberChattingLeave(

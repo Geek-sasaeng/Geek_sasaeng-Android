@@ -24,6 +24,24 @@ data class CreateChattingResult(
     @SerializedName("title") val title: String
 )
 
+data class SendChattingRequest(
+    @SerializedName("chatId") val chatId: String?,
+    @SerializedName("chatRoomId") val chatRoomId: String,
+    @SerializedName("chatType") val chatType: String?,
+    @SerializedName("content") val content: String,
+    @SerializedName("isSystemMessage") val isSystemMessage: Boolean?,
+    @SerializedName("jwt") val jwt: String?,
+    @SerializedName("memberId") val memberId: Int?,
+    @SerializedName("profileImgUrl") val profileImgUrl: String?,
+)
+
+data class SendChattingResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess: Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
 data class ChattingMemberAddRequest(
     @SerializedName("partyChatRoomId") val partyChatRoomId: String
 )
@@ -85,6 +103,5 @@ data class ChattingDeliveryComplicatedResult(
     @SerializedName("body") val body: ArrayList<Any>,
     @SerializedName("statusCode") val statusCode: String,
     @SerializedName("statusCodeValue") val statusCodeValue: Int
-
 )
 

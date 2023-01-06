@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.animation.Animator
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -11,12 +12,14 @@ import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import kotlinx.coroutines.delay
 import java.util.logging.Handler
 
-class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate), ChattingListView {
+class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
+    ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
@@ -40,7 +43,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         initAdapter()
         initClickListener()
         initScrollListener()
-//        initChattingList()
     }
 
     private fun initChattingList() {
@@ -62,11 +64,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                 ChattingListRVAdapter.OnItemClickListener {
                 override fun onItemClick(chatting: ChattingList, position: Int) {
                     // 채팅방 입장할때
-                    // 채팅방 Activity로 이동
-                    // val intent = Intent(activity, ChattingRoomActivity::class.java)
-                    // intent.putExtra("roomName", chatting.roomData.roomName)
-                    // intent.putExtra("roomUuid", chatting.roomData.roomUuid)
-                    // startActivity(intent)
+                    val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    var chattingRoomData = chattingListRVAdapter.getRoomData(position)
+                    intent.putExtra("roomName", chattingRoomData.roomTitle)
+                    intent.putExtra("roomId", chattingRoomData.roomId)
+                    startActivity(intent)
                 }
             })
         }

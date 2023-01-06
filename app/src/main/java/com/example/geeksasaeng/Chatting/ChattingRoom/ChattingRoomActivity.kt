@@ -1,37 +1,44 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Gallery
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.geeksasaeng.ChatSetting.ChatRequest
+import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
+import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
+import kotlin.concurrent.thread
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView {
+    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
+    WebSocketListenerInterface, SendChattingView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
     private var roomName = String()
     private var chattingList: MutableList<Chatting> = ArrayList()
-    private var roomUuid = String()
+    private var roomId = String()
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -52,27 +59,49 @@ class ChattingRoomActivity :
     // Album
     val PERMISSION_Album = 101 // 앨범 권한 처리
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    
+
+    // Chatting
+    private var chatClient = OkHttpClient()
+
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
-        roomUuid = intent.getStringExtra("roomUuid").toString()
-        chattingRoomName = roomUuid
+        roomId = intent.getStringExtra("roomId").toString()
+        Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
-
         initTextChangedListener()
         initSendChatListener()
         initAdapter()
         initChattingService()
-        optionClickListener()
+//        optionClickListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("WebSocketListener-Test", "onResume")
+        webSocketStart()
+    }
+
+    private fun webSocketStart() {
+        Log.d("WebSocketListener-Test", "webSocketStart")
+        WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
+    }
+
+    fun webSocketPrint(message: String) {
+        runOnUiThread {
+            Log.d("WebSocketListener-Test", message)
+            // textResult.setText(textResult.getText().toString() + "\n" + message)
+        }
     }
 
     // 종료 시 리스너 제거
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        realTimeChatListener.remove()
-        changeParticipantsListener.remove()
+//        realTimeChatListener.remove()
+//        changeParticipantsListener.remove()
+        Log.d("WebSocketListener-Test", "END")
+        WebSocketManager.close()
     }
 
     private fun getBankAndAccountNumber() {
@@ -102,6 +131,7 @@ class ChattingRoomActivity :
     private fun initChattingService() {
         chattingService = ChattingService()
         chattingService.setChattingMemberLeaveView(this)
+        chattingService.setSendChattingView(this)
     }
 
     private fun optionClickListener() {
@@ -110,7 +140,7 @@ class ChattingRoomActivity :
                 val optionDialog = LeaderOptionDialog()
                 optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
-                bundle.putString("roomUuid", roomUuid)
+//                bundle.putString("roomUuid", roomUuid)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
@@ -118,7 +148,6 @@ class ChattingRoomActivity :
                 optionDialog.setOptionView(this)
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
-
         }
 
         binding.chattingRoomBackBtn.setOnClickListener {
@@ -174,7 +203,47 @@ class ChattingRoomActivity :
     // 메시지 전송
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
+            thread {
+                kotlin.run {
+                    WebSocketManager.connect()
+                }
+            }
+
             // TODO: 메시지 전송
+            var content = binding.chattingRoomChattingTextEt.text.toString()
+            var chatRoomId = roomId
+            var isSystemMessage = false
+            var memberId = getMemberId()
+            var profileImgUrl = getProfileImgUrl()
+            var chatType = "publish"
+            var chatId = "none"
+            var jwt = getJwt()
+
+            // 전송할 데이터를 JSON Type 변수에 저장
+            val jsonObject = JSONObject()
+            jsonObject.put("content", content)
+            jsonObject.put("chatRoomId", chatRoomId)
+            jsonObject.put("isSystemMessage", isSystemMessage)
+            jsonObject.put("memberId", memberId)
+            jsonObject.put("profileImgUrl", profileImgUrl)
+            jsonObject.put("chatType", chatType)
+            jsonObject.put("chatId", chatId)
+            jsonObject.put("jwt", jwt)
+
+            val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+
+            Log.d("WebSocketListener-Test", chatData.toString())
+            WebSocketManager.sendMessage(chatData.toString())
+
+            binding.chattingRoomChattingTextEt.setText("")
+
+            if ( WebSocketManager .sendMessage( " Client send " )) {
+                Log.d("WebSocketListener-Test", " Send from the client \n " )
+            }
+
+            var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+
+            chattingService.sendChatting(sendChatData)
         }
     }
 
@@ -185,8 +254,8 @@ class ChattingRoomActivity :
 
     // 일반 유저 나가기
     override fun MemberExistClick() {
-        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
-        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
+//        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
+//        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
     }
 
     // 방장 나가기
@@ -215,5 +284,32 @@ class ChattingRoomActivity :
         val date = Date(nowTime)
         var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         return dateFormat.format(date)
+    }
+
+    // WebSocketListenerInterface 관련
+    override fun onConnectSuccess() {
+        Log.d("WebSocketListener-Test", "Connect Success")
+    }
+
+    override fun onConnectFailed() {
+        Log.d("WebSocketListener-Test", "Connect Failed")
+    }
+
+    override fun onClose() {
+        Log.d("WebSocketListener-Test", "Connect Closed")
+    }
+
+    override fun onMessage(text: String?) {
+        Log.d("WebSocketListener-Test", "Message = $text")
+    }
+
+    override fun sendChattingSuccess(result: String) {
+        Log.d("SEND-CHATTING", "Send Chatting Success")
+        Toast.makeText(this, "채팅 전송 성공", Toast.LENGTH_LONG)
+    }
+
+    override fun sendChattingFailure(code: Int, message: String) {
+        Log.d("SEND-CHATTING", "Send Chatting Failure")
+        Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
     }
 }

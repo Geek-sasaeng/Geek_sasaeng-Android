@@ -10,6 +10,11 @@ interface ChattingMemberAddView {
     fun chattingMemberFailure(code: Int, message: String)
 }
 
+interface SendChattingView {
+    fun sendChattingSuccess(result: String)
+    fun sendChattingFailure(code: Int, message: String)
+}
+
 interface ChattingMemberLeaveView {
     fun chattingMemberLeaveSuccess(result: String)
     fun chattingMemberLeaveFailure(code: Int, message: String)
