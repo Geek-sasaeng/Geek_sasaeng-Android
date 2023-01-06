@@ -8,6 +8,7 @@ data class LoginResult(
     @SerializedName("fcmToken") val fcmToken: String,
     @SerializedName("jwt") val jwt: String,
     @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("memberId") val memberId: Int,
     @SerializedName("nickName") val nickName: String,
     @SerializedName("profileImgUrl") val profileImgUrl: String
 )

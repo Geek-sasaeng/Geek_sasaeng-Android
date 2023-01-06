@@ -20,6 +20,13 @@ interface ChattingRetrofitInterfaces {
         @Body chattingMemberAddRequest: ChattingMemberAddRequest
     ): Call<ChattingMemberAddResponse>
 
+    // 채팅 전송
+    @POST("/party-chat-room/chat")
+    fun sendChatting(
+        @Header("Authorization") jwt: String,
+        @Body sendChattingRequest: SendChattingRequest
+    ): Call<SendChattingResponse>
+
     //방장이 배달 파티 채팅 멤버를 강제퇴장
     @DELETE("/party-chat-room/members")
     fun chattingMemberForcedExit(

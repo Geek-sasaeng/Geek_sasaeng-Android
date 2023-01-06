@@ -19,6 +19,19 @@ fun saveNickname(nickname: String) {
     editor.apply()
 }
 
+// Member Id
+fun removeMemberId() {
+    val editor = mSharedPreferences.edit()
+    editor.remove("memberId")
+    editor.commit()
+}
+
+fun saveMemberId(memberId: Int) {
+    val editor = mSharedPreferences.edit()
+    editor.putInt("memberId", memberId)
+    editor.apply()
+}
+
 // 프로필 이미지
 fun removeProfileImgUrl(){
     val editor = mSharedPreferences.edit()
@@ -114,6 +127,7 @@ fun saveForcedExitCheckList(forcedExitCheckList: MutableList<Boolean>){
 
 fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
 fun getNickname(): String? = mSharedPreferences.getString("nickname", null)
+fun getMemberId(): Int? = mSharedPreferences.getInt("memberId", 0)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
 fun getDormitoryId(): Int? = mSharedPreferences.getInt("dormitoryId", -1)
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)

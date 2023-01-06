@@ -130,6 +130,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }else{
             Log.d("cherry", "첫 로그인이 아님")
             saveNickname(result.nickName)
+            saveMemberId(result.memberId)
             saveProfileImgUrl(result.profileImgUrl)
             saveDormitory("제"+result.dormitoryName)
             saveDormitoryId(result.dormitoryId)
