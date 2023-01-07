@@ -37,7 +37,6 @@ interface ChattingRetrofitInterfaces {
     //주문 완료
     @PATCH("/party-chat-room/order")
     fun chattingOrderComplete(
-        @Header("Authorization") jwt: String,
         @Body chattingOrderCompleteRequest: ChattingOrderCompleteRequest
     ): Call<ChattingOrderCompleteResponse>
 

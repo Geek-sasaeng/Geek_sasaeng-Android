@@ -124,7 +124,7 @@ class ChattingService {
 
     // 방장 - 주문완료
     fun chattingOrderComplete(chattingOrderCompleteRequest: ChattingOrderCompleteRequest) {
-        chattingService?.chattingOrderComplete("Bearer " + getJwt(), chattingOrderCompleteRequest)?.enqueue(object: Callback<ChattingOrderCompleteResponse> {
+        chattingService?.chattingOrderComplete(chattingOrderCompleteRequest)?.enqueue(object: Callback<ChattingOrderCompleteResponse> {
 
             override fun onResponse(
                 call: Call<ChattingOrderCompleteResponse>,
@@ -132,7 +132,6 @@ class ChattingService {
             ) {
                 Log.d("orderComplete", "response:"+response)
                 if (response.isSuccessful && response.code() == 200) {
-                    Log.d("ORDER-COMPLETE", "진입성공1")
                     val resp = response.body()!!
                     when (resp.code) {
                         1000 -> chattingOrderCompleteView.chattingOrderCompleteSuccess(resp.result)
@@ -167,8 +166,7 @@ class ChattingService {
 
     // 파티장 나가기
     fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
-        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest)
-            ?.enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
+        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
                 override fun onResponse(
                     call: Call<ChattingPartyLeaderLeaveResponse>,
                     response: Response<ChattingPartyLeaderLeaveResponse>
@@ -192,8 +190,7 @@ class ChattingService {
     //배달완료 알림보내기
     fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
         Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)
-            ?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
+        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
                 override fun onResponse(
                     call: Call<ChattingDeliveryComplicatedResponse?>,
                     response: Response<ChattingDeliveryComplicatedResponse?>
