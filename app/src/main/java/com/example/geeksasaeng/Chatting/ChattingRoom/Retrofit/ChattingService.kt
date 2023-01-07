@@ -13,6 +13,7 @@ class ChattingService {
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
     private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
+    private lateinit var chattingRemittanceCompleteView: ChattingRemittanceCompleteView
     private lateinit var sendChattingView: SendChattingView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
@@ -35,6 +36,9 @@ class ChattingService {
     }
     fun setChattingOrderCompleteView(chattingOrderCompleteView: ChattingOrderCompleteView) {
         this.chattingOrderCompleteView = chattingOrderCompleteView
+    }
+    fun setChattingRemittanceCompleteView(chattingRemittanceCompleteView: ChattingRemittanceCompleteView) {
+        this.chattingRemittanceCompleteView = chattingRemittanceCompleteView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -142,6 +146,30 @@ class ChattingService {
 
             override fun onFailure(call: Call<ChattingOrderCompleteResponse>, t: Throwable) {
                 Log.d("ORDER-COMPLETE", "실패")
+            }
+        })
+    }
+
+    // 멤버 - 송금완료
+    fun chattingRemittanceComplete(chattingRemittanceCompleteRequest: ChattingRemittanceCompleteRequest) {
+        chattingService?.chattingRemittanceComplete(chattingRemittanceCompleteRequest)?.enqueue(object: Callback<ChattingRemittanceCompleteResponse> {
+
+            override fun onResponse(
+                call: Call<ChattingRemittanceCompleteResponse>,
+                response: Response<ChattingRemittanceCompleteResponse>
+            ) {
+                Log.d("orderComplete", "response:"+response)
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingRemittanceCompleteView.chattingRemittanceCompleteSuccess(resp.result)
+                        else -> chattingRemittanceCompleteView.chattingRemittanceCompleteFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChattingRemittanceCompleteResponse>, t: Throwable) {
+                Log.d("REMITTANCE-COMPLETE", "실패")
             }
         })
     }

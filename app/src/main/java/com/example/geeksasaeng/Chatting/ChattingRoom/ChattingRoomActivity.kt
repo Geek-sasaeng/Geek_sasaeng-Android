@@ -35,7 +35,7 @@ import kotlin.concurrent.thread
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
-    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView {
+    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -75,7 +75,6 @@ class ChattingRoomActivity :
     val QUEUE_NAME = "110"
 
     override fun initAfterBinding() {
-        leader=true // 임시로 설정해둠.
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
         Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
@@ -193,7 +192,8 @@ class ChattingRoomActivity :
         chattingService = ChattingService()
         chattingService.setChattingMemberLeaveView(this)
         chattingService.setSendChattingView(this)
-        chattingService.setChattingOrderCompleteView(this) //주문완료 뷰 set
+        chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
+        chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
     }
 
     private fun optionClickListener() {
@@ -221,10 +221,9 @@ class ChattingRoomActivity :
             chattingService.chattingOrderComplete(ChattingOrderCompleteRequest(roomId))
         }
 
-        binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener {
-            binding.chattingRoomTopLayout.visibility = View.GONE
-            topLayoutFlag = false
-            CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+        binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener { //송금완료 버튼
+            Log.d("remittanceComplete-request",ChattingRemittanceCompleteRequest(roomId).toString()  )
+            chattingService.chattingRemittanceComplete(ChattingRemittanceCompleteRequest(roomId))
         }
     }
 
@@ -341,19 +340,6 @@ class ChattingRoomActivity :
         TODO("Not yet implemented")
     }
 
-    //주문 완료 성공
-    override fun chattingOrderCompleteSuccess(result: String) {
-        binding.chattingRoomTopLayout.visibility = View.GONE
-        topLayoutFlag = false
-        CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-        Log.d("orderComplete",result)
-    }
-
-    //주문 완료 실패
-    override fun chattingOrderCompleteFailure(code: Int, message: String) {
-        Log.d("orderComplete","실패 : "+message)
-    }
-
     private fun calculateToday(): String {
         val nowTime = System.currentTimeMillis();
         val date = Date(nowTime)
@@ -386,5 +372,29 @@ class ChattingRoomActivity :
     override fun sendChattingFailure(code: Int, message: String) {
         Log.d("SEND-CHATTING", "Send Chatting Failure")
         Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
+    }
+
+    //주문 완료 성공/실패
+    override fun chattingOrderCompleteSuccess(result: String) {
+        binding.chattingRoomTopLayout.visibility = View.GONE
+        topLayoutFlag = false
+        CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+        Log.d("orderComplete",result)
+    }
+
+    override fun chattingOrderCompleteFailure(code: Int, message: String) {
+        Log.d("orderComplete","실패 : "+message)
+    }
+
+    //채팅 송금완료 성공/실패
+    override fun chattingRemittanceCompleteSuccess(result: String) {
+        binding.chattingRoomTopLayout.visibility = View.GONE
+        topLayoutFlag = false
+        CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+        Log.d("remittanceComplete",result)
+    }
+
+    override fun chattingRemittanceCompleteFailure(code: Int, message: String) {
+        Log.d("remittanceComplete","실패 : "+message)
     }
 }

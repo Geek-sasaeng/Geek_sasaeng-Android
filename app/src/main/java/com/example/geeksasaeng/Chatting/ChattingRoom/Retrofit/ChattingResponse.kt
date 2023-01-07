@@ -78,7 +78,6 @@ data class ChattingMemberForcedExitResult(
 )
 
 // 주문 완료
-
 data class ChattingOrderCompleteResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -87,6 +86,18 @@ data class ChattingOrderCompleteResponse(
 )
 
 data class ChattingOrderCompleteRequest(
+    @SerializedName("roomId") val roomId: String
+)
+
+// 송금 완료
+data class ChattingRemittanceCompleteResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+data class ChattingRemittanceCompleteRequest(
     @SerializedName("roomId") val roomId: String
 )
 
