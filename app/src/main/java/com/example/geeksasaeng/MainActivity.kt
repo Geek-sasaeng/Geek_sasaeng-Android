@@ -101,10 +101,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     return@setOnItemSelectedListener true
                 }
                 R.id.communityFragment -> {
-                    val intent = Intent(applicationContext, ChattingRoomActivity::class.java)
-                    startActivity(intent)
-                    /*setFragment(R.id.main_frm, CommunityFragment())
-                    Log.d("Stack-Log", "CommunityFragment()")*/
+                    setFragment(R.id.main_frm, CommunityFragment())
+                    Log.d("Stack-Log", "CommunityFragment()")
                     return@setOnItemSelectedListener true
                 }
                 R.id.chattingFragment -> {
