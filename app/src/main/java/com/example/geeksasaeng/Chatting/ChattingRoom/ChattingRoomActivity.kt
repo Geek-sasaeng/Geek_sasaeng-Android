@@ -92,8 +92,8 @@ class ChattingRoomActivity :
 
         // initRabbitMQSetting()
 
-        var rabbitMQSetting = RabbitMQSetting()
-        rabbitMQSetting.main()
+        // var rabbitMQSetting = RabbitMQSetting()
+        // rabbitMQSetting.main()
     }
 
     fun initRabbitMQSetting() {

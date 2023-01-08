@@ -132,11 +132,14 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
 
+        Log.d("GET-CHATTING-LIST", "result = $result")
+
         // 로딩화면 제거
         loadingStop()
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+        Log.d("GET-CHATTING-LIST", "code = $code, msg = $msg")
     }
 }

@@ -41,8 +41,10 @@ class ChattingService {
     fun createChatting(createChattingRequest: CreateChattingRequest) {
         chattingService?.createChatting("Bearer " + getJwt(), createChattingRequest)?.enqueue(object : Callback<CreateChattingResponse> {
             override fun onResponse(call: Call<CreateChattingResponse>, response: Response<CreateChattingResponse>) {
+                Log.d("CREATE-CHATTING", "response = $response")
                 if (response.isSuccessful && response.code() == 200) {
                     val createChattingResponse = response.body()!!
+                    Log.d("CREATE-CHATTING", "response body = $createChattingResponse")
                     when (createChattingResponse.code) {
                         1000 -> createChattingView.createChattingSuccess(createChattingResponse.result)
                         else -> createChattingView.createChattingFailure(createChattingResponse.code, createChattingResponse.message)
@@ -73,6 +75,7 @@ class ChattingService {
         })
     }
 
+    // 채팅 전송
     fun sendChatting(sendChattingRequest: SendChattingRequest) {
         chattingService?.sendChatting("Bearer " + getJwt(), sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
             override fun onResponse(call: Call<SendChattingResponse>, response: Response<SendChattingResponse>) {
