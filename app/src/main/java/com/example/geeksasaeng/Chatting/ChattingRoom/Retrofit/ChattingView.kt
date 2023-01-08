@@ -20,6 +20,11 @@ interface ChattingOrderCompleteView {
     fun chattingOrderCompleteFailure(code: Int, message: String)
 }
 
+interface ChattingRemittanceCompleteView {
+    fun chattingRemittanceCompleteSuccess(result: String)
+    fun chattingRemittanceCompleteFailure(code: Int, message: String)
+}
+
 interface SendChattingView {
     fun sendChattingSuccess(result: String)
     fun sendChattingFailure(code: Int, message: String)

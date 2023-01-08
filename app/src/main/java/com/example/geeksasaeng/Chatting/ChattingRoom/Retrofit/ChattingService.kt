@@ -13,6 +13,7 @@ class ChattingService {
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
     private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
+    private lateinit var chattingRemittanceCompleteView: ChattingRemittanceCompleteView
     private lateinit var sendChattingView: SendChattingView
     private lateinit var chattingMemberLeaveView: ChattingMemberLeaveView
     private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
@@ -35,6 +36,9 @@ class ChattingService {
     }
     fun setChattingOrderCompleteView(chattingOrderCompleteView: ChattingOrderCompleteView) {
         this.chattingOrderCompleteView = chattingOrderCompleteView
+    }
+    fun setChattingRemittanceCompleteView(chattingRemittanceCompleteView: ChattingRemittanceCompleteView) {
+        this.chattingRemittanceCompleteView = chattingRemittanceCompleteView
     }
     fun setChattingMemberLeaveView(chattingMemberLeaveView: ChattingMemberLeaveView){
         this.chattingMemberLeaveView = chattingMemberLeaveView
@@ -124,7 +128,7 @@ class ChattingService {
 
     // 방장 - 주문완료
     fun chattingOrderComplete(chattingOrderCompleteRequest: ChattingOrderCompleteRequest) {
-        chattingService?.chattingOrderComplete("Bearer " + getJwt(), chattingOrderCompleteRequest)?.enqueue(object: Callback<ChattingOrderCompleteResponse> {
+        chattingService?.chattingOrderComplete(chattingOrderCompleteRequest)?.enqueue(object: Callback<ChattingOrderCompleteResponse> {
 
             override fun onResponse(
                 call: Call<ChattingOrderCompleteResponse>,
@@ -132,7 +136,6 @@ class ChattingService {
             ) {
                 Log.d("orderComplete", "response:"+response)
                 if (response.isSuccessful && response.code() == 200) {
-                    Log.d("ORDER-COMPLETE", "진입성공1")
                     val resp = response.body()!!
                     when (resp.code) {
                         1000 -> chattingOrderCompleteView.chattingOrderCompleteSuccess(resp.result)
@@ -143,6 +146,30 @@ class ChattingService {
 
             override fun onFailure(call: Call<ChattingOrderCompleteResponse>, t: Throwable) {
                 Log.d("ORDER-COMPLETE", "실패")
+            }
+        })
+    }
+
+    // 멤버 - 송금완료
+    fun chattingRemittanceComplete(chattingRemittanceCompleteRequest: ChattingRemittanceCompleteRequest) {
+        chattingService?.chattingRemittanceComplete(chattingRemittanceCompleteRequest)?.enqueue(object: Callback<ChattingRemittanceCompleteResponse> {
+
+            override fun onResponse(
+                call: Call<ChattingRemittanceCompleteResponse>,
+                response: Response<ChattingRemittanceCompleteResponse>
+            ) {
+                Log.d("orderComplete", "response:"+response)
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingRemittanceCompleteView.chattingRemittanceCompleteSuccess(resp.result)
+                        else -> chattingRemittanceCompleteView.chattingRemittanceCompleteFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChattingRemittanceCompleteResponse>, t: Throwable) {
+                Log.d("REMITTANCE-COMPLETE", "실패")
             }
         })
     }
@@ -167,8 +194,7 @@ class ChattingService {
 
     // 파티장 나가기
     fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
-        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest)
-            ?.enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
+        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
                 override fun onResponse(
                     call: Call<ChattingPartyLeaderLeaveResponse>,
                     response: Response<ChattingPartyLeaderLeaveResponse>
@@ -192,8 +218,7 @@ class ChattingService {
     //배달완료 알림보내기
     fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
         Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)
-            ?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
+        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
                 override fun onResponse(
                     call: Call<ChattingDeliveryComplicatedResponse?>,
                     response: Response<ChattingDeliveryComplicatedResponse?>

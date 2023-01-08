@@ -37,9 +37,14 @@ interface ChattingRetrofitInterfaces {
     //주문 완료
     @PATCH("/party-chat-room/order")
     fun chattingOrderComplete(
-        @Header("Authorization") jwt: String,
         @Body chattingOrderCompleteRequest: ChattingOrderCompleteRequest
     ): Call<ChattingOrderCompleteResponse>
+
+    //송금 완료
+    @PATCH("/party-chat-room/members/remittance")
+    fun chattingRemittanceComplete(
+        @Body chattingRemittanceCompleteRequest: ChattingRemittanceCompleteRequest
+    ): Call<ChattingRemittanceCompleteResponse>
 
     // <<delivery-party>>//
     // 파티 멤버 나가기
