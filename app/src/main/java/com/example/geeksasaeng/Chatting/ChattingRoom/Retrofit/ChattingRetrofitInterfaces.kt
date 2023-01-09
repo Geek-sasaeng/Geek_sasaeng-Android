@@ -8,10 +8,10 @@ interface ChattingRetrofitInterfaces {
     // <<party-chat-room>> //
     // 채팅방 생성
     @POST("/party-chat-room")
-    fun createChatting(
+    fun createChattingRoom(
         @Header("Authorization") jwt: String?,
-        @Body createChattingRequest: CreateChattingRequest
-    ): Call<CreateChattingResponse>
+        @Body createChattingRequest: CreateChattingRoomRequest
+    ): Call<CreateChattingRoomResponse>
 
     // 채팅방 멤버 추가
     @POST("/party-chat-room/member")
