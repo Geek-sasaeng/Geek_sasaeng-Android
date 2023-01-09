@@ -9,28 +9,24 @@ interface ChattingRetrofitInterfaces {
     // 채팅방 생성
     @POST("/party-chat-room")
     fun createChattingRoom(
-        @Header("Authorization") jwt: String?,
         @Body createChattingRequest: CreateChattingRoomRequest
     ): Call<CreateChattingRoomResponse>
 
     // 채팅방 멤버 추가
     @POST("/party-chat-room/member")
     fun chattingMemberAdd(
-        @Header("Authorization") jwt: String,
         @Body chattingMemberAddRequest: ChattingMemberAddRequest
     ): Call<ChattingMemberAddResponse>
 
     // 채팅 전송
     @POST("/party-chat-room/chat")
     fun sendChatting(
-        @Header("Authorization") jwt: String,
         @Body sendChattingRequest: SendChattingRequest
     ): Call<SendChattingResponse>
 
     //방장이 배달 파티 채팅 멤버를 강제퇴장
     @DELETE("/party-chat-room/members")
     fun chattingMemberForcedExit(
-        @Header("Authorization") jwt: String,
         @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
     ): Call<ChattingMemberForcedExitResponse>
 

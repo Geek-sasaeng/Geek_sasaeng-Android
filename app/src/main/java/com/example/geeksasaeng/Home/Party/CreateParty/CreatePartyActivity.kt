@@ -11,10 +11,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingRequest
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingResult
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.CreateChattingView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.Home.Party.CreateParty.*
 import com.example.geeksasaeng.Home.Party.Retrofit.*
@@ -30,7 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //TODO: 여기서는 잘하면 CreatePartyDefaultLocView 이거 없이도 가능할지도? 7.30-31에 이 부분 다시 봐보기
-class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView, CreateChattingView,
+class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCreatePartyBinding::inflate), CreatePartyDefaultLocView, CreatePartyView, CreateChattingRoomView,
     DialogDt.DialogDtNextClickListener, DialogNum.DialogNumNextClickListener, DialogCategory.DialogCategoryNextClickListener, DialogLink.DialogLinkNextClickListener, DialogLocation.DialogLocationNextClickListener,
     DialogAccountNumber.DialogAccountNumberClickListener {
 
@@ -325,32 +322,33 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
     }
 
     // 채팅 생성하기
-    private fun createChatting(deliveryItemId: Int) {
+    private fun createChattingRoom(deliveryItemId: Int) {
         val chattingService = ChattingService()
         chattingService.setCreateChattingView(this)
 
-        val createChattingRequest = CreateChattingRequest(createPartyVM.getAccountNumber().toString(),
+        val createChattingRequest = CreateChattingRoomRequest(createPartyVM.getAccountNumber().toString(),
             createPartyVM.getAccount().toString(), createPartyVM.getCategory()!!,
             deliveryItemId, createPartyVM.getMaxMatching()!!, binding.createPartyTitleEt.text.toString())
+        Log.d("CREATE-CHATTING", "createChattingRequest = $createChattingRequest")
 
-        chattingService.createChatting(createChattingRequest)
+        chattingService.createChattingRoom(createChattingRequest)
     }
 
     // 파티 등록하기 성공/실패
     override fun onCreatePartySuccess(result: CreatePartyResult) {
-        Log.d("jjang", "파티 생성 성공(서버로 정보 보냄)")
         //TODO:파티보기로 이동
         CustomToastMsg.createToast(this, "파티 생성이 완료되었습니다", "#8029ABE2", 58)?.show()
+
         val deliveryItemId = result.id
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "lookParty")
         intent.putExtra("deliveryItemId", deliveryItemId.toString()) //파티 상세보기 띄우기 위해 파티 아이디 넘겨줌
-        Log.d("jjang", "파티 생성하기에서의 파티 아이디"+result.id.toString())
+
         binding.createPartyKakaoMapLocation.removeView(mapView) //카카오맵 종료
+
+        createChattingRoom(deliveryItemId)
         finish() //액티비티 종료되면서 카카오맵도 종료됨
         startActivity(intent)
-
-        createChatting(deliveryItemId)
     }
 
     override fun onCreatePartyFailure(message: String) {
@@ -365,11 +363,11 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         createPartyService.createPartySender(getDormitoryId()!!, createPartyRequest) //★파티 등록하기 요청
     }
 
-    override fun createChattingSuccess(result: CreateChattingResult) {
+    override fun createChattingRoomSuccess(result: CreateChattingResult) {
         Log.d("CREATE-CHATTING", result.toString())
     }
 
-    override fun createChattingFailure(code: Int, message: String) {
+    override fun createChattingRoomFailure(code: Int, message: String) {
         Log.d("CREATE-CHATTING", "code = $code, message = $message")
     }
 }

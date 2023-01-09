@@ -55,7 +55,7 @@ class ChattingService {
 
     // 채팅방 생성
     fun createChattingRoom(createChattingRequest: CreateChattingRoomRequest) {
-        chattingService?.createChattingRoom("Bearer " + getJwt(), createChattingRequest)?.enqueue(object : Callback<CreateChattingRoomResponse> {
+        chattingService?.createChattingRoom(createChattingRequest)?.enqueue(object : Callback<CreateChattingRoomResponse> {
             override fun onResponse(call: Call<CreateChattingRoomResponse>, response: Response<CreateChattingRoomResponse>) {
                 Log.d("CREATE-CHATTING", "response = $response")
                 if (response.isSuccessful && response.code() == 200) {
@@ -75,7 +75,7 @@ class ChattingService {
 
     // 채팅방 멤버 추가
     fun addChattingMember(chattingMemberAddRequest: ChattingMemberAddRequest) {
-        chattingService?.chattingMemberAdd("Bearer " + getJwt(), chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
+        chattingService?.chattingMemberAdd(chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
             override fun onResponse(call: Call<ChattingMemberAddResponse>, response: Response<ChattingMemberAddResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
@@ -93,7 +93,7 @@ class ChattingService {
 
     // 채팅 전송
     fun sendChatting(sendChattingRequest: SendChattingRequest) {
-        chattingService?.sendChatting("Bearer " + getJwt(), sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
+        chattingService?.sendChatting(sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
             override fun onResponse(call: Call<SendChattingResponse>, response: Response<SendChattingResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val sendChattingResponse = response.body()!!
@@ -111,7 +111,7 @@ class ChattingService {
 
     // 방장이 배달 파티 채팅 멤버를 강제퇴장
     fun chattingMemberForcedExit(chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest) {
-        chattingService?.chattingMemberForcedExit("Bearer " + getJwt(), chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
+        chattingService?.chattingMemberForcedExit(chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
 
             override fun onResponse(call: Call<ChattingMemberForcedExitResponse>, response: Response<ChattingMemberForcedExitResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
