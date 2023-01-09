@@ -12,18 +12,19 @@ import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
+import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
+import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import kotlinx.coroutines.delay
-import java.util.logging.Handler
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
     ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
-    var cursor = 0
+    var cursor: Int = 0
     private var chattingList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
 
@@ -83,6 +84,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 //    }
 
     private fun initClickListener() {
+        //필터버튼
         binding.chattingSectionRb1.setOnClickListener {
             binding.chattingListPreparingIv.visibility = View.GONE
             binding.chattingListRv.visibility = View.VISIBLE
@@ -96,6 +98,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         binding.chattingSectionRb3.setOnClickListener {
             binding.chattingListRv.visibility = View.GONE
             binding.chattingListPreparingIv.visibility = View.VISIBLE
+        }
+
+        //보관함 버튼
+       binding.chattingStorageIv.setOnClickListener {
+           (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingStorageFragment()).addToBackStack("chattingStorage").commit()
         }
     }
 
@@ -131,7 +138,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         result.parties?.let { chattingList.addAll(it) }
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
-
         Log.d("GET-CHATTING-LIST", "result = $result")
 
         // 로딩화면 제거

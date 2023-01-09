@@ -46,7 +46,7 @@ class LoginDataService() {
         })
     }
     fun autoLogin() {
-        loginService?.autoLogin("Bearer " + getJwt())?.enqueue(object : Callback<AutoLoginResponse> {
+        loginService?.autoLogin()?.enqueue(object : Callback<AutoLoginResponse> {
             override fun onResponse(call: Call<AutoLoginResponse>, response: Response<AutoLoginResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val autoLoginResponse: AutoLoginResponse = response.body()!!

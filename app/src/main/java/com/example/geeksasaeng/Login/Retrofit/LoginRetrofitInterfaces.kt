@@ -3,7 +3,6 @@ package com.example.geeksasaeng.Login.Retrofit
 
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface LoginRetrofitInterfaces {
@@ -13,7 +12,6 @@ interface LoginRetrofitInterfaces {
     // 자동로그인
     @POST("/login/auto")
     fun autoLogin(
-        @Header("Authorization") jwt: String?
         ): Call<AutoLoginResponse>
 
     // 네이버 로그인, accessToken 전달

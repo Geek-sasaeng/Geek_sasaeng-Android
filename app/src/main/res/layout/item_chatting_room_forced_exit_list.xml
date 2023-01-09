@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_chatting_room_forced_exit_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBox
+        android:id="@+id/item_chatting_room_forced_exit_check_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="27dp"
+        android:layout_marginVertical="10dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:button="@android:color/transparent"
+        android:background="@drawable/selector_checkbox_square"
+        android:clickable="false"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_chatting_room_forced_exit_image_cv"
+        android:layout_width="40.8dp"
+        android:layout_height="40.8dp"
+        app:cardCornerRadius="20.4dp"
+        app:cardElevation="0dp"
+        android:layout_marginStart="19dp"
+        app:layout_constraintTop_toTopOf="@id/item_chatting_room_forced_exit_check_box"
+        app:layout_constraintBottom_toBottomOf="@id/item_chatting_room_forced_exit_check_box"
+        app:layout_constraintStart_toEndOf="@id/item_chatting_room_forced_exit_check_box" >
+
+        <ImageView
+            android:id="@+id/item_chatting_room_forced_exit_image_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_default_profile2"
+            android:alpha="0.5"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/item_chatting_room_forced_exit_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="한둘셋넷닷한둘셋넷닷한둘셋넷닷한"
+        android:textColor="@color/top"
+        android:textSize="14sp"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toEndOf="@id/item_chatting_room_forced_exit_image_cv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_chatting_room_forced_exit_image_cv"
+        app:layout_constraintBottom_toBottomOf="@id/item_chatting_room_forced_exit_image_cv"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

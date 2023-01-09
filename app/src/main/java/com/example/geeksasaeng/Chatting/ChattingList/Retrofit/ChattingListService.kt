@@ -18,12 +18,10 @@ class ChattingListService {
     }
 
     fun getChattingList(cursor: Int) {
-        chattingListService?.getChattingList("Bearer " + getJwt(), cursor)?.enqueue(object : Callback<ChattingListResponse> {
+        chattingListService?.getChattingList(cursor)?.enqueue(object : Callback<ChattingListResponse> {
             override fun onResponse(call: Call<ChattingListResponse>, response: Response<ChattingListResponse>) {
-                Log.d("GET-CHATTING-LIST", "response = $response")
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("GET-CHATTING-LIST", "response body = $resp")
                     when (resp.code) {
                         1000 -> getChattingListView.getChattingListSuccess(resp.result)
                         else -> getChattingListView.getChattingListFailure(resp.code, resp.message)

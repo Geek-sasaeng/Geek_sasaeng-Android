@@ -61,6 +61,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
         return position
     }
 
+    //TODO: binding으로 바꾸기
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var deliveryItemMemberIc: ImageView = itemView.findViewById(R.id.delivery_item_member_ic)
         var deliveryItemMemberNumber: TextView =

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.Home.HomeFragment
 // import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
@@ -170,7 +171,8 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 2011 : 비밀번호가 틀립니다
         // 2012 : 탈퇴한 회원
         // 2400 : 존재하지 않는 아이디
-        showToast(message)
+        CustomToastMsg.createToast(this, message, "#80A8A8A8", 26)?.show() //gray_2색상 //80붙여서 투명도 50%줌
+/*        showToast(message)*/
     }
 
     private fun setTextChangedListener() {

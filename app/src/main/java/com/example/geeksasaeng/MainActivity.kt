@@ -1,5 +1,6 @@
 package com.example.geeksasaeng
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
@@ -7,7 +8,10 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomForcedExitFragment
 import com.example.geeksasaeng.Community.CommunityFragment
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment

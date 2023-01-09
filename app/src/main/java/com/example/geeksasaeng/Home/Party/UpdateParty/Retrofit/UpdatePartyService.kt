@@ -19,7 +19,7 @@ class UpdatePartyService {
     }
 
     fun updatePartySender(dormitoryId: Int, partyId:Int, updatePartyRequest: UpdatePartyRequest){
-        updatePartyService?.updateParty("Bearer " + getJwt(), dormitoryId, updatePartyRequest, partyId)?.enqueue(object:Callback<UpdatePartyResponse> {
+        updatePartyService?.updateParty(dormitoryId, updatePartyRequest, partyId)?.enqueue(object:Callback<UpdatePartyResponse> {
             override fun onResponse(call: Call<UpdatePartyResponse>, response: Response<UpdatePartyResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: UpdatePartyResponse = response.body()!!

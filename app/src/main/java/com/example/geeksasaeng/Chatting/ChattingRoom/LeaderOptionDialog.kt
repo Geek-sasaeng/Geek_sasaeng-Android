@@ -50,9 +50,6 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     private fun initListener(){
         // TODO 각 옵션 기능 넣기
-        binding.dialogLeaderPopupOptionLookMenuTv.setOnClickListener { //메뉴판 보기
-
-        }
 
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
             val dialog = DialogSendAlarm()

@@ -24,7 +24,7 @@ class SearchDataService {
     private val searchPartyService = NetworkModule.getInstance()?.create(SearchRetrofitInterface::class.java)
 
     fun getSearchPartyList(dormitoryId: Int, cursor: Int, keyword: String) {
-        searchPartyService?.getSearchPartyList("Bearer " + getJwt(), dormitoryId, cursor, keyword)?.enqueue(object: Callback<SearchResponse> {
+        searchPartyService?.getSearchPartyList(dormitoryId, cursor, keyword)?.enqueue(object: Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val searchResponse: SearchResponse = response.body()!!
@@ -42,7 +42,7 @@ class SearchDataService {
 
     // 배달 리스트 필터 적용 후 목록들 불러오기
     fun getSearchFilterList(dormitoryId: Int, cursor: Int, keyword: String, orderTimeCategory: String?, maxMatching: Int?){
-        searchPartyService?.getFilterSearchList("Bearer " + getJwt(), dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)?.enqueue(object: Callback<SearchResponse> {
+        searchPartyService?.getFilterSearchList(dormitoryId, cursor, keyword, orderTimeCategory, maxMatching)?.enqueue(object: Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val searchResponse: SearchResponse = response.body()!!

@@ -28,7 +28,7 @@ class CreatePartyService {
 
     //기숙사 위치 정보
     fun getDefaultLoc( dormitoryId : Int) {
-        createPartyDataService?.getDeliveryPartyDefaultLocation("Bearer " + getJwt(), dormitoryId)?.enqueue(object : Callback<CreatePartyDefaultLocResponse> {
+        createPartyDataService?.getDeliveryPartyDefaultLocation(dormitoryId)?.enqueue(object : Callback<CreatePartyDefaultLocResponse> {
                 override fun onResponse(
                     call: Call<CreatePartyDefaultLocResponse>,
                     response: Response<CreatePartyDefaultLocResponse>
@@ -47,7 +47,7 @@ class CreatePartyService {
 
     //파티 생성하기
     fun createPartySender(dormitoryId: Int, createPartyRequest: CreatePartyRequest){
-        createPartyDataService?.createParty("Bearer " + getJwt(), dormitoryId, createPartyRequest)?.enqueue(object : Callback<CreatePartyResponse>{
+        createPartyDataService?.createParty(dormitoryId, createPartyRequest)?.enqueue(object : Callback<CreatePartyResponse>{
                 override fun onResponse(call: Call<CreatePartyResponse>, response: Response<CreatePartyResponse>) {
                     if (response.isSuccessful && response.code() == 200) {
                         val resp: CreatePartyResponse = response.body()!!

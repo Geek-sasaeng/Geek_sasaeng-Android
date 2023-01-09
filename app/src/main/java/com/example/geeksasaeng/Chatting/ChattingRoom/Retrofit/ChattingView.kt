@@ -7,7 +7,22 @@ interface CreateChattingView {
 
 interface ChattingMemberAddView {
     fun chattingMemberAddSuccess(result: ChattingMemberAddResult)
-    fun chattingMemberFailure(code: Int, message: String)
+    fun chattingMemberAddFailure(code: Int, message: String)
+}
+
+interface ChattingMemberForcedExitView {
+    fun chattingMemberForcedExitSuccess(result: ChattingMemberForcedExitResult)
+    fun chattingMemberForcedExitFailure(code: Int, message: String)
+}
+
+interface ChattingOrderCompleteView {
+    fun chattingOrderCompleteSuccess(result: String)
+    fun chattingOrderCompleteFailure(code: Int, message: String)
+}
+
+interface ChattingRemittanceCompleteView {
+    fun chattingRemittanceCompleteSuccess(result: String)
+    fun chattingRemittanceCompleteFailure(code: Int, message: String)
 }
 
 interface SendChattingView {
@@ -28,4 +43,9 @@ interface ChattingLeaderLeaveView {
 interface ChattingDeliveryComplicatedView {
     fun chattingDeliveryComplicatedSuccess()
     fun chattingDeliveryComplicatedFailure(message: String)
+}
+
+interface MatchingEndView {
+    fun onMatchingEndSuccess()
+    fun onMatchingEndFailure(message: String)
 }

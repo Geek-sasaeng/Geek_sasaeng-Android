@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
@@ -18,6 +19,8 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -31,7 +34,7 @@ import kotlin.concurrent.thread
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
-    WebSocketListenerInterface, SendChattingView {
+    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -63,6 +66,10 @@ class ChattingRoomActivity :
     // WebSocket
     private var chatClient = OkHttpClient()
     // RabbitMQ
+    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+    private val factory = ConnectionFactory()
+    lateinit var conn: Connection
+    lateinit var channel: Channel
     // QUEUE_NAME = MemberID!
     val QUEUE_NAME = "110"
 
@@ -85,6 +92,17 @@ class ChattingRoomActivity :
             var rabbitMQSetting = RabbitMQSetting()
             rabbitMQSetting.initRabbitMQSetting()
         }.start()
+    }
+
+    private fun initTopLayout(){
+        //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
+        //TODO: 그렇지 않았다면~~
+        if(leader){ //리더면 상단 바 구성을 다르게 해줘야하므로
+            binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
+            binding.chattingRoomSectionIv.visibility = View.INVISIBLE
+            binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
+            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
+        }
     }
 
     override fun onResume() {
@@ -116,6 +134,17 @@ class ChattingRoomActivity :
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
         binding.chattingRoomChattingRv.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
+            override fun onUserProfileClicked() {
+                //사용자 프로필
+                Log.d("bottom", "실행됨.")
+                val bottomSheetDialogFragment = ChattingUserBottomFragment()
+                bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
+                bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
+            }
+
+        })
     }
 
     private fun initClickListener() {
@@ -135,6 +164,8 @@ class ChattingRoomActivity :
         chattingService = ChattingService()
         chattingService.setChattingMemberLeaveView(this)
         chattingService.setSendChattingView(this)
+        chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
+        chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
     }
 
     private fun optionClickListener() {
@@ -157,15 +188,14 @@ class ChattingRoomActivity :
             finish()
         }
 
-        binding.chattingRoomTopLayoutBtn.setOnClickListener {
-            binding.chattingRoomTopLayout.visibility = View.GONE
-            topLayoutFlag = false
+        binding.chattingRoomTopLayoutOrderCompleteBtn.setOnClickListener { // 주문완료 버튼
+            Log.d("orderComplete-request",ChattingOrderCompleteRequest(roomId).toString()  )
+            chattingService.chattingOrderComplete(ChattingOrderCompleteRequest(roomId))
+        }
 
-            if (binding.chattingRoomTopLayoutBtnTv.text == "주문 완료")
-                CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
-            else if (binding.chattingRoomTopLayoutBtnTv.text == "송금 완료") {
-                // TODO: 여기에 성공했을 때 toast message 뜨도록 아래 코드 넣어주기
-            }
+        binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener { //송금완료 버튼
+            Log.d("remittanceComplete-request",ChattingRemittanceCompleteRequest(roomId).toString()  )
+            chattingService.chattingRemittanceComplete(ChattingRemittanceCompleteRequest(roomId))
         }
     }
 
@@ -314,5 +344,29 @@ class ChattingRoomActivity :
     override fun sendChattingFailure(code: Int, message: String) {
         Log.d("SEND-CHATTING", "Send Chatting Failure")
         Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
+    }
+
+    //주문 완료 성공/실패
+    override fun chattingOrderCompleteSuccess(result: String) {
+        binding.chattingRoomTopLayout.visibility = View.GONE
+        topLayoutFlag = false
+        CustomToastMsg.createToast(this, "주문이 완료되었습니다", "#8029ABE2", 53)?.show()
+        Log.d("orderComplete",result)
+    }
+
+    override fun chattingOrderCompleteFailure(code: Int, message: String) {
+        Log.d("orderComplete","실패 : "+message)
+    }
+
+    //채팅 송금완료 성공/실패
+    override fun chattingRemittanceCompleteSuccess(result: String) {
+        binding.chattingRoomTopLayout.visibility = View.GONE
+        topLayoutFlag = false
+        CustomToastMsg.createToast(this, "송금이 완료되었습니다", "#8029ABE2", 53)?.show()
+        Log.d("remittanceComplete",result)
+    }
+
+    override fun chattingRemittanceCompleteFailure(code: Int, message: String) {
+        Log.d("remittanceComplete","실패 : "+message)
     }
 }

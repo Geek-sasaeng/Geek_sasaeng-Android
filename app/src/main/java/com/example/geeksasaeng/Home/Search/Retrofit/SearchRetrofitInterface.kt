@@ -7,7 +7,6 @@ import retrofit2.http.*
 interface SearchRetrofitInterface {
     @GET("/{dormitoryId}/delivery-parties/keyword")
     fun getSearchPartyList(
-        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
         @Query("keyword") keyword: String
@@ -16,7 +15,6 @@ interface SearchRetrofitInterface {
     // 기숙사별 배달 리스트 필터 적용 후 불러오기
     @GET("/{dormitoryId}/delivery-parties/keyword")
     fun getFilterSearchList(
-        @Header("Authorization") jwt: String?,
         @Path("dormitoryId") dormitoryId: Int,
         @Query("cursor") cursor: Int,
         @Query("keyword") keyword: String,

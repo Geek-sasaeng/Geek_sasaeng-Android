@@ -3,12 +3,16 @@ package com.example.geeksasaeng.Utils
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.geeksasaeng.Config.Secret.AuthorizationTokenInterceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ApplicationClass: Application() {
     companion object {
+        const val Authorization_TOKEN: String = "Authorization"         // JWT Token Key
         const val BASE_URL = "https://geeksasaeng.shop"
         //const val BASE_URL = "http://192.168.1.2:8080"
         const val TAG: String = "geeksasaeng-pref" // Log, SharedPreference
@@ -21,10 +25,16 @@ class ApplicationClass: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .readTimeout(30000, TimeUnit.MILLISECONDS)
+            .connectTimeout(30000, TimeUnit.MILLISECONDS)
+            .addNetworkInterceptor(AuthorizationTokenInterceptor()) // JWT 자동 헤더 전송
+            .build()
+
         //레트로핏
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            /*.client(client)*/
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
