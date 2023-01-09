@@ -66,10 +66,6 @@ class ChattingRoomActivity :
     // WebSocket
     private var chatClient = OkHttpClient()
     // RabbitMQ
-    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
-    private val factory = ConnectionFactory()
-    lateinit var conn: Connection
-    lateinit var channel: Channel
     // QUEUE_NAME = MemberID!
     val QUEUE_NAME = "110"
 
