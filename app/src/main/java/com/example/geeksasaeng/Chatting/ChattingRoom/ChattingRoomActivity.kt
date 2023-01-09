@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
 import com.example.geeksasaeng.ChatSetting.WebSocketManager

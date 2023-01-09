@@ -29,8 +29,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
         /*buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵*/
-        // buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
-        buildConfigField("String", "RABBITMQ_ID", properties['rabbitMQ_ID'])
+        buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
         buildConfigField "String", "RABBITMQ_PWD", properties['rabbitMQ_pwd']
         buildConfigField "String", "RABBITMQ_ADDRESS", properties['rabbitMQ_address']
     }

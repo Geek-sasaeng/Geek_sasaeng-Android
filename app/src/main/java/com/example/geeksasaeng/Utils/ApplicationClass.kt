@@ -12,6 +12,7 @@ class ApplicationClass: Application() {
         const val BASE_URL = "https://geeksasaeng.shop"
         //const val BASE_URL = "http://192.168.1.2:8080"
         const val TAG: String = "geeksasaeng-pref" // Log, SharedPreference
+        const val Authorization_TOKEN: String = "Authorization"         // JWT Token Key
 
         lateinit var retrofit: Retrofit
         lateinit var mSharedPreferences: SharedPreferences
