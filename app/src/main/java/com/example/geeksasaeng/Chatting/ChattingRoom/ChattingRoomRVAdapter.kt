@@ -34,7 +34,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
                 return SystemChattingViewHolder(binding)
             }
             imageChatting -> {
-                val binding = ItemChattingEmoticonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemChattingImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ImageChattingViewHolder(binding)
             }
             else -> {
@@ -125,10 +125,9 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
 
     // 이 부분 대신 사진 전송 부분으로 수정하기!!!
     // 이모티콘 부분 삭제됨!
-    // ItemChattingEmoticonBinding 부분 수정하기!
-    inner class ImageChattingViewHolder(val binding: ItemChattingEmoticonBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ImageChattingViewHolder(val binding: ItemChattingImageBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: ChatResponse) {
-            // 이모티콘으로 인사해보세요 관련 binding
+            // 사진 전송 관련 View 작업
         }
     }
 
