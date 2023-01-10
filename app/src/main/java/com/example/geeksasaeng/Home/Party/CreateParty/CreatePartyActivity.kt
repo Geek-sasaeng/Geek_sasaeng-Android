@@ -327,7 +327,7 @@ class CreatePartyActivity : BaseActivity<ActivityCreatePartyBinding>(ActivityCre
         chattingService.setCreateChattingView(this)
 
         val createChattingRequest = CreateChattingRoomRequest(createPartyVM.getAccountNumber().toString(),
-            createPartyVM.getAccount().toString(), createPartyVM.getCategory()!!,
+            createPartyVM.getAccount().toString(), "Delivery",
             deliveryItemId, createPartyVM.getMaxMatching()!!, binding.createPartyTitleEt.text.toString())
         Log.d("CREATE-CHATTING", "createChattingRequest = $createChattingRequest")
 

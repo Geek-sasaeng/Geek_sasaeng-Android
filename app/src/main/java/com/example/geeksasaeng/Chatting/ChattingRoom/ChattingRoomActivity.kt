@@ -1,11 +1,17 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
+
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -68,6 +75,11 @@ class ChattingRoomActivity :
     // QUEUE_NAME = MemberID!
     var QUEUE_NAME = getMemberId().toString()
     private val chattingList = arrayListOf<ChatResponse>()
+
+    // Album
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    // 이미지의 uri를 담을 ArrayList 객체
+    var albumImageList: ArrayList<Uri> = ArrayList()
 
     override fun initAfterBinding() {
         accountNumber = intent.getStringExtra("accountNumber").toString()
@@ -212,10 +224,50 @@ class ChattingRoomActivity :
             finish()
         }
 
-        binding.chattingRoomAlbumIv.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
+        binding.chattingRoomAlbumIv.setOnClickListener(View.OnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            
+            // startActivityForResult -> registerForActivityResult로 변경하기
+            // startActivityForResult(intent, 2222)
+            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    getImageFromAlbum(result.data)
+                }
+            }
+
+            resultLauncher.launch(intent)
+        })
+    }
+
+    private fun getImageFromAlbum(data: Intent?) {
+        // 어떤 이미지도 선택하지 않은 경우
+        if (data == null) {
+            Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+        }
+        // 이미지를 하나라도 선택한 경우
+        else {
+            var clipData = data.clipData
+
+            if (clipData == null) {
+                var imageUri = data.data
+                if (imageUri != null) {
+                    albumImageList.add(imageUri)
+                }
+            } else {
+                for (i in 0 until clipData.itemCount) {
+                    var imageUri = clipData.getItemAt(i).uri
+                    try {
+                        albumImageList.add(imageUri)
+                    } catch (e: Exception) {
+                        Log.e("ALBUM-IMAGE-ACCESS", "Files select error", e)
+                    }
+                }
+            }
+            Log.d("ALBUM-IMAGE-ACCESS", "Image = ${clipData!!.itemCount}")
+            Log.d("ALBUM-IMAGE-ACCESS", "ImageList = $albumImageList")
         }
     }
 
