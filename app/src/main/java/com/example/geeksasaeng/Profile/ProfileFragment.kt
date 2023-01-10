@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Profile
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -25,11 +26,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var profileMyOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
 
     override fun initAfterBinding() {
-        binding.profileNoticeBelowTv.setSingleLine(true)
-        binding.profileNoticeBelowTv.ellipsize = TextUtils.TruncateAt.MARQUEE
-        binding.profileNoticeBelowTv.isSelected = true //물흐르는 애니메이션
-
-        binding.profileNickNameTv.text = getNickname()
+        binding.profileCardNickNameTv.text = getNickname()
+        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         // clearBackStack()
         initClickListener()
@@ -38,23 +36,29 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     private fun initClickListener() {
-        binding.profileNotice.setOnClickListener { //공지사항
+        /*binding.profileNotice.setOnClickListener { //공지사항
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
             val noticeFragment = NoticeFragment()
             transaction.addToBackStack("profile_announcement").replace(R.id.main_frm, noticeFragment)
             transaction.commit()
-        }
+        }*/
 
         binding.profileInquiry.setOnClickListener { //문의하기
             val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
             startActivity(urlIntent)
         }
-        binding.profileMyActivity.setOnClickListener {
+        binding.profileMyActivity.setOnClickListener { //나의 활동 보기
             startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
         }
 
-        binding.profileMyInfo.setOnClickListener {
+        binding.profileMyInfo.setOnClickListener { //나의 정보 수정
             (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
+        }
+
+        binding.profileTos.setOnClickListener { //서비스 이용 약관 보기
+            val intent = Intent(activity, Tos2Activity::class.java)
+            intent.putExtra("status","profile")
+            startActivity(intent)
         }
     }
 
@@ -65,17 +69,17 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
-        profileMyOngoingActivityList = result!!
+     /*   profileMyOngoingActivityList = result!!
         for (i in 0 until result.size) {
             recentActivityBind(result[i], i)
-        }
+        }*/
     }
 
     override fun onProfileMyOngoingActivityFailure(message: String) {
         showToast(message)
     }
 
-    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
+/*    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
         when (index) {
             0 -> {
                 binding.profilePartyLayoutCv1.visibility = View.VISIBLE
@@ -91,10 +95,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
                 binding.profilePartyTitleTv3.text = activity.title
             }
         }
-    }
+    }*/
 
     private fun initRecentActivityClickListener() {
-        binding.profilePartyLayoutCv1.setOnClickListener {
+     /*   binding.profilePartyLayoutCv1.setOnClickListener {
             val activityId = profileMyOngoingActivityList[0].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -138,12 +142,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             // transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
-        }
-
-        binding.profileTos.setOnClickListener { //서비스 이용 약관 보기
-            val intent = Intent(activity, Tos2Activity::class.java)
-            intent.putExtra("status","profile")
-            startActivity(intent)
-        }
+        }*/
     }
 }
