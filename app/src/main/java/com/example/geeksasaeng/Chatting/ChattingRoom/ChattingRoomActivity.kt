@@ -6,12 +6,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
+import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
 import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
@@ -22,6 +21,10 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.rabbitmq.client.Connection
+import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -63,6 +66,8 @@ class ChattingRoomActivity :
     // WebSocket
     private var chatClient = OkHttpClient()
     // RabbitMQ
+    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+    private val factory = ConnectionFactory()
     // QUEUE_NAME = MemberID!
     val QUEUE_NAME = "110"
 
@@ -82,9 +87,31 @@ class ChattingRoomActivity :
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
         Thread {
-            var rabbitMQSetting = RabbitMQSetting()
-            rabbitMQSetting.initRabbitMQSetting()
+            initRabbitMQSetting()
         }.start()
+    }
+
+    private fun initRabbitMQSetting() {
+        factory.setUri(rabbitMQUri)
+        // RabbitMQ 연결
+        val conn: Connection = factory.newConnection()
+        // Send and Receive 가능하도록 해주는 부분!
+        val channel = conn.createChannel()
+        // durable = true로 설정!!
+        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
+
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            Log.d("CHATTING-SYSTEM-TEST", "in deliverCallback")
+            val message = String(delivery.body, Charsets.UTF_8)
+            Log.d("CHATTING-SYSTEM-TEST", "message = $message")
+            println(" [x] Received '$message'")
+        }
+
+        Log.d("CHATTING-SYSTEM-TEST", "deliverCallback = $deliverCallback")
+
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
     private fun initTopLayout(){
@@ -330,12 +357,10 @@ class ChattingRoomActivity :
 
     override fun sendChattingSuccess(result: String) {
         Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Success")
-        Toast.makeText(this, "채팅 전송 성공", Toast.LENGTH_LONG)
     }
 
     override fun sendChattingFailure(code: Int, message: String) {
         Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Failure")
-        Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
     }
 
     //주문 완료 성공/실패
