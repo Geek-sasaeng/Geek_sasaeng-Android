@@ -39,9 +39,17 @@ class ChattingRoomActivity :
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
-    private var roomName = String()
-//    private var chattingList: MutableList<Chatting> = ArrayList()
-    private var roomId = String()
+    // 채팅 리스트에서 받아오는 값들
+    private lateinit var roomName: String
+    private lateinit var roomId: String
+    private lateinit var accountNumber: String
+    private lateinit var bank: String
+    private lateinit var chiefId: String
+    private lateinit var enterTime: String
+    private lateinit var isChief: String
+    private lateinit var isOrderFinish: String
+    private lateinit var isRemittanceFinish: String
+
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -52,16 +60,6 @@ class ChattingRoomActivity :
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
     private var leader = false
-    private var leaderName = String()
-    private var chattingRoomName = String()
-    private var nickname = getNickname()
-    lateinit var bank: String
-    lateinit var accountNumber: String
-    var preChatNickname: String = ""
-
-    // Album
-    val PERMISSION_Album = 101 // 앨범 권한 처리
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     // Chatting
     // WebSocket
@@ -74,6 +72,14 @@ class ChattingRoomActivity :
     private val chattingList = arrayListOf<ChatResponse>()
 
     override fun initAfterBinding() {
+        accountNumber = intent.getStringExtra("accountNumber").toString()
+        bank = intent.getStringExtra("bank").toString()
+        chiefId = intent.getIntExtra("chiefId", 0).toString()
+        enterTime = intent.getStringExtra("enterTime").toString()
+        isChief = intent.getBooleanExtra("isChief", false).toString()
+        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false).toString()
+        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false).toString()
+
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
 
