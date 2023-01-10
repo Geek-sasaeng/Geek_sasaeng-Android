@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,12 +24,11 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import okhttp3.OkHttpClient
-import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
-
+import kotlin.properties.Delegates
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -44,11 +42,11 @@ class ChattingRoomActivity :
     private lateinit var roomId: String
     private lateinit var accountNumber: String
     private lateinit var bank: String
-    private lateinit var chiefId: String
+    private var chiefId by Delegates.notNull<Int>()
     private lateinit var enterTime: String
-    private lateinit var isChief: String
-    private lateinit var isOrderFinish: String
-    private lateinit var isRemittanceFinish: String
+    private var isChief: Boolean = false
+    private var isOrderFinish: Boolean = false
+    private var isRemittanceFinish: Boolean = false
 
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
@@ -74,11 +72,11 @@ class ChattingRoomActivity :
     override fun initAfterBinding() {
         accountNumber = intent.getStringExtra("accountNumber").toString()
         bank = intent.getStringExtra("bank").toString()
-        chiefId = intent.getIntExtra("chiefId", 0).toString()
+        chiefId = intent.getIntExtra("chiefId", 0)
         enterTime = intent.getStringExtra("enterTime").toString()
-        isChief = intent.getBooleanExtra("isChief", false).toString()
-        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false).toString()
-        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false).toString()
+        isChief = intent.getBooleanExtra("isChief", false)
+        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
+        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
 
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
@@ -165,7 +163,9 @@ class ChattingRoomActivity :
         else if (memberId.toString() == QUEUE_NAME) myChatting
         else yourChatting
 
-        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType)
+        var isLeader: Boolean = chiefId == memberId
+
+        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     override fun onResume() {
@@ -194,8 +194,7 @@ class ChattingRoomActivity :
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
-        binding.chattingRoomChattingRv.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
             override fun onUserProfileClicked() {
@@ -205,7 +204,6 @@ class ChattingRoomActivity :
                 bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
                 bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
             }
-
         })
     }
 
@@ -218,7 +216,6 @@ class ChattingRoomActivity :
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
-
         }
     }
 

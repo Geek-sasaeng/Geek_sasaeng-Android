@@ -24,7 +24,8 @@ data class ChatResponse (
     var chatType: String,
     var unreadMemberCnt: Int,
     var isImageMessage: Boolean,
-    var viewType: Int = 0
+    var viewType: Int = 0,
+    var isLeader: Boolean
 )
 
 const val myChatting = 1

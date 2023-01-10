@@ -73,9 +73,9 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
         fun bind(chatting: ChatResponse) {
             binding.itemMyChattingChattingTv.text = chatting.content
 
-//            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
-//                binding.itemMyChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
-//            }
+            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
+                binding.itemMyChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
+            }
 
             if (chatting.unreadMemberCnt?.toString() == "0")
                 binding.itemMyChattingNotReadTv.visibility = View.INVISIBLE
@@ -91,9 +91,9 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
         fun bind(chatting: ChatResponse) {
             binding.itemYourChattingChattingTv.text = chatting.content
 
-//            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
-//                binding.itemYourChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
-//            }
+            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
+                binding.itemYourChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
+            }
 
             if (chatting.unreadMemberCnt?.toString() == "0")
                 binding.itemYourChattingNotReadTv.visibility = View.INVISIBLE
