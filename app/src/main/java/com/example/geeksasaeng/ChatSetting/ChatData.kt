@@ -23,5 +23,11 @@ data class ChatResponse (
     var createdAt: String,
     var chatType: String,
     var unreadMemberCnt: Int,
-    var isImageMessage: Boolean
+    var isImageMessage: Boolean,
+    var viewType: Int = 0
 )
+
+const val myChatting = 1
+const val yourChatting = 2
+const val systemChatting = 3
+const val imageChatting = 4

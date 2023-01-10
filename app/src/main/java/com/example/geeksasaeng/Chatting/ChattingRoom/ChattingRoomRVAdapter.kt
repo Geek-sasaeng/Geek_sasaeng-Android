@@ -2,28 +2,21 @@ package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.ChatSetting.ChatResponse
-import com.example.geeksasaeng.Chatting.ChattingRoom.*
-import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
-import com.example.geeksasaeng.R
+import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.databinding.*
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import okhttp3.internal.notify
 import java.text.DecimalFormat
 
-class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mCilckListener : OnUserProfileClickListener
 
     override fun getItemViewType(position: Int): Int {
-        // return chattingList[position].viewType
-        // 그냥 오류 막기 위해 임시로 넣어놓은 부분
-        return chattingList[position].memberId
+         return chattingList[position].viewType
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -40,9 +33,9 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : Recyc
                 val binding = ItemChattingSystemChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return SystemChattingViewHolder(binding)
             }
-            emoticonChatting -> {
+            imageChatting -> {
                 val binding = ItemChattingEmoticonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return EmoticonChattingViewHolder(binding)
+                return ImageChattingViewHolder(binding)
             }
             else -> {
                 val binding = ItemChattingSystemChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -52,72 +45,67 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : Recyc
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        when (chattingList[position].viewType) {
-//            myChatting -> {
-//                (holder as MyChattingViewHolder).bind(chattingList[position])
-//                holder.setIsRecyclable(false)
-//            }
-//            yourChatting -> {
-//                (holder as YourChattingViewHolder).bind(chattingList[position])
-//                holder.setIsRecyclable(false)
-//            }
-//            systemChatting -> {
-//                (holder as SystemChattingViewHolder).bind(chattingList[position])
-//                holder.setIsRecyclable(false)
-//            }
-//            emoticonChatting -> {
-//                (holder as EmoticonChattingViewHolder).bind(chattingList[position])
-//                holder.setIsRecyclable(false)
-//            }
-//            else -> {
-//                (holder as SystemChattingViewHolder).bind(chattingList[position])
-//                holder.setIsRecyclable(false)
-//            }
-//        }
+        when (chattingList[position].viewType) {
+            myChatting -> {
+                (holder as MyChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+            yourChatting -> {
+                (holder as YourChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+            systemChatting -> {
+                (holder as SystemChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+            imageChatting -> {
+                (holder as ImageChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+            else -> {
+                (holder as SystemChattingViewHolder).bind(chattingList[position])
+                holder.setIsRecyclable(false)
+            }
+        }
     }
 
     inner class MyChattingViewHolder(val binding: ItemChattingMyChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: Chatting) {
-            binding.itemMyChattingChattingTv.text = chatting.message
+        fun bind(chatting: ChatResponse) {
+            binding.itemMyChattingChattingTv.text = chatting.content
 
-            Log.d("isLeader", chatting.isLeader.toString())
-            if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
-                binding.itemMyChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
-            }
+//            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
+//                binding.itemMyChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
+//            }
 
-            if (chatting.notRead?.toString() == "0")
+            if (chatting.unreadMemberCnt?.toString() == "0")
                 binding.itemMyChattingNotReadTv.visibility = View.INVISIBLE
-            else binding.itemMyChattingNotReadTv.text = chatting.notRead?.toString()
+            else binding.itemMyChattingNotReadTv.text = chatting.unreadMemberCnt?.toString()
 
-            binding.itemMyChattingNicknameTv.text = chatting.nickname
-            binding.itemMyChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
-
-            binding.itemMyChattingTimeTv.text = setTime(chatting.time)
-            // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
+            binding.itemMyChattingNicknameTv.text = chatting.nickName
+            binding.itemMyChattingTimeTv.text = setTime(chatting.createdAt)
+            binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
         }
     }
 
     inner class YourChattingViewHolder(val binding: ItemChattingYourChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: Chatting) {
-            binding.itemYourChattingChattingTv.text = chatting.message
+        fun bind(chatting: ChatResponse) {
+            binding.itemYourChattingChattingTv.text = chatting.content
 
-            Log.d("isLeader", chatting.isLeader.toString())
-            if(chatting.isLeader){ //리더라면 프로필 테두리 파랗게
-                binding.itemYourChattingProfileCv.setStrokeColor(Color.parseColor("#3266EB"))
-            }
+//            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
+//                binding.itemYourChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
+//            }
 
-            if (chatting.notRead?.toString() == "0")
+            if (chatting.unreadMemberCnt?.toString() == "0")
                 binding.itemYourChattingNotReadTv.visibility = View.INVISIBLE
-            else binding.itemYourChattingNotReadTv.text = chatting.notRead?.toString()
+            else binding.itemYourChattingNotReadTv.text = chatting.unreadMemberCnt?.toString()
 
-            binding.itemYourChattingNicknameTv.text = chatting.nickname
-            binding.itemYourChattingProfileIv.setImageResource(chatting.senderImgUrl!!)
+            binding.itemYourChattingNicknameTv.text = chatting.nickName
             binding.itemYourChattingProfileIv.setOnClickListener {
                 mCilckListener.onUserProfileClicked()
             }
 
-            binding.itemYourChattingTimeTv.text = setTime(chatting.time)
-            // binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting?.senderImgUrl))
+            binding.itemYourChattingTimeTv.text = setTime(chatting.createdAt)
+            binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
         }
     }
 
@@ -130,13 +118,16 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : Recyc
     }
 
     inner class SystemChattingViewHolder(val binding: ItemChattingSystemChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: Chatting) {
-            binding.itemChattingSystemChattingTv.text = chatting.message
+        fun bind(chatting: ChatResponse) {
+            binding.itemChattingSystemChattingTv.text = chatting.content
         }
     }
 
-    inner class EmoticonChattingViewHolder(val binding: ItemChattingEmoticonBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: Chatting) {
+    // 이 부분 대신 사진 전송 부분으로 수정하기!!!
+    // 이모티콘 부분 삭제됨!
+    // ItemChattingEmoticonBinding 부분 수정하기!
+    inner class ImageChattingViewHolder(val binding: ItemChattingEmoticonBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(chatting: ChatResponse) {
             // 이모티콘으로 인사해보세요 관련 binding
         }
     }
@@ -153,23 +144,16 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : Recyc
         else "오후 ${hour - 12}:$minute"
     }
 
-//    fun addItem(item: Chatting) {
-//        chattingList.add(item)
-//        this.notifyDataSetChanged()
-//    }
-//
-//    fun setUnreadCount(position: Int, unReadCount: Int) {
-//        val chatting = chattingList.get(position)
-//        chatting.notRead = unReadCount
-//        chattingList.set(position, chatting)
-//        this.notifyDataSetChanged()
-//    }
-//
-//    fun addAllItems(items: MutableList<Chatting>) {
-//        chattingList.clear()
-//        chattingList.addAll(items)
-//        this.notifyDataSetChanged()
-//    }
+    fun addItem(item: ChatResponse) {
+        chattingList.add(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun addAllItems(items: ArrayList<ChatResponse>) {
+        chattingList.clear()
+        chattingList.addAll(items)
+        this.notifyDataSetChanged()
+    }
 
     fun returnPosition(): Int {
         return chattingList.size

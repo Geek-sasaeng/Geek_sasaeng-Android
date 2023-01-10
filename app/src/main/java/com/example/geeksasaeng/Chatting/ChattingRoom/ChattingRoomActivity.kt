@@ -11,10 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.BuildConfig
-import com.example.geeksasaeng.ChatSetting.ChatRequest
-import com.example.geeksasaeng.ChatSetting.ChatResponse
-import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
-import com.example.geeksasaeng.ChatSetting.WebSocketManager
+import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
@@ -79,7 +76,7 @@ class ChattingRoomActivity :
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
-        Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
+
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
@@ -114,6 +111,8 @@ class ChattingRoomActivity :
             originalMessage = String(delivery.body, Charsets.UTF_8)
             chatResponseMessage = getJSONtoChatting(originalMessage)
             Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
+
+            chattingList.add(chatResponseMessage)
         }
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
@@ -154,7 +153,13 @@ class ChattingRoomActivity :
         var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
         var isImageMessage = chatting.getBoolean("isImageMessage")
 
-        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage)
+        // ViewType 설정 부분
+        var viewType: Int = if (isSystemMessage.toString() == "true") systemChatting
+        else if (isImageMessage.toString() == "true") imageChatting
+        else if (memberId.toString() == QUEUE_NAME) myChatting
+        else yourChatting
+
+        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType)
     }
 
     override fun onResume() {
