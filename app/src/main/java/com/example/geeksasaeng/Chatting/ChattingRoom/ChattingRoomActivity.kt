@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.BuildConfig
+import com.example.geeksasaeng.ChatSetting.ChatRequest
+import com.example.geeksasaeng.ChatSetting.ChatResponse
 import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
 import com.example.geeksasaeng.ChatSetting.WebSocketManager
 import com.example.geeksasaeng.Chatting.ChattingList.*
@@ -26,10 +28,12 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import okhttp3.OkHttpClient
+import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -39,7 +43,7 @@ class ChattingRoomActivity :
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
     private var roomName = String()
-    private var chattingList: MutableList<Chatting> = ArrayList()
+//    private var chattingList: MutableList<Chatting> = ArrayList()
     private var roomId = String()
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
@@ -69,7 +73,8 @@ class ChattingRoomActivity :
     private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
     private val factory = ConnectionFactory()
     // QUEUE_NAME = MemberID!
-    val QUEUE_NAME = "110"
+    var QUEUE_NAME = getMemberId().toString()
+    private val chattingList = arrayListOf<ChatResponse>()
 
     override fun initAfterBinding() {
         roomName = intent.getStringExtra("roomName").toString()
@@ -99,17 +104,17 @@ class ChattingRoomActivity :
         val channel = conn.createChannel()
         // durable = true로 설정!!
         // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
         Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
 
-        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-            Log.d("CHATTING-SYSTEM-TEST", "in deliverCallback")
-            val message = String(delivery.body, Charsets.UTF_8)
-            Log.d("CHATTING-SYSTEM-TEST", "message = $message")
-            println(" [x] Received '$message'")
-        }
+        lateinit var originalMessage: String
+        lateinit var chatResponseMessage: ChatResponse
 
-        Log.d("CHATTING-SYSTEM-TEST", "deliverCallback = $deliverCallback")
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            originalMessage = String(delivery.body, Charsets.UTF_8)
+            chatResponseMessage = getJSONtoChatting(originalMessage)
+            Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
+        }
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
@@ -123,6 +128,33 @@ class ChattingRoomActivity :
             binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
             binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
         }
+    }
+
+    private fun getJSONtoChatting(message: String): ChatResponse {
+        var chatting = JSONObject(message)
+        var chatId = chatting.getString("chatId")
+        var content = chatting.getString("content")
+        var chatRoomId = chatting.getString("chatRoomId")
+        var isSystemMessage = chatting.getBoolean("isSystemMessage")
+        var memberId = chatting.getInt("memberId")
+        var nickName = chatting.getString("nickName")
+        var profileImgUrl = chatting.getString("profileImgUrl")
+
+        // JsonArray를 ArrayList로 바꾸기 위한 과정!
+        var readMembers = ArrayList<Int>()
+        var readMembersTemp = chatting.getJSONArray("readMembers")
+        if (readMembersTemp != null) {
+            for (i in 0 until readMembersTemp.length()) {
+                readMembers.add(readMembersTemp.getInt(i))
+            }
+        }
+
+        var createdAt = chatting.getString("createdAt")
+        var chatType = chatting.getString("chatType")
+        var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
+        var isImageMessage = chatting.getBoolean("isImageMessage")
+
+        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage)
     }
 
     override fun onResume() {

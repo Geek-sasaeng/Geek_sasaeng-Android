@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.ChatSetting.ChatResponse
 import com.example.geeksasaeng.Chatting.ChattingRoom.*
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogCategory
 import com.example.geeksasaeng.R
@@ -15,12 +16,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import okhttp3.internal.notify
 import java.text.DecimalFormat
 
-class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(var chattingList: MutableList<ChatResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mCilckListener : OnUserProfileClickListener
 
     override fun getItemViewType(position: Int): Int {
-        return chattingList[position].viewType
+        // return chattingList[position].viewType
+        // 그냥 오류 막기 위해 임시로 넣어놓은 부분
+        return chattingList[position].memberId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -49,28 +52,28 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (chattingList[position].viewType) {
-            myChatting -> {
-                (holder as MyChattingViewHolder).bind(chattingList[position])
-                holder.setIsRecyclable(false)
-            }
-            yourChatting -> {
-                (holder as YourChattingViewHolder).bind(chattingList[position])
-                holder.setIsRecyclable(false)
-            }
-            systemChatting -> {
-                (holder as SystemChattingViewHolder).bind(chattingList[position])
-                holder.setIsRecyclable(false)
-            }
-            emoticonChatting -> {
-                (holder as EmoticonChattingViewHolder).bind(chattingList[position])
-                holder.setIsRecyclable(false)
-            }
-            else -> {
-                (holder as SystemChattingViewHolder).bind(chattingList[position])
-                holder.setIsRecyclable(false)
-            }
-        }
+//        when (chattingList[position].viewType) {
+//            myChatting -> {
+//                (holder as MyChattingViewHolder).bind(chattingList[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            yourChatting -> {
+//                (holder as YourChattingViewHolder).bind(chattingList[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            systemChatting -> {
+//                (holder as SystemChattingViewHolder).bind(chattingList[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            emoticonChatting -> {
+//                (holder as EmoticonChattingViewHolder).bind(chattingList[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            else -> {
+//                (holder as SystemChattingViewHolder).bind(chattingList[position])
+//                holder.setIsRecyclable(false)
+//            }
+//        }
     }
 
     inner class MyChattingViewHolder(val binding: ItemChattingMyChattingBinding): RecyclerView.ViewHolder(binding.root) {
@@ -150,23 +153,23 @@ class ChattingRoomRVAdapter(var chattingList: MutableList<Chatting>) : RecyclerV
         else "오후 ${hour - 12}:$minute"
     }
 
-    fun addItem(item: Chatting) {
-        chattingList.add(item)
-        this.notifyDataSetChanged()
-    }
-
-    fun setUnreadCount(position: Int, unReadCount: Int) {
-        val chatting = chattingList.get(position)
-        chatting.notRead = unReadCount
-        chattingList.set(position, chatting)
-        this.notifyDataSetChanged()
-    }
-
-    fun addAllItems(items: MutableList<Chatting>) {
-        chattingList.clear()
-        chattingList.addAll(items)
-        this.notifyDataSetChanged()
-    }
+//    fun addItem(item: Chatting) {
+//        chattingList.add(item)
+//        this.notifyDataSetChanged()
+//    }
+//
+//    fun setUnreadCount(position: Int, unReadCount: Int) {
+//        val chatting = chattingList.get(position)
+//        chatting.notRead = unReadCount
+//        chattingList.set(position, chatting)
+//        this.notifyDataSetChanged()
+//    }
+//
+//    fun addAllItems(items: MutableList<Chatting>) {
+//        chattingList.clear()
+//        chattingList.addAll(items)
+//        this.notifyDataSetChanged()
+//    }
 
     fun returnPosition(): Int {
         return chattingList.size
