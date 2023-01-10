@@ -19,12 +19,9 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.rabbitmq.client.*
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -103,12 +100,11 @@ class ChattingRoomActivity :
 
     override fun onResume() {
         super.onResume()
-        Log.d("WebSocketListener-Test", "onResume")
         webSocketStart()
     }
 
     private fun webSocketStart() {
-        Log.d("WebSocketListener-Test", "webSocketStart")
+        Log.d("CHATTING-SYSTEM-TEST", "webSocketStart")
         WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
     }
 
@@ -117,7 +113,7 @@ class ChattingRoomActivity :
         super.onDetachedFromWindow()
 //        realTimeChatListener.remove()
 //        changeParticipantsListener.remove()
-        Log.d("WebSocketListener-Test", "END")
+        Log.d("CHATTING-SYSTEM-TEST", "END")
         WebSocketManager.close()
     }
 
@@ -261,13 +257,13 @@ class ChattingRoomActivity :
 
             val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
 
-            Log.d("WebSocketListener-Test", chatData.toString())
+            Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
             WebSocketManager.sendMessage(chatData.toString())
 
             binding.chattingRoomChattingTextEt.setText("")
 
             if ( WebSocketManager .sendMessage( " Client send " )) {
-                Log.d("WebSocketListener-Test", " Send from the client \n " )
+                Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
             }
 
             var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
@@ -317,28 +313,28 @@ class ChattingRoomActivity :
 
     // WebSocketListenerInterface 관련
     override fun onConnectSuccess() {
-        Log.d("WebSocketListener-Test", "Connect Success")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Success")
     }
 
     override fun onConnectFailed() {
-        Log.d("WebSocketListener-Test", "Connect Failed")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Failed")
     }
 
     override fun onClose() {
-        Log.d("WebSocketListener-Test", "Connect Closed")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Closed")
     }
 
     override fun onMessage(text: String?) {
-        Log.d("WebSocketListener-Test", "Message = $text")
+        Log.d("CHATTING-SYSTEM-TEST", "Message = $text")
     }
 
     override fun sendChattingSuccess(result: String) {
-        Log.d("SEND-CHATTING", "Send Chatting Success")
+        Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Success")
         Toast.makeText(this, "채팅 전송 성공", Toast.LENGTH_LONG)
     }
 
     override fun sendChattingFailure(code: Int, message: String) {
-        Log.d("SEND-CHATTING", "Send Chatting Failure")
+        Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Failure")
         Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
     }
 
