@@ -238,7 +238,9 @@ class ChattingRoomActivity :
                 }
             }
 
-            resultLauncher.launch(intent)
+            // resultLauncher.launch(intent)
+            // var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }
+            // launcher.launch("image/*")
         })
     }
 
