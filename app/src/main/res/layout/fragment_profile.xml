@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
         android:paddingBottom="16dp"
+        android:background="#F1F5F9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
