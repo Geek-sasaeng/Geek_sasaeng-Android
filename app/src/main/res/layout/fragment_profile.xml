@@ -26,8 +26,7 @@
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:id="@+id/profile_alarm_iv"
@@ -39,8 +38,7 @@
             android:layout_marginEnd="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/profile_title_tv"
-            app:layout_constraintBottom_toBottomOf="@id/profile_title_tv"
-             />
+            app:layout_constraintBottom_toBottomOf="@id/profile_title_tv"/>
 
         <!--프로필 카드-->
         <androidx.cardview.widget.CardView
@@ -262,15 +260,16 @@
             app:layout_constraintEnd_toStartOf="@id/profile_my_activity2_cv"
             app:layout_constraintTop_toBottomOf="@id/profile_my_activity"
             app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_width="106dp"
-            android:layout_height="84dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
+            android:layout_marginStart="20dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/profile_my_activity1_type_tv"
@@ -278,6 +277,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity1_title_tv"
                     android:text="배달파티"
                     android:textColor="@color/main"
                     android:textSize="11sp"
@@ -291,6 +291,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity1_type_tv"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity1_date_tv"
                     android:text="한둘셋넷닷엿..."
                     android:textColor="@color/top"
                     android:textSize="13sp"
@@ -304,12 +305,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity1_title_tv"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="2022.02.02"
                     android:textColor="@color/gray_2"
                     android:textSize="11sp"
                     android:fontFamily="@font/spoqa_medium"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="21dp"/>
 
                 <ImageView
                     android:id="@+id/profile_my_activity1_iv"
@@ -329,14 +332,14 @@
             app:layout_constraintTop_toTopOf="@id/profile_my_activity1_cv"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:layout_marginStart="7dp"
-            android:layout_width="106dp"
-            android:layout_height="84dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:cardCornerRadius="5dp"
             app:cardElevation="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/profile_my_activity2_type_tv"
@@ -344,6 +347,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity2_title_tv"
                     android:text="심부름"
                     android:textColor="@color/main"
                     android:textSize="11sp"
@@ -357,6 +361,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity2_type_tv"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity2_date_tv"
                     android:text="한둘셋넷닷엿..."
                     android:textColor="@color/top"
                     android:textSize="13sp"
@@ -370,12 +375,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity2_title_tv"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="2022.02.02"
                     android:textColor="@color/gray_2"
                     android:textSize="11sp"
                     android:fontFamily="@font/spoqa_medium"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="21dp"/>
 
                 <ImageView
                     android:id="@+id/profile_my_activity2_iv"
@@ -395,14 +402,15 @@
             app:layout_constraintTop_toTopOf="@id/profile_my_activity1_cv"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:layout_marginStart="7dp"
-            android:layout_width="106dp"
-            android:layout_height="84dp"
+            android:layout_width="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="wrap_content"
             app:cardCornerRadius="5dp"
             app:cardElevation="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/profile_my_activity3_type_tv"
@@ -410,7 +418,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="심부름"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity3_title_tv"
+                    android:text="거래"
                     android:textColor="@color/main"
                     android:textSize="11sp"
                     android:fontFamily="@font/spoqa_regular"
@@ -423,6 +432,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity3_type_tv"
+                    app:layout_constraintBottom_toTopOf="@id/profile_my_activity3_date_tv"
                     android:text="한둘셋넷닷엿..."
                     android:textColor="@color/top"
                     android:textSize="13sp"
@@ -436,12 +446,14 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity3_title_tv"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="2022.02.02"
                     android:textColor="@color/gray_2"
                     android:textSize="11sp"
                     android:fontFamily="@font/spoqa_medium"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="21dp"/>
 
                 <ImageView
                     android:id="@+id/profile_my_activity3_iv"
@@ -460,7 +472,7 @@
             android:id="@+id/profile_thick_line"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="22dp"
             android:background="@color/line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
