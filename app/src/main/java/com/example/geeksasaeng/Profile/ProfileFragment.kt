@@ -43,10 +43,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }*/
 
-        binding.profileInquiry.setOnClickListener { //문의하기
-            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
-            startActivity(urlIntent)
-        }
         binding.profileMyActivity.setOnClickListener { //나의 활동 보기
             startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
         }
@@ -55,10 +51,20 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
         }
 
+        binding.profileInquiry.setOnClickListener { //문의하기
+            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
+            startActivity(urlIntent)
+        }
+
         binding.profileTos.setOnClickListener { //서비스 이용 약관 보기
             val intent = Intent(activity, Tos2Activity::class.java)
             intent.putExtra("status","profile")
             startActivity(intent)
+        }
+
+        binding.profileLogout.setOnClickListener { //로그아웃
+            val dialog = DialogProfileLogout()
+            dialog.show(parentFragmentManager, "ProfileLogoutDialog")
         }
     }
 
