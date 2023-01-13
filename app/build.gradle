@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
+    // RoomDB
+    id 'kotlin-kapt'
 }
 
 Properties properties = new Properties()
@@ -110,4 +113,9 @@ dependencies {
     // 라이브러리를 찾을 수 없다는 오류 해결하기 위해 추가한 부분!
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation("org.slf4j:slf4j-api:1.7.36")
+
+    // RoomDB
+    implementation 'androidx.room:room-runtime:2.3.0'
+    implementation 'androidx.room:room-ktx:2.3.0'
+    kapt 'androidx.room:room-compiler:2.3.0'
 }
