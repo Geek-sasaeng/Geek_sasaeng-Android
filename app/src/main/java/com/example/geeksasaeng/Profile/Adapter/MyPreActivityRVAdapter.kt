@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Profile.Retrofit.EndedDeliveryPartiesVoList
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyPreActivityResult
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemProfilePreActivityBinding
@@ -12,6 +13,15 @@ import com.google.android.material.internal.EdgeToEdgeUtils
 class MyPreActivityRVAdapter: RecyclerView.Adapter<MyPreActivityRVAdapter.ViewHolder>() {
 
     private var activityList = ArrayList<EndedDeliveryPartiesVoList>()
+    private lateinit var mItemClickListener: OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(data: EndedDeliveryPartiesVoList, pos: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mItemClickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPreActivityRVAdapter.ViewHolder {
         val binding: ItemProfilePreActivityBinding = ItemProfilePreActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,6 +30,9 @@ class MyPreActivityRVAdapter: RecyclerView.Adapter<MyPreActivityRVAdapter.ViewHo
 
     override fun onBindViewHolder(holder: MyPreActivityRVAdapter.ViewHolder, position: Int) {
         holder.bind(activityList[position])
+        holder.itemView.setOnClickListener {
+            mItemClickListener.onItemClick(activityList[position]!!, position)
+        }
     }
 
     override fun getItemCount(): Int = activityList.size

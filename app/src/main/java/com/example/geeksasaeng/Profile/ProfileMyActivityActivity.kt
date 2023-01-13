@@ -1,30 +1,22 @@
 package com.example.geeksasaeng.Profile
 
+
 import android.content.Intent
-import android.graphics.Color
+import android.os.Bundle
 import android.os.Handler
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
-import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import java.util.*
-import kotlin.Comparator
+
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyPreActivityView {
 
@@ -120,6 +112,19 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myPreActivityRVAdapter = MyPreActivityRVAdapter()
         binding.profileMyActivityRv.adapter = myPreActivityRVAdapter
         binding.profileMyActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        myPreActivityRVAdapter.setOnItemClickListener(object :
+            MyPreActivityRVAdapter.OnItemClickListener { // 리사이클러 뷰 : 내가 진행한 활동 아이템 클릭하면, 해당 글로 화면 전환
+            override fun onItemClick(data: EndedDeliveryPartiesVoList, pos: Int) {
+
+                var activityItemId = data.id
+
+                //액티비티에서 => 나의 해당 글의 lookParty로 이동하는 법 ☆
+                val intent = Intent(this@ProfileMyActivityActivity, MainActivity::class.java)
+                intent.putExtra("status", "myActivity")
+                intent.putExtra("deliveryItemId", activityItemId.toString())
+                startActivity(intent)
+            }
+        })
     }
 
     private fun initActivityListener() {

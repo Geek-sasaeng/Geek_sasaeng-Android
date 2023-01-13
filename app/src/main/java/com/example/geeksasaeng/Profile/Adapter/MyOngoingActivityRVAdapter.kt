@@ -21,6 +21,8 @@ import com.example.geeksasaeng.databinding.ItemProfileMyActivityActivityBinding
 import com.example.geeksasaeng.databinding.ItemProfileMyActivityTimeBinding
 import okhttp3.internal.notify
 
+//이거는 지금 나의 활동 보기에서 현재 진행중 활동이 빠지면서 현재는 안쓰는 중
+
 class MyOngoingActivityRVAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var activityList = ArrayList<ProfileMyOngoingActivityResult>()
