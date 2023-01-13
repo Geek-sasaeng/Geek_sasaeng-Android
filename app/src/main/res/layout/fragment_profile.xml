@@ -290,6 +290,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_my_activity1_cv"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/profile_my_activity2_cv"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_activity"
@@ -361,6 +362,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_my_activity2_cv"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toEndOf="@id/profile_my_activity1_cv"
                     app:layout_constraintEnd_toStartOf="@id/profile_my_activity3_cv"
                     app:layout_constraintTop_toTopOf="@id/profile_my_activity1_cv"
@@ -369,7 +371,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="5dp"
-                    app:cardElevation="4dp">
+                    app:cardElevation="4dp"
+                    >
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -431,6 +434,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/profile_my_activity3_cv"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toEndOf="@id/profile_my_activity2_cv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/profile_my_activity1_cv"

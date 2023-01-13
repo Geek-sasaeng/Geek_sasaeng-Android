@@ -112,36 +112,45 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
-     /*   profileMyOngoingActivityList = result!!
+        profileMyOngoingActivityList = result!!
         for (i in 0 until result.size) {
             recentActivityBind(result[i], i)
-        }*/
+        }
     }
 
     override fun onProfileMyOngoingActivityFailure(message: String) {
         showToast(message)
     }
 
-/*    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
+    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
         when (index) {
             0 -> {
-                binding.profilePartyLayoutCv1.visibility = View.VISIBLE
-                binding.profilePartyLayoutSectionIv1.setImageResource(R.drawable.ic_delivery_party_ic)
-                binding.profilePartyTitleTv1.text = activity.title
+                binding.profileMyActivity1TypeTv.text = "배달파티"
+                binding.profileMyActivity1Cv.visibility = View.VISIBLE
+                binding.profileMyActivity1Iv.setImageResource(R.drawable.ic_delivery_party_ic)
+                binding.profileMyActivity1TitleTv.text = activity.title
+                val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+                binding.profileMyActivity1DateTv.text = fomattingDate
             } 1 -> {
-                binding.profilePartyLayoutCv2.visibility = View.VISIBLE
-                binding.profilePartyLayoutSectionIv2.setImageResource(R.drawable.ic_delivery_party_ic)
-                binding.profilePartyTitleTv2.text = activity.title
+                binding.profileMyActivity2TypeTv.text = "배달파티"
+                binding.profileMyActivity2Cv.visibility = View.VISIBLE
+                binding.profileMyActivity2Iv.setImageResource(R.drawable.ic_delivery_party_ic)
+                binding.profileMyActivity2TitleTv.text = activity.title
+                val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+                binding.profileMyActivity2DateTv.text = fomattingDate
             } 2 -> {
-                binding.profilePartyLayoutCv3.visibility = View.VISIBLE
-                binding.profilePartyLayoutSectionIv3.setImageResource(R.drawable.ic_delivery_party_ic)
-                binding.profilePartyTitleTv3.text = activity.title
+                binding.profileMyActivity3TypeTv.text = "배달파티"
+                binding.profileMyActivity3Cv.visibility = View.VISIBLE
+                binding.profileMyActivity3Iv.setImageResource(R.drawable.ic_delivery_party_ic)
+                binding.profileMyActivity3TitleTv.text = activity.title
+            val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+                binding.profileMyActivity3DateTv.text = fomattingDate
             }
         }
-    }*/
+    }
 
     private fun initRecentActivityClickListener() {
-     /*   binding.profilePartyLayoutCv1.setOnClickListener {
+        binding.profileMyActivity1Cv.setOnClickListener {
             val activityId = profileMyOngoingActivityList[0].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -156,7 +165,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment).commit()
         }
 
-        binding.profilePartyLayoutCv2.setOnClickListener {
+        binding.profileMyActivity2Cv.setOnClickListener {
             val activityId = profileMyOngoingActivityList[1].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -171,7 +180,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }
 
-        binding.profilePartyLayoutCv3.setOnClickListener {
+        binding.profileMyActivity3Cv.setOnClickListener {
             val activityId = profileMyOngoingActivityList[2].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -185,7 +194,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             // transaction.addToBackStack("lookParty").replace(R.id.main_frm, lookPartyFragment)
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
-        }*/
+        }
     }
 
     override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
