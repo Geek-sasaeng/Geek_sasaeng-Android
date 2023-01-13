@@ -4,34 +4,45 @@ import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.example.geeksasaeng.Chatting.ChattingRoom.DialogMatchingEnd
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
-import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityResult
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityView
+import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate), ProfileMyOngoingActivityView {
+class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate)
+    ,ProfileMyOngoingActivityView, ProfileMyInfoView {
 
-    lateinit var profileMyOngoingActivityService: ProfileDataService
+    lateinit var profiledataService: ProfileDataService
     private var profileMyOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
+
+    // 나의정보 상세보기 다이얼로그에 넘겨줄 정보들
+    private var nickName = String()
+    private var universityName = String()
+    private var dormitoryName = String()
+    private var loginId = String()
+    private var emailAddress = String()
+    private var formattingPhoneNumber = String()
 
     override fun initAfterBinding() {
         binding.profileCardNickNameTv.text = getNickname()
         binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         // clearBackStack()
+        initRetrofitService()
         initClickListener()
-        initRecentActivityService()
         initRecentActivityClickListener()
     }
 
@@ -42,6 +53,19 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.addToBackStack("profile_announcement").replace(R.id.main_frm, noticeFragment)
             transaction.commit()
         }*/
+
+        binding.profileCardLayoutWhile.setOnClickListener {
+            val profileDetailDialog = DialogProfileDetail()
+            val bundle = Bundle()
+            bundle.putString("nickName", nickName)
+            bundle.putString("universityName", universityName)
+            bundle.putString("dormitoryName", dormitoryName)
+            bundle.putString("loginId", loginId)
+            bundle.putString("emailAddress", emailAddress)
+            bundle.putString("phoneNumber", formattingPhoneNumber)
+            profileDetailDialog.arguments = bundle
+            profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
+        }
 
         binding.profileMyActivity.setOnClickListener { //나의 활동 보기
             startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
@@ -68,10 +92,12 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
     }
 
-    private fun initRecentActivityService() {
-        profileMyOngoingActivityService = ProfileDataService() // 서비스 객체 생성
-        profileMyOngoingActivityService.setProfileMyOngoingActivityView(this)
-        profileMyOngoingActivityService.profileMyOngoingActivitySender()
+    private fun initRetrofitService() {
+        profiledataService = ProfileDataService() // 서비스 객체 생성
+        profiledataService.setProfileMyOngoingActivityView(this)
+        profiledataService.profileMyOngoingActivitySender()
+        profiledataService.setMyInfoView(this)
+        profiledataService.profileMyInfoSender()
     }
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
@@ -149,5 +175,21 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
         }*/
+    }
+
+    override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
+        nickName = result.nickname
+        universityName = result.universityName
+        dormitoryName = result.dormitoryName
+        loginId = result.loginId
+        emailAddress = result.emailAddress
+        var phoneNumber = result.phoneNumber
+        formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
+        binding.profileCardUnivTv.text = result.universityName
+        binding.profileCardDormitoryNameTv.text = result.dormitoryName
+    }
+
+    override fun onProfileMyInfoFailure(message: String) {
+        Log.d("profile","나의 정보 조회 실패")
     }
 }
