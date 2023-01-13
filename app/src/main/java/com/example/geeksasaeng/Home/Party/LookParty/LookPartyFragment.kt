@@ -343,6 +343,11 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     // 채팅방으로 이동
     override fun showPartyChattingRoom() {
         // TODO: 채팅방 이동
+        // 채팅방 입장할때
+        val intent = Intent(activity, ChattingRoomActivity::class.java)
+        intent.putExtra("roomName", partyData.partyChatRoomTitle)
+        intent.putExtra("roomId", partyData.partyChatRoomId)
+        startActivity(intent)
     }
 
     fun joinPartyChattingRoom(){

@@ -1,36 +1,41 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.BuildConfig
-import com.example.geeksasaeng.ChatSetting.RabbitMQSetting
-import com.example.geeksasaeng.ChatSetting.WebSocketListenerInterface
-import com.example.geeksasaeng.ChatSetting.WebSocketManager
+import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.rabbitmq.client.*
+import com.rabbitmq.client.Connection
+import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
+import kotlin.properties.Delegates
+
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
@@ -39,9 +44,17 @@ class ChattingRoomActivity :
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
-    private var roomName = String()
-    private var chattingList: MutableList<Chatting> = ArrayList()
-    private var roomId = String()
+    // 채팅 리스트에서 받아오는 값들
+    private lateinit var roomName: String
+    private lateinit var roomId: String
+    private lateinit var accountNumber: String
+    private lateinit var bank: String
+    private var chiefId by Delegates.notNull<Int>()
+    private lateinit var enterTime: String
+    private var isChief: Boolean = false
+    private var isOrderFinish: Boolean = false
+    private var isRemittanceFinish: Boolean = false
+
     private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -52,16 +65,6 @@ class ChattingRoomActivity :
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
     private var leader = false
-    private var leaderName = String()
-    private var chattingRoomName = String()
-    private var nickname = getNickname()
-    lateinit var bank: String
-    lateinit var accountNumber: String
-    var preChatNickname: String = ""
-
-    // Album
-    val PERMISSION_Album = 101 // 앨범 권한 처리
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     // Chatting
     // WebSocket
@@ -69,16 +72,27 @@ class ChattingRoomActivity :
     // RabbitMQ
     private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
     private val factory = ConnectionFactory()
-    lateinit var conn: Connection
-    lateinit var channel: Channel
     // QUEUE_NAME = MemberID!
-    val QUEUE_NAME = "110"
+    var QUEUE_NAME = getMemberId().toString()
+    private val chattingList = arrayListOf<ChatResponse>()
+
+    // Album
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    // 이미지의 uri를 담을 ArrayList 객체
+    var albumImageList: ArrayList<Uri> = ArrayList()
 
     override fun initAfterBinding() {
+        accountNumber = intent.getStringExtra("accountNumber").toString()
+        bank = intent.getStringExtra("bank").toString()
+        chiefId = intent.getIntExtra("chiefId", 0)
+        enterTime = intent.getStringExtra("enterTime").toString()
+        isChief = intent.getBooleanExtra("isChief", false)
+        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
+        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
+
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
-        Log.d("ChatTest", "roomName = $roomName / roomId = $roomId")
-        //TODO: room name이랑 roomId는 인텐트로 받아오는데, 이 채팅방에서 주문완료 여부나, 리더여부나 , 송금완료 여부 이런건 어디서 받아와?
+
         binding.chattingRoomTitleTv.text = roomName
 
         initClickListener()
@@ -86,19 +100,38 @@ class ChattingRoomActivity :
         initSendChatListener()
         initAdapter()
         initChattingService()
-        optionClickListener()
-        initTopLayout() // 상단 송금완료/주문완료 부분 레이아웃 조정하는 부분
+//        optionClickListener()
 
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
         Thread {
             initRabbitMQSetting()
         }.start()
+    }
 
-        // initRabbitMQSetting()
+    private fun initRabbitMQSetting() {
+        factory.setUri(rabbitMQUri)
+        // RabbitMQ 연결
+        val conn: Connection = factory.newConnection()
+        // Send and Receive 가능하도록 해주는 부분!
+        val channel = conn.createChannel()
+        // durable = true로 설정!!
+        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
+        Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
 
-//        var rabbitMQSetting = RabbitMQSetting()
-//        rabbitMQSetting.main()
+        lateinit var originalMessage: String
+        lateinit var chatResponseMessage: ChatResponse
+
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            originalMessage = String(delivery.body, Charsets.UTF_8)
+            chatResponseMessage = getJSONtoChatting(originalMessage)
+            Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
+
+            chattingList.add(chatResponseMessage)
+        }
+
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
     private fun initTopLayout(){
@@ -112,35 +145,48 @@ class ChattingRoomActivity :
         }
     }
 
-    fun initRabbitMQSetting() {
-        factory.setUri(rabbitMQUri)
-        // RabbitMQ 연결
-        val conn: Connection = factory.newConnection()
-        // Send and Receive 가능하도록 해주는 부분!
-        val channel = conn.createChannel()
-        // durable = true로 설정!!
-        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
-        Log.d("RabbitMQ-Test", " [*] Waiting for messages. To exit press CTRL+C")
+    private fun getJSONtoChatting(message: String): ChatResponse {
+        var chatting = JSONObject(message)
+        var chatId = chatting.getString("chatId")
+        var content = chatting.getString("content")
+        var chatRoomId = chatting.getString("chatRoomId")
+        var isSystemMessage = chatting.getBoolean("isSystemMessage")
+        var memberId = chatting.getInt("memberId")
+        var nickName = chatting.getString("nickName")
+        var profileImgUrl = chatting.getString("profileImgUrl")
 
-        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-            val message = String(delivery.body, Charsets.UTF_8)
-            Log.d("RabbitMQ-Test", "")
-            println(" [x] Received '$message'")
+        // JsonArray를 ArrayList로 바꾸기 위한 과정!
+        var readMembers = ArrayList<Int>()
+        var readMembersTemp = chatting.getJSONArray("readMembers")
+        if (readMembersTemp != null) {
+            for (i in 0 until readMembersTemp.length()) {
+                readMembers.add(readMembersTemp.getInt(i))
+            }
         }
-        channel.basicConsume(
-            QUEUE_NAME, true, deliverCallback
-        ) { consumerTag: String? -> }
+
+        var createdAt = chatting.getString("createdAt")
+        var chatType = chatting.getString("chatType")
+        var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
+        var isImageMessage = chatting.getBoolean("isImageMessage")
+
+        // ViewType 설정 부분
+        var viewType: Int = if (isSystemMessage.toString() == "true") systemChatting
+        else if (isImageMessage.toString() == "true") imageChatting
+        else if (memberId.toString() == QUEUE_NAME) myChatting
+        else yourChatting
+
+        var isLeader: Boolean = chiefId == memberId
+
+        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("WebSocketListener-Test", "onResume")
         webSocketStart()
     }
 
     private fun webSocketStart() {
-        Log.d("WebSocketListener-Test", "webSocketStart")
+        Log.d("CHATTING-SYSTEM-TEST", "webSocketStart")
         WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
     }
 
@@ -149,7 +195,7 @@ class ChattingRoomActivity :
         super.onDetachedFromWindow()
 //        realTimeChatListener.remove()
 //        changeParticipantsListener.remove()
-        Log.d("WebSocketListener-Test", "END")
+        Log.d("CHATTING-SYSTEM-TEST", "END")
         WebSocketManager.close()
     }
 
@@ -160,8 +206,7 @@ class ChattingRoomActivity :
     private fun initAdapter() {
         chattingRoomRVAdapter = ChattingRoomRVAdapter(chattingList)
         binding.chattingRoomChattingRv.adapter = chattingRoomRVAdapter
-        binding.chattingRoomChattingRv.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
             override fun onUserProfileClicked() {
@@ -171,7 +216,6 @@ class ChattingRoomActivity :
                 bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
                 bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
             }
-
         })
     }
 
@@ -180,11 +224,52 @@ class ChattingRoomActivity :
             finish()
         }
 
-        binding.chattingRoomAlbumIv.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
+        binding.chattingRoomAlbumIv.setOnClickListener(View.OnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            
+            // startActivityForResult -> registerForActivityResult로 변경하기
+            // startActivityForResult(intent, 2222)
+            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    getImageFromAlbum(result.data)
+                }
+            }
 
+            // resultLauncher.launch(intent)
+            // var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }
+            // launcher.launch("image/*")
+        })
+    }
+
+    private fun getImageFromAlbum(data: Intent?) {
+        // 어떤 이미지도 선택하지 않은 경우
+        if (data == null) {
+            Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+        }
+        // 이미지를 하나라도 선택한 경우
+        else {
+            var clipData = data.clipData
+
+            if (clipData == null) {
+                var imageUri = data.data
+                if (imageUri != null) {
+                    albumImageList.add(imageUri)
+                }
+            } else {
+                for (i in 0 until clipData.itemCount) {
+                    var imageUri = clipData.getItemAt(i).uri
+                    try {
+                        albumImageList.add(imageUri)
+                    } catch (e: Exception) {
+                        Log.e("ALBUM-IMAGE-ACCESS", "Files select error", e)
+                    }
+                }
+            }
+            Log.d("ALBUM-IMAGE-ACCESS", "Image = ${clipData!!.itemCount}")
+            Log.d("ALBUM-IMAGE-ACCESS", "ImageList = $albumImageList")
         }
     }
 
@@ -293,13 +378,13 @@ class ChattingRoomActivity :
 
             val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
 
-            Log.d("WebSocketListener-Test", chatData.toString())
+            Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
             WebSocketManager.sendMessage(chatData.toString())
 
             binding.chattingRoomChattingTextEt.setText("")
 
             if ( WebSocketManager .sendMessage( " Client send " )) {
-                Log.d("WebSocketListener-Test", " Send from the client \n " )
+                Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
             }
 
             var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
@@ -349,29 +434,27 @@ class ChattingRoomActivity :
 
     // WebSocketListenerInterface 관련
     override fun onConnectSuccess() {
-        Log.d("WebSocketListener-Test", "Connect Success")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Success")
     }
 
     override fun onConnectFailed() {
-        Log.d("WebSocketListener-Test", "Connect Failed")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Failed")
     }
 
     override fun onClose() {
-        Log.d("WebSocketListener-Test", "Connect Closed")
+        Log.d("CHATTING-SYSTEM-TEST", "Connect Closed")
     }
 
     override fun onMessage(text: String?) {
-        Log.d("WebSocketListener-Test", "Message = $text")
+        Log.d("CHATTING-SYSTEM-TEST", "Message = $text")
     }
 
     override fun sendChattingSuccess(result: String) {
-        Log.d("SEND-CHATTING", "Send Chatting Success")
-        Toast.makeText(this, "채팅 전송 성공", Toast.LENGTH_LONG)
+        Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Success")
     }
 
     override fun sendChattingFailure(code: Int, message: String) {
-        Log.d("SEND-CHATTING", "Send Chatting Failure")
-        Toast.makeText(this, "채팅 전송 실패", Toast.LENGTH_LONG)
+        Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Failure")
     }
 
     //주문 완료 성공/실패

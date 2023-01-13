@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Config.Secret
+package com.example.geeksasaeng.Utils
 
 import android.util.Log
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.Authorization_TOKEN

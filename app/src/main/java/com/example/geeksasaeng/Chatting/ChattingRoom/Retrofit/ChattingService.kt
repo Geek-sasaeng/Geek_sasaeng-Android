@@ -9,7 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ChattingService {
-    private lateinit var createChattingView: CreateChattingView
+    private lateinit var createChattingRoomView: CreateChattingRoomView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
     private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
@@ -22,8 +22,8 @@ class ChattingService {
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
-    fun setCreateChattingView(createChattingView: CreateChattingView) {
-        this.createChattingView = createChattingView
+    fun setCreateChattingView(createChattingRoomView: CreateChattingRoomView) {
+        this.createChattingRoomView = createChattingRoomView
     }
     fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
         this.chattingMemberAddView = chattingMemberAddView
@@ -54,18 +54,20 @@ class ChattingService {
     }
 
     // 채팅방 생성
-    fun createChatting(createChattingRequest: CreateChattingRequest) {
-        chattingService?.createChatting("Bearer " + getJwt(), createChattingRequest)?.enqueue(object : Callback<CreateChattingResponse> {
-            override fun onResponse(call: Call<CreateChattingResponse>, response: Response<CreateChattingResponse>) {
+    fun createChattingRoom(createChattingRequest: CreateChattingRoomRequest) {
+        chattingService?.createChattingRoom(createChattingRequest)?.enqueue(object : Callback<CreateChattingRoomResponse> {
+            override fun onResponse(call: Call<CreateChattingRoomResponse>, response: Response<CreateChattingRoomResponse>) {
+                Log.d("CREATE-CHATTING", "response = $response")
                 if (response.isSuccessful && response.code() == 200) {
-                    val createChattingResponse = response.body()!!
-                    when (createChattingResponse.code) {
-                        1000 -> createChattingView.createChattingSuccess(createChattingResponse.result)
-                        else -> createChattingView.createChattingFailure(createChattingResponse.code, createChattingResponse.message)
+                    val createChattingRoomResponse = response.body()!!
+                    Log.d("CREATE-CHATTING", "response body = $createChattingRoomResponse")
+                    when (createChattingRoomResponse.code) {
+                        1000 -> createChattingRoomView.createChattingRoomSuccess(createChattingRoomResponse.result)
+                        else -> createChattingRoomView.createChattingRoomFailure(createChattingRoomResponse.code, createChattingRoomResponse.message)
                     }
                 }
             }
-            override fun onFailure(call: Call<CreateChattingResponse>, t: Throwable) {
+            override fun onFailure(call: Call<CreateChattingRoomResponse>, t: Throwable) {
                 Log.d("CHATTING-CREATE", "실패")
             }
         })
@@ -73,7 +75,7 @@ class ChattingService {
 
     // 채팅방 멤버 추가
     fun addChattingMember(chattingMemberAddRequest: ChattingMemberAddRequest) {
-        chattingService?.chattingMemberAdd("Bearer " + getJwt(), chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
+        chattingService?.chattingMemberAdd(chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
             override fun onResponse(call: Call<ChattingMemberAddResponse>, response: Response<ChattingMemberAddResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
@@ -89,8 +91,9 @@ class ChattingService {
         })
     }
 
+    // 채팅 전송
     fun sendChatting(sendChattingRequest: SendChattingRequest) {
-        chattingService?.sendChatting("Bearer " + getJwt(), sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
+        chattingService?.sendChatting(sendChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
             override fun onResponse(call: Call<SendChattingResponse>, response: Response<SendChattingResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     val sendChattingResponse = response.body()!!
@@ -108,7 +111,7 @@ class ChattingService {
 
     // 방장이 배달 파티 채팅 멤버를 강제퇴장
     fun chattingMemberForcedExit(chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest) {
-        chattingService?.chattingMemberForcedExit("Bearer " + getJwt(), chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
+        chattingService?.chattingMemberForcedExit(chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
 
             override fun onResponse(call: Call<ChattingMemberForcedExitResponse>, response: Response<ChattingMemberForcedExitResponse>) {
                 if (response.isSuccessful && response.code() == 200) {

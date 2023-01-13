@@ -1,25 +1,14 @@
 package com.example.geeksasaeng.Profile.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingData
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingListRVAdapter
-import com.example.geeksasaeng.Chatting.ChattingList.ChattingRoomRVAdapter
-import com.example.geeksasaeng.Chatting.ChattingRoom.Chatting
-import com.example.geeksasaeng.Chatting.ChattingRoom.myChatting
-import com.example.geeksasaeng.Home.Delivery.Adapter.DeliveryRVAdapter
-import com.example.geeksasaeng.Home.Delivery.DeliveryPartiesVoList
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMyOngoingActivityResult
 import com.example.geeksasaeng.Profile.Retrofit.myOngoingActivity
 import com.example.geeksasaeng.Profile.Retrofit.myOngoingActivityDate
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.databinding.ItemChattingMyChattingBinding
-import com.example.geeksasaeng.databinding.ItemChattingSystemChattingBinding
 import com.example.geeksasaeng.databinding.ItemProfileMyActivityActivityBinding
 import com.example.geeksasaeng.databinding.ItemProfileMyActivityTimeBinding
-import okhttp3.internal.notify
 
 class MyOngoingActivityRVAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
