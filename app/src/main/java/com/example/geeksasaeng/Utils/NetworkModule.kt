@@ -1,11 +1,8 @@
 package com.example.geeksasaeng.Utils
 
-import android.util.Log
-import com.example.geeksasaeng.Config.Secret.AuthorizationTokenInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class NetworkModule {
     companion object {

@@ -18,3 +18,20 @@ data class ChattingList(
     @SerializedName("roomId") val roomId: String,
     @SerializedName("roomTitle") val roomTitle: String
 )
+
+data class ChattingDetailResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingDetailResult
+)
+
+data class ChattingDetailResult(
+    @SerializedName("accountNumber") val accountNumber: String,
+    @SerializedName("bank") val bank: String,
+    @SerializedName("chiefId") val chiefId: Int,
+    @SerializedName("enterTime") val enterTime: String,
+    @SerializedName("isChief") val isChief: Boolean,
+    @SerializedName("isOrderFinish") val isOrderFinish: Boolean,
+    @SerializedName("isRemittanceFinish") val isRemittanceFinish: Boolean
+)

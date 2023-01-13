@@ -3,7 +3,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class CreateChattingRequest(
+data class CreateChattingRoomRequest(
     @SerializedName("accountNumber") val accountNumber: String,
     @SerializedName("bank") val bank: String,
     @SerializedName("category") val category: String,
@@ -12,7 +12,7 @@ data class CreateChattingRequest(
     @SerializedName("title") val title: String
 )
 
-data class CreateChattingResponse(
+data class CreateChattingRoomResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,

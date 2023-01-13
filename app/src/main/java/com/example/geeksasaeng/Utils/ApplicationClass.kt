@@ -3,7 +3,6 @@ package com.example.geeksasaeng.Utils
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.geeksasaeng.Config.Secret.AuthorizationTokenInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

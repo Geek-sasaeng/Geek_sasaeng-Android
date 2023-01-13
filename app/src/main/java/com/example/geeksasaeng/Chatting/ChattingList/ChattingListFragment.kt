@@ -8,25 +8,27 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
-import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListResult
-import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
-import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListView
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.*
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
+import com.google.gson.annotations.SerializedName
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
-    ChattingListView {
+    ChattingListView, ChattingDetailView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
     var cursor: Int = 0
     private var chattingList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
+
+    // 채팅방 정보를 넘기기 위해 필요한 부분
+    private lateinit var roomTitle: String
+    private lateinit var roomId: String
 
     override fun onResume() {
         super.onResume()
@@ -53,6 +55,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         getChattingList()
     }
 
+    private fun getChattingDetail(roomId: String) {
+        chattingListService.setChattingDetailView(this)
+        chattingListService.getChattingDetail(roomId)
+    }
+
     private fun initAdapter() {
         if (checkBinding) {
             chattingListRVAdapter = ChattingListRVAdapter(chattingList)
@@ -65,11 +72,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                 ChattingListRVAdapter.OnItemClickListener {
                 override fun onItemClick(chatting: ChattingList, position: Int) {
                     // 채팅방 입장할때
-                    val intent = Intent(activity, ChattingRoomActivity::class.java)
                     var chattingRoomData = chattingListRVAdapter.getRoomData(position)
-                    intent.putExtra("roomName", chattingRoomData.roomTitle)
-                    intent.putExtra("roomId", chattingRoomData.roomId)
-                    startActivity(intent)
+                    roomTitle = chattingRoomData.roomTitle
+                    roomId = chattingRoomData.roomId
+
+                    getChattingDetail(roomId)
                 }
             })
         }
@@ -138,13 +145,35 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         result.parties?.let { chattingList.addAll(it) }
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
+        Log.d("GET-CHATTING-LIST", "result = $result")
+
         // 로딩화면 제거
         loadingStop()
-        Log.d("chattingList", "getChattingListSuccess")
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT)
-        Log.d("chattingList", "getChattingListFailure")
+        Log.d("GET-CHATTING-LIST", "code = $code, msg = $msg")
+    }
+
+    override fun getChattingDetailSuccess(result: ChattingDetailResult) {
+        val intent = Intent(activity, ChattingRoomActivity::class.java)
+
+        intent.putExtra("accountNumber", result.accountNumber)
+        intent.putExtra("bank", result.bank)
+        intent.putExtra("chiefId", result.chiefId)
+        intent.putExtra("enterTime", result.enterTime)
+        intent.putExtra("isChief", result.isChief)
+        intent.putExtra("isOrderFinish", result.isOrderFinish)
+        intent.putExtra("isRemittanceFinish", result.isRemittanceFinish)
+
+        intent.putExtra("roomName", roomTitle)
+        intent.putExtra("roomId", roomId)
+
+        startActivity(intent)
+    }
+
+    override fun getChattingDetailFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
     }
 }

@@ -1,8 +1,8 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
-interface CreateChattingView {
-    fun createChattingSuccess(result: CreateChattingResult)
-    fun createChattingFailure(code: Int, message: String)
+interface CreateChattingRoomView {
+    fun createChattingRoomSuccess(result: CreateChattingResult)
+    fun createChattingRoomFailure(code: Int, message: String)
 }
 
 interface ChattingMemberAddView {
