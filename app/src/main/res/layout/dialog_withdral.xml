@@ -54,7 +54,7 @@
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="회원 탈퇴 시 긱사생 서비스를\n더 이상 이용할 수 없습니다.\n계속하시겠습니까?"
+            android:text="긱사생 서비스를 더 이상\n이용할 수 없어요.\n탈퇴를 진행할까요?"
             android:textColor="@color/black"
             android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -35,6 +35,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var loginId = String()
     private var emailAddress = String()
     private var formattingPhoneNumber = String()
+    private var userId: Int = 0
 
     override fun initAfterBinding() {
         binding.profileCardNickNameTv.text = getNickname()
@@ -89,6 +90,16 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         binding.profileLogout.setOnClickListener { //로그아웃
             val dialog = DialogProfileLogout()
             dialog.show(parentFragmentManager, "ProfileLogoutDialog")
+        }
+
+        binding.profileSignOutTv.setOnClickListener { //회원탈퇴
+            val dialog = DialogProfileWithdrawal()
+
+            var bundle = Bundle()
+            bundle.putInt("userId", userId)
+
+            dialog.arguments = bundle
+            dialog.show(parentFragmentManager, "ProfileWithdrawalDialog")
         }
     }
 
@@ -178,6 +189,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
+        userId = result.id
         nickName = result.nickname
         universityName = result.universityName
         dormitoryName = result.dormitoryName
