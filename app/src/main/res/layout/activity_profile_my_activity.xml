@@ -51,45 +51,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/profile_my_activity_number_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="현재 진행 중인\n나의 활동은 총 0개 입니다."
-                android:textSize="24sp"
-                android:textColor="@color/top"
-                android:textFontWeight="500"
-                android:lineHeight="35dp"
-                android:fontFamily="@font/spoqa_medium"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="18dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profile_my_activity_activity_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_number_tv"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <View
-                android:id="@+id/profile_my_profile_my_activity_line"
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="#F8F8F8"
-                android:layout_marginTop="38.5dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_activity_rv"
-                app:layout_constraintStart_toStartOf="parent" />
+            
 
             <TextView
-                android:id="@+id/profile_my_activity_pre_activity_tv"
+                android:id="@+id/profile_my_activity_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(닉네임)님이 진행하셨던\n활동들을 한 눈에 확인해보세요"
+                android:text="내가 만들었던 활동들을\n한 눈에 확인해보세요"
                 android:textSize="24sp"
                 android:textColor="@color/top"
                 android:textFontWeight="500"
@@ -98,160 +66,77 @@
                 android:layout_marginTop="39dp"
                 android:layout_marginStart="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_profile_my_activity_line" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/profile_my_activity_pre_activity_tab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="23dp"
-                android:layout_marginTop="26dp"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_tv"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profile_my_activity_tab1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/profile_activity_tab">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="배달파티"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginBottom="25dp"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/spoqa_medium"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profile_my_activity_tab2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="13dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/profile_not_activity_tab">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginBottom="25dp"
-                        android:fontFamily="@font/spoqa_medium"
-                        android:text="심부름"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profile_my_activity_tab3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/profile_not_activity_tab">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="거래"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginBottom="25dp"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/spoqa_medium"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/profile_my_activity_pre_activity_white_tab"
-                android:layout_width="match_parent"
-                android:layout_height="14dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="-14dp"
-                android:layout_marginHorizontal="23dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_tab">
-
-                <View
-                    android:id="@+id/profile_my_activity_pre_activity_white_tab1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:visibility="invisible"
-                    android:layout_weight="1" />
-
-                <View
-                    android:id="@+id/profile_my_activity_pre_activity_white_tab2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_weight="1" />
-
-                <View
-                    android:id="@+id/profile_my_activity_pre_activity_white_tab3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
 
             <ImageView
                 android:id="@+id/profile_my_activity_filter_iv"
                 android:layout_width="31dp"
-                android:layout_height="23dp"
-                android:src="@drawable/ic_sort"
+                android:layout_height="31dp"
+                android:src="@drawable/ic_filter_wide"
                 android:padding="5dp"
                 android:layout_marginTop="22dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="11dp"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_white_tab"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_tv"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Spinner
-                android:id="@+id/profile_my_activity_pre_activity_spinner"
+            <RadioGroup
+                android:id="@+id/profile_my_activity_rg"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/profile_spinner_outline_clicked"
-                android:popupBackground="@drawable/profile_spinner_outline_unclicked"
-                android:spinnerMode="dropdown"
-                android:entries="@array/profile_dropdown"
-                tools:listitem="@layout/item_profile_pre_activity_spinner"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="@id/profile_my_activity_filter_iv"
                 app:layout_constraintBottom_toBottomOf="@id/profile_my_activity_filter_iv"
-                app:layout_constraintStart_toEndOf="@id/profile_my_activity_filter_iv" />
+                app:layout_constraintStart_toEndOf="@id/profile_my_activity_filter_iv" >
+
+                <RadioButton
+                    android:id="@+id/profile_my_activity_rb1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:text="배달파티"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:button="@null"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_activity_rb2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:text="심부름"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:button="@null"
+                    android:layout_marginStart="9dp"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_activity_rb3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_outline_unclicked"
+                    android:textColor="@drawable/selector_time_radiobtn_text"
+                    android:text="거래"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:button="@null"
+                    android:layout_marginStart="9dp"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"/>
+
+            </RadioGroup>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profile_my_activity_pre_activity_rv"
+                android:id="@+id/profile_my_activity_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -259,7 +144,7 @@
                 android:layout_marginTop="13dp"
                 android:paddingHorizontal="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_spinner"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_rg"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -268,7 +153,7 @@
                 android:layout_height="0dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="@id/profile_my_activity_pre_activity_rv"
+                app:layout_constraintTop_toTopOf="@id/profile_my_activity_rv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -291,7 +176,7 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_pre_activity_spinner"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_activity_rg"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
