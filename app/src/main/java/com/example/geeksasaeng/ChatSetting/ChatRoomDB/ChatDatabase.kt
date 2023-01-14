@@ -4,22 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.geeksasaeng.ChatSetting.Chat
 
 @Database(entities = [Chat::class], version = 1)
-abstract class ChatDB: RoomDatabase() {
-    abstract fun ChatDao(): ChatDao
+@TypeConverters(DataTypeConverters::class)
+abstract class ChatDatabase: RoomDatabase() {
+    abstract fun chatDao(): ChatDao
 
     companion object {
-        private var instance : ChatDB? = null
+        private var instance : ChatDatabase? = null
 
         @Synchronized
-        fun getDBInstance(context: Context) : ChatDB? {
+        fun getDBInstance(context: Context) : ChatDatabase? {
             if (instance == null) {
-                synchronized(ChatDB::class) {
+                synchronized(ChatDatabase::class) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        ChatDB::class.java,
+                        ChatDatabase::class.java,
                         "user-database"
                     ).fallbackToDestructiveMigration().build()
                 }

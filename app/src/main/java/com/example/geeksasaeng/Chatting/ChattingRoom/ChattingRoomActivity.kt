@@ -1,22 +1,21 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
+import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
@@ -75,6 +74,8 @@ class ChattingRoomActivity :
     // QUEUE_NAME = MemberID!
     var QUEUE_NAME = getMemberId().toString()
     private val chattingList = arrayListOf<ChatResponse>()
+    // RoomDB
+    private lateinit var chatDB: ChatDatabase
 
     // Album
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -82,6 +83,8 @@ class ChattingRoomActivity :
     var albumImageList: ArrayList<Uri> = ArrayList()
 
     override fun initAfterBinding() {
+        chatDB = ChatDatabase.getDBInstance(applicationContext)!!
+
         accountNumber = intent.getStringExtra("accountNumber").toString()
         bank = intent.getStringExtra("bank").toString()
         chiefId = intent.getIntExtra("chiefId", 0)
@@ -129,6 +132,9 @@ class ChattingRoomActivity :
             Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
 
             chattingList.add(chatResponseMessage)
+            chatDB.chatDao().insert(chatResponseMessage)
+
+            Log.d("CHATTING-SYSTEM-TEST", "ChatTable = ${chatDB.chatDao().getAllChats()}")
         }
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
@@ -156,11 +162,12 @@ class ChattingRoomActivity :
         var profileImgUrl = chatting.getString("profileImgUrl")
 
         // JsonArray를 ArrayList로 바꾸기 위한 과정!
-        var readMembers = ArrayList<Int>()
+        // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
+        var readMembers = ArrayList<String>()
         var readMembersTemp = chatting.getJSONArray("readMembers")
         if (readMembersTemp != null) {
             for (i in 0 until readMembersTemp.length()) {
-                readMembers.add(readMembersTemp.getInt(i))
+                readMembers.add(readMembersTemp.getInt(i).toString())
             }
         }
 
@@ -225,18 +232,18 @@ class ChattingRoomActivity :
         }
 
         binding.chattingRoomAlbumIv.setOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//            val intent = Intent(Intent.ACTION_PICK)
+//            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+//            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             
             // startActivityForResult -> registerForActivityResult로 변경하기
             // startActivityForResult(intent, 2222)
-            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    getImageFromAlbum(result.data)
-                }
-            }
+//            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//                if (result.resultCode == Activity.RESULT_OK) {
+//                    getImageFromAlbum(result.data)
+//                }
+//            }
 
             // resultLauncher.launch(intent)
             // var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }
