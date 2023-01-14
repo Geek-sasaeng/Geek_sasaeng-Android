@@ -73,7 +73,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정
-            (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
+            startActivity(Intent(activity, ProfileMyInfoUpdateActivity::class.java))
         }
 
         binding.profileInquiry.setOnClickListener { //문의하기
