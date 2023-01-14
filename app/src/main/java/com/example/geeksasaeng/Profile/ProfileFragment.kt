@@ -35,6 +35,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var loginId = String()
     private var emailAddress = String()
     private var formattingPhoneNumber = String()
+    private var fomattingsignUpDate = String()
     private var userId: Int = 0
 
     override fun initAfterBinding() {
@@ -64,6 +65,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             bundle.putString("loginId", loginId)
             bundle.putString("emailAddress", emailAddress)
             bundle.putString("phoneNumber", formattingPhoneNumber)
+            bundle.putString("signUpDate", fomattingsignUpDate)
             profileDetailDialog.arguments = bundle
             profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
         }
@@ -206,6 +208,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         emailAddress = result.emailAddress
         var phoneNumber = result.phoneNumber
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
+        val signUpDate = result.createdAt
+        fomattingsignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
         binding.profileCardUnivTv.text = result.universityName
         binding.profileCardDormitoryNameTv.text = result.dormitoryName
     }
