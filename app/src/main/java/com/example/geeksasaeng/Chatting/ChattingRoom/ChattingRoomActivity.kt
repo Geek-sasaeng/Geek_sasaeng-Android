@@ -132,7 +132,9 @@ class ChattingRoomActivity :
             Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
 
             chattingList.add(chatResponseMessage)
-            chatDB.chatDao().insert(chatResponseMessage)
+            chatDB.chatDao().insert(Chat(chatResponseMessage.chatId, chatResponseMessage.content, chatResponseMessage.chatRoomId, chatResponseMessage.isSystemMessage,
+                chatResponseMessage.memberId, chatResponseMessage.nickName, chatResponseMessage.profileImgUrl, chatResponseMessage.readMembers, chatResponseMessage.createdAt,
+                chatResponseMessage.chatType, chatResponseMessage.unreadMemberCnt, chatResponseMessage.isImageMessage, chatResponseMessage.viewType, chatResponseMessage.isLeader))
 
             Log.d("CHATTING-SYSTEM-TEST", "ChatTable = ${chatDB.chatDao().getAllChats()}")
         }

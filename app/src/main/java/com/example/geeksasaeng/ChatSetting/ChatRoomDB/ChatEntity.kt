@@ -7,17 +7,17 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "ChatTable")
 data class Chat(
     @PrimaryKey val chatId: String,
-    @ColumnInfo(name = "content") val content: String?,
-    @ColumnInfo(name = "chatRoomId") val chatRoomId: String,
-    @ColumnInfo(name = "isSystemMessage") val isSystemMessage: Boolean,
-    @ColumnInfo(name = "memberId") val memberId: Int,
-    @ColumnInfo(name = "nickName") val nickName: String,
-    @ColumnInfo(name = "profileImgUrl") val profileImgUrl: String?,
-    @ColumnInfo(name = "readMembers") val readMembers: ArrayList<String>,
-    @ColumnInfo(name = "createdAt") val createdAt: String,
-    @ColumnInfo(name = "chatType") val chatType: String,
-    @ColumnInfo(name = "unreadMemberCnt") val unreadMemberCnt: Int,
-    @ColumnInfo(name = "isImageMessage") val isImageMessage: Boolean,
-    @ColumnInfo(name = "viewType") val viewType: Int,
-    @ColumnInfo(name = "isLeader") val isLeader: Boolean
+    val content: String?,
+    val chatRoomId: String,
+    val isSystemMessage: Boolean,
+    val memberId: Int,
+    val nickName: String,
+    val profileImgUrl: String?,
+    val readMembers: ArrayList<String>,
+    val createdAt: String,
+    val chatType: String,
+    val unreadMemberCnt: Int,
+    val isImageMessage: Boolean,
+    val viewType: Int,
+    val isLeader: Boolean
 )
