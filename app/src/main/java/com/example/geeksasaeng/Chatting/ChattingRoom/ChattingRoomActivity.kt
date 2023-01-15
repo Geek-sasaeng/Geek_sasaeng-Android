@@ -1,22 +1,23 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
+import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
@@ -29,6 +30,9 @@ import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -74,7 +78,9 @@ class ChattingRoomActivity :
     private val factory = ConnectionFactory()
     // QUEUE_NAME = MemberID!
     var QUEUE_NAME = getMemberId().toString()
-    private val chattingList = arrayListOf<ChatResponse>()
+    private val chattingList = arrayListOf<Chat>()
+    // RoomDB
+    private lateinit var chatDB: ChatDatabase
 
     // Album
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -82,6 +88,8 @@ class ChattingRoomActivity :
     var albumImageList: ArrayList<Uri> = ArrayList()
 
     override fun initAfterBinding() {
+        chatDB = ChatDatabase.getDBInstance(applicationContext)!!
+
         accountNumber = intent.getStringExtra("accountNumber").toString()
         bank = intent.getStringExtra("bank").toString()
         chiefId = intent.getIntExtra("chiefId", 0)
@@ -107,6 +115,29 @@ class ChattingRoomActivity :
         Thread {
             initRabbitMQSetting()
         }.start()
+
+        // 이전 채팅을 가져오기 위한 초기 작업
+        // DB 비동기 처리를 위해 코루틴 사용!
+        CoroutineScope(Dispatchers.IO).launch {
+            var allChatting = chatDB.chatDao().getAllChats()
+            var chattingSize = allChatting.size
+
+            for (i in 0 until chattingSize) {
+                // roomId가 같은 경우에만 가져오도록 설정!
+                if (roomId == allChatting[i].chatRoomId)
+                    chattingList.add(allChatting[i])
+            }
+
+            // 채팅 제일 밑으로 가는 방법!
+            val smoothScroller: RecyclerView.SmoothScroller by lazy {
+                object : LinearSmoothScroller(this@ChattingRoomActivity) {
+                    override fun getVerticalSnapPreference() = SNAP_TO_START
+                }
+            }
+
+            smoothScroller.targetPosition = chattingSize
+            binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
+        }
     }
 
     private fun initRabbitMQSetting() {
@@ -118,15 +149,15 @@ class ChattingRoomActivity :
         // durable = true로 설정!!
         // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
         channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-        Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
+        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
 
         lateinit var originalMessage: String
-        lateinit var chatResponseMessage: ChatResponse
+        lateinit var chatResponseMessage: Chat
 
         val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
             originalMessage = String(delivery.body, Charsets.UTF_8)
             chatResponseMessage = getJSONtoChatting(originalMessage)
-            Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
+            chatDB.chatDao().insert(chatResponseMessage)
 
             chattingList.add(chatResponseMessage)
         }
@@ -145,7 +176,7 @@ class ChattingRoomActivity :
         }
     }
 
-    private fun getJSONtoChatting(message: String): ChatResponse {
+    private fun getJSONtoChatting(message: String): Chat {
         var chatting = JSONObject(message)
         var chatId = chatting.getString("chatId")
         var content = chatting.getString("content")
@@ -156,11 +187,12 @@ class ChattingRoomActivity :
         var profileImgUrl = chatting.getString("profileImgUrl")
 
         // JsonArray를 ArrayList로 바꾸기 위한 과정!
-        var readMembers = ArrayList<Int>()
+        // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
+        var readMembers = ArrayList<String>()
         var readMembersTemp = chatting.getJSONArray("readMembers")
         if (readMembersTemp != null) {
             for (i in 0 until readMembersTemp.length()) {
-                readMembers.add(readMembersTemp.getInt(i))
+                readMembers.add(readMembersTemp.getInt(i).toString())
             }
         }
 
@@ -177,7 +209,7 @@ class ChattingRoomActivity :
 
         var isLeader: Boolean = chiefId == memberId
 
-        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
+        return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     override fun onResume() {
@@ -225,18 +257,18 @@ class ChattingRoomActivity :
         }
 
         binding.chattingRoomAlbumIv.setOnClickListener(View.OnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//            val intent = Intent(Intent.ACTION_PICK)
+//            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+//            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             
             // startActivityForResult -> registerForActivityResult로 변경하기
             // startActivityForResult(intent, 2222)
-            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    getImageFromAlbum(result.data)
-                }
-            }
+//            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//                if (result.resultCode == Activity.RESULT_OK) {
+//                    getImageFromAlbum(result.data)
+//                }
+//            }
 
             // resultLauncher.launch(intent)
             // var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }

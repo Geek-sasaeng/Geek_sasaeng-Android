@@ -22,7 +22,7 @@ data class ChatResponse (
     var memberId: Int,
     var nickName: String,
     var profileImgUrl: String?,
-    var readMembers: ArrayList<Int>,
+    var readMembers: ArrayList<String>,
     var createdAt: String,
     var chatType: String,
     var unreadMemberCnt: Int,
