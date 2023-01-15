@@ -1,35 +1,25 @@
 package com.example.geeksasaeng.Profile
 
+
 import android.content.Intent
-import android.graphics.Color
+import android.os.Bundle
 import android.os.Handler
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
-import com.example.geeksasaeng.Profile.Adapter.MyOngoingActivityRVAdapter
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import java.util.*
-import kotlin.Comparator
 
-class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyOngoingActivityView, ProfileMyPreActivityView {
 
-    private var myOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
-    lateinit var myOngoingActivityRVAdapter: MyOngoingActivityRVAdapter
+class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyPreActivityView {
+
     private var myPreActivityList = ArrayList<EndedDeliveryPartiesVoList>()
     lateinit var myPreActivityRVAdapter: MyPreActivityRVAdapter
     lateinit var profileDataService: ProfileDataService
@@ -40,11 +30,9 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
 
     override fun initAfterBinding() {
         binding.profileMyInfoProgressCover.visibility = View.GONE
-        binding.profileMyActivityPreActivityTv.text = getNickname()+"님이 진행하셨던\n활동들을 한 눈에 확인해보세요"
         initClickListener()
         initActivityListener()
         initAdapter()
-        initSpinner()
 
         if (totalCursor == 0)
             initLoadPosts()
@@ -53,42 +41,30 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     }
 
     private fun initClickListener() {
+        
+        binding.profileMyActivityRg.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.profile_my_activity_rb1 -> { //배달 파티
+                    binding.profileMyActivityRv.visibility = View.VISIBLE
+                    binding.profileMyInfoPreparingLayout.visibility = View.GONE
+                }
+                R.id.profile_my_activity_rb2 -> { //심부름
+                    binding.profileMyActivityRv.visibility = View.INVISIBLE
+                    binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
+                }
+                R.id.profile_my_activity_rb3 -> { //거래
+                    binding.profileMyActivityRv.visibility = View.INVISIBLE
+                    binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
+                    //TODO: 나중에는 이렇게 할게 아니라 각각에 맞게 rv에 데이터를 넣어줘야함.
+                }
+                else-> {}
+            }
+        }
+
         binding.profileMyActivityBackBtn.setOnClickListener {
             finish()
         }
 
-        binding.profileMyActivityTab1.setOnClickListener {
-            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.INVISIBLE
-            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
-            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
-            binding.profileMyActivityPreActivityRv.visibility = View.VISIBLE
-            binding.profileMyInfoPreparingLayout.visibility = View.GONE
-        }
-
-        binding.profileMyActivityTab2.setOnClickListener {
-            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
-            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.INVISIBLE
-            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.VISIBLE
-            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
-            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
-        }
-
-        binding.profileMyActivityTab3.setOnClickListener {
-            binding.profileMyActivityTab1.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab1.visibility = View.VISIBLE
-            binding.profileMyActivityTab2.setBackgroundResource(R.drawable.profile_not_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab2.visibility = View.VISIBLE
-            binding.profileMyActivityTab3.setBackgroundResource(R.drawable.profile_activity_tab)
-            binding.profileMyActivityPreActivityWhiteTab3.visibility = View.INVISIBLE
-            binding.profileMyActivityPreActivityRv.visibility = View.INVISIBLE
-            binding.profileMyInfoPreparingLayout.visibility = View.VISIBLE
-        }
     }
 
     private fun initLoadPosts() {
@@ -99,7 +75,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     }
 
     private fun getMyPreActivityAllList(cursor: Int) {
-        profileDataService.profileMyPreActivitySender(cursor)
+        profileDataService.profileMyPreActivitySender(cursor) //★ api호출
         totalCursor += 1
     }
 
@@ -114,11 +90,11 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     }
 
     private fun initScrollListener() {
-        binding.profileMyActivityPreActivityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.profileMyActivityRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val layoutManager = binding.profileMyActivityPreActivityRv.layoutManager
+                val layoutManager = binding.profileMyActivityRv.layoutManager
 
                 if (!isLoading) {
                     if (layoutManager != null && (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() == myPreActivityList.size - 1) {
@@ -133,109 +109,31 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
     }
 
     private fun initAdapter() {
-        myOngoingActivityRVAdapter = MyOngoingActivityRVAdapter()
-        binding.profileMyActivityActivityRv.adapter = myOngoingActivityRVAdapter
-        binding.profileMyActivityActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        myPreActivityRVAdapter = MyPreActivityRVAdapter()
+        binding.profileMyActivityRv.adapter = myPreActivityRVAdapter
+        binding.profileMyActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        myPreActivityRVAdapter.setOnItemClickListener(object :
+            MyPreActivityRVAdapter.OnItemClickListener { // 리사이클러 뷰 : 내가 진행한 활동 아이템 클릭하면, 해당 글로 화면 전환
+            override fun onItemClick(data: EndedDeliveryPartiesVoList, pos: Int) {
 
-        myOngoingActivityRVAdapter.setOnItemClickListener(object : MyOngoingActivityRVAdapter.OnItemClickListener{
-            override fun onItemClick(data: ProfileMyOngoingActivityResult, pos : Int) {
-                var activityItemId = myOngoingActivityRVAdapter.getPartyId(pos)
+                var activityItemId = data.id
 
+                //액티비티에서 => 나의 해당 글의 lookParty로 이동하는 법 ☆
                 val intent = Intent(this@ProfileMyActivityActivity, MainActivity::class.java)
                 intent.putExtra("status", "myActivity")
                 intent.putExtra("deliveryItemId", activityItemId.toString())
                 startActivity(intent)
             }
         })
-
-        myPreActivityRVAdapter = MyPreActivityRVAdapter()
-        binding.profileMyActivityPreActivityRv.adapter = myPreActivityRVAdapter
-        binding.profileMyActivityPreActivityRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-    }
-
-    private fun initSpinner() {
-        val items = resources.getStringArray(R.array.profile_dropdown) // spinner아이템 배열
-
-        //어댑터
-        val spinnerAdapter = ProfileMyPreActivitySpinnerAdapter(this, items)
-        binding.profileMyActivityPreActivitySpinner.adapter = spinnerAdapter
-        binding.profileMyActivityPreActivitySpinner.setSelection(items.size - 1) //마지막아이템을 스피너 초기값으로 설정해준다.
-
-        //이벤트 처리
-        binding.profileMyActivityPreActivitySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position==0) items[0]= items[items.size-1]
-                else items[0] = items[position]
-
-                val image: ImageView = view!!.findViewById(R.id.arrow_iv)
-                image.setImageResource(R.drawable.ic_spinner_up)
-                image.visibility = View.VISIBLE
-
-                val textName: TextView = view.findViewById(R.id.spinner_text)
-                textName.text = items[position]
-                textName.setTextColor(ContextCompat.getColor(this@ProfileMyActivityActivity, R.color.gray_2))
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
 
     private fun initActivityListener() {
         profileDataService = ProfileDataService()
-        profileDataService.setProfileMyOngoingActivityView(this)
-        profileDataService.profileMyOngoingActivitySender()
         profileDataService.setMyPreActivityView(this)
     }
 
-    override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
-        var preActivityDate = ""
-        Collections.sort(result!!, DateComparator())
 
-        for (i in 0 until result.size) {
-            if (preActivityDate != result[i].createdAt.substring(0, 10)) {
-                if (i != 0)
-                    myOngoingActivityList.add(ProfileMyOngoingActivityResult(null, null, "${preActivityDate.substring(0, 4)}.${preActivityDate.substring(5, 7)}.${preActivityDate.substring(8, 10)}", 2))
-                preActivityDate = result[i].createdAt.substring(0, 10)
-            }
-
-            var item = ProfileMyOngoingActivityResult(result[i].id, result[i].title, result[i].createdAt, 1)
-            myOngoingActivityList.add(item)
-
-            if (i == result.size - 1)
-                myOngoingActivityList.add(ProfileMyOngoingActivityResult(null, null, "${preActivityDate.substring(0, 4)}.${preActivityDate.substring(5, 7)}.${preActivityDate.substring(8, 10)}", 2))
-        }
-
-        myOngoingActivityList.reverse()
-        myOngoingActivityRVAdapter.addAllItems(myOngoingActivityList)
-        initOngoingActivityNumber(result.size)
-    }
-
-    internal class DateComparator : Comparator<ProfileMyOngoingActivityResult?> {
-        override fun compare(f1: ProfileMyOngoingActivityResult?, f2: ProfileMyOngoingActivityResult?): Int {
-            if (f1!!.createdAt < f2!!.createdAt) {
-                return 1
-            } else if (f1.createdAt > f2.createdAt) {
-                return -1
-            }
-            return 0
-        }
-    }
-
-    override fun onProfileMyOngoingActivityFailure(message: String) {
-        showToast(message)
-    }
-
-    private fun initOngoingActivityNumber(digitNumber: Int) {
-        val str = SpannableString("현재 진행 중인 나의 활동은\n총 ${digitNumber}개 입니다.")
-        val resultBuilder = SpannableStringBuilder(str)
-
-        val begin = "현재 진행 중인 나의 홛동은\n총 ".length
-        val end = begin + digitNumber.toString().length + 1
-
-        resultBuilder.setSpan(ForegroundColorSpan(Color.parseColor("#29ABE2")), begin, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-
-        binding.profileMyActivityNumberTv.text = resultBuilder
-    }
-
+    //나의 활동 불러오기 성공
     override fun onProfileMyPreActivityViewSuccess(result: ProfileMyPreActivityResult) {
         finalPage = result.finalPage
         var result = result.endedDeliveryPartiesVoList
@@ -249,6 +147,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
         myPreActivityRVAdapter.addAllItems(myPreActivityList)
     }
 
+    //나의 활동 불러오기 실패
     override fun onProfileMyPreActivityViewFailure(message: String) {
         showToast(message)
     }

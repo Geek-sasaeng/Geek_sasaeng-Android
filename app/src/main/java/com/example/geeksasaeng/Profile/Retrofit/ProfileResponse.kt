@@ -89,7 +89,7 @@ data class ProfileMyInfoResult(
     @SerializedName("universityName") val universityName: String,
 )
 
-// 진행했던 활동 보기
+// 진행했던 활동 조회
 data class ProfileMyPreActivityResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
