@@ -6,9 +6,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+//local.properties에서 kakao_native_app_key 가져오기 위한 3줄
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
+def kakao_native_app_key = properties.getProperty('kakao_native_app_key')
 
 android {
     compileSdk 32
@@ -30,11 +31,12 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        manifestPlaceholders = [kakaoNativeAppKey:kakao_native_app_key]
-        /*buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵*/
+
+        //buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵-안쓰는 코드
         buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
         buildConfigField "String", "RABBITMQ_PWD", properties['rabbitMQ_pwd']
         buildConfigField "String", "RABBITMQ_ADDRESS", properties['rabbitMQ_address']
+        manifestPlaceholders = [kakaoNativeAppKey: kakao_native_app_key] //메니페스트에서 쓸 수 있도록 key-value매핑
     }
 
     buildTypes {

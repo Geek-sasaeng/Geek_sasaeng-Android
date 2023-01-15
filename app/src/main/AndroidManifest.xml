@@ -74,9 +74,9 @@
             android:screenOrientation="portrait"/>
 
         <!--카카오맵 APP KEY 추가-->
-<!--        <meta-data-->
-<!--            android:name="com.kakao.sdk.AppKey"-->
-<!--            android:value="${kakaoNativeAppKey}" />-->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${kakaoNativeAppKey}" />
 
         <service
             android:name=".FirebaseMessagingService"
