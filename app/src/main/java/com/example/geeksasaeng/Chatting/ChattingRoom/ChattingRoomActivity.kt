@@ -122,19 +122,19 @@ class ChattingRoomActivity :
             var allChatting = chatDB.chatDao().getAllChats()
             var chattingSize = allChatting.size
 
-            Log.d("CHATTING-SYSTEM-TEST", "AllChatting = $allChatting")
-
             for (i in 0 until chattingSize) {
-                chattingList.add(allChatting[i])
+                // roomId가 같은 경우에만 가져오도록 설정!
+                if (roomId == allChatting[i].chatRoomId)
+                    chattingList.add(allChatting[i])
             }
 
-            // binding.chattingRoomChattingRv.scrollToPosition(chattingSize)
-
+            // 채팅 제일 밑으로 가는 방법!
             val smoothScroller: RecyclerView.SmoothScroller by lazy {
                 object : LinearSmoothScroller(this@ChattingRoomActivity) {
                     override fun getVerticalSnapPreference() = SNAP_TO_START
                 }
             }
+
             smoothScroller.targetPosition = chattingSize
             binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
         }
@@ -149,7 +149,7 @@ class ChattingRoomActivity :
         // durable = true로 설정!!
         // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
         channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-        Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
+        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
 
         lateinit var originalMessage: String
         lateinit var chatResponseMessage: Chat
