@@ -2,10 +2,12 @@ package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.graphics.Color
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.ChatSetting.ChatResponse
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.databinding.*
@@ -83,7 +85,11 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
 
             binding.itemMyChattingNicknameTv.text = chatting.nickName
             binding.itemMyChattingTimeTv.text = setTime(chatting.createdAt)
-            binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
+            // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
+            Glide.with(itemView.context)
+                .load(chatting.profileImgUrl)
+                .into(binding.itemMyChattingProfileIv)
+            Log.d("CHATTING-SYSTEM-TEST", "IMAGE URL = ${chatting.profileImgUrl}")
         }
     }
 
@@ -105,7 +111,10 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
             }
 
             binding.itemYourChattingTimeTv.text = setTime(chatting.createdAt)
-            binding.itemYourChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
+            Glide.with(itemView.context)
+                .load(chatting.profileImgUrl)
+                .into(binding.itemYourChattingProfileIv)
+            Log.d("CHATTING-SYSTEM-TEST", "IMAGE URL = ${chatting.profileImgUrl}")
         }
     }
 
