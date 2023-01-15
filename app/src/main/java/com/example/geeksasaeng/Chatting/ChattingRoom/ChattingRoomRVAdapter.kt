@@ -11,7 +11,7 @@ import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.databinding.*
 import java.text.DecimalFormat
 
-class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var mCilckListener : OnUserProfileClickListener
 
@@ -70,7 +70,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
     }
 
     inner class MyChattingViewHolder(val binding: ItemChattingMyChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: ChatResponse) {
+        fun bind(chatting: Chat) {
             binding.itemMyChattingChattingTv.text = chatting.content
 
             if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
@@ -88,7 +88,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
     }
 
     inner class YourChattingViewHolder(val binding: ItemChattingYourChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: ChatResponse) {
+        fun bind(chatting: Chat) {
             binding.itemYourChattingChattingTv.text = chatting.content
 
             if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
@@ -118,7 +118,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
     }
 
     inner class SystemChattingViewHolder(val binding: ItemChattingSystemChattingBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: ChatResponse) {
+        fun bind(chatting: Chat) {
             binding.itemChattingSystemChattingTv.text = chatting.content
         }
     }
@@ -126,7 +126,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
     // 이 부분 대신 사진 전송 부분으로 수정하기!!!
     // 이모티콘 부분 삭제됨!
     inner class ImageChattingViewHolder(val binding: ItemChattingImageBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatting: ChatResponse) {
+        fun bind(chatting: Chat) {
             // 사진 전송 관련 View 작업
         }
     }
@@ -143,12 +143,12 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<ChatResponse>) : Recycle
         else "오후 ${hour - 12}:$minute"
     }
 
-    fun addItem(item: ChatResponse) {
+    fun addItem(item: Chat) {
         chattingList.add(item)
         this.notifyDataSetChanged()
     }
 
-    fun addAllItems(items: ArrayList<ChatResponse>) {
+    fun addAllItems(items: ArrayList<Chat>) {
         chattingList.clear()
         chattingList.addAll(items)
         this.notifyDataSetChanged()

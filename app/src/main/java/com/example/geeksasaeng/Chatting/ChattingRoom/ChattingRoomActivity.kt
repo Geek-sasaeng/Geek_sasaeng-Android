@@ -28,6 +28,9 @@ import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -73,7 +76,7 @@ class ChattingRoomActivity :
     private val factory = ConnectionFactory()
     // QUEUE_NAME = MemberID!
     var QUEUE_NAME = getMemberId().toString()
-    private val chattingList = arrayListOf<ChatResponse>()
+    private val chattingList = arrayListOf<Chat>()
     // RoomDB
     private lateinit var chatDB: ChatDatabase
 
@@ -110,6 +113,26 @@ class ChattingRoomActivity :
         Thread {
             initRabbitMQSetting()
         }.start()
+
+//        var allChatting = chatDB.chatDao().getAllChats()
+//        var chattingSize = allChatting.size
+//
+//        for (i in 0 until chattingSize) {
+//            chattingList.add(allChatting[i])
+//        }
+
+        // 이전 채팅을 가져오기 위한 초기 작업
+        // DB 비동기 처리를 위해 코루틴 사용!
+        CoroutineScope(Dispatchers.IO).launch {
+            var allChatting = chatDB.chatDao().getAllChats()
+            var chattingSize = allChatting.size
+
+            Log.d("CHATTING-SYSTEM-TEST", "AllChatting = $allChatting")
+
+            for (i in 0 until chattingSize) {
+                chattingList.add(allChatting[i])
+            }
+        }
     }
 
     private fun initRabbitMQSetting() {
@@ -124,19 +147,14 @@ class ChattingRoomActivity :
         Log.d("CHATTING-SYSTEM-TEST", " [*] Waiting for messages. To exit press CTRL+C")
 
         lateinit var originalMessage: String
-        lateinit var chatResponseMessage: ChatResponse
+        lateinit var chatResponseMessage: Chat
 
         val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
             originalMessage = String(delivery.body, Charsets.UTF_8)
             chatResponseMessage = getJSONtoChatting(originalMessage)
-            Log.d("CHATTING-SYSTEM-TEST", "chat = $chatResponseMessage")
+            chatDB.chatDao().insert(chatResponseMessage)
 
             chattingList.add(chatResponseMessage)
-            chatDB.chatDao().insert(Chat(chatResponseMessage.chatId, chatResponseMessage.content, chatResponseMessage.chatRoomId, chatResponseMessage.isSystemMessage,
-                chatResponseMessage.memberId, chatResponseMessage.nickName, chatResponseMessage.profileImgUrl, chatResponseMessage.readMembers, chatResponseMessage.createdAt,
-                chatResponseMessage.chatType, chatResponseMessage.unreadMemberCnt, chatResponseMessage.isImageMessage, chatResponseMessage.viewType, chatResponseMessage.isLeader))
-
-            Log.d("CHATTING-SYSTEM-TEST", "ChatTable = ${chatDB.chatDao().getAllChats()}")
         }
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
@@ -153,7 +171,7 @@ class ChattingRoomActivity :
         }
     }
 
-    private fun getJSONtoChatting(message: String): ChatResponse {
+    private fun getJSONtoChatting(message: String): Chat {
         var chatting = JSONObject(message)
         var chatId = chatting.getString("chatId")
         var content = chatting.getString("content")
@@ -186,7 +204,7 @@ class ChattingRoomActivity :
 
         var isLeader: Boolean = chiefId == memberId
 
-        return ChatResponse(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
+        return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     override fun onResume() {
