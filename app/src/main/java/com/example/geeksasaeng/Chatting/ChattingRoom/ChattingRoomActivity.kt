@@ -13,6 +13,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
@@ -114,13 +116,6 @@ class ChattingRoomActivity :
             initRabbitMQSetting()
         }.start()
 
-//        var allChatting = chatDB.chatDao().getAllChats()
-//        var chattingSize = allChatting.size
-//
-//        for (i in 0 until chattingSize) {
-//            chattingList.add(allChatting[i])
-//        }
-
         // 이전 채팅을 가져오기 위한 초기 작업
         // DB 비동기 처리를 위해 코루틴 사용!
         CoroutineScope(Dispatchers.IO).launch {
@@ -132,6 +127,16 @@ class ChattingRoomActivity :
             for (i in 0 until chattingSize) {
                 chattingList.add(allChatting[i])
             }
+
+            // binding.chattingRoomChattingRv.scrollToPosition(chattingSize)
+
+            val smoothScroller: RecyclerView.SmoothScroller by lazy {
+                object : LinearSmoothScroller(this@ChattingRoomActivity) {
+                    override fun getVerticalSnapPreference() = SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = chattingSize
+            binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
         }
     }
 
