@@ -125,31 +125,29 @@ data class ChattingPartyMemberLeaveChatResponse(
     @SerializedName("result") val result: String
 )
 
-data class ChattingPartyLeaderLeaveRequest(
+//방장 나가기 for 배달파티
+data class ChattingPartyLeaderLeavePartyRequest(
     @SerializedName("nickName") val nickName: String?,
     @SerializedName("uuid") val uuid: String
 )
 
-data class ChattingPartyLeaderLeaveResult(
-    @SerializedName("result") val result: String
-)
-
-data class ChattingPartyLeaderLeaveResponse(
+data class ChattingPartyLeaderLeavePartyResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ChattingPartyLeaderLeaveResult
-)
-
-data class ChattingDeliveryPartyLeaderLeaveResult(
     @SerializedName("result") val result: String
 )
 
-data class ChattingDeliveryPartyLeaderLeaveResponse(
+//방장 나가기 for 채팅방
+data class ChattingPartyLeaderLeaveChatRequest(
+    @SerializedName("roomId") val uuid: String,
+)
+
+data class ChattingPartyLeaderLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ChattingPartyLeaderLeaveResult
+    @SerializedName("result") val result: String
 )
 
 //배달완료 알림보내기

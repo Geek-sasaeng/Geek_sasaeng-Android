@@ -57,9 +57,15 @@ interface ChattingRetrofitInterfaces {
 
     // 배달파티 방장 삭제 및 교체 for 배달파티
     @PATCH("/delivery-party/chief")
+    fun partyLeaderPartyLeave(
+        @Body chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest
+    ): Call<ChattingPartyLeaderLeavePartyResponse>
+
+    // 배달파티 방장 삭제 및 교체 for 채팅방
+    @PATCH("/party-chat-room/chief")
     fun partyLeaderChattingLeave(
-        @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
-    ): Call<ChattingPartyLeaderLeaveResponse>
+        @Body chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest
+    ): Call<ChattingPartyLeaderLeaveChatResponse>
 
     //배달 완료 알림 보내기
     @POST("/delivery-party/complicated")

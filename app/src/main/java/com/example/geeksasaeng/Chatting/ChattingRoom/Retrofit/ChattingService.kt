@@ -17,7 +17,8 @@ class ChattingService {
     private lateinit var sendChattingView: SendChattingView
     private lateinit var chattingMemberLeavePartyView: ChattingMemberLeavePartyView
     private lateinit var chattingMemberLeaveChatView: ChattingMemberLeaveChatView
-    private lateinit var chattingLeaderLeaveView: ChattingLeaderLeaveView
+    private lateinit var chattingLeaderLeavePartyView: ChattingLeaderLeavePartyView
+    private lateinit var chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
     private lateinit var matchingEndView: MatchingEndView
 
@@ -41,14 +42,17 @@ class ChattingService {
     fun setChattingRemittanceCompleteView(chattingRemittanceCompleteView: ChattingRemittanceCompleteView) {
         this.chattingRemittanceCompleteView = chattingRemittanceCompleteView
     }
-    fun setChattingMemberLeaveView(chattingMemberLeavePartyView: ChattingMemberLeavePartyView){
+    fun setChattingMemberLeavePartyView(chattingMemberLeavePartyView: ChattingMemberLeavePartyView){
         this.chattingMemberLeavePartyView = chattingMemberLeavePartyView
     }
-    fun setChattingMemberLeaveView(chattingMemberLeaveChatView: ChattingMemberLeaveChatView){
+    fun setChattingMemberLeaveChatView(chattingMemberLeaveChatView: ChattingMemberLeaveChatView){
         this.chattingMemberLeaveChatView = chattingMemberLeaveChatView
     }
-    fun setChattingLeaderLeaveView(chattingLeaderLeaveView: ChattingLeaderLeaveView){
-        this.chattingLeaderLeaveView = chattingLeaderLeaveView
+    fun setChattingLeaderLeavePartyView(chattingLeaderLeavePartyView: ChattingLeaderLeavePartyView){
+        this.chattingLeaderLeavePartyView = chattingLeaderLeavePartyView
+    }
+    fun setChattingLeaderLeaveChatView(chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView){
+        this.chattingLeaderLeaveChatView = chattingLeaderLeaveChatView
     }
     fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
         this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
@@ -219,27 +223,50 @@ class ChattingService {
         })
     }
 
-    // 파티장 나가기
-    fun getChattingPartyLeaderLeave(chattingPartyLeaderLeaveRequest: ChattingPartyLeaderLeaveRequest, leaderMap: HashMap<String, String>){
-        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveResponse> {
+    // 파티장 나가기 for 배달 파티
+    fun getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest, leaderMap: HashMap<String, String>){
+        chattingService?.partyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeavePartyResponse> {
                 override fun onResponse(
-                    call: Call<ChattingPartyLeaderLeaveResponse>,
-                    response: Response<ChattingPartyLeaderLeaveResponse>
+                    call: Call<ChattingPartyLeaderLeavePartyResponse>,
+                    response: Response<ChattingPartyLeaderLeavePartyResponse>
                 ) {
                     if (response.isSuccessful && response.code() == 200) {
-                        val ChattingPartyLeaderLeaveResponse = response.body()!!
+                        val chattingPartyLeaderLeavePartyResponse = response.body()!!
 
-                        when (ChattingPartyLeaderLeaveResponse.code) {
-                            1000 -> chattingLeaderLeaveView.chattingLeaderLeaveSuccess(ChattingPartyLeaderLeaveResponse.result!!.result, leaderMap)
-                            else -> chattingLeaderLeaveView.chattingLeaderLeaveFailure(ChattingPartyLeaderLeaveResponse.code, ChattingPartyLeaderLeaveResponse.message)
+                        when (chattingPartyLeaderLeavePartyResponse.code) {
+                            1000 -> chattingLeaderLeavePartyView.chattingLeaderLeavePartySuccess(chattingPartyLeaderLeavePartyResponse.result!!, leaderMap)
+                            else -> chattingLeaderLeavePartyView.chattingLeaderLeavePartyFailure(chattingPartyLeaderLeavePartyResponse.code, chattingPartyLeaderLeavePartyResponse.message)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<ChattingPartyLeaderLeaveResponse>, t: Throwable) {
-                    Log.d("CHATTING-MEMBER-LEAVE", "실패")
+                override fun onFailure(call: Call<ChattingPartyLeaderLeavePartyResponse>, t: Throwable) {
+                    Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
                 }
             })
+    }
+
+    // 파티장 나가기 for 채팅방
+    fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest, leaderMap: HashMap<String, String>){
+        chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveChatRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveChatResponse> {
+            override fun onResponse(
+                call: Call<ChattingPartyLeaderLeaveChatResponse>,
+                response: Response<ChattingPartyLeaderLeaveChatResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val chattingPartyLeaderLeaveChatResponse = response.body()!!
+
+                    when (chattingPartyLeaderLeaveChatResponse.code) {
+                        1000 -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatSuccess(chattingPartyLeaderLeaveChatResponse.result!!, leaderMap)
+                        else -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatFailure(chattingPartyLeaderLeaveChatResponse.code, chattingPartyLeaderLeaveChatResponse.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ChattingPartyLeaderLeaveChatResponse>, t: Throwable) {
+                Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+            }
+        })
     }
 
     //배달완료 알림보내기
