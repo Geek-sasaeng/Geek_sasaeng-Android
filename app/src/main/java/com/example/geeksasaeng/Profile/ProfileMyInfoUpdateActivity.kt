@@ -1,6 +1,8 @@
 package com.example.geeksasaeng.Profile
 
+import android.content.Intent
 import android.os.Bundle
+import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
@@ -48,12 +50,16 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             finish()
         }
 
-        binding.profileMyInfoUpdateCompleteTv.setOnClickListener {
+        binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
             val dialogProfileUpdate = DialogProfileUpdate()
             val bundle = Bundle()
 
             dialogProfileUpdate.arguments= bundle
             dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
+        }
+
+        binding.profileMyInfoUpdatePasswordChangeBtn.setOnClickListener {
+            startActivity(Intent(this, ProfileMyInfoUpdatePwdActivity::class.java))
         }
     }
 }
