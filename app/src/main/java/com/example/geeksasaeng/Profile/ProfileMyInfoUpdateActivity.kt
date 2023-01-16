@@ -8,6 +8,7 @@ import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate) {
 
     private var dormitoryId = 1 //default 기숙사 아이디
+
     override fun initAfterBinding() {
         initClickListener()
         initRadioButton()

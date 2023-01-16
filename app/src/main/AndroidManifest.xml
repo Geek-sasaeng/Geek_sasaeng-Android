@@ -72,6 +72,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Profile.ProfileMyActivityActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.ProfileMyInfoUpdateActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.ProfileMyInfoUpdatePwdActivity"
+            android:screenOrientation="portrait"/>
 
         <!--카카오맵 APP KEY 추가-->
         <meta-data
