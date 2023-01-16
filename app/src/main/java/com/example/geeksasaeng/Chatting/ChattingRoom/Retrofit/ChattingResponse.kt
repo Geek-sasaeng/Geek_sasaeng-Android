@@ -60,12 +60,12 @@ data class ChattingMemberAddResult(
     @SerializedName("remittance") val remittance: Boolean
 )
 
+// 강제퇴장
 data class ChattingMemberForcedExitRequest(
     @SerializedName("removedMemberId") val removedMemberId: String,
     @SerializedName("roomId") val roomId: String
 )
 
-// 강제퇴장
 data class ChattingMemberForcedExitResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -101,11 +101,24 @@ data class ChattingRemittanceCompleteRequest(
     @SerializedName("roomId") val roomId: String
 )
 
-data class ChattingPartyMemberLeaveRequest(
+//파티 멤버 나가기 for 배달파티
+data class ChattingPartyMemberLeavePartyRequest(
     @SerializedName("uuid") val uuid: String,
 )
 
-data class ChattingPartyMemberLeaveResponse(
+data class ChattingPartyMemberLeavePartyResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)
+
+//파티 멤버 나가기 for 채팅방
+data class ChattingPartyMemberLeaveChatRequest(
+    @SerializedName("roomId") val uuid: String,
+)
+
+data class ChattingPartyMemberLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
@@ -122,6 +135,17 @@ data class ChattingPartyLeaderLeaveResult(
 )
 
 data class ChattingPartyLeaderLeaveResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingPartyLeaderLeaveResult
+)
+
+data class ChattingDeliveryPartyLeaderLeaveResult(
+    @SerializedName("result") val result: String
+)
+
+data class ChattingDeliveryPartyLeaderLeaveResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,

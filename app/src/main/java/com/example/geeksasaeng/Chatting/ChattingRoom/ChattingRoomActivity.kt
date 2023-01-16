@@ -43,7 +43,7 @@ import kotlin.properties.Delegates
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
+    ChattingMemberLeavePartyView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
     WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
@@ -432,21 +432,13 @@ class ChattingRoomActivity :
 
     // 일반 유저 나가기
     override fun MemberExistClick() {
-//        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
-//        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
+        //val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomUuid)
+        //chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
     }
 
     // 방장 나가기
     override fun LeaderExistClick() {
         // TODO: FIREBASE 버전에서 수정하기
-    }
-
-    override fun chattingMemberLeaveSuccess(result: String) {
-        // TODO: 채팅방 나가기 성공
-    }
-
-    override fun chattingMemberLeaveFailure(code: Int, message: String) {
-        // TODO: 채팅방 나가기 실패
     }
 
     override fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>) {
@@ -511,5 +503,13 @@ class ChattingRoomActivity :
 
     override fun chattingRemittanceCompleteFailure(code: Int, message: String) {
         Log.d("remittanceComplete","실패 : "+message)
+    }
+
+    override fun chattingMemberLeavePartySuccess(result: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
+        TODO("Not yet implemented")
     }
 }
