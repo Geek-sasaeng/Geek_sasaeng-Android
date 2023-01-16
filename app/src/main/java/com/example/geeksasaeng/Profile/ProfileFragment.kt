@@ -5,12 +5,9 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Chatting.ChattingRoom.DialogMatchingEnd
-import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
@@ -115,8 +112,13 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
         profileMyOngoingActivityList = result!!
-        for (i in 0 until result.size) {
-            recentActivityBind(result[i], i)
+        if (result.size == 0){ //진행중인 활동이 하나도 없으면
+            binding.profileMyActivity.visibility = View.GONE
+            binding.profileMyActivityNoInfoLayout.visibility = View.VISIBLE
+        }else{
+            for (i in 0 until result.size) {
+                recentActivityBind(result[i], i)
+            }
         }
     }
 
