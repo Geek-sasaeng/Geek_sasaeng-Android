@@ -5,12 +5,9 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Chatting.ChattingRoom.DialogMatchingEnd
-import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
@@ -35,6 +32,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var loginId = String()
     private var emailAddress = String()
     private var formattingPhoneNumber = String()
+    private var fomattingsignUpDate = String()
     private var userId: Int = 0
 
     override fun initAfterBinding() {
@@ -64,6 +62,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             bundle.putString("loginId", loginId)
             bundle.putString("emailAddress", emailAddress)
             bundle.putString("phoneNumber", formattingPhoneNumber)
+            bundle.putString("signUpDate", fomattingsignUpDate)
             profileDetailDialog.arguments = bundle
             profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
         }
@@ -73,7 +72,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정
-            (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
+            startActivity(Intent(activity, ProfileMyInfoUpdateActivity::class.java))
         }
 
         binding.profileInquiry.setOnClickListener { //문의하기
@@ -113,8 +112,13 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
         profileMyOngoingActivityList = result!!
-        for (i in 0 until result.size) {
-            recentActivityBind(result[i], i)
+        if (result.size == 0){ //진행중인 활동이 하나도 없으면
+            binding.profileMyActivity.visibility = View.GONE
+            binding.profileMyActivityNoInfoLayout.visibility = View.VISIBLE
+        }else{
+            for (i in 0 until result.size) {
+                recentActivityBind(result[i], i)
+            }
         }
     }
 
@@ -206,6 +210,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         emailAddress = result.emailAddress
         var phoneNumber = result.phoneNumber
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
+        val signUpDate = result.createdAt
+        fomattingsignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
         binding.profileCardUnivTv.text = result.universityName
         binding.profileCardDormitoryNameTv.text = result.dormitoryName
     }

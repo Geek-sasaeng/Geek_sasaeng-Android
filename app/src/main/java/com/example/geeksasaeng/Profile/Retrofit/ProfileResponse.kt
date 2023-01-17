@@ -70,6 +70,7 @@ data class ProfileMyInfoResponse(
 )
 
 data class ProfileMyInfoResult(
+    @SerializedName("createdAt") val createdAt: String,
     @SerializedName("dormitoryId") val dormitoryId: Int,
     @SerializedName("dormitoryName") val dormitoryName: String,
     @SerializedName("emailAddress") val emailAddress: String,

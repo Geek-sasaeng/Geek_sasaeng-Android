@@ -26,6 +26,7 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -37,13 +38,15 @@ import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeaveView, MemberOptionView, LeaderOptionView, ChattingLeaderLeaveView,
+    ChattingMemberLeavePartyView, ChattingMemberLeaveChatView, MemberOptionView,
+    LeaderOptionView, ChattingLeaderLeavePartyView, ChattingLeaderLeaveChatView,
     WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
@@ -307,7 +310,10 @@ class ChattingRoomActivity :
 
     private fun initChattingService() {
         chattingService = ChattingService()
-        chattingService.setChattingMemberLeaveView(this)
+        chattingService.setChattingMemberLeavePartyView(this)
+        chattingService.setChattingMemberLeaveChatView(this)
+        chattingService.setChattingLeaderLeavePartyView(this)
+        chattingService.setChattingLeaderLeaveChatView(this)
         chattingService.setSendChattingView(this)
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
@@ -432,8 +438,24 @@ class ChattingRoomActivity :
 
     // 일반 유저 나가기
     override fun MemberExistClick() {
-//        val chattingPartyMemberLeaveRequest = ChattingPartyMemberLeaveRequest(roomUuid)
-//        chattingService.getChattingPartyMemberLeave(chattingPartyMemberLeaveRequest)
+        //val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomUuid)
+        //chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
+    }
+
+    override fun chattingMemberLeavePartySuccess(result: String) {
+
+    }
+
+    override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
+
+    }
+
+    override fun chattingMemberLeaveChatSuccess(result: String) {
+
+    }
+
+    override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
+
     }
 
     // 방장 나가기
@@ -441,20 +463,20 @@ class ChattingRoomActivity :
         // TODO: FIREBASE 버전에서 수정하기
     }
 
-    override fun chattingMemberLeaveSuccess(result: String) {
-        // TODO: 채팅방 나가기 성공
+    override fun chattingLeaderLeavePartySuccess(result: String, leaderMap: HashMap<String, String>) {
+        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
     }
 
-    override fun chattingMemberLeaveFailure(code: Int, message: String) {
-        // TODO: 채팅방 나가기 실패
+    override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
+
     }
 
-    override fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>) {
-        // TODO: 방장 나가기
+    override fun chattingLeaderLeaveChatSuccess(result: String, leaderMap: HashMap<String, String>) {
+        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
     }
 
-    override fun chattingLeaderLeaveFailure(code: Int, message: String) {
-        TODO("Not yet implemented")
+    override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {
+
     }
 
     private fun calculateToday(): String {

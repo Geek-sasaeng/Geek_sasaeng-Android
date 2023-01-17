@@ -43,17 +43,29 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingRemittanceCompleteResponse>
 
     // <<delivery-party>>//
-    // 파티 멤버 나가기
+    // 파티 멤버 나가기 for 배달파티
     @PATCH("/delivery-party/member")
-    fun partyMemberChattingLeave(
-        @Body chattingPartyMemeberLeaveRequest: ChattingPartyMemberLeaveRequest
-    ): Call<ChattingPartyMemberLeaveResponse>
+    fun partyMemberPartyLeave(
+        @Body chattingPartyMemberLeavePartyRequest: ChattingPartyMemberLeavePartyRequest
+    ): Call<ChattingPartyMemberLeavePartyResponse>
 
-    // 파티장 나가기
+    //배달 파티멤버가 스스로 퇴장 for 채팅방
+    @DELETE("/party-chat-room/members/self")
+    fun partyMemberChattingLeave(
+        @Body chattingPartyMemberLeaveChatRequest: ChattingPartyMemberLeaveChatRequest
+    ): Call<ChattingPartyMemberLeaveChatResponse>
+
+    // 배달파티 방장 삭제 및 교체 for 배달파티
     @PATCH("/delivery-party/chief")
+    fun partyLeaderPartyLeave(
+        @Body chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest
+    ): Call<ChattingPartyLeaderLeavePartyResponse>
+
+    // 배달파티 방장 삭제 및 교체 for 채팅방
+    @PATCH("/party-chat-room/chief")
     fun partyLeaderChattingLeave(
-        @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
-    ): Call<ChattingPartyLeaderLeaveResponse>
+        @Body chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest
+    ): Call<ChattingPartyLeaderLeaveChatResponse>
 
     //배달 완료 알림 보내기
     @POST("/delivery-party/complicated")

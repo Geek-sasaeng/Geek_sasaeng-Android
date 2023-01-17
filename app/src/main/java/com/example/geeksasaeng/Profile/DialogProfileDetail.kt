@@ -22,6 +22,7 @@ class DialogProfileDetail : DialogFragment()  {
     var loginId: String? = null
     var emailAddress: String? = null
     var phoneNumber: String? = null
+    var signUpDate: String? = null
 
     override fun onResume() {
         super.onResume()
@@ -50,6 +51,7 @@ class DialogProfileDetail : DialogFragment()  {
         loginId =requireArguments().getString("loginId")
         emailAddress =requireArguments().getString("emailAddress")
         phoneNumber =requireArguments().getString("phoneNumber") //이미 포맷팅된 전화번호가 넘어옴
+        signUpDate =requireArguments().getString("signUpDate") //이미 포맷팅된 가입일이 넘어옴
 
         binding.dialogProfileDetailNickNameTv.text = nickName
         binding.dialogProfileDetailUnivTv.text = universityName
@@ -57,6 +59,7 @@ class DialogProfileDetail : DialogFragment()  {
         binding.dialogProfileDetailIdTv.text = loginId
         binding.dialogProfileDetailEmailTv.text = emailAddress
         binding.dialogProfileDetailPhoneTv.text = phoneNumber
+        binding.dialogProfileDetailSignUpDateTv.text = signUpDate
     }
 
 }

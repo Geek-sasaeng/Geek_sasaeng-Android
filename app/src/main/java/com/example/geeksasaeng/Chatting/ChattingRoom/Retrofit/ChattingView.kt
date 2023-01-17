@@ -30,14 +30,24 @@ interface SendChattingView {
     fun sendChattingFailure(code: Int, message: String)
 }
 
-interface ChattingMemberLeaveView {
-    fun chattingMemberLeaveSuccess(result: String)
-    fun chattingMemberLeaveFailure(code: Int, message: String)
+interface ChattingMemberLeavePartyView {
+    fun chattingMemberLeavePartySuccess(result: String)
+    fun chattingMemberLeavePartyFailure(code: Int, message: String)
 }
 
-interface ChattingLeaderLeaveView {
-    fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>)
-    fun chattingLeaderLeaveFailure(code: Int, message: String)
+interface ChattingMemberLeaveChatView {
+    fun chattingMemberLeaveChatSuccess(result: String)
+    fun chattingMemberLeaveChatFailure(code: Int, message: String)
+}
+
+interface ChattingLeaderLeavePartyView {
+    fun chattingLeaderLeavePartySuccess(result: String, leaderMap: HashMap<String, String>)
+    fun chattingLeaderLeavePartyFailure(code: Int, message: String)
+}
+
+interface ChattingLeaderLeaveChatView {
+    fun chattingLeaderLeaveChatSuccess(result: String, leaderMap: HashMap<String, String>)
+    fun chattingLeaderLeaveChatFailure(code: Int, message: String)
 }
 
 interface ChattingDeliveryComplicatedView {
