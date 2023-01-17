@@ -13,6 +13,7 @@ import com.example.geeksasaeng.databinding.DialogPartyRequestCompleteBinding
 interface DialogPartyRequestCompleteView{
     fun showPartyChattingRoom()
 }
+
 class DialogPartyRequestComplete: DialogFragment() {
     lateinit var binding: DialogPartyRequestCompleteBinding
     lateinit var dialogPartyRequestCompleteView: DialogPartyRequestCompleteView

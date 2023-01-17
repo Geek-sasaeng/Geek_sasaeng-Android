@@ -68,7 +68,6 @@ class ChattingRoomActivity :
 
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
-    private var leader = false
 
     // Chatting
     // WebSocket
@@ -98,11 +97,14 @@ class ChattingRoomActivity :
         isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
         isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
 
+        Log.d("CHATTING-ROOM-TEST", "accountNumber = $accountNumber / bank = $bank / isChief = $isChief")
+
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
 
         binding.chattingRoomTitleTv.text = roomName
 
+        initTopLayout()
         initClickListener()
         initTextChangedListener()
         initSendChatListener()
@@ -165,14 +167,21 @@ class ChattingRoomActivity :
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
-    private fun initTopLayout(){
+    private fun initTopLayout() {
         //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
         //TODO: 그렇지 않았다면~~
-        if(leader){ //리더면 상단 바 구성을 다르게 해줘야하므로
+        Log.d("CHATTING-ROOM-TEST", "leader = $isChief")
+        if (isChief) { //리더면 상단 바 구성을 다르게 해줘야하므로
             binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
-            binding.chattingRoomSectionIv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
+            binding.chattingRoomSectionIv.visibility = View.GONE
+            binding.chattingRoomTopLayoutStatusTv.visibility = View.GONE
+            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.GONE
+        } else {
+            binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.GONE
+            binding.chattingRoomSectionIv.visibility = View.VISIBLE
+            binding.chattingRoomTopLayoutStatusTv.visibility = View.VISIBLE
+            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.VISIBLE
+            binding.chattingRoomTopLayoutStatusTv.text = "$bank  $accountNumber"
         }
     }
 
@@ -315,7 +324,7 @@ class ChattingRoomActivity :
 
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener {
-            if (leader) {
+            if (isChief) {
                 val optionDialog = LeaderOptionDialog()
                 optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
