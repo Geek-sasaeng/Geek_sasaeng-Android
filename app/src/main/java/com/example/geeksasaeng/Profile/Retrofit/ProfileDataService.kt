@@ -9,6 +9,7 @@ import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Path
 
 class ProfileDataService {
 
@@ -19,6 +20,7 @@ class ProfileDataService {
     private lateinit var profileMyInfoView: ProfileMyInfoView
     private lateinit var profileMyPreActivityView: ProfileMyPreActivityView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
+    private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -39,6 +41,9 @@ class ProfileDataService {
     }
     fun setProfileWithdrawalView(profileWithdrawalView: ProfileWithdrawalView) {
         this.profileWithdrawalView = profileWithdrawalView
+    }
+    fun setProfileMemberInfoModifyView(profileMemberInfoModifyView: ProfileMemberInfoModifyView) {
+        this.profileMemberInfoModifyView = profileMemberInfoModifyView
     }
 
     // 진행 중인 활동 조회
@@ -157,4 +162,33 @@ class ProfileDataService {
             }
         })
     }
+
+    // 회원 정보 수정
+    fun profileMemberInfoModifySender(checkPassword: String?, dormitoryId: Int, loginId: String, nickname: String, password: String?, profileImg: String?) {
+        profileDataService?.profileMemberInfoModify(checkPassword, dormitoryId, loginId, nickname, password, profileImg)?.enqueue(object: Callback<ProfileMemberInfoModifyResponse> {
+            override fun onResponse(
+                call: Call<ProfileMemberInfoModifyResponse>,
+                response: Response<ProfileMemberInfoModifyResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("PROFILE-MODIFY-RESPONSE", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileMemberInfoModifyView.onProfileMemberInfoModifySuccess(resp.result)
+                        4000 -> Log.d("PROFILE-MODIFY-RESPONSE", "서버 오류")
+                        else -> profileMemberInfoModifyView.onProfileMemberInfoModifyFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileMemberInfoModifyResponse>, t: Throwable) {
+                Log.d("PROFILE-MODIFY-RESPONSE", "ProfileDataService-onFailure : profileMemberInfoModifyFailed", t)
+            }
+        })
+    }
+
+
+
+
 }
+

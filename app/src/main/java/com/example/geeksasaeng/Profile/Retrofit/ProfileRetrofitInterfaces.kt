@@ -38,4 +38,15 @@ interface ProfileRetrofitInterfaces {
         @Path("id") id: Int,
         @Body profileWithdrawalRequest: ProfileWithdrawalRequest
     ): Call<ProfileWithdrawalResponse>
+
+    // 멤버 정보 수정하기
+    @POST("/members/info")
+    fun profileMemberInfoModify(
+        @Path("checkPassword") checkPassword: String?,
+        @Path("dormitoryId") dormitoryId: Int,
+        @Path("loginId") loginId: String,
+        @Path("nickname") nickname: String,
+        @Path("password") password: String?,
+        @Path("profileImg") profileImg: String?,
+    ): Call<ProfileMemberInfoModifyResponse>
 }

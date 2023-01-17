@@ -137,9 +137,13 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
             val dialogProfileUpdate = DialogProfileUpdate()
             val bundle = Bundle()
-
+            bundle.putInt("dormitoryId", dormitoryId)
+            bundle.putString("loginId", loginId)
+            bundle.putString("nickname", nickName)
+            bundle.putString("profileImg", getProfileImgUrl()) //TODO: 프로필 이미지 앨범 연결 하고 이 부분 수정 필요!
             dialogProfileUpdate.arguments= bundle
             dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
+
         }
 
         binding.profileMyInfoUpdateNicknameCheckBtn.setOnClickListener {

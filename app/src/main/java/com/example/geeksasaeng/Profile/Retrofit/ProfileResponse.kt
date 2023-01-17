@@ -123,3 +123,20 @@ data class ProfileWithdrawalRequest(
     @SerializedName("checkPassword") val checkPassword: String,
     @SerializedName("password") val password: String
 )
+
+// 회원 정보 수정
+data class ProfileMemberInfoModifyResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ProfileMemberInfoModifyResult
+)
+
+data class ProfileMemberInfoModifyResult(
+    @SerializedName("dormitoryId") val dormitoryId: Int,
+    @SerializedName("dormitoryName") val dormitoryName: String,
+    @SerializedName("loginId") val loginId: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("profileImgUrl") val profileImgUrl: String
+
+)

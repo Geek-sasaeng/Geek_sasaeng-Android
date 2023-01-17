@@ -35,3 +35,9 @@ interface ProfileWithdrawalView {
     fun onProfileWithdrawalSuccess()
     fun onProfileWithdrawalFailure(message: String)
 }
+
+// 회원 정보 수정
+interface ProfileMemberInfoModifyView {
+    fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult)
+    fun onProfileMemberInfoModifyFailure(message: String)
+}
