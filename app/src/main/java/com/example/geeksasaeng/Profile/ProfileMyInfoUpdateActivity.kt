@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Profile
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,10 +15,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.getDormitoryId
-import com.example.geeksasaeng.Utils.getNickname
-import com.example.geeksasaeng.Utils.getProfileImgUrl
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
 import java.util.regex.Pattern
 
@@ -25,6 +23,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     SignUpNickCheckView {
 
     private var dormitoryId = 1 //default 기숙사 아이디
+    private lateinit var nickName :String  //기존 닉네임
+    private lateinit var loginId :String  //로그인 id -api용
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
 
     override fun initAfterBinding() {
@@ -38,8 +38,16 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private fun initData() {
         //기존 정보 불러오기
 
-        binding.profileMyInfoUpdateNicknameEt.hint = getNickname() //닉네임
-        dormitoryId = getDormitoryId() //기숙사 아이디
+        //로그인 아이디
+        loginId = intent.getStringExtra("loginId").toString()
+        //로그인아이디는 getLoginId로 안꺼내 쓰는 이유는 로그인 api 반환값에 로그인아이디가 없어서 sharedPreference에 저장이 안되어있기 때문이다.
+
+        //닉네임
+        nickName = getNickname()!!
+        binding.profileMyInfoUpdateNicknameEt.hint = nickName
+
+        //기숙사 아이디
+        dormitoryId = getDormitoryId()
         when(dormitoryId){
             1-> binding.profileMyInfoUpdateDormitoryRb1.isChecked = true
             2-> binding.profileMyInfoUpdateDormitoryRb2.isChecked = true
@@ -49,7 +57,9 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             6-> binding.profileMyInfoUpdateDormitoryRb6.isChecked = true
             else->{}
         }
-        Glide.with(this) //사용자 프로필
+
+        //사용자 프로필
+        Glide.with(this)
             .load(getProfileImgUrl())
             .into(binding.profileMyInfoUpdateUserImgIv)
     }
@@ -83,6 +93,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
                         binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE // 보이게 만들기
                     }
                 }
+                checkingModifiability()
             }
         })
     }
@@ -100,6 +111,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
                 R.id.profile_my_info_update_dormitory_rb3 -> dormitoryId = 3
                 else-> {}
             }
+            checkingModifiability()
         }
 
         binding.profileMyInfoUpdateDormitoryRg2.setOnCheckedChangeListener { group, checkedId ->
@@ -113,6 +125,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
                 R.id.profile_my_info_update_dormitory_rb6 -> dormitoryId = 6
                 else-> {}
             }
+            checkingModifiability()
         }
     }
 
@@ -150,6 +163,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         //버튼 이미지 확인 완료로 변경
         binding.profileMyInfoUpdateNicknameCheckBtn.visibility = View.INVISIBLE //중복확인버튼
         binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility = View.VISIBLE //확인 완료 버튼
+        checkingModifiability()
     }
 
     override fun onSignUpNickCheckFailure(message: String) {
@@ -157,6 +171,22 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         binding.profileMyInfoUpdateNicknameExplainationTv.text = "중복된 닉네임입니다"
         if(binding.profileMyInfoUpdateNicknameExplainationTv.visibility == View.INVISIBLE){
             binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE // 보이게 만들기
+        }
+        checkingModifiability()
+    }
+
+    private fun checkingModifiability() {
+        var modifiability = (binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility==View.VISIBLE) ||
+                (dormitoryId!= getDormitoryId())
+        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르면
+
+        if (modifiability) { //수정이 가능하면
+            binding.profileMyInfoUpdateCompleteTv.isClickable = true
+            binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.main))
+
+        } else{
+            binding.profileMyInfoUpdateCompleteTv.isClickable = false
+            binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.bababa_color))
         }
     }
 }

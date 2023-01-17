@@ -20,4 +20,7 @@
     <color name= "error">#FF0000</color>
     <color name= "main_color">#2DB9EA</color>
 
+    <!--자주 쓰이길래 임의로 넣은 것-->
+    <color name= "bababa_color">#BABABA</color>
+
 </resources>

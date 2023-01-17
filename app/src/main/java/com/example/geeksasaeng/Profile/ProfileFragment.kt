@@ -72,7 +72,9 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정
-            startActivity(Intent(activity, ProfileMyInfoUpdateActivity::class.java))
+            val intent = Intent(activity, ProfileMyInfoUpdateActivity::class.java)
+            intent.putExtra("loginId", loginId)
+            startActivity(intent)
         }
 
         binding.profileInquiry.setOnClickListener { //문의하기
