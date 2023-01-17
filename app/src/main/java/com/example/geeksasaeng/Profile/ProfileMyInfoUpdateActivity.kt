@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.example.geeksasaeng.Home.CreateParty.DialogLink
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
@@ -17,6 +18,7 @@ import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
+import com.example.geeksasaeng.databinding.DialogProfileCurrentPwdCheckingBinding
 import java.util.regex.Pattern
 
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
@@ -155,7 +157,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
 
         binding.profileMyInfoUpdatePasswordChangeBtn.setOnClickListener { // 비밀번호 변경
-            startActivity(Intent(this, ProfileMyInfoUpdatePwdActivity::class.java))
+            val dialogProfileCurrentPwdChecking = DialogProfileCurrentPwdChecking()
+            dialogProfileCurrentPwdChecking.show(supportFragmentManager, "DialogProfileCurrentPwdChecking")
         }
     }
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/dialog_profile_current_pwd_checking_back_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="33dp"
+            android:layout_marginStart="31dp"/>
+
+        <TextView
+            android:id="@+id/dialog_profile_current_pwd_checking_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="본인 확인하기"
+            android:textSize="18sp"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginHorizontal="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/dialog_profile_current_pwd_checking_et"
+            android:layout_marginTop="30dp" />
+
+        <!--edittext밑줄 색상은 backgroundTint로 바꿀 수 있음-->
+        <EditText
+            android:id="@+id/dialog_profile_current_pwd_checking_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="기존 비밀번호를 입력해주세요"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:textColorHint="@color/gray_1"
+            android:backgroundTint="@color/gray_0"
+            android:textSize="15sp"
+            android:fontFamily="@font/spoqa_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_profile_current_pwd_checking_title_tv"
+            app:layout_constraintBottom_toTopOf="@id/dialog_profile_current_pwd_checking_next_btn"
+            android:paddingStart="7dp"
+            android:paddingBottom="13dp"
+            android:layout_marginHorizontal="28dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginBottom="70dp" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_profile_current_pwd_checking_next_btn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/main"
+            android:background="@drawable/round_border"
+            android:text="완료"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/spoqa_bold"
+            app:layout_constraintTop_toBottomOf="@id/dialog_profile_current_pwd_checking_et"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="21dp"
+            android:layout_marginBottom="35dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
