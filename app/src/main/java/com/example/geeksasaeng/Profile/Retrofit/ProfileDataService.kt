@@ -198,13 +198,11 @@ class ProfileDataService {
                 call: Call<ProfilePasswordCheckingResponse>,
                 response: Response<ProfilePasswordCheckingResponse>
             ) {
-                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE-JWT", getJwt().toString())
-                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE-외부", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", resp.toString())
                     when (resp.code) {
-                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        1203 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
                         4000 -> Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", "서버 오류")
                         else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
                     }

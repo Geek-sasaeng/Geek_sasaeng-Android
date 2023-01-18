@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordCheckingRequest
 import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordCheckingView
 import com.example.geeksasaeng.databinding.DialogProfileCurrentPwdCheckingBinding
+import java.util.regex.Pattern
 
 class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordCheckingView  {
 
@@ -48,8 +50,17 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
 
     private fun initClickListener() {
         binding.dialogProfileCurrentPwdCheckingNextBtn.setOnClickListener {
-            val password = binding.dialogProfileCurrentPwdCheckingEt.text.toString()
-            profileDataService.profilePasswordCheckingSender(ProfilePasswordCheckingRequest(password))  //비밀번호 일치 확인 API ★
+            val pwRegex = """^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$)[A-Za-z\d!@#$%^+\-=]{8,}$"""
+            val pwPattern = Pattern.compile(pwRegex)
+            val macher = pwPattern.matcher(binding.dialogProfileCurrentPwdCheckingEt.text.toString())
+
+            if (macher.matches()) { // 조건이 맞을 때만 api로 확인
+                val password = binding.dialogProfileCurrentPwdCheckingEt.text.toString()
+                profileDataService.profilePasswordCheckingSender(ProfilePasswordCheckingRequest(password))  //비밀번호 일치 확인 API ★
+            }
+            else{ //조건이 안 맞으면 무조건 틀린거거
+               binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -60,6 +71,5 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
 
     override fun onProfilePasswordCheckingFailure(message: String) {
         binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.VISIBLE
-        startActivity(Intent(activity, ProfileMyInfoUpdatePwdActivity::class.java))
     }
 }
