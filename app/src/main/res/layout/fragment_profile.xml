@@ -339,18 +339,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/profile_my_activity2_cv"
                         app:layout_constraintTop_toBottomOf="@id/profile_my_activity"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="17dp"
                         android:layout_marginStart="20dp"
+                        android:layout_marginBottom="22dp"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="4dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="22dp">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:id="@+id/profile_my_activity1_type_tv"
