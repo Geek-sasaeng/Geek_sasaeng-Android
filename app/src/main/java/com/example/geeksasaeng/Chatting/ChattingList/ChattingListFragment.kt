@@ -6,16 +6,29 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.example.geeksasaeng.BuildConfig
+import com.example.geeksasaeng.ChatSetting.*
+import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.*
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getMemberId
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.google.gson.annotations.SerializedName
+import com.rabbitmq.client.Connection
+import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
     ChattingListView, ChattingDetailView {
@@ -23,12 +36,23 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
     var cursor: Int = 0
-    private var chattingList = ArrayList<ChattingList?>()
+    private var chattingRoomInfoList = ArrayList<ChattingList?>()
+    private var chattingRoomList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
 
     // 채팅방 정보를 넘기기 위해 필요한 부분
     private lateinit var roomTitle: String
     private lateinit var roomId: String
+
+    // RabbitMQ
+    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+    private val factory = ConnectionFactory()
+    // QUEUE_NAME = MemberID!
+    var QUEUE_NAME = getMemberId().toString()
+    private val chattingList = arrayListOf<Chat>()
+
+    // RoomDB
+    private lateinit var chatDB: ChatDatabase
 
     override fun onResume() {
         super.onResume()
@@ -41,18 +65,90 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     }
 
     override fun initAfterBinding() {
+        chatDB = ChatDatabase.getDBInstance(context as MainActivity)!!
+
         checkBinding = true
         loadingStart()
         initAdapter()
         initClickListener()
         initScrollListener()
+
+        // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
+        // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
+        Thread {
+            initRabbitMQSetting()
+        }.start()
     }
 
     private fun initChattingList() {
-        chattingList.clear()
+        chattingRoomList.clear()
         chattingListService = ChattingListService()
         chattingListService.setChattingListView(this)
         getChattingList()
+    }
+
+    private fun initRabbitMQSetting() {
+        factory.setUri(rabbitMQUri)
+        // RabbitMQ 연결
+        val conn: Connection = factory.newConnection()
+        // Send and Receive 가능하도록 해주는 부분!
+        val channel = conn.createChannel()
+        // durable = true로 설정!!
+        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
+        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
+
+        lateinit var originalMessage: String
+        lateinit var chatResponseMessage: Chat
+
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            originalMessage = String(delivery.body, Charsets.UTF_8)
+            chatResponseMessage = getJSONtoChatting(originalMessage)
+            chatDB.chatDao().insert(chatResponseMessage)
+
+            Log.d("CHATTING-SYSTEM-TEST", "chatResponseMessage = $chatResponseMessage")
+            chattingList.add(chatResponseMessage)
+        }
+
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
+    }
+
+    private fun getJSONtoChatting(message: String): Chat {
+        var chatting = JSONObject(message)
+        var chatId = chatting.getString("chatId")
+        var content = chatting.getString("content")
+        var chatRoomId = chatting.getString("chatRoomId")
+        var isSystemMessage = chatting.getBoolean("isSystemMessage")
+        var memberId = chatting.getInt("memberId")
+        var nickName = chatting.getString("nickName")
+        var profileImgUrl = chatting.getString("profileImgUrl")
+
+        // JsonArray를 ArrayList로 바꾸기 위한 과정!
+        // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
+        var readMembers = java.util.ArrayList<String>()
+        var readMembersTemp = chatting.getJSONArray("readMembers")
+        if (readMembersTemp != null) {
+            for (i in 0 until readMembersTemp.length()) {
+                readMembers.add(readMembersTemp.getInt(i).toString())
+            }
+        }
+
+        var createdAt = chatting.getString("createdAt")
+        var chatType = chatting.getString("chatType")
+        var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
+        var isImageMessage = chatting.getBoolean("isImageMessage")
+
+        // ViewType 설정 부분
+        var viewType: Int = if (isSystemMessage.toString() == "true") systemChatting
+        else if (isImageMessage.toString() == "true") imageChatting
+        else if (memberId.toString() == QUEUE_NAME) myChatting
+        else yourChatting
+
+        // var isLeader: Boolean = chiefId == memberId
+        // TODO: 리더인지 아닌지 데이터 넘기기
+        var isLeader = true
+
+        return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     private fun getChattingDetail(roomId: String) {
@@ -62,7 +158,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 
     private fun initAdapter() {
         if (checkBinding) {
-            chattingListRVAdapter = ChattingListRVAdapter(chattingList)
+            chattingListRVAdapter = ChattingListRVAdapter(chattingRoomList)
             binding.chattingListRv.adapter = chattingListRVAdapter
             binding.chattingListRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -141,7 +237,59 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         }
     }
 
+    private fun getChattingRoomInfo(roomId: String) {
+        // roomId를 이용해 마지막 채팅 연결
+
+    }
+
     override fun getChattingListSuccess(result: ChattingListResult) {
+        CoroutineScope(Dispatchers.IO).launch {
+            for (i in 0 until result.parties.size) {
+                var lastChatting = ""
+                var lastChattingTime = ""
+                var newChattingNumber = 0
+
+                Log.d("CHATTING-LIST-TEST", "1")
+                var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
+
+                if (chat != null) {
+                    if (chat.size > 1) {
+                        lastChatting = chat[chat.size - 1].content.toString()
+                        lastChattingTime = chat[chat.size - 1].createdAt
+
+                        // TODO: 임시로 넣은 부분
+                        newChattingNumber = 0
+                    }
+                }
+                Log.d("CHATTING-LIST-TEST", "2")
+
+                var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
+                chattingRoomInfoList.add(partyData)
+                chattingRoomList.add(partyData)
+                Log.d("CHATTING-LIST-TEST", "chattingRoomInfoList 1 = $chattingRoomInfoList")
+                Log.d("CHATTING-LIST-TEST", "3")
+            }
+        }
+
+        chattingListRVAdapter.addAllItems(chattingRoomList)
+        Log.d("CHATTING-LIST-TEST", "6")
+
+        // for 문을 이용해 각 채팅방의 마지막 채팅 및 안 읽은 채팅 개수 넣어주기!!
+        // result.parties?.let { chattingRoomList.addAll(it) }
+
+        // 마지막 채팅 및 안 읽은 채팅 개수 연결해주기
+        // 여기도 for 문 이용하기!
+        // result.parties[0]?.let { getChattingRoomInfo(it.roomId) }
+
+        chattingListRVAdapter.notifyDataSetChanged()
+        Log.d("CHATTING-LIST-TEST", "7")
+        var finalPage = result.finalPage
+
+        // 로딩화면 제거
+        loadingStop()
+        Log.d("CHATTING-LIST-TEST", "8")
+
+        /*
         result.parties?.let { chattingList.addAll(it) }
         chattingListRVAdapter.notifyDataSetChanged()
         var finalPage = result.finalPage
@@ -149,6 +297,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 
         // 로딩화면 제거
         loadingStop()
+         */
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
@@ -174,6 +323,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     }
 
     override fun getChattingDetailFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT)
+        Log.d("GET-CHATTING-DETAIL-LIST", "code = $code, msg = $msg")
     }
 }

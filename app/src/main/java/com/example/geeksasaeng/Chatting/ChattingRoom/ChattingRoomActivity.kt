@@ -73,8 +73,8 @@ class ChattingRoomActivity :
     // WebSocket
     private var chatClient = OkHttpClient()
     // RabbitMQ
-    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
-    private val factory = ConnectionFactory()
+//    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+//    private val factory = ConnectionFactory()
     // QUEUE_NAME = MemberID!
     var QUEUE_NAME = getMemberId().toString()
     private val chattingList = arrayListOf<Chat>()
@@ -114,9 +114,9 @@ class ChattingRoomActivity :
 
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
-        Thread {
-            initRabbitMQSetting()
-        }.start()
+//        Thread {
+//            initRabbitMQSetting()
+//        }.start()
 
         // 이전 채팅을 가져오기 위한 초기 작업
         // DB 비동기 처리를 위해 코루틴 사용!
@@ -142,30 +142,30 @@ class ChattingRoomActivity :
         }
     }
 
-    private fun initRabbitMQSetting() {
-        factory.setUri(rabbitMQUri)
-        // RabbitMQ 연결
-        val conn: Connection = factory.newConnection()
-        // Send and Receive 가능하도록 해주는 부분!
-        val channel = conn.createChannel()
-        // durable = true로 설정!!
-        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
-
-        lateinit var originalMessage: String
-        lateinit var chatResponseMessage: Chat
-
-        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-            originalMessage = String(delivery.body, Charsets.UTF_8)
-            chatResponseMessage = getJSONtoChatting(originalMessage)
-            chatDB.chatDao().insert(chatResponseMessage)
-
-            chattingList.add(chatResponseMessage)
-        }
-
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
-    }
+//    private fun initRabbitMQSetting() {
+//        factory.setUri(rabbitMQUri)
+//        // RabbitMQ 연결
+//        val conn: Connection = factory.newConnection()
+//        // Send and Receive 가능하도록 해주는 부분!
+//        val channel = conn.createChannel()
+//        // durable = true로 설정!!
+//        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+//        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
+//        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
+//
+//        lateinit var originalMessage: String
+//        lateinit var chatResponseMessage: Chat
+//
+//        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+//            originalMessage = String(delivery.body, Charsets.UTF_8)
+//            chatResponseMessage = getJSONtoChatting(originalMessage)
+//            chatDB.chatDao().insert(chatResponseMessage)
+//
+//            chattingList.add(chatResponseMessage)
+//        }
+//
+//        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
+//    }
 
     private fun initTopLayout() {
         //TODO: 주문 또는 송금 완료했으면 안보이게 해주기

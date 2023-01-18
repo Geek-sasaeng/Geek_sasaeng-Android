@@ -1,11 +1,14 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemChattingListBinding
+import okhttp3.internal.notify
 
 class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<ChattingList?>) : RecyclerView.Adapter<ChattingListRVAdapter.ViewHolder>() {
 
@@ -40,10 +43,21 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
         return chattingList[position]!!
     }
 
-    fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
-        chattingList.clear()
-        chattingList.addAll(items)
+    fun addItem(item: ChattingList) {
+        chattingList.add(item)
         this.notifyDataSetChanged()
+    }
+
+    fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
+        Log.d("CHATTING-LIST-TEST", "4")
+        Log.d("CHATTING-LIST-TEST", "items 1 = $items")
+        chattingList.clear()
+        Log.d("CHATTING-LIST-TEST", "items 2 = $items")
+        chattingList.addAll(items)
+        Log.d("CHATTING-LIST-TEST", "items 3 = $items")
+        this.notifyDataSetChanged()
+        Log.d("CHATTING-LIST-TEST", "items 4 = $items")
+        Log.d("CHATTING-LIST-TEST", "5")
     }
 
     override fun getItemCount(): Int = chattingList.size
@@ -53,14 +67,10 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
             binding.itemChattingListTitle.text = chatting.roomTitle
             // 배달파티인지, 거래인지 등을 구분하기 위함
             binding.itemChattingListSectionIv.setImageResource(R.drawable.ic_delivery_party_ic)
-
-            // TODO: Firebase를 통해 적용했던 부분이라서 수정 필요
-//            binding.itemChattingListLastChatting.text = chatting.lastChat
-//            binding.itemChattingListTimeTv.text = chatting.lastMsgTime
-//            binding.itemChattingListChattingNumberTv.text = chatting.newMsg
-//            if(chatting.newMsg==""){
-//                binding.itemChattingListLastChatting.setTextColor(Color.parseColor("#636363"))
-//            }
+            binding.itemChattingListLastChatting.text = chatting.lastChatting
+            binding.itemChattingListTimeTv.text = chatting.lastChattingTime
+            binding.itemChattingListChattingNumberTv.text = chatting.newChattingNumber.toString()
+            binding.itemChattingListLastChatting.setTextColor(Color.parseColor("#636363"))
         }
     }
 }
