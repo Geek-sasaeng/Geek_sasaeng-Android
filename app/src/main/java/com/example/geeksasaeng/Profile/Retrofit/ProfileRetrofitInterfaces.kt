@@ -49,4 +49,13 @@ interface ProfileRetrofitInterfaces {
         @Path("password") password: String?,
         @Path("profileImg") profileImg: String?,
     ): Call<ProfileMemberInfoModifyResponse>
+
+    //비밀번호 일치 확인
+    @POST("/members/password")
+    fun profilePasswordChecking(
+        @Body profilePasswordCheckingRequest: ProfilePasswordCheckingRequest
+    ) : Call<ProfilePasswordCheckingResponse>
+
+
+
 }

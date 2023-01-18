@@ -21,6 +21,7 @@ class ProfileDataService {
     private lateinit var profileMyPreActivityView: ProfileMyPreActivityView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
     private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
+    private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -44,6 +45,9 @@ class ProfileDataService {
     }
     fun setProfileMemberInfoModifyView(profileMemberInfoModifyView: ProfileMemberInfoModifyView) {
         this.profileMemberInfoModifyView = profileMemberInfoModifyView
+    }
+    fun setProfilePasswordCheckingView(profilePasswordCheckingView: ProfilePasswordCheckingView) {
+        this.profilePasswordCheckingView = profilePasswordCheckingView
     }
 
     // 진행 중인 활동 조회
@@ -187,7 +191,31 @@ class ProfileDataService {
         })
     }
 
+    // 비밀번호 일치 확인
+    fun profilePasswordCheckingSender(body: ProfilePasswordCheckingRequest) {
+        profileDataService?.profilePasswordChecking(body)?.enqueue(object: Callback<ProfilePasswordCheckingResponse> {
+            override fun onResponse(
+                call: Call<ProfilePasswordCheckingResponse>,
+                response: Response<ProfilePasswordCheckingResponse>
+            ) {
+                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE-JWT", getJwt().toString())
+                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE-외부", response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", resp.toString())
+                    when (resp.code) {
+                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        4000 -> Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", "서버 오류")
+                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                    }
+                }
+            }
 
+            override fun onFailure(call: Call<ProfilePasswordCheckingResponse>, t: Throwable) {
+                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", "ProfileDataService-onFailure : profilePasswordCheckingFailed", t)
+            }
+        })
+    }
 
 
 }

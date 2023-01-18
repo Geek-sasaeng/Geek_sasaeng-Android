@@ -9,11 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
+import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordCheckingRequest
+import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordCheckingView
 import com.example.geeksasaeng.databinding.DialogProfileCurrentPwdCheckingBinding
 
-class DialogProfileCurrentPwdChecking: DialogFragment()  {
+class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordCheckingView  {
 
     lateinit var binding: DialogProfileCurrentPwdCheckingBinding
+    lateinit var profileDataService: ProfileDataService
 
     override fun onResume() {
         super.onResume()
@@ -32,15 +36,30 @@ class DialogProfileCurrentPwdChecking: DialogFragment()  {
     ): View? {
         binding = DialogProfileCurrentPwdCheckingBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
+        initView()
         initClickListener()
         return binding.root
     }
 
+    private fun initView() {
+        profileDataService = ProfileDataService()
+        profileDataService.setProfilePasswordCheckingView(this)
+    }
+
     private fun initClickListener() {
         binding.dialogProfileCurrentPwdCheckingNextBtn.setOnClickListener {
-            //비밀번호 맞는지 안 맞는 지 체크하는 API
-            //그게 성공시 아래 코드 수행
-            startActivity(Intent(activity, ProfileMyInfoUpdatePwdActivity::class.java))
+            val password = binding.dialogProfileCurrentPwdCheckingEt.text.toString()
+            profileDataService.profilePasswordCheckingSender(ProfilePasswordCheckingRequest(password))  //비밀번호 일치 확인 API ★
         }
+    }
+
+    override fun onProfilePasswordCheckingSuccess() {
+        binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.INVISIBLE
+        startActivity(Intent(activity, ProfileMyInfoUpdatePwdActivity::class.java))
+    }
+
+    override fun onProfilePasswordCheckingFailure(message: String) {
+        binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.VISIBLE
+        startActivity(Intent(activity, ProfileMyInfoUpdatePwdActivity::class.java))
     }
 }

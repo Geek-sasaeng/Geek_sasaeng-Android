@@ -140,3 +140,15 @@ data class ProfileMemberInfoModifyResult(
     @SerializedName("profileImgUrl") val profileImgUrl: String
 
 )
+
+// 비밀번호 일치 확인
+data class ProfilePasswordCheckingRequest(
+    @SerializedName("password") val password: String
+)
+
+data class ProfilePasswordCheckingResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)

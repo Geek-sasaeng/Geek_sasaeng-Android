@@ -41,3 +41,9 @@ interface ProfileMemberInfoModifyView {
     fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult)
     fun onProfileMemberInfoModifyFailure(message: String)
 }
+
+// 비밀번호 일치 확인
+interface ProfilePasswordCheckingView {
+    fun onProfilePasswordCheckingSuccess()
+    fun onProfilePasswordCheckingFailure(message: String)
+}
