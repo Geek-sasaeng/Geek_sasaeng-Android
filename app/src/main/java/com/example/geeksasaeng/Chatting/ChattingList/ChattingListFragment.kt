@@ -249,7 +249,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                 var lastChattingTime = ""
                 var newChattingNumber = 0
 
-                Log.d("CHATTING-LIST-TEST", "1")
                 var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
 
                 if (chat != null) {
@@ -261,43 +260,20 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                         newChattingNumber = 0
                     }
                 }
-                Log.d("CHATTING-LIST-TEST", "2")
 
                 var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
                 chattingRoomInfoList.add(partyData)
                 chattingRoomList.add(partyData)
-                Log.d("CHATTING-LIST-TEST", "chattingRoomInfoList 1 = $chattingRoomInfoList")
-                Log.d("CHATTING-LIST-TEST", "3")
             }
         }
 
         chattingListRVAdapter.addAllItems(chattingRoomList)
-        Log.d("CHATTING-LIST-TEST", "6")
-
-        // for 문을 이용해 각 채팅방의 마지막 채팅 및 안 읽은 채팅 개수 넣어주기!!
-        // result.parties?.let { chattingRoomList.addAll(it) }
-
-        // 마지막 채팅 및 안 읽은 채팅 개수 연결해주기
-        // 여기도 for 문 이용하기!
-        // result.parties[0]?.let { getChattingRoomInfo(it.roomId) }
 
         chattingListRVAdapter.notifyDataSetChanged()
-        Log.d("CHATTING-LIST-TEST", "7")
         var finalPage = result.finalPage
 
         // 로딩화면 제거
         loadingStop()
-        Log.d("CHATTING-LIST-TEST", "8")
-
-        /*
-        result.parties?.let { chattingList.addAll(it) }
-        chattingListRVAdapter.notifyDataSetChanged()
-        var finalPage = result.finalPage
-        Log.d("GET-CHATTING-LIST", "result = $result")
-
-        // 로딩화면 제거
-        loadingStop()
-         */
     }
 
     override fun getChattingListFailure(code: Int, msg: String) {
