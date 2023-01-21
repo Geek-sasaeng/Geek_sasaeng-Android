@@ -48,7 +48,7 @@ class MemberOptionDialog: DialogFragment() {
             //memberOptionView.MemberExistClick()
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
-            bundle.putBoolean("leader",true)
+            bundle.putBoolean("isCheif",false)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
         }

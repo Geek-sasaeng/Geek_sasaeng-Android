@@ -53,6 +53,8 @@ class ChattingRoomActivity :
     // 채팅 리스트에서 받아오는 값들
     private lateinit var roomName: String
     private lateinit var roomId: String
+
+    //상세보기 api로 부터 받아올 정보들
     private lateinit var accountNumber: String
     private lateinit var bank: String
     private var chiefId by Delegates.notNull<Int>()
@@ -60,6 +62,7 @@ class ChattingRoomActivity :
     private var isChief: Boolean = false
     private var isOrderFinish: Boolean = false
     private var isRemittanceFinish: Boolean = false
+    private var partyId by Delegates.notNull<Int>()
 
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
@@ -300,7 +303,7 @@ class ChattingRoomActivity :
                 val optionDialog = LeaderOptionDialog()
                 //optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
-//                bundle.putString("roomUuid", roomUuid)
+                bundle.putInt("partyId", partyId)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
@@ -532,8 +535,9 @@ class ChattingRoomActivity :
         isChief = result.isChief
         isOrderFinish = result.isOrderFinish
         isRemittanceFinish = result.isRemittanceFinish
+        partyId = result.partyId
 
-        initTopLayout()
+        initTopLayout() // 받아온 정보로 상단바 설정
     }
 
     private fun initTopLayout(){ //채팅방 상단 바 설정

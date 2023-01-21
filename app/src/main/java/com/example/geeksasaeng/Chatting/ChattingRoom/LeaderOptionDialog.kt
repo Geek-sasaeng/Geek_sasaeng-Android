@@ -15,7 +15,7 @@ import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBi
 class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
-    private var roomUuid : String? = null
+    private var partyId : Int = 0
     private lateinit var leaderOptionView: LeaderOptionView
 
     fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
@@ -28,8 +28,8 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogChattingRoomOptionLeaderPopupBinding.inflate(inflater, container, false)
-        roomUuid = requireArguments().getString("roomUuid")
-        Log.d("roomUuid", roomUuid.toString())
+        partyId = requireArguments().getInt("partyId")
+        Log.d("partyId", partyId.toString())
         initListener()
         initMatchingEndListener()
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
@@ -53,7 +53,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
             val dialog = DialogSendAlarm()
             val bundle = Bundle()
             dialog.setChattingDeliveryComplicatedView(this)
-            bundle.putString("roomUuid", roomUuid)
+            bundle.putInt("partyId", partyId)
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
         }
@@ -61,7 +61,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         binding.dialogLeaderPopupOptionMatchingEndTv.setOnClickListener { //매칭마감하기 기능
             val warningDialog = DialogMatchingEnd()
             val bundle = Bundle()
-            bundle.putString("roomUuid", roomUuid)
+            bundle.putInt("partyId", partyId)
             warningDialog.arguments = bundle
             warningDialog.show(parentFragmentManager, "MatchingEndWarningDialog")
         }
@@ -74,7 +74,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
             //leaderOptionView.LeaderExistClick()
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
-            bundle.putBoolean("leader",true)
+            bundle.putBoolean("isCheif",true)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
         }

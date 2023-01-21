@@ -40,9 +40,9 @@ class DialogChattingExit: DialogFragment() {
 
         binding.chattingExitOkBtn.setOnClickListener {
 
-            var leader = arguments!!.getBoolean("leader")
+            var isCheif = arguments!!.getBoolean("isCheif")
 
-            if(leader){
+            if(isCheif){
                 var leaderOptionView = activity as LeaderOptionView
                 leaderOptionView.LeaderExistClick()
             }else{

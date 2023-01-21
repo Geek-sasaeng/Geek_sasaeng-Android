@@ -298,9 +298,9 @@ class ChattingService {
     }
 
     //배달파티 수동 매칭마감
-    fun matchingEndSender(roomUuid: String){
-        Log.d("matchingEND","Bearer " + getJwt()+"/"+roomUuid.toString())
-        chattingService?.matchingEnd(roomUuid)?.enqueue(object : Callback<MatchingEndResponse>{
+    fun matchingEndSender(partyId: Int){
+        Log.d("matchingEND","Bearer " + getJwt()+"/"+partyId.toString())
+        chattingService?.matchingEnd(partyId)?.enqueue(object : Callback<MatchingEndResponse>{
             override fun onResponse(call: Call<MatchingEndResponse>, response: Response<MatchingEndResponse>) {
                 Log.d("matchingEND", response.toString())
                 if (response.isSuccessful && response.code() == 200) {

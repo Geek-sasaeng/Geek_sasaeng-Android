@@ -74,9 +74,9 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingDeliveryComplicatedResponse>
 
     //배달파티 수동 매칭마감
-    @PATCH("/delivery-party/{roomUuid}/matching-status")
+    @PATCH("/delivery-party/{partyId}/matching-status")
     fun matchingEnd(
-        @Path("roomUuid") roomUuid: String
+        @Path("partyId") partyId: Int
     ): Call<MatchingEndResponse>
 
     //채팅방 상세조회
