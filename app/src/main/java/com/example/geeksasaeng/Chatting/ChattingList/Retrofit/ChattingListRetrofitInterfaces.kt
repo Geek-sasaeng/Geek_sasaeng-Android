@@ -11,9 +11,4 @@ interface ChattingListRetrofitInterfaces {
     fun getChattingList(
         @Query("cursor") cursor: Int
     ): Call<ChattingListResponse>
-
-    @GET("/party-chat-room/{chatRoomId}")
-    fun getChattingDetail(
-        @Path("chatRoomId") chatRoomId: String
-    ): Call<ChattingDetailResponse>
 }

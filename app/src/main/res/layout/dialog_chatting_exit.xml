@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="256dp"
-    android:layout_height="236dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="7dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chatting_exit_title"
@@ -26,6 +26,7 @@
                 android:text="채팅 나가기"
                 android:textColor="@color/gray_2"
                 android:textSize="14sp"
+                android:layout_marginHorizontal="94dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +55,7 @@
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="본 채팅방을 나갈 시\n이후로 채팅에 참여할 수\n없습니다. 계속하시겠습니까?"
+            android:text="이 채팅방을 나간 후로는\n채팅에 참여할 수 없어요.\n채팅 나가기를 진행할까요?"
             android:textColor="@color/black"
             android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="22dp"
+            android:layout_marginHorizontal="110dp"
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:text="확인"

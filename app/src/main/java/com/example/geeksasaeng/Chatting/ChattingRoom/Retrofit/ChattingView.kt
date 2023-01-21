@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
+
 interface CreateChattingRoomView {
     fun createChattingRoomSuccess(result: CreateChattingResult)
     fun createChattingRoomFailure(code: Int, message: String)
@@ -41,12 +42,12 @@ interface ChattingMemberLeaveChatView {
 }
 
 interface ChattingLeaderLeavePartyView {
-    fun chattingLeaderLeavePartySuccess(result: String, leaderMap: HashMap<String, String>)
+    fun chattingLeaderLeavePartySuccess(result: String)
     fun chattingLeaderLeavePartyFailure(code: Int, message: String)
 }
 
 interface ChattingLeaderLeaveChatView {
-    fun chattingLeaderLeaveChatSuccess(result: String, leaderMap: HashMap<String, String>)
+    fun chattingLeaderLeaveChatSuccess(result: String)
     fun chattingLeaderLeaveChatFailure(code: Int, message: String)
 }
 
@@ -58,4 +59,9 @@ interface ChattingDeliveryComplicatedView {
 interface MatchingEndView {
     fun onMatchingEndSuccess()
     fun onMatchingEndFailure(message: String)
+}
+
+interface ChattingDetailView {
+    fun getChattingDetailSuccess(result: ChattingDetailResult)
+    fun getChattingDetailFailure(code: Int, msg: String)
 }

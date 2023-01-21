@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.content.Context
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -26,7 +26,6 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -38,7 +37,6 @@ import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
@@ -46,8 +44,9 @@ import kotlin.properties.Delegates
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     ChattingMemberLeavePartyView, ChattingMemberLeaveChatView, MemberOptionView,
-    LeaderOptionView, ChattingLeaderLeavePartyView, ChattingLeaderLeaveChatView,
-    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
+    ChattingLeaderLeavePartyView, ChattingLeaderLeaveChatView, LeaderOptionView,
+    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
+    ChattingDetailView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -71,7 +70,6 @@ class ChattingRoomActivity :
 
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
-    private var leader = false
 
     // Chatting
     // WebSocket
@@ -92,26 +90,16 @@ class ChattingRoomActivity :
 
     override fun initAfterBinding() {
         chatDB = ChatDatabase.getDBInstance(applicationContext)!!
-
-        accountNumber = intent.getStringExtra("accountNumber").toString()
-        bank = intent.getStringExtra("bank").toString()
-        chiefId = intent.getIntExtra("chiefId", 0)
-        enterTime = intent.getStringExtra("enterTime").toString()
-        isChief = intent.getBooleanExtra("isChief", false)
-        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
-        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
-
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
-
         binding.chattingRoomTitleTv.text = roomName
 
+        initChattingService()
         initClickListener()
         initTextChangedListener()
         initSendChatListener()
         initAdapter()
-        initChattingService()
-//        optionClickListener()
+        optionClickListener()
 
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
@@ -170,8 +158,7 @@ class ChattingRoomActivity :
 
     private fun initTopLayout(){
         //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
-        //TODO: 그렇지 않았다면~~
-        if(leader){ //리더면 상단 바 구성을 다르게 해줘야하므로
+        if(isChief){ //리더면 상단 바 구성을 다르게 해줘야하므로
             binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
             binding.chattingRoomSectionIv.visibility = View.INVISIBLE
             binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
@@ -317,20 +304,22 @@ class ChattingRoomActivity :
         chattingService.setSendChattingView(this)
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
+        chattingService.setChattingDetailView(this) //채팅방 상세 조회용
+        getChattingDetail(roomId) //채팅방 상세 조회 api 호출!
     }
 
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener {
-            if (leader) {
+            if (isChief) {
                 val optionDialog = LeaderOptionDialog()
-                optionDialog.setLeaderOptionView(this)
+                //optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
 //                bundle.putString("roomUuid", roomUuid)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
                 val optionDialog = MemberOptionDialog()
-                optionDialog.setOptionView(this)
+                //optionDialog.setOptionView(this)
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
         }
@@ -438,45 +427,56 @@ class ChattingRoomActivity :
 
     // 일반 유저 나가기
     override fun MemberExistClick() {
-        //val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomUuid)
-        //chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
+        Log.d("exit", "일반 유저 나가기 클릭됨")
+        //roomUuid가 roomId?
+        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomId)
+        val chattingPartyMemberLeaveChatRequest = ChattingPartyMemberLeaveChatRequest(roomId)
+        chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
+        chattingService.getChattingPartyMemberChatLeave(chattingPartyMemberLeaveChatRequest)
     }
 
     override fun chattingMemberLeavePartySuccess(result: String) {
-
+        Log.d("exit-멤버 파티 나가기 성공",result)
+        //finish()
     }
 
     override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
-
+        Log.d("exit-멤버 파티 나가기 실패",message)
     }
 
     override fun chattingMemberLeaveChatSuccess(result: String) {
-
+        Log.d("exit-멤버 채팅 나가기 성공",result)
     }
 
     override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
-
+        Log.d("exit-멤버 채팅 나가기 실패",message)
     }
 
     // 방장 나가기
     override fun LeaderExistClick() {
-        // TODO: FIREBASE 버전에서 수정하기
+        Log.d("exit", "방장 나가기 클릭됨")
+        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname(), roomId)
+        val chattingPartyLeaderLeaveChatRequest = ChattingPartyLeaderLeaveChatRequest(roomId)
+        chattingService.getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)
+        chattingService.getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest)
     }
 
-    override fun chattingLeaderLeavePartySuccess(result: String, leaderMap: HashMap<String, String>) {
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
+    override fun chattingLeaderLeavePartySuccess(result: String) {
+        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
+        Log.d("exit-방장 파티 나가기 성공",result)
     }
 
     override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
-
+        Log.d("exit- 방장 파티 나가기 실패",message)
     }
 
-    override fun chattingLeaderLeaveChatSuccess(result: String, leaderMap: HashMap<String, String>) {
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
+    override fun chattingLeaderLeaveChatSuccess(result: String) {
+        Log.d("exit-방장 채팅 나가기 성공",result)
+        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
     }
 
     override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {
-
+        Log.d("exit-방장 채팅 나가기 실패",message)
     }
 
     private fun calculateToday(): String {
@@ -533,5 +533,27 @@ class ChattingRoomActivity :
 
     override fun chattingRemittanceCompleteFailure(code: Int, message: String) {
         Log.d("remittanceComplete","실패 : "+message)
+    }
+
+    //채팅 상세 조회
+    private fun getChattingDetail(roomId: String) {
+        chattingService.setChattingDetailView(this)
+        chattingService.getChattingDetail(roomId)
+    }
+
+    override fun getChattingDetailSuccess(result: ChattingDetailResult) {
+        Log.d("chatDetail", "채팅방 디테일 불러오기 성공 :${result.toString()}")
+        accountNumber = result.accountNumber
+        bank = result.bank
+        chiefId = result.chiefId
+        enterTime = result.enterTime
+        isChief = result.isChief
+        isOrderFinish = result.isOrderFinish
+        isRemittanceFinish = result.isRemittanceFinish
+
+    }
+
+    override fun getChattingDetailFailure(code: Int, msg: String) {
+        Log.d("chatDetail", "채팅방 디테일 불러오기 실패 :$msg")
     }
 }

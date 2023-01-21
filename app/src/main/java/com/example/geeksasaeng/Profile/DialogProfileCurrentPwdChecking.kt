@@ -58,7 +58,7 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
                 val password = binding.dialogProfileCurrentPwdCheckingEt.text.toString()
                 profileDataService.profilePasswordCheckingSender(ProfilePasswordCheckingRequest(password))  //비밀번호 일치 확인 API ★
             }
-            else{ //조건이 안 맞으면 무조건 틀린거거
+            else{ //조건이 안 맞으면 무조건 틀린거
                binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.VISIBLE
             }
         }

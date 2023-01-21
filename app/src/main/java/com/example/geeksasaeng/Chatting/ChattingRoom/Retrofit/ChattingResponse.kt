@@ -186,3 +186,21 @@ data class MemberData(
     @SerializedName("profileImgUrl") val profileImgUrl: String,
     @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean
 ): Serializable
+
+//채팅방 상세조회
+data class ChattingDetailResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingDetailResult
+)
+
+data class ChattingDetailResult(
+    @SerializedName("accountNumber") val accountNumber: String,
+    @SerializedName("bank") val bank: String,
+    @SerializedName("chiefId") val chiefId: Int,
+    @SerializedName("enterTime") val enterTime: String,
+    @SerializedName("isChief") val isChief: Boolean,
+    @SerializedName("isOrderFinish") val isOrderFinish: Boolean,
+    @SerializedName("isRemittanceFinish") val isRemittanceFinish: Boolean
+)

@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Chatting.ChattingRoom.DialogForcedExit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
@@ -21,6 +20,7 @@ class ChattingService {
     private lateinit var chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView
     private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
     private lateinit var matchingEndView: MatchingEndView
+    private lateinit var getChattingDetailView: ChattingDetailView
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
@@ -59,6 +59,9 @@ class ChattingService {
     }
     fun setMatchingEndView(matchingEndView: MatchingEndView){
         this.matchingEndView = matchingEndView
+    }
+    fun setChattingDetailView(getChattingDetailView: ChattingDetailView) {
+        this.getChattingDetailView = getChattingDetailView
     }
 
     // 채팅방 생성
@@ -224,7 +227,7 @@ class ChattingService {
     }
 
     // 파티장 나가기 for 배달 파티
-    fun getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest, leaderMap: HashMap<String, String>){
+    fun getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest){
         chattingService?.partyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeavePartyResponse> {
                 override fun onResponse(
                     call: Call<ChattingPartyLeaderLeavePartyResponse>,
@@ -234,7 +237,7 @@ class ChattingService {
                         val chattingPartyLeaderLeavePartyResponse = response.body()!!
 
                         when (chattingPartyLeaderLeavePartyResponse.code) {
-                            1000 -> chattingLeaderLeavePartyView.chattingLeaderLeavePartySuccess(chattingPartyLeaderLeavePartyResponse.result!!, leaderMap)
+                            1000 -> chattingLeaderLeavePartyView.chattingLeaderLeavePartySuccess(chattingPartyLeaderLeavePartyResponse.result)
                             else -> chattingLeaderLeavePartyView.chattingLeaderLeavePartyFailure(chattingPartyLeaderLeavePartyResponse.code, chattingPartyLeaderLeavePartyResponse.message)
                         }
                     }
@@ -247,7 +250,7 @@ class ChattingService {
     }
 
     // 파티장 나가기 for 채팅방
-    fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest, leaderMap: HashMap<String, String>){
+    fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest){
         chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveChatRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveChatResponse> {
             override fun onResponse(
                 call: Call<ChattingPartyLeaderLeaveChatResponse>,
@@ -257,7 +260,7 @@ class ChattingService {
                     val chattingPartyLeaderLeaveChatResponse = response.body()!!
 
                     when (chattingPartyLeaderLeaveChatResponse.code) {
-                        1000 -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatSuccess(chattingPartyLeaderLeaveChatResponse.result!!, leaderMap)
+                        1000 -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatSuccess(chattingPartyLeaderLeaveChatResponse.result!!)
                         else -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatFailure(chattingPartyLeaderLeaveChatResponse.code, chattingPartyLeaderLeaveChatResponse.message)
                     }
                 }
@@ -311,6 +314,24 @@ class ChattingService {
             }
             override fun onFailure(call: Call<MatchingEndResponse>, t: Throwable) {
                 Log.d("MATCHINGEND-RESPONSE", "ChattingDataService-onFailure : MatchingEndFailed", t)
+            }
+        })
+    }
+
+    //채팅방 상세조회
+    fun getChattingDetail(chatRoomId: String) {
+        chattingService?.getChattingDetail(chatRoomId)?.enqueue(object: Callback<ChattingDetailResponse> {
+            override fun onResponse(call: Call<ChattingDetailResponse>, response: Response<ChattingDetailResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> getChattingDetailView.getChattingDetailSuccess(resp.result)
+                        else -> getChattingDetailView.getChattingDetailFailure(resp.code, resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ChattingDetailResponse>, t: Throwable) {
+                Log.d("RETROFIT-SERVICE", "ChattingListService-getChattingDetail-Failure")
             }
         })
     }

@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
@@ -43,9 +40,10 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     override fun onResume() {
         super.onResume()
-        val width = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_width)
-        val height = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_height)
-        dialog?.window?.setLayout(width,height)
+        val params = dialog!!.window!!.attributes
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
     }
 
     private fun initListener(){
@@ -73,7 +71,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
-            leaderOptionView.LeaderExistClick()
+            //leaderOptionView.LeaderExistClick()
+            val dialogChattingExit = DialogChattingExit()
+            val bundle = Bundle()
+            bundle.putBoolean("leader",true)
+            dialogChattingExit.arguments = bundle
+            dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
         }
     }
 

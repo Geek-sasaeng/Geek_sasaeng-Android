@@ -79,4 +79,10 @@ interface ChattingRetrofitInterfaces {
         @Path("roomUuid") roomUuid: String
     ): Call<MatchingEndResponse>
 
+    //채팅방 상세조회
+    @GET("/party-chat-room/{chatRoomId}")
+    fun getChattingDetail(
+        @Path("chatRoomId") chatRoomId: String
+    ): Call<ChattingDetailResponse>
+
 }
