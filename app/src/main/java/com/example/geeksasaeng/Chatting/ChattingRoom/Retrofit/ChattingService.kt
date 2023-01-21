@@ -18,7 +18,7 @@ class ChattingService {
     private lateinit var chattingMemberLeaveChatView: ChattingMemberLeaveChatView
     private lateinit var chattingLeaderLeavePartyView: ChattingLeaderLeavePartyView
     private lateinit var chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView
-    private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
+    private lateinit var chattingDeliveryCompleteView: ChattingDeliveryCompleteView
     private lateinit var matchingEndView: MatchingEndView
     private lateinit var getChattingDetailView: ChattingDetailView
 
@@ -54,8 +54,8 @@ class ChattingService {
     fun setChattingLeaderLeaveChatView(chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView){
         this.chattingLeaderLeaveChatView = chattingLeaderLeaveChatView
     }
-    fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
-        this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
+    fun setChattingDeliveryCompleteView(chattingDeliveryCompleteView: ChattingDeliveryCompleteView){
+        this.chattingDeliveryCompleteView = chattingDeliveryCompleteView
     }
     fun setMatchingEndView(matchingEndView: MatchingEndView){
         this.matchingEndView = matchingEndView
@@ -273,25 +273,23 @@ class ChattingService {
     }
 
     //배달완료 알림보내기
-    fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
-        Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
-                override fun onResponse(
-                    call: Call<ChattingDeliveryComplicatedResponse?>,
-                    response: Response<ChattingDeliveryComplicatedResponse?>
-                ) {
-                    Log.d("deliveryComplicated", response.toString())
+    fun sendDeliveryCompleteAlarm(chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest){
+        Log.d("deliveryAlarm", "Bearer " + getJwt() + "            :           "+chattingDeliveryCompleteRequest.toString())
+        chattingService?.partyDeliveryComplete(chattingDeliveryCompleteRequest)?.enqueue(object : Callback<ChattingDeliveryCompleteResponse?>{
+                override fun onResponse(call: Call<ChattingDeliveryCompleteResponse?>,response: Response<ChattingDeliveryCompleteResponse?>) {
+                    Log.d("deliveryAlarm", response.toString())
+                    Log.d("deliveryAlarm", response.body().toString())
                     if (response.isSuccessful && response.code() == 200) {
                         val resp = response.body()!!
                         when(resp.code){
-                            1000->chattingDeliveryComplicatedView.chattingDeliveryComplicatedSuccess()
-                            else->chattingDeliveryComplicatedView.chattingDeliveryComplicatedFailure(resp.message)
+                            1000->chattingDeliveryCompleteView.chattingDeliveryCompleteSuccess()
+                            else->chattingDeliveryCompleteView.chattingDeliveryCompleteFailure(resp.message)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<ChattingDeliveryComplicatedResponse?>, t: Throwable) {
-                    Log.d("delivery-배달완료알람", "실패"+ t.toString())
+                override fun onFailure(call: Call<ChattingDeliveryCompleteResponse?>, t: Throwable) {
+                    Log.d("deliveryAlarm", "실패"+ t.toString())
                     //TODO: 계속 타임아웃 오류나...
                 }
             })

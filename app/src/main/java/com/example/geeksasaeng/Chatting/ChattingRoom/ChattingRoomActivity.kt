@@ -305,6 +305,7 @@ class ChattingRoomActivity :
                 //optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
                 bundle.putInt("partyId", partyId)
+                bundle.putString("roomId", roomId)
                 bundle.putBoolean("isMatchingFinish", isMatchingFinish)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")

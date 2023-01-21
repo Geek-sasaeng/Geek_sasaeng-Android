@@ -67,11 +67,11 @@ interface ChattingRetrofitInterfaces {
         @Body chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest
     ): Call<ChattingPartyLeaderLeaveChatResponse>
 
-    //배달 완료 알림 보내기
-    @POST("/delivery-party/complicated")
-    fun partyDeliveryComplicated(
-        @Body chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest
-    ): Call<ChattingDeliveryComplicatedResponse>
+    //배달 완료 알림
+    @POST("/party-chat-room/delivery-complete")
+    fun partyDeliveryComplete(
+        @Body chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest
+    ): Call<ChattingDeliveryCompleteResponse>
 
     //배달파티 수동 매칭마감
     @PATCH("/delivery-party/{partyId}/matching-status")

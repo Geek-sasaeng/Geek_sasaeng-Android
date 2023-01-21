@@ -151,24 +151,19 @@ data class ChattingPartyLeaderLeaveChatResponse(
 )
 
 //배달완료 알림보내기
-data class ChattingDeliveryComplicatedRequest(
-    @SerializedName("uuid") val uuid: String
+data class ChattingDeliveryCompleteRequest(
+    @SerializedName("roomId") val roomId: String
 )
 
-data class ChattingDeliveryComplicatedResponse(
+data class ChattingDeliveryCompleteResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ChattingDeliveryComplicatedResult
-)
-
-data class ChattingDeliveryComplicatedResult(
-    @SerializedName("body") val body: ArrayList<Any>,
-    @SerializedName("statusCode") val statusCode: String,
-    @SerializedName("statusCodeValue") val statusCodeValue: Int
+    @SerializedName("result") val result: String
 )
 
 //배달파티 수동 매칭마감
+
 data class MatchingEndResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,

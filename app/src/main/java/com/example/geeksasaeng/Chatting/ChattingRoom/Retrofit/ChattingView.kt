@@ -51,9 +51,9 @@ interface ChattingLeaderLeaveChatView {
     fun chattingLeaderLeaveChatFailure(code: Int, message: String)
 }
 
-interface ChattingDeliveryComplicatedView {
-    fun chattingDeliveryComplicatedSuccess()
-    fun chattingDeliveryComplicatedFailure(message: String)
+interface ChattingDeliveryCompleteView {
+    fun chattingDeliveryCompleteSuccess()
+    fun chattingDeliveryCompleteFailure(message: String)
 }
 
 interface MatchingEndView {

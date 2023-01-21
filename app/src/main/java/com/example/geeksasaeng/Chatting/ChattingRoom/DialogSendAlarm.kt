@@ -8,23 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedRequest
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteRequest
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteView
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.databinding.DialogSendAlarmLayoutBinding
 
 class DialogSendAlarm: DialogFragment(){
     lateinit var binding: DialogSendAlarmLayoutBinding
     private lateinit var chattingService: ChattingService
-    private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
-    private var roomUuid : String? = null
+    private lateinit var chattingDeliveryCompleteView: ChattingDeliveryCompleteView
+    private var roomId : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        roomUuid = requireArguments().getString("roomUuid")
+        roomId = requireArguments().getString("roomId")
         binding = DialogSendAlarmLayoutBinding.inflate(inflater, container, false)
         initChattingService()
         initListener()
@@ -35,7 +35,7 @@ class DialogSendAlarm: DialogFragment(){
     private fun initListener(){
         binding.sendAlarmSendBtn.setOnClickListener {
             Log.d("deliveryAlarm", "배달완료 알림보내기 버튼 눌림")
-            chattingService.sendDeliveryComplicatedAlarm(ChattingDeliveryComplicatedRequest(roomUuid!!)) //★ 매칭완료 알람보내기 api 호출
+            chattingService.sendDeliveryCompleteAlarm(ChattingDeliveryCompleteRequest(roomId!!)) //★ 매칭완료 알람보내기 api 호출
             this.dismiss()
         }
 
@@ -44,13 +44,13 @@ class DialogSendAlarm: DialogFragment(){
         }
     }
 
-    fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
-        this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
+    fun setChattingDeliveryCompleteView(chattingDeliveryCompleteView: ChattingDeliveryCompleteView){
+        this.chattingDeliveryCompleteView = chattingDeliveryCompleteView
     }
 
     fun initChattingService(){
         chattingService = ChattingService() //서비스 객체 생성
-        chattingService.setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView)
+        chattingService.setChattingDeliveryCompleteView(chattingDeliveryCompleteView)
     }
 
 }

@@ -5,18 +5,18 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 
-class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
+class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var partyId : Int = 0
+    private lateinit var roomId: String
     private var isMatchingFinish : Boolean = false
     private lateinit var leaderOptionView: LeaderOptionView
 
@@ -32,6 +32,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         binding = DialogChattingRoomOptionLeaderPopupBinding.inflate(inflater, container, false)
 
         partyId = requireArguments().getInt("partyId")
+        roomId = requireArguments().getString("roomId").toString()
         isMatchingFinish = requireArguments().getBoolean("isMatchingFinish")
         Log.d("matching", isMatchingFinish.toString())
 
@@ -57,8 +58,8 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
             val dialog = DialogSendAlarm()
             val bundle = Bundle()
-            dialog.setChattingDeliveryComplicatedView(this)
-            bundle.putInt("partyId", partyId)
+            dialog.setChattingDeliveryCompleteView(this)
+            bundle.putString("roomId", roomId)
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
         }
@@ -95,12 +96,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         // TODO: 매칭 마감 확인
     }
 
-    override fun chattingDeliveryComplicatedSuccess() {
+    override fun chattingDeliveryCompleteSuccess() {
         Log.d("deliveryAlarm", "배달완료 알림보내기 성공")
         CustomToastMsg.createToast(requireContext(), "배달완료 알림 전송이 완료되었습니다", "#8029ABE2", 53)?.show()
     }
 
-    override fun chattingDeliveryComplicatedFailure(message: String) {
+    override fun chattingDeliveryCompleteFailure(message: String) {
         Log.d("deliveryAlarm", "배달완료 알림보내기 실패")
         CustomToastMsg.createToast(requireContext(), message, "#8029ABE2", 53)?.show()
     }
