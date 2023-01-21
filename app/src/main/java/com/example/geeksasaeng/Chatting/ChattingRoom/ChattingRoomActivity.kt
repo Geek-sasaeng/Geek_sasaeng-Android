@@ -60,6 +60,7 @@ class ChattingRoomActivity :
     private var chiefId by Delegates.notNull<Int>()
     private lateinit var enterTime: String
     private var isChief: Boolean = false
+    private var isMatchingFinish: Boolean = false
     private var isOrderFinish: Boolean = false
     private var isRemittanceFinish: Boolean = false
     private var partyId by Delegates.notNull<Int>()
@@ -304,6 +305,7 @@ class ChattingRoomActivity :
                 //optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
                 bundle.putInt("partyId", partyId)
+                bundle.putBoolean("isMatchingFinish", isMatchingFinish)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
@@ -533,6 +535,7 @@ class ChattingRoomActivity :
         chiefId = result.chiefId
         enterTime = result.enterTime
         isChief = result.isChief
+        isMatchingFinish = result.isMatchingFinish
         isOrderFinish = result.isOrderFinish
         isRemittanceFinish = result.isRemittanceFinish
         partyId = result.partyId

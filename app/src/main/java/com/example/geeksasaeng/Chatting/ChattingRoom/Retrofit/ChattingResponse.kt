@@ -201,6 +201,7 @@ data class ChattingDetailResult(
     @SerializedName("chiefId") val chiefId: Int,
     @SerializedName("enterTime") val enterTime: String,
     @SerializedName("isChief") val isChief: Boolean,
+    @SerializedName("isMatchingFinish") val isMatchingFinish: Boolean,
     @SerializedName("isOrderFinish") val isOrderFinish: Boolean,
     @SerializedName("isRemittanceFinish") val isRemittanceFinish: Boolean,
     @SerializedName("partyId") val partyId: Int

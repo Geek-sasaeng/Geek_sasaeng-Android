@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
 import com.example.geeksasaeng.R
@@ -16,6 +17,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
     private var partyId : Int = 0
+    private var isMatchingFinish : Boolean = false
     private lateinit var leaderOptionView: LeaderOptionView
 
     fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
@@ -28,8 +30,11 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogChattingRoomOptionLeaderPopupBinding.inflate(inflater, container, false)
+
         partyId = requireArguments().getInt("partyId")
-        Log.d("partyId", partyId.toString())
+        isMatchingFinish = requireArguments().getBoolean("isMatchingFinish")
+        Log.d("matching", isMatchingFinish.toString())
+
         initListener()
         initMatchingEndListener()
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
@@ -56,6 +61,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
             bundle.putInt("partyId", partyId)
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
+        }
+
+        Log.d("matching", isMatchingFinish.toString())
+        if (isMatchingFinish){ //매칭 마감 여부에 따라 textView 색깔 다르게 해주기
+            binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+            binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
         }
 
         binding.dialogLeaderPopupOptionMatchingEndTv.setOnClickListener { //매칭마감하기 기능
