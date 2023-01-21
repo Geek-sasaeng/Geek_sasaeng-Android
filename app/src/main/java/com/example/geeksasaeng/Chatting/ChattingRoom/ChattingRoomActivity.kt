@@ -61,7 +61,6 @@ class ChattingRoomActivity :
     private var isOrderFinish: Boolean = false
     private var isRemittanceFinish: Boolean = false
 
-    private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     private lateinit var chattingService: ChattingService
@@ -95,6 +94,7 @@ class ChattingRoomActivity :
         binding.chattingRoomTitleTv.text = roomName
 
         initChattingService()
+        chattingService.getChattingDetail(roomId) //채팅방 상세 조회 api 호출!!
         initClickListener()
         initTextChangedListener()
         initSendChatListener()
@@ -156,15 +156,6 @@ class ChattingRoomActivity :
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
-    private fun initTopLayout(){
-        //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
-        if(isChief){ //리더면 상단 바 구성을 다르게 해줘야하므로
-            binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
-            binding.chattingRoomSectionIv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
-        }
-    }
 
     private fun getJSONtoChatting(message: String): Chat {
         var chatting = JSONObject(message)
@@ -219,10 +210,6 @@ class ChattingRoomActivity :
 //        changeParticipantsListener.remove()
         Log.d("CHATTING-SYSTEM-TEST", "END")
         WebSocketManager.close()
-    }
-
-    private fun getBankAndAccountNumber() {
-        // TODO: 계좌번호 불러오기
     }
 
     private fun initAdapter() {
@@ -305,7 +292,6 @@ class ChattingRoomActivity :
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
         chattingService.setChattingDetailView(this) //채팅방 상세 조회용
-        getChattingDetail(roomId) //채팅방 상세 조회 api 호출!
     }
 
     private fun optionClickListener() {
@@ -429,54 +415,55 @@ class ChattingRoomActivity :
     override fun MemberExistClick() {
         Log.d("exit", "일반 유저 나가기 클릭됨")
         //roomUuid가 roomId?
-        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomId)
         val chattingPartyMemberLeaveChatRequest = ChattingPartyMemberLeaveChatRequest(roomId)
-        chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
         chattingService.getChattingPartyMemberChatLeave(chattingPartyMemberLeaveChatRequest)
     }
 
     override fun chattingMemberLeavePartySuccess(result: String) {
-        Log.d("exit-멤버 파티 나가기 성공",result)
-        //finish()
+        Log.d("exit","멤버 파티 나가기 성공" + result)
+        finish()
     }
 
     override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
-        Log.d("exit-멤버 파티 나가기 실패",message)
+        Log.d("exit","멤버 파티 나가기 실패" + message)
     }
 
     override fun chattingMemberLeaveChatSuccess(result: String) {
-        Log.d("exit-멤버 채팅 나가기 성공",result)
+        Log.d("exit","멤버 채팅 나가기 성공" + result)
+        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomId)
+        chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
     }
 
     override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
-        Log.d("exit-멤버 채팅 나가기 실패",message)
+        Log.d("exit", "멤버 채팅 나가기 실패" + message)
     }
 
     // 방장 나가기
     override fun LeaderExistClick() {
         Log.d("exit", "방장 나가기 클릭됨")
-        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname(), roomId)
         val chattingPartyLeaderLeaveChatRequest = ChattingPartyLeaderLeaveChatRequest(roomId)
-        chattingService.getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)
         chattingService.getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest)
     }
 
     override fun chattingLeaderLeavePartySuccess(result: String) {
         //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
-        Log.d("exit-방장 파티 나가기 성공",result)
+        Log.d("exit","방장 파티 나가기 성공"+ result)
+        finish()
     }
 
     override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
-        Log.d("exit- 방장 파티 나가기 실패",message)
+        Log.d("exit","방장 파티 나가기 실패" + message)
     }
 
     override fun chattingLeaderLeaveChatSuccess(result: String) {
-        Log.d("exit-방장 채팅 나가기 성공",result)
+        Log.d("exit","방장 채팅 나가기 성공" + result)
         //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
+        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname(), roomId)
+        chattingService.getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)
     }
 
     override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {
-        Log.d("exit-방장 채팅 나가기 실패",message)
+        Log.d("exit","방장 채팅 나가기 실패" + message)
     }
 
     private fun calculateToday(): String {
@@ -535,12 +522,7 @@ class ChattingRoomActivity :
         Log.d("remittanceComplete","실패 : "+message)
     }
 
-    //채팅 상세 조회
-    private fun getChattingDetail(roomId: String) {
-        chattingService.setChattingDetailView(this)
-        chattingService.getChattingDetail(roomId)
-    }
-
+    //채팅방 상세조회
     override fun getChattingDetailSuccess(result: ChattingDetailResult) {
         Log.d("chatDetail", "채팅방 디테일 불러오기 성공 :${result.toString()}")
         accountNumber = result.accountNumber
@@ -551,6 +533,23 @@ class ChattingRoomActivity :
         isOrderFinish = result.isOrderFinish
         isRemittanceFinish = result.isRemittanceFinish
 
+        initTopLayout()
+    }
+
+    private fun initTopLayout(){ //채팅방 상단 바 설정
+
+        if(isOrderFinish||isRemittanceFinish){ //주문 또는 송금 완료했으면 안보이게 해주기
+            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+        }else{
+            if(isChief){ //리더면 상단 바 구성을 다르게 해줘야하므로
+                binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE //주문완료 버튼 보이게 하기
+                binding.chattingRoomSectionIv.visibility = View.INVISIBLE // 계좌 아이콘
+                binding.chattingRoomTopLayoutAccountNumberTv.visibility = View.INVISIBLE //계좌번호 textView
+                binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE // 송금완료 버튼
+            }else{
+                binding.chattingRoomTopLayoutAccountNumberTv.text = bank + "  " + accountNumber
+            }
+        }
     }
 
     override fun getChattingDetailFailure(code: Int, msg: String) {

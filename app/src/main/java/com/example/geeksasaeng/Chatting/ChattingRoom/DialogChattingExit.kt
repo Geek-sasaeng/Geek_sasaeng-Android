@@ -41,7 +41,6 @@ class DialogChattingExit: DialogFragment() {
         binding.chattingExitOkBtn.setOnClickListener {
 
             var leader = arguments!!.getBoolean("leader")
-            Log.d("exitDialog", leader.toString())
 
             if(leader){
                 var leaderOptionView = activity as LeaderOptionView
