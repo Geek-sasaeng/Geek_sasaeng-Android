@@ -22,6 +22,7 @@ class ProfileDataService {
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
     private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
     private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
+    private lateinit var profilePasswordChangeView: ProfilePasswordChangeView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -48,6 +49,9 @@ class ProfileDataService {
     }
     fun setProfilePasswordCheckingView(profilePasswordCheckingView: ProfilePasswordCheckingView) {
         this.profilePasswordCheckingView = profilePasswordCheckingView
+    }
+    fun setProfilePasswordChangeView(profilePasswordChangeView: ProfilePasswordChangeView) {
+        this.profilePasswordChangeView = profilePasswordChangeView
     }
 
     // 진행 중인 활동 조회

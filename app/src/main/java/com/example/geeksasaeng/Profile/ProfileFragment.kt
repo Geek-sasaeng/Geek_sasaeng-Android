@@ -78,12 +78,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             startActivity(intent)
         }
 
-        binding.profileInquiry.setOnClickListener { //문의하기
-            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
-            startActivity(urlIntent)
-        }
-
-        binding.profileTos.setOnClickListener { //서비스 이용 약관 보기
+        binding.profileCustomerService.setOnClickListener { //고객 센터
             val intent = Intent(activity, Tos2Activity::class.java)
             intent.putExtra("status","profile")
             startActivity(intent)

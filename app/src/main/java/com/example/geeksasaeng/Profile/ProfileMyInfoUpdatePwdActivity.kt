@@ -1,11 +1,19 @@
 package com.example.geeksasaeng.Profile
 
 import android.os.Bundle
+import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
+import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordChangeRequest
+import com.example.geeksasaeng.Profile.Retrofit.ProfilePasswordChangeView
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdatePwdBinding
 
-class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePwdBinding>(ActivityProfileMyInfoUpdatePwdBinding::inflate) {
+class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePwdBinding>(ActivityProfileMyInfoUpdatePwdBinding::inflate), ProfilePasswordChangeView {
+
+    lateinit var profiledataService: ProfileDataService
+
     override fun initAfterBinding() {
+        profiledataService = ProfileDataService()
+        profiledataService.setProfilePasswordChangeView(this)
         initClickListener()
     }
 
@@ -15,11 +23,16 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
         }
 
         binding.profileMyInfoUpdatePwdCompleteTv.setOnClickListener { //완료
-            val dialogProfileUpdate = DialogProfileUpdate()
-            val bundle = Bundle()
-
-            dialogProfileUpdate.arguments= bundle
-            dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
+            val profilePasswordChangeRequest = ProfilePasswordChangeRequest(binding.profileMyInfoUpdatePwdCheckEt.text.toString(), binding.profileMyInfoUpdatePwdEt.text.toString())
+            profiledataService.profilePasswordChangeSender(profilePasswordChangeRequest)
         }
+    }
+
+    override fun onProfilePasswordChangeSuccess() {
+
+    }
+
+    override fun onProfilePasswordChangeFailure(message: String) {
+
     }
 }
