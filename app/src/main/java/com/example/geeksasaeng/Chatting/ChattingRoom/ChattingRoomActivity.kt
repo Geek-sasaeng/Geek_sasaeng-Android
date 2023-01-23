@@ -44,7 +44,7 @@ import kotlin.properties.Delegates
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
-    ChattingDetailView {
+    ChattingDetailView, DialogMatchingEnd.MatchingEndClickListener {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -503,5 +503,9 @@ class ChattingRoomActivity :
     override fun getChattingDetailFailure(code: Int, msg: String) {
         Log.d("chatDetail", "채팅방 디테일 불러오기 실패 :$msg")
         //finish()
+    }
+
+    override fun onMatchingEndClicked() {
+        isMatchingFinish = true
     }
 }

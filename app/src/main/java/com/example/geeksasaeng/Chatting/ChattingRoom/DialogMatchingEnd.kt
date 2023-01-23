@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.MatchingEndView
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
@@ -25,10 +28,17 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     private lateinit var chattingService: ChattingService
     private var partyId by Delegates.notNull<Int>()
 
+    private lateinit var dialogMatchingEndNextClickListener: MatchingEndClickListener
+
+    interface MatchingEndClickListener{
+        fun onMatchingEndClicked()
+    }
+
     override fun onStart() {
         super.onStart()
         chattingService = ChattingService() //서비스 객체생성
         chattingService.setMatchingEndView(this)
+        dialogMatchingEndNextClickListener =  activity as MatchingEndClickListener
     }
 
     override fun onResume() {
@@ -63,10 +73,14 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
-        Log.d("matchingEnd", "매칭 마감 성공")
         this.dismiss()
         Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
-        // TODO: 매칭 마감 성공시 ChattingRoomActivity의 isMatchingFinish와 LeaderOptionDialog의 isMatchingFinish도 true로 바로 반영해주기! => 흠 어떻게 하지? 콜백함수?
+
+        //1) ChattingRoomActivity에 매칭마감 정보전달
+        dialogMatchingEndNextClickListener.onMatchingEndClicked()
+        //2) LeaderOptionDialog에 매칭마감 정보전달
+        val result = "true"
+        setFragmentResult("isMatchFinish", bundleOf("bundleKey" to result))
     }
 
     //매칭마감 실패

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResultListener
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.CustomToastMsg
@@ -18,6 +19,18 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
     private var partyId : Int = 0
     private lateinit var roomId: String
     private var isMatchingFinish : Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener("isMatchFinish"){ key, bundle ->
+            val result = bundle.getString("bundleKey")
+            if (result=="true"){
+                isMatchingFinish = true
+                binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+                binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +54,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
 
     override fun onResume() {
         super.onResume()
+        Log.d("life", "LeaderOptionDialog-> onResume")
         val params = dialog!!.window!!.attributes
         params.width = WindowManager.LayoutParams.WRAP_CONTENT
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
