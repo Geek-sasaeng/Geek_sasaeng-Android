@@ -18,11 +18,6 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
     private var partyId : Int = 0
     private lateinit var roomId: String
     private var isMatchingFinish : Boolean = false
-    private lateinit var leaderOptionView: LeaderOptionView
-
-    fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
-        this.leaderOptionView = leaderOptionView
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,9 +78,9 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
-            //leaderOptionView.LeaderExistClick()
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
+            bundle.putString("roomId", roomId)
             bundle.putBoolean("isCheif",true)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")

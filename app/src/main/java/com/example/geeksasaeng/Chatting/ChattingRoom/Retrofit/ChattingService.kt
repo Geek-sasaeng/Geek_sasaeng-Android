@@ -201,7 +201,7 @@ class ChattingService {
                 }
             }
             override fun onFailure(call: Call<ChattingPartyMemberLeavePartyResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                Log.d("exit", "멤버 배달파티 나가기 실패 => onFailure"+t.toString())
             }
         })
     }
@@ -221,7 +221,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<ChattingPartyMemberLeaveChatResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-CHATTING", "실패")
+                Log.d("exit", "멤버 채팅방 나가기 실패 => onFailure"+t.toString()+t.toString())
             }
         })
     }
@@ -244,7 +244,7 @@ class ChattingService {
                 }
 
                 override fun onFailure(call: Call<ChattingPartyLeaderLeavePartyResponse>, t: Throwable) {
-                    Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                    Log.d("exit", "방장 배달파티 나가기 실패 => onFailure"+t.toString())
                 }
             })
     }
@@ -252,10 +252,10 @@ class ChattingService {
     // 파티장 나가기 for 채팅방
     fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest){
         chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveChatRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveChatResponse> {
-            override fun onResponse(
-                call: Call<ChattingPartyLeaderLeaveChatResponse>,
-                response: Response<ChattingPartyLeaderLeaveChatResponse>
-            ) {
+
+            override fun onResponse(call: Call<ChattingPartyLeaderLeaveChatResponse>, response: Response<ChattingPartyLeaderLeaveChatResponse>) {
+                Log.d("exit", "방장 채팅방 나가기 : "+chattingPartyLeaderLeaveChatRequest.toString())
+                Log.d("exit", "방장 채팅방 나가기 : "+response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyLeaderLeaveChatResponse = response.body()!!
 
@@ -267,7 +267,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<ChattingPartyLeaderLeaveChatResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                Log.d("exit", "방장 채팅방 나가기 실패 => onFailure"+ t.toString())
             }
         })
     }

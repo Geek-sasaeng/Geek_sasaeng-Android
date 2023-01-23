@@ -103,7 +103,7 @@ data class ChattingRemittanceCompleteRequest(
 
 //파티 멤버 나가기 for 배달파티
 data class ChattingPartyMemberLeavePartyRequest(
-    @SerializedName("uuid") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyMemberLeavePartyResponse(
@@ -115,39 +115,52 @@ data class ChattingPartyMemberLeavePartyResponse(
 
 //파티 멤버 나가기 for 채팅방
 data class ChattingPartyMemberLeaveChatRequest(
-    @SerializedName("roomId") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyMemberLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
+    @SerializedName("result") val result: ChattingPartyMemberLeaveChatResult
+)
+
+
+data class ChattingPartyMemberLeaveChatResult(
+    @SerializedName("message") val message: String
 )
 
 //방장 나가기 for 배달파티
 data class ChattingPartyLeaderLeavePartyRequest(
     @SerializedName("nickName") val nickName: String?,
-    @SerializedName("uuid") val uuid: String
+    @SerializedName("roomId") val roomId: String
 )
 
 data class ChattingPartyLeaderLeavePartyResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingPartyLeaderLeavePartyResult
+)
+
+data class ChattingPartyLeaderLeavePartyResult(
     @SerializedName("result") val result: String
 )
 
 //방장 나가기 for 채팅방
 data class ChattingPartyLeaderLeaveChatRequest(
-    @SerializedName("roomId") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyLeaderLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
+    @SerializedName("result") val result: ChattingPartyLeaderLeaveChatResult
+)
+
+data class ChattingPartyLeaderLeaveChatResult(
+    @SerializedName("message") val message: String
 )
 
 //배달완료 알림보내기

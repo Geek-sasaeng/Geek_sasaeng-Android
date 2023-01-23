@@ -67,7 +67,6 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
         this.dismiss()
         Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
         // TODO: 매칭 마감 성공시 ChattingRoomActivity의 isMatchingFinish와 LeaderOptionDialog의 isMatchingFinish도 true로 바로 반영해주기! => 흠 어떻게 하지? 콜백함수?
-        requireActivity().onContentChanged()
     }
 
     //매칭마감 실패

@@ -43,8 +43,6 @@ import kotlin.properties.Delegates
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeavePartyView, ChattingMemberLeaveChatView, MemberOptionView,
-    ChattingLeaderLeavePartyView, ChattingLeaderLeaveChatView, LeaderOptionView,
     WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
     ChattingDetailView {
 
@@ -288,10 +286,6 @@ class ChattingRoomActivity :
 
     private fun initChattingService() {
         chattingService = ChattingService()
-        chattingService.setChattingMemberLeavePartyView(this)
-        chattingService.setChattingMemberLeaveChatView(this)
-        chattingService.setChattingLeaderLeavePartyView(this)
-        chattingService.setChattingLeaderLeaveChatView(this)
         chattingService.setSendChattingView(this)
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
@@ -302,7 +296,6 @@ class ChattingRoomActivity :
         binding.chattingRoomOptionBtn.setOnClickListener {
             if (isChief) {
                 val optionDialog = LeaderOptionDialog()
-                //optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
                 bundle.putInt("partyId", partyId)
                 bundle.putString("roomId", roomId)
@@ -311,7 +304,9 @@ class ChattingRoomActivity :
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
                 val optionDialog = MemberOptionDialog()
-                //optionDialog.setOptionView(this)
+                val bundle = Bundle()
+                bundle.putString("roomId", roomId)
+                optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
         }
@@ -417,61 +412,6 @@ class ChattingRoomActivity :
         return formatter.format(Calendar.getInstance().time)
     }
 
-    // 일반 유저 나가기
-    override fun MemberExistClick() {
-        Log.d("exit", "일반 유저 나가기 클릭됨")
-        //roomUuid가 roomId?
-        val chattingPartyMemberLeaveChatRequest = ChattingPartyMemberLeaveChatRequest(roomId)
-        chattingService.getChattingPartyMemberChatLeave(chattingPartyMemberLeaveChatRequest)
-    }
-
-    override fun chattingMemberLeavePartySuccess(result: String) {
-        Log.d("exit","멤버 파티 나가기 성공" + result)
-        finish()
-    }
-
-    override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
-        Log.d("exit","멤버 파티 나가기 실패" + message)
-    }
-
-    override fun chattingMemberLeaveChatSuccess(result: String) {
-        Log.d("exit","멤버 채팅 나가기 성공" + result)
-        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomId)
-        chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
-    }
-
-    override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
-        Log.d("exit", "멤버 채팅 나가기 실패" + message)
-    }
-
-    // 방장 나가기
-    override fun LeaderExistClick() {
-        Log.d("exit", "방장 나가기 클릭됨")
-        val chattingPartyLeaderLeaveChatRequest = ChattingPartyLeaderLeaveChatRequest(roomId)
-        chattingService.getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest)
-    }
-
-    override fun chattingLeaderLeavePartySuccess(result: String) {
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
-        Log.d("exit","방장 파티 나가기 성공"+ result)
-        finish()
-    }
-
-    override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
-        Log.d("exit","방장 파티 나가기 실패" + message)
-    }
-
-    override fun chattingLeaderLeaveChatSuccess(result: String) {
-        Log.d("exit","방장 채팅 나가기 성공" + result)
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오던거 없앰
-        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname(), roomId)
-        chattingService.getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)
-    }
-
-    override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {
-        Log.d("exit","방장 채팅 나가기 실패" + message)
-    }
-
     private fun calculateToday(): String {
         val nowTime = System.currentTimeMillis();
         val date = Date(nowTime)
@@ -562,5 +502,6 @@ class ChattingRoomActivity :
 
     override fun getChattingDetailFailure(code: Int, msg: String) {
         Log.d("chatDetail", "채팅방 디테일 불러오기 실패 :$msg")
+        //finish()
     }
 }

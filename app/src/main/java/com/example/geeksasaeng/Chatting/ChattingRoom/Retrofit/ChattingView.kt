@@ -37,17 +37,17 @@ interface ChattingMemberLeavePartyView {
 }
 
 interface ChattingMemberLeaveChatView {
-    fun chattingMemberLeaveChatSuccess(result: String)
+    fun chattingMemberLeaveChatSuccess(result: ChattingPartyMemberLeaveChatResult)
     fun chattingMemberLeaveChatFailure(code: Int, message: String)
 }
 
 interface ChattingLeaderLeavePartyView {
-    fun chattingLeaderLeavePartySuccess(result: String)
+    fun chattingLeaderLeavePartySuccess(result: ChattingPartyLeaderLeavePartyResult)
     fun chattingLeaderLeavePartyFailure(code: Int, message: String)
 }
 
 interface ChattingLeaderLeaveChatView {
-    fun chattingLeaderLeaveChatSuccess(result: String)
+    fun chattingLeaderLeaveChatSuccess(result: ChattingPartyLeaderLeaveChatResult)
     fun chattingLeaderLeaveChatFailure(code: Int, message: String)
 }
 

@@ -11,11 +11,7 @@ import com.example.geeksasaeng.databinding.DialogChattingRoomOptionNotLeaderPopu
 
 class MemberOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionNotLeaderPopupBinding
-    lateinit var memberOptionView: MemberOptionView
-
-    fun setOptionView(memberOptionView: MemberOptionView){
-        this.memberOptionView = memberOptionView
-    }
+    private lateinit var roomId: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +22,8 @@ class MemberOptionDialog: DialogFragment() {
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         dialog?.window?.setWindowAnimations(com.example.geeksasaeng.R.style.AnimationPopupStyle)
+
+        roomId = requireArguments().getString("roomId").toString()
         initListener()
         return binding.root
     }
@@ -45,9 +43,9 @@ class MemberOptionDialog: DialogFragment() {
     private fun initExistClickListener(){
         binding.dialogNotLeaderPopupOptionExitTv.setOnClickListener { //파티나가기
             Log.d("exit", "멤버 파티 나가기 클릭됨")
-            //memberOptionView.MemberExistClick()
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
+            bundle.putString("roomId", roomId)
             bundle.putBoolean("isCheif",false)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
