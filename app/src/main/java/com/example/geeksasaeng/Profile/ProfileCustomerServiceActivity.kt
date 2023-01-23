@@ -17,11 +17,13 @@ class ProfileCustomerServiceActivity: BaseActivity<ActivityProfileCustomerServic
 
         binding.profileCustomerServiceTos1.setOnClickListener {
             val intent = Intent(this, Tos2Activity::class.java)
+            intent.putExtra("status","profile")
             startActivity(intent)
         }
 
         binding.profileCustomerServiceTos2.setOnClickListener {
             val intent = Intent(this, Tos1Activity::class.java)
+            intent.putExtra("status","profile")
             startActivity(intent)
         }
 

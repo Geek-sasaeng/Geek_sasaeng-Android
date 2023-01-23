@@ -79,8 +79,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileCustomerService.setOnClickListener { //고객 센터
-            val intent = Intent(activity, Tos2Activity::class.java)
-            intent.putExtra("status","profile")
+            val intent = Intent(activity, ProfileCustomerServiceActivity::class.java)
             startActivity(intent)
         }
 
