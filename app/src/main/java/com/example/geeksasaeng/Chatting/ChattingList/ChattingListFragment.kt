@@ -1,26 +1,23 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
-import android.animation.Animator
 import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.*
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getMemberId
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
-import com.google.gson.annotations.SerializedName
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -29,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
     ChattingListView, ChattingDetailView {
@@ -243,33 +241,100 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     }
 
     override fun getChattingListSuccess(result: ChattingListResult) {
-        CoroutineScope(Dispatchers.IO).launch {
-            for (i in 0 until result.parties.size) {
-                var lastChatting = ""
-                var lastChattingTime = ""
-                var newChattingNumber = 0
+        var one = 0
+        var two = 0
 
-                var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
+        CoroutineScope(Dispatchers.Main).launch {
+            one++
+            Log.d("CHATTING-SYSTEM-TEST", "one 1 = $one")
+            CoroutineScope(Dispatchers.IO).launch {
+                two++
+                Log.d("CHATTING-SYSTEM-TEST", "two 1 = $two")
+                for (i in 0 until result.parties.size) {
+                    two++
+                    Log.d("CHATTING-SYSTEM-TEST", "two 2 = $two")
+                    var lastChatting = ""
+                    var lastChattingTime = ""
+                    var newChattingNumber = 0
+                    // Log.d("CHATTING-SYSTEM-TEST", "io 1")
 
-                if (chat != null) {
-                    if (chat.size > 1) {
-                        lastChatting = chat[chat.size - 1].content.toString()
-                        lastChattingTime = chat[chat.size - 1].createdAt
+                    var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
+                    // Log.d("CHATTING-SYSTEM-TEST", "io 3")
 
-                        // TODO: 임시로 넣은 부분
-                        newChattingNumber = 0
+                    if (chat != null) {
+                        if (chat.size > 1) {
+                            lastChatting = chat[chat.size - 1].content.toString()
+                            lastChattingTime = chat[chat.size - 1].createdAt
+
+                            // TODO: 임시로 넣은 부분
+                            newChattingNumber = 0
+                        }
                     }
-                }
 
-                var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
-                chattingRoomInfoList.add(partyData)
-                chattingRoomList.add(partyData)
+                    var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
+                    chattingRoomInfoList.add(partyData)
+                    chattingRoomList.add(partyData)
+                    // Log.d("CHATTING-SYSTEM-TEST", "io 6")
+                }
             }
+
+            chattingListRVAdapter.addAllItems(chattingRoomList)
+            chattingListRVAdapter.notifyDataSetChanged()
+            // Log.d("CHATTING-SYSTEM-TEST", "main 7")
+
+            one++
+            Log.d("CHATTING-SYSTEM-TEST", "one 2 = $one")
+            Log.d("CHATTING-SYSTEM-TEST", "two 3 = $two")
         }
 
-        chattingListRVAdapter.addAllItems(chattingRoomList)
+//        CoroutineScope(Dispatchers.IO).launch {
+//            one++
+//            Log.d("CHATTING-SYSTEM-TEST", "one 1 = $one")
+//
+//            for (i in 0 until result.parties.size) {
+//                var lastChatting = ""
+//                var lastChattingTime = ""
+//                var newChattingNumber = 0
+//                // Log.d("CHATTING-SYSTEM-TEST", "io 1")
+//
+//                var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
+//                // Log.d("CHATTING-SYSTEM-TEST", "io 3")
+//
+//                if (chat != null) {
+//                    if (chat.size > 1) {
+//                        lastChatting = chat[chat.size - 1].content.toString()
+//                        lastChattingTime = chat[chat.size - 1].createdAt
+//
+//                        // TODO: 임시로 넣은 부분
+//                        newChattingNumber = 0
+//                    }
+//                }
+//
+//                var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
+//                chattingRoomInfoList.add(partyData)
+//                chattingRoomList.add(partyData)
+//                // Log.d("CHATTING-SYSTEM-TEST", "io 6")
+//            }
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                two++
+//                Log.d("CHATTING-SYSTEM-TEST", "two 1 = $two")
+//                chattingListRVAdapter.addAllItems(chattingRoomList)
+//                chattingListRVAdapter.notifyDataSetChanged()
+//                // Log.d("CHATTING-SYSTEM-TEST", "main 7")
+//            }
+//
+//            one++
+//            Log.d("CHATTING-SYSTEM-TEST", "one 2 = $one")
+//            Log.d("CHATTING-SYSTEM-TEST", "two 2 = $two")
 
-        chattingListRVAdapter.notifyDataSetChanged()
+//        2023-01-20 19:34:03.924 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: one 1 = 1
+//2023-01-20 19:34:03.990 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: one 2 = 2
+//2023-01-20 19:34:03.990 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: two 3 = 0
+//2023-01-20 19:34:03.990 19028-19028/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: two 1 = 1
+
+//        }
+
         var finalPage = result.finalPage
 
         // 로딩화면 제거
