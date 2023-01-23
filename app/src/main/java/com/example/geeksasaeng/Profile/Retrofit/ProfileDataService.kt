@@ -215,6 +215,27 @@ class ProfileDataService {
         })
     }
 
+    // 비밀번호 변경
+    fun profilePasswordChangeSender(body: ProfilePasswordChangeRequest) {
+        profileDataService?.profilePasswordChange(body)?.enqueue(object: Callback<ProfilePasswordChangeResponse> {
+
+            override fun onResponse(call: Call<ProfilePasswordChangeResponse>, response: Response<ProfilePasswordChangeResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", resp.toString())
+                    when (resp.code) {
+                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        4000 -> Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "서버 오류")
+                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfilePasswordChangeResponse>, t: Throwable) {
+                Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "ProfileDataService-onFailure : profilePasswordChangeFailed", t)
+            }
+        })
+    }
 
 }
 

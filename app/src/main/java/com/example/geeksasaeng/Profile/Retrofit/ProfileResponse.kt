@@ -152,3 +152,16 @@ data class ProfilePasswordCheckingResponse(
     @SerializedName("message") val message: String,
     @SerializedName("result") val result: String
 )
+
+// 비밀번호 수정
+data class ProfilePasswordChangeRequest(
+    @SerializedName("checkNewPassword") val checkNewPassword: String,
+    @SerializedName("newPassword") val newPassword: String
+)
+
+data class ProfilePasswordChangeResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)

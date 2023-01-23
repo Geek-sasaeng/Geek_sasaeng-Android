@@ -56,6 +56,11 @@ interface ProfileRetrofitInterfaces {
         @Body profilePasswordCheckingRequest: ProfilePasswordCheckingRequest
     ) : Call<ProfilePasswordCheckingResponse>
 
+    //비밀번호 수정
+    @PATCH("/members/password")
+    fun profilePasswordChange(
+        @Body profilePasswordChangeRequest: ProfilePasswordChangeRequest
+    ) : Call<ProfilePasswordChangeResponse>
 
 
 }

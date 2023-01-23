@@ -34,7 +34,7 @@
 
             <ImageView
                 android:id="@+id/chatting_exit_cancel_btn"
-                android:layout_width="26dp"
+                android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:layout_marginEnd="20dp"
                 android:padding="2dp"

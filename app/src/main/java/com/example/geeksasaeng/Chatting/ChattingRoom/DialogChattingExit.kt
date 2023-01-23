@@ -54,7 +54,6 @@ class DialogChattingExit: DialogFragment(),
     private fun initLClickListener() {
         binding.chattingExitCancelBtn.setOnClickListener {
             this.dismiss()
-            requireActivity().finish()
         }
 
         binding.chattingExitOkBtn.setOnClickListener {

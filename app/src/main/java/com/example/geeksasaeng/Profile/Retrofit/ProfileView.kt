@@ -47,3 +47,9 @@ interface ProfilePasswordCheckingView {
     fun onProfilePasswordCheckingSuccess()
     fun onProfilePasswordCheckingFailure(message: String)
 }
+
+// 비밀번호 수정
+interface ProfilePasswordChangeView {
+    fun onProfilePasswordChangeSuccess()
+    fun onProfilePasswordChangeFailure(message: String)
+}
