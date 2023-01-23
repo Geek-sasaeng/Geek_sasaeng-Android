@@ -15,6 +15,10 @@ class ProfileCustomerServiceActivity: BaseActivity<ActivityProfileCustomerServic
 
     private fun initClickListener() {
 
+        binding.profileCustomerServiceBackBtn.setOnClickListener {
+            finish()
+        }
+
         binding.profileCustomerServiceTos1.setOnClickListener {
             val intent = Intent(this, Tos2Activity::class.java)
             intent.putExtra("status","profile")

@@ -54,6 +54,11 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }*/
 
+        binding.profileCardLayoutBlueTop.setOnClickListener { //프로필 카드 상단 파란영역 클릭시 레벨 설명
+            val intent = Intent(activity, ProfileLevelIntroductionActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.profileCardLayoutWhile.setOnClickListener {
             val profileDetailDialog = DialogProfileDetail()
             val bundle = Bundle()
