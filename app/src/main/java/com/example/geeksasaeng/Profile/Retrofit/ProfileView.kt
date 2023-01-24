@@ -38,6 +38,7 @@ interface ProfileWithdrawalView {
 
 // 회원 정보 수정
 interface ProfileMemberInfoModifyView {
+    abstract val contentResolver: Any
     fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult)
     fun onProfileMemberInfoModifyFailure(message: String)
 }

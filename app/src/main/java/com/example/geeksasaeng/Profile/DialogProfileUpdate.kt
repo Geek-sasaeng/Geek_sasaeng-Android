@@ -1,13 +1,19 @@
 package com.example.geeksasaeng.Profile
 
+import android.app.Activity
+import android.content.Intent
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
@@ -17,16 +23,20 @@ import com.example.geeksasaeng.Utils.saveDormitoryId
 import com.example.geeksasaeng.Utils.saveNickname
 import com.example.geeksasaeng.Utils.saveProfileImgUrl
 import com.example.geeksasaeng.databinding.DialogProfileUpdateBinding
-import kotlin.properties.Delegates
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
-class DialogProfileUpdate: DialogFragment(), ProfileMemberInfoModifyView {
+
+class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
     lateinit var binding: DialogProfileUpdateBinding
-    lateinit var profiledataService: ProfileDataService
+    lateinit var profileDataService: ProfileDataService //내 정보 수정용
 
-    private var dormitoryId :Int = 1
+    private var dormitoryId :Int = 0
     private lateinit var loginId : String
     private lateinit var nickname : String
-    private var profileImg : String? = null
+    private var currentImageURI : Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,14 +51,22 @@ class DialogProfileUpdate: DialogFragment(), ProfileMemberInfoModifyView {
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog!!.window!!.attributes = params as WindowManager.LayoutParams
 
+        initData()
         initView()
         initLClickListener()
         return binding.root
     }
 
+    private fun initData() {
+        dormitoryId = arguments!!.getInt("dormitoryId")
+        loginId = arguments!!.getString("loginId").toString()
+        nickname  = arguments!!.getString("nickname").toString()
+        currentImageURI = arguments?.getString("currentImageURI")?.toUri()
+    }
+
     private fun initView() {
-        profiledataService = ProfileDataService() // 서비스 객체 생성
-        profiledataService.setProfileMemberInfoModifyView(this)
+        profileDataService = ProfileDataService() // 서비스 객체 생성
+        profileDataService.setProfileMemberInfoModifyView(this)
     }
 
     private fun initLClickListener() {
@@ -57,29 +75,55 @@ class DialogProfileUpdate: DialogFragment(), ProfileMemberInfoModifyView {
         }
 
         binding.dialogProfileUpdateOkBtn.setOnClickListener {
-            //★ 나의 정보 수정 api 호출
-            dormitoryId = arguments!!.getInt("dormitoryId")
-            loginId = arguments!!.getString("loginId").toString()
-            nickname  = arguments!!.getString("loginId").toString()
-            profileImg = arguments?.getString("profileImg")
-            //profiledataService.profileMemberInfoModifySender(null, dormitoryId, loginId, nickname, null, profileImg)
-
+            Log.d("sendImg- dialogProfileUpdateOkBtn",currentImageURI.toString())
+            editProfile()
         }
     }
 
+
+    fun editProfile(){
+        var profileImg: MultipartBody.Part? = null
+
+        Log.d("sendImg- editProfile",currentImageURI.toString())
+        if(currentImageURI.toString() != "null"){ // 프로필 이미지가 변경할게 있다면,
+            //TODO: 궁금점: currentImageURI.toString() != null 이건 왜 항상 TRUE가 나온다는 걸까?
+            Log.d("sendImg- editProfile?",currentImageURI.toString())
+            val file = File(absolutelyPath(currentImageURI!!))
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile) //폼데이터
+        }
+
+        Log.d("sendImg-정보", "$dormitoryId/$nickname/$profileImg")
+
+        //나머지 dormitoryId랑 nickname
+        val mapData = HashMap<String, RequestBody>()
+        val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
+        val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickname)
+        mapData.put("dormitoryId", dormitoryIdRequest)
+        mapData.put("nickname", nicknameRequest)
+
+        profileDataService.profileMemberInfoModifySender(profileImg,mapData) // 프로필 수정 api 호출 ★
+    }
+
     override fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult) {
-        Log.d("PROFILE-MODIFY-RESPONSE", "성공")
-        //정보 수정이 성공하면, 그 정보로 sharedPreference에 갱시시켜주는 작업
-        //기숙사
+        Log.d("sendImg", "성공:"+result.toString())
         saveDormitoryId(result.dormitoryId)
-        saveDormitory("제"+result.dormitoryName)
-        //닉네임
+        saveDormitory("제 "+result.dormitoryName)
         saveNickname(result.nickname)
-        //프로필
         saveProfileImgUrl(result.profileImgUrl)
     }
 
     override fun onProfileMemberInfoModifyFailure(message: String) {
-        Log.d("PROFILE-MODIFY-RESPONSE", "실패"+message)
+        Log.d("sendImg", "실패:"+ message)
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = requireActivity().contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+        var result = c.getString(index)
+        return result
     }
 }

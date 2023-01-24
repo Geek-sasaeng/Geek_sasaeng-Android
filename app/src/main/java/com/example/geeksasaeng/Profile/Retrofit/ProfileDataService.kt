@@ -180,9 +180,10 @@ class ProfileDataService {
                 call: Call<ProfileMemberInfoModifyResponse>,
                 response: Response<ProfileMemberInfoModifyResponse>
             ) {
+                Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", resp.toString())
+                    Log.d("sendImg/ PROFILE-MODIFY-RESP", resp.toString())
                     when (resp.code) {
                         1000 -> profileMemberInfoModifyView.onProfileMemberInfoModifySuccess(resp.result)
                         4000 -> Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", "서버 오류")

@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
@@ -20,10 +21,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Utils.BaseActivity
-import com.example.geeksasaeng.Utils.getDormitoryId
-import com.example.geeksasaeng.Utils.getNickname
-import com.example.geeksasaeng.Utils.getProfileImgUrl
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -33,14 +31,13 @@ import java.util.regex.Pattern
 
 
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
-    SignUpNickCheckView, ProfileMemberInfoModifyView {
+    SignUpNickCheckView {
 
     private var dormitoryId = 1 //default 기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
     private lateinit var loginId :String  //로그인 id -api용
-    private lateinit var currentImageURI :Uri  //기존 닉네임
+    private var currentImageURI : Uri? = null  // 새로 지정할 프로필 Url
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
-    private lateinit var profileDataService : ProfileDataService //내 정보 수정용
 
     override fun initAfterBinding() {
         initData()
@@ -82,8 +79,6 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private fun initView() {
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpNickCheckView(this)//닉네임 중복확인 뷰 연결
-        profileDataService = ProfileDataService() // 서비스 객체 생성
-        profileDataService.setProfileMemberInfoModifyView(this)//닉네임 중복확인 뷰 연결
     }
 
     private fun initTextWatcher() {
@@ -152,12 +147,12 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
 
         binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
-            val dialogProfileUpdate = DialogProfileUpdate()
+            val dialogProfileUpdate = DialogProfileUpdate(contentResolver)
             val bundle = Bundle()
             bundle.putInt("dormitoryId", dormitoryId)
             bundle.putString("loginId", loginId)
             bundle.putString("nickname", nickName)
-            bundle.putString("profileImg", getProfileImgUrl()) //TODO: 프로필 이미지 앨범 연결 하고 이 부분 수정 필요!
+            bundle.putString("currentImageURI", currentImageURI.toString())
             dialogProfileUpdate.arguments= bundle
             dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
 
@@ -168,12 +163,6 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             intent.type = MediaStore.Images.Media.CONTENT_TYPE
             intent.type = "image/*"
             startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
-        }
-
-        binding.profileMyInfoUpdateCompleteTv.setOnClickListener {
-            if(currentImageURI!=null){
-                editProfile(currentImageURI!!)
-            }
         }
 
         binding.profileMyInfoUpdateNicknameCheckBtn.setOnClickListener {
@@ -195,49 +184,15 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
         if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
             currentImageURI = intent?.data!!
+            Log.d("sendImg- onActivityResult",currentImageURI.toString())
             binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
-
+            checkingModifiability()
         } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
             Log.d("ActivityResult", "사진 선택 취소")
         }
         else{
             Log.d("ActivityResult", "something wrong")
         }
-    }
-
-    fun editProfile(uri: Uri){
-        val file = File(absolutelyPath(uri!!))
-        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-        val profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile)
-
-        val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
-        val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickName)
-
-        Log.d("sendImg-정보", dormitoryId.toString() +"/"+ nickName+"/"+profileImg)
-
-        val mapData = HashMap<String, RequestBody>()
-        mapData.put("dormitoryId", dormitoryIdRequest)
-        mapData.put("nickname", nicknameRequest)
-
-        profileDataService.profileMemberInfoModifySender(profileImg,mapData)
-    }
-
-    override fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult) {
-        Log.d("sendImg", "성공:"+result.toString())
-    }
-
-    override fun onProfileMemberInfoModifyFailure(message: String) {
-        Log.d("sendImg", "실패:"+ message)
-    }
-
-    // 절대경로 변환
-    fun absolutelyPath(path: Uri): String {
-        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
-        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        c.moveToFirst()
-        var result = c.getString(index)
-        return result
     }
 
     override fun onSignUpNickCheckSuccess(message: String) {
@@ -262,15 +217,15 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     private fun checkingModifiability() {
         var modifiability = (binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility==View.VISIBLE) ||
-                (dormitoryId!= getDormitoryId())
-        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르면
+                (dormitoryId!= getDormitoryId()) || (currentImageURI != null )
+        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니면
 
         if (modifiability) { //수정이 가능하면
-            binding.profileMyInfoUpdateCompleteTv.isClickable = true
+            binding.profileMyInfoUpdateCompleteTv.isEnabled = true
             binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.main))
 
         } else{
-            binding.profileMyInfoUpdateCompleteTv.isClickable = false
+            binding.profileMyInfoUpdateCompleteTv.isEnabled = false
             binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.bababa_color))
         }
     }
