@@ -1,5 +1,7 @@
 package com.example.geeksasaeng.Profile.Retrofit
 
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -40,14 +42,11 @@ interface ProfileRetrofitInterfaces {
     ): Call<ProfileWithdrawalResponse>
 
     // 멤버 정보 수정하기
+    @Multipart
     @POST("/members/info")
     fun profileMemberInfoModify(
-        @Path("checkPassword") checkPassword: String?,
-        @Path("dormitoryId") dormitoryId: Int,
-        @Path("loginId") loginId: String,
-        @Path("nickname") nickname: String,
-        @Path("password") password: String?,
-        @Path("profileImg") profileImg: String?,
+        @Part profileImg: MultipartBody.Part?,
+        @PartMap data: HashMap<String, RequestBody>
     ): Call<ProfileMemberInfoModifyResponse>
 
     //비밀번호 일치 확인

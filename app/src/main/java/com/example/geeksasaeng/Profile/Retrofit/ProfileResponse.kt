@@ -135,10 +135,8 @@ data class ProfileMemberInfoModifyResponse(
 data class ProfileMemberInfoModifyResult(
     @SerializedName("dormitoryId") val dormitoryId: Int,
     @SerializedName("dormitoryName") val dormitoryName: String,
-    @SerializedName("loginId") val loginId: String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("profileImgUrl") val profileImgUrl: String
-
 )
 
 // 비밀번호 일치 확인

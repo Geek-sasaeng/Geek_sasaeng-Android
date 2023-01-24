@@ -21,13 +21,6 @@
         android:theme="@style/Theme.Geeksasaeng"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ProfileLevelIntroductionActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -95,7 +88,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Profile.ProfileCustomerServiceActivity"
-            android:screenOrientation="portrait" /> <!-- 카카오맵 APP KEY 추가 -->
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Profile.ProfileLevelIntroductionActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- 카카오맵 APP KEY 추가 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="${kakaoNativeAppKey}" />

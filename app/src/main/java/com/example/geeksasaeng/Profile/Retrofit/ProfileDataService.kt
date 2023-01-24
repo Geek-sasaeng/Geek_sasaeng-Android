@@ -6,6 +6,8 @@ import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.getJwt
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -172,25 +174,25 @@ class ProfileDataService {
     }
 
     // 회원 정보 수정
-    fun profileMemberInfoModifySender(checkPassword: String?, dormitoryId: Int, loginId: String, nickname: String, password: String?, profileImg: String?) {
-        profileDataService?.profileMemberInfoModify(checkPassword, dormitoryId, loginId, nickname, password, profileImg)?.enqueue(object: Callback<ProfileMemberInfoModifyResponse> {
+    fun profileMemberInfoModifySender(profileImg: MultipartBody.Part?, data: HashMap<String, RequestBody>) {
+        profileDataService?.profileMemberInfoModify(profileImg, data)?.enqueue(object: Callback<ProfileMemberInfoModifyResponse> {
             override fun onResponse(
                 call: Call<ProfileMemberInfoModifyResponse>,
                 response: Response<ProfileMemberInfoModifyResponse>
             ) {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
-                    Log.d("PROFILE-MODIFY-RESPONSE", resp.toString())
+                    Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", resp.toString())
                     when (resp.code) {
                         1000 -> profileMemberInfoModifyView.onProfileMemberInfoModifySuccess(resp.result)
-                        4000 -> Log.d("PROFILE-MODIFY-RESPONSE", "서버 오류")
+                        4000 -> Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", "서버 오류")
                         else -> profileMemberInfoModifyView.onProfileMemberInfoModifyFailure(resp.message)
                     }
                 }
             }
 
             override fun onFailure(call: Call<ProfileMemberInfoModifyResponse>, t: Throwable) {
-                Log.d("PROFILE-MODIFY-RESPONSE", "ProfileDataService-onFailure : profileMemberInfoModifyFailed", t)
+                Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", "ProfileDataService-onFailure : profileMemberInfoModifyFailed", t)
             }
         })
     }

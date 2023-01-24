@@ -1,33 +1,46 @@
 package com.example.geeksasaeng.Profile
 
+import android.app.Activity
 import android.content.Intent
-import android.content.res.ColorStateList
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.example.geeksasaeng.Home.CreateParty.DialogLink
-import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
+import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
-import com.example.geeksasaeng.Utils.*
+import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.getDormitoryId
+import com.example.geeksasaeng.Utils.getNickname
+import com.example.geeksasaeng.Utils.getProfileImgUrl
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
-import com.example.geeksasaeng.databinding.DialogProfileCurrentPwdCheckingBinding
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import java.util.regex.Pattern
 
+
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
-    SignUpNickCheckView {
+    SignUpNickCheckView, ProfileMemberInfoModifyView {
 
     private var dormitoryId = 1 //default 기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
     private lateinit var loginId :String  //로그인 id -api용
+    private lateinit var currentImageURI :Uri  //기존 닉네임
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
+    private lateinit var profileDataService : ProfileDataService //내 정보 수정용
 
     override fun initAfterBinding() {
         initData()
@@ -69,6 +82,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private fun initView() {
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpNickCheckView(this)//닉네임 중복확인 뷰 연결
+        profileDataService = ProfileDataService() // 서비스 객체 생성
+        profileDataService.setProfileMemberInfoModifyView(this)//닉네임 중복확인 뷰 연결
     }
 
     private fun initTextWatcher() {
@@ -148,6 +163,19 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
         }
 
+        binding.profileUserImgCv.setOnClickListener { //사용자 프로필
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.type = "image/*"
+            startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
+        }
+
+        binding.profileMyInfoUpdateCompleteTv.setOnClickListener {
+            if(currentImageURI!=null){
+                editProfile(currentImageURI!!)
+            }
+        }
+
         binding.profileMyInfoUpdateNicknameCheckBtn.setOnClickListener {
             //닉네임 중복확인 버튼 - 닉네임 validation 맞을 때만 활성화된다.
             val userNick = binding.profileMyInfoUpdateNicknameEt.text.toString() //사용자가 입력한 닉네임 가져오기
@@ -160,6 +188,56 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             val dialogProfileCurrentPwdChecking = DialogProfileCurrentPwdChecking()
             dialogProfileCurrentPwdChecking.show(supportFragmentManager, "DialogProfileCurrentPwdChecking")
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
+        if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
+            currentImageURI = intent?.data!!
+            binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
+
+        } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
+            Log.d("ActivityResult", "사진 선택 취소")
+        }
+        else{
+            Log.d("ActivityResult", "something wrong")
+        }
+    }
+
+    fun editProfile(uri: Uri){
+        val file = File(absolutelyPath(uri!!))
+        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        val profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile)
+
+        val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
+        val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickName)
+
+        Log.d("sendImg-정보", dormitoryId.toString() +"/"+ nickName+"/"+profileImg)
+
+        val mapData = HashMap<String, RequestBody>()
+        mapData.put("dormitoryId", dormitoryIdRequest)
+        mapData.put("nickname", nicknameRequest)
+
+        profileDataService.profileMemberInfoModifySender(profileImg,mapData)
+    }
+
+    override fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult) {
+        Log.d("sendImg", "성공:"+result.toString())
+    }
+
+    override fun onProfileMemberInfoModifyFailure(message: String) {
+        Log.d("sendImg", "실패:"+ message)
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor = contentResolver.query(path, proj, null, null, null)!!
+        var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c.moveToFirst()
+        var result = c.getString(index)
+        return result
     }
 
     override fun onSignUpNickCheckSuccess(message: String) {

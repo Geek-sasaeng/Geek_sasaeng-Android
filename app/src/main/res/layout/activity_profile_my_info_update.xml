@@ -84,7 +84,8 @@
                     android:id="@+id/profile_my_info_update_user_img_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/profile_thumbs_up"/>
+                    android:src="@drawable/profile_thumbs_up"
+                    android:scaleType="fitXY"/>
 
                 <ImageView
                     android:id="@+id/profile_my_info_update_user_img_change_iv"
