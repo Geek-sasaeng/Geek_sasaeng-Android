@@ -22,18 +22,30 @@
         android:layout_marginHorizontal="32dp"
         >
 
+        <ImageView
+            android:id="@+id/user_position_iv"
+            android:layout_width="8.5dp"
+            android:layout_height="13dp"
+            android:src="@drawable/ic_heart_bar_chatting_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/user_position_tv"
+            app:layout_constraintTop_toTopOf="@id/user_position_tv"
+            app:layout_constraintBottom_toBottomOf="@id/user_position_tv"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
         <TextView
-            android:id="@+id/user_position"
+            android:id="@+id/user_position_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_3"
-            android:fontFamily="@font/spoqa_medium"
-            android:textSize="11sp"
-            android:text="파티원"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/main"
+            android:fontFamily="@font/spoqa_bold"
+            android:textSize="13sp"
+            android:text="신입생 ㅣ 파티원"
+            app:layout_constraintStart_toEndOf="@id/user_position_iv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="54dp"/>
+            android:layout_marginTop="51dp"/>
 
         <TextView
             android:id="@+id/user_name"
@@ -43,53 +55,52 @@
             android:textSize="18sp"
             android:textColor="@color/top"
             android:fontFamily="@font/spoqa_bold"
-            app:layout_constraintTop_toBottomOf="@id/user_position"
+            app:layout_constraintTop_toBottomOf="@id/user_position_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="13dp"/>
+            android:layout_marginTop="18dp"/>
 
-        <View
-            android:id="@+id/user_line1"
-            android:layout_width="0dp"
-            android:layout_height="1.7px"
-            android:background="@color/gray_0"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_name"
-            android:layout_marginTop="36dp"
-            android:layout_marginHorizontal="18dp"/>
-
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_line1"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="25dp"
-            >
+            android:layout_width="0dp"
+            android:layout_height="43dp"
+            android:background="@drawable/round_border_button_gray1"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="22dp"
+            android:layout_marginTop="38dp"
+            app:layout_constraintTop_toBottomOf="@id/user_name">
 
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="15dp"
-                android:layout_height="17dp"
-                android:src="@drawable/ic_report2"
-                android:layout_marginEnd="8dp"/>
-
-
-            <TextView
-                android:id="@+id/chatting_user_report"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/spoqa_medium"
-                android:textSize="15sp"
-                android:text="신고하기"
-                android:textColor="@color/top" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_report2"
+                    android:layout_marginEnd="7dp"/>
+
+
+                <TextView
+                    android:id="@+id/chatting_user_report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:textSize="15sp"
+                    android:text="신고하기"
+                    android:textColor="@color/top" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

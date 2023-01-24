@@ -86,7 +86,7 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
 
         Log.d("sendImg- editProfile",currentImageURI.toString())
         if(currentImageURI.toString() != "null"){ // 프로필 이미지가 변경할게 있다면,
-            //TODO: 궁금점: currentImageURI.toString() != null 이건 왜 항상 TRUE가 나온다는 걸까?
+            //TODO: 궁금점: currentImageURI.toString() != null 이건 왜 항상 TRUE가 나온다는 걸까? => 초기화가 null로 되어있어서 그런듯..?
             Log.d("sendImg- editProfile?",currentImageURI.toString())
             val file = File(absolutelyPath(currentImageURI!!))
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
