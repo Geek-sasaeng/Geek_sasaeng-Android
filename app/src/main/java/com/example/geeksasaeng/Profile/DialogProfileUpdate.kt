@@ -1,7 +1,5 @@
 package com.example.geeksasaeng.Profile
 
-import android.app.Activity
-import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -18,15 +16,16 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
-import com.example.geeksasaeng.Utils.saveDormitory
-import com.example.geeksasaeng.Utils.saveDormitoryId
-import com.example.geeksasaeng.Utils.saveNickname
-import com.example.geeksasaeng.Utils.saveProfileImgUrl
+import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.DialogProfileUpdateBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+import java.net.URL
 
 
 class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
@@ -36,7 +35,7 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
     private var dormitoryId :Int = 0
     private lateinit var loginId : String
     private lateinit var nickname : String
-    private var currentImageURI : Uri? = null
+    private lateinit var currentImageURI : Uri
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +60,7 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
         dormitoryId = arguments!!.getInt("dormitoryId")
         loginId = arguments!!.getString("loginId").toString()
         nickname  = arguments!!.getString("nickname").toString()
-        currentImageURI = arguments?.getString("currentImageURI")?.toUri()
+        currentImageURI = arguments!!.getString("currentImageURI")!!.toUri()
     }
 
     private fun initView() {
@@ -85,10 +84,13 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
         var profileImg: MultipartBody.Part? = null
 
         Log.d("sendImg- editProfile",currentImageURI.toString())
-        if(currentImageURI.toString() != "null"){ // 프로필 이미지가 변경할게 있다면,
-            //TODO: 궁금점: currentImageURI.toString() != null 이건 왜 항상 TRUE가 나온다는 걸까? => 초기화가 null로 되어있어서 그런듯..?
-            Log.d("sendImg- editProfile?",currentImageURI.toString())
+        if(currentImageURI.toString() != getProfileImgUrl()){ // 프로필 이미지가 변경할게 있다면,
+            Log.d("sendImg- editProfile?",currentImageURI.path.toString())
             val file = File(absolutelyPath(currentImageURI!!))
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile) //폼데이터
+        }else{
+            val file = File(currentImageURI.toString())
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile) //폼데이터
         }

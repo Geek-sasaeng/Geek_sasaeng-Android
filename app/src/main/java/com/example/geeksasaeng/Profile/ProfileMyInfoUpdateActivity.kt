@@ -36,7 +36,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private var dormitoryId = 1 //default 기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
     private lateinit var loginId :String  //로그인 id -api용
-    private var currentImageURI : Uri? = null  // 새로 지정할 프로필 Url
+    private lateinit var currentImageURI : Uri // 새로 지정할 프로필 Url
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
 
     override fun initAfterBinding() {
@@ -74,6 +74,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         Glide.with(this)
             .load(getProfileImgUrl())
             .into(binding.profileMyInfoUpdateUserImgIv)
+        currentImageURI = getProfileImgUrl()!!.toUri()
     }
 
     private fun initView() {
@@ -217,7 +218,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     private fun checkingModifiability() {
         var modifiability = (binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility==View.VISIBLE) ||
-                (dormitoryId!= getDormitoryId()) || (currentImageURI != null )
+                (dormitoryId!= getDormitoryId()) || (currentImageURI.toString() != getProfileImgUrl() )
         // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니면
 
         if (modifiability) { //수정이 가능하면
