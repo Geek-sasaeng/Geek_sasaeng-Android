@@ -34,7 +34,7 @@ class DialogSendAlarm: DialogFragment(){
 
     private fun initListener(){
         binding.sendAlarmSendBtn.setOnClickListener {
-            Log.d("deliveryAlarm", "배달완료 알림보내기 버튼 눌림")
+            Log.d("deliveryAlarm", "배달완료 알림보내기 버튼 눌림 / "+ roomId)
             chattingService.sendDeliveryCompleteAlarm(ChattingDeliveryCompleteRequest(roomId!!)) //★ 매칭완료 알람보내기 api 호출
             this.dismiss()
         }
