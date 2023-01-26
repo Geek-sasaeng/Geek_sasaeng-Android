@@ -49,15 +49,8 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
     }
 
     fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
-        Log.d("CHATTING-LIST-TEST", "4")
-        Log.d("CHATTING-LIST-TEST", "items 1 = $items")
-        chattingList.clear()
-        Log.d("CHATTING-LIST-TEST", "items 2 = $items")
         chattingList.addAll(items)
-        Log.d("CHATTING-LIST-TEST", "items 3 = $items")
         this.notifyDataSetChanged()
-        Log.d("CHATTING-LIST-TEST", "items 4 = $items")
-        Log.d("CHATTING-LIST-TEST", "5")
     }
 
     override fun getItemCount(): Int = chattingList.size

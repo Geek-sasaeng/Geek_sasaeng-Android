@@ -1,6 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.content.Intent
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -22,9 +23,7 @@ import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
 
 
@@ -34,7 +33,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
     var cursor: Int = 0
-    private var chattingRoomInfoList = ArrayList<ChattingList?>()
     private var chattingRoomList = ArrayList<ChattingList?>()
     private var checkBinding: Boolean = false
 
@@ -104,7 +102,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
             chatResponseMessage = getJSONtoChatting(originalMessage)
             chatDB.chatDao().insert(chatResponseMessage)
 
-            Log.d("CHATTING-SYSTEM-TEST", "chatResponseMessage = $chatResponseMessage")
             chattingList.add(chatResponseMessage)
         }
 
@@ -241,25 +238,16 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     }
 
     override fun getChattingListSuccess(result: ChattingListResult) {
-        var one = 0
-        var two = 0
-
         CoroutineScope(Dispatchers.Main).launch {
-            one++
-            Log.d("CHATTING-SYSTEM-TEST", "one 1 = $one")
-            CoroutineScope(Dispatchers.IO).launch {
-                two++
-                Log.d("CHATTING-SYSTEM-TEST", "two 1 = $two")
+            // 여러 개의 작업 (data access 작업 및 ui 작업)을 하나의 coroutine 안에서 작업하기 위해 withContext 사용!
+            // http://www.gisdeveloper.co.kr/?p=10279#:~:text=withContext%EB%A5%BC%20%EC%8D%A8%EC%84%9C%20%EC%83%88%EB%A1%9C%EC%9A%B4%20%EC%BD%94%EB%A3%A8%ED%8B%B4%EC%9D%84%20%EB%8B%A4%EB%A5%B8%20%EC%8A%A4%EB%A0%88%EB%93%9C%EC%97%90%EC%84%9C%20%EB%8F%99%EA%B8%B0%EC%A0%81%EC%9C%BC%EB%A1%9C%20%EC%8B%A4%ED%96%89%ED%95%98%EB%8F%84%EB%A1%9D%20%ED%95%98%EB%8A%94%20%EC%BD%94%EB%93%9C%EC%9E%85%EB%8B%88%EB%8B%A4.%20%EA%B2%B0%EA%B3%BC%EB%8A%94%20%EB%8B%A4%EC%9D%8C%EA%B3%BC%20%EA%B0%99%EC%8A%B5%EB%8B%88%EB%8B%A4.
+            withContext(Dispatchers.IO) {
                 for (i in 0 until result.parties.size) {
-                    two++
-                    Log.d("CHATTING-SYSTEM-TEST", "two 2 = $two")
                     var lastChatting = ""
                     var lastChattingTime = ""
                     var newChattingNumber = 0
-                    // Log.d("CHATTING-SYSTEM-TEST", "io 1")
 
                     var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
-                    // Log.d("CHATTING-SYSTEM-TEST", "io 3")
 
                     if (chat != null) {
                         if (chat.size > 1) {
@@ -272,19 +260,13 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                     }
 
                     var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
-                    chattingRoomInfoList.add(partyData)
                     chattingRoomList.add(partyData)
-                    // Log.d("CHATTING-SYSTEM-TEST", "io 6")
                 }
             }
 
+            Log.d("CHATTING-SYSTEM-TEST", "out chattingRoomList = $chattingRoomList")
             chattingListRVAdapter.addAllItems(chattingRoomList)
             chattingListRVAdapter.notifyDataSetChanged()
-            // Log.d("CHATTING-SYSTEM-TEST", "main 7")
-
-            one++
-            Log.d("CHATTING-SYSTEM-TEST", "one 2 = $one")
-            Log.d("CHATTING-SYSTEM-TEST", "two 3 = $two")
         }
 
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -319,8 +301,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 //            CoroutineScope(Dispatchers.Main).launch {
 //                two++
 //                Log.d("CHATTING-SYSTEM-TEST", "two 1 = $two")
-//                chattingListRVAdapter.addAllItems(chattingRoomList)
-//                chattingListRVAdapter.notifyDataSetChanged()
 //                // Log.d("CHATTING-SYSTEM-TEST", "main 7")
 //            }
 //
