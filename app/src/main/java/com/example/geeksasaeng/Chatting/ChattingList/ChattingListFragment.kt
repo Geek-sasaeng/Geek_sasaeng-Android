@@ -248,6 +248,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                     var newChattingNumber = 0
 
                     var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
+                    Log.d("CHATTING-SYSTEM-TEST", "chat = $chat")
 
                     if (chat != null) {
                         if (chat.size > 1) {
@@ -268,52 +269,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
             chattingListRVAdapter.addAllItems(chattingRoomList)
             chattingListRVAdapter.notifyDataSetChanged()
         }
-
-//        CoroutineScope(Dispatchers.IO).launch {
-//            one++
-//            Log.d("CHATTING-SYSTEM-TEST", "one 1 = $one")
-//
-//            for (i in 0 until result.parties.size) {
-//                var lastChatting = ""
-//                var lastChattingTime = ""
-//                var newChattingNumber = 0
-//                // Log.d("CHATTING-SYSTEM-TEST", "io 1")
-//
-//                var chat = result.parties[i]?.let { chatDB.chatDao().getRoomChats(it.roomId) }
-//                // Log.d("CHATTING-SYSTEM-TEST", "io 3")
-//
-//                if (chat != null) {
-//                    if (chat.size > 1) {
-//                        lastChatting = chat[chat.size - 1].content.toString()
-//                        lastChattingTime = chat[chat.size - 1].createdAt
-//
-//                        // TODO: 임시로 넣은 부분
-//                        newChattingNumber = 0
-//                    }
-//                }
-//
-//                var partyData = result.parties[i]?.let { ChattingList(it.roomId, it.roomTitle, lastChatting, lastChattingTime, newChattingNumber) }
-//                chattingRoomInfoList.add(partyData)
-//                chattingRoomList.add(partyData)
-//                // Log.d("CHATTING-SYSTEM-TEST", "io 6")
-//            }
-//
-//            CoroutineScope(Dispatchers.Main).launch {
-//                two++
-//                Log.d("CHATTING-SYSTEM-TEST", "two 1 = $two")
-//                // Log.d("CHATTING-SYSTEM-TEST", "main 7")
-//            }
-//
-//            one++
-//            Log.d("CHATTING-SYSTEM-TEST", "one 2 = $one")
-//            Log.d("CHATTING-SYSTEM-TEST", "two 2 = $two")
-
-//        2023-01-20 19:34:03.924 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: one 1 = 1
-//2023-01-20 19:34:03.990 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: one 2 = 2
-//2023-01-20 19:34:03.990 19028-19315/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: two 3 = 0
-//2023-01-20 19:34:03.990 19028-19028/com.example.geeksasaeng D/CHATTING-SYSTEM-TEST: two 1 = 1
-
-//        }
 
         var finalPage = result.finalPage
 
