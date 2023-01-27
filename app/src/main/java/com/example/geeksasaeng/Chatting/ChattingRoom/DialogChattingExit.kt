@@ -15,6 +15,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.DialogChattingExitBinding
 import com.example.geeksasaeng.databinding.DialogChattingRoomForcedExitLeaderBinding
+import kotlin.properties.Delegates
 
 class DialogChattingExit: DialogFragment(),
     ChattingMemberLeavePartyView, ChattingMemberLeaveChatView,
@@ -22,7 +23,8 @@ class DialogChattingExit: DialogFragment(),
 
     lateinit var binding: DialogChattingExitBinding
     private lateinit var chattingService: ChattingService
-    private lateinit var roomId : String
+    private lateinit var roomId : String //배달파티 채팅방 나가기용
+    private var partyId by Delegates.notNull<Int>() //배달파티 게시글 나가기용
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +38,8 @@ class DialogChattingExit: DialogFragment(),
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog!!.window!!.attributes = params as WindowManager.LayoutParams
 
-        roomId = arguments?.getString("roomId")!!
+        roomId = arguments!!.getString("roomId").toString()
+        partyId = arguments!!.getInt("partyId")
 
         initService()
         initLClickListener()
@@ -74,6 +77,7 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingMemberLeavePartySuccess(result: String) {
         Log.d("exit","멤버 파티 나가기 성공" + result)
+        requireActivity().finish()
     }
 
     override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
@@ -82,9 +86,8 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingMemberLeaveChatSuccess(result: ChattingPartyMemberLeaveChatResult) {
         Log.d("exit","멤버 채팅 나가기 성공" + result)
-        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomId)
+        val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(partyId)
         chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
-        requireActivity().finish()
     }
 
     override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
@@ -95,6 +98,7 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingLeaderLeavePartySuccess(result: ChattingPartyLeaderLeavePartyResult) {
         Log.d("exit","방장 파티 나가기 성공"+ result)
+        requireActivity().finish()
     }
 
     override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
@@ -103,9 +107,8 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingLeaderLeaveChatSuccess(result: ChattingPartyLeaderLeaveChatResult) {
         Log.d("exit","방장 채팅 나가기 성공" + result)
-        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname(), roomId)
+        val chattingPartyLeaderLeavePartyRequest = ChattingPartyLeaderLeavePartyRequest(getNickname()!!, partyId)
         chattingService.getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)
-        requireActivity().finish()
     }
 
     override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {

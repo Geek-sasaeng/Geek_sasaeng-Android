@@ -103,7 +103,7 @@ data class ChattingRemittanceCompleteRequest(
 
 //파티 멤버 나가기 for 배달파티
 data class ChattingPartyMemberLeavePartyRequest(
-    @SerializedName("roomId") val roomId: String,
+    @SerializedName("partyId") val partyId: Int
 )
 
 data class ChattingPartyMemberLeavePartyResponse(
@@ -115,7 +115,7 @@ data class ChattingPartyMemberLeavePartyResponse(
 
 //파티 멤버 나가기 for 채팅방
 data class ChattingPartyMemberLeaveChatRequest(
-    @SerializedName("roomId") val roomId: String,
+    @SerializedName("roomId") val roomId: String
 )
 
 data class ChattingPartyMemberLeaveChatResponse(
@@ -132,8 +132,8 @@ data class ChattingPartyMemberLeaveChatResult(
 
 //방장 나가기 for 배달파티
 data class ChattingPartyLeaderLeavePartyRequest(
-    @SerializedName("nickName") val nickName: String?,
-    @SerializedName("roomId") val roomId: String
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("partyId") val partyId: Int
 )
 
 data class ChattingPartyLeaderLeavePartyResponse(

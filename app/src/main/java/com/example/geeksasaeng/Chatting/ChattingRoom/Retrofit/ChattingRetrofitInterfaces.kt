@@ -50,7 +50,7 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingPartyMemberLeavePartyResponse>
 
     //배달 파티멤버가 스스로 퇴장 for 채팅방
-    @DELETE("/party-chat-room/members/self")
+    @HTTP(method = "DELETE", path = "/party-chat-room/members/self", hasBody = true)
     fun partyMemberChattingLeave(
         @Body chattingPartyMemberLeaveChatRequest: ChattingPartyMemberLeaveChatRequest
     ): Call<ChattingPartyMemberLeaveChatResponse>

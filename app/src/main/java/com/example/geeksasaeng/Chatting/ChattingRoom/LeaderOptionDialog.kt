@@ -95,6 +95,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
             bundle.putString("roomId", roomId)
+            bundle.putInt("partyId", partyId)
             bundle.putBoolean("isCheif",true)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
