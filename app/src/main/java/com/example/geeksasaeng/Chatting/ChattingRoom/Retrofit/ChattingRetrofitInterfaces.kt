@@ -68,7 +68,7 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingPartyLeaderLeaveChatResponse>
 
     //배달 완료 알림
-    @POST("/party-chat-room/delivery-complete")
+    @PATCH("/party-chat-room/delivery-complete")
     fun partyDeliveryComplete(
         @Body chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest
     ): Call<ChattingDeliveryCompleteResponse>
