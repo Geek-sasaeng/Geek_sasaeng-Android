@@ -22,6 +22,7 @@ class DeliveryTimer(val textView: TextView, millisInFuture: Long,
     override fun onFinish() {
         textView.setText("0 초")
     }
+
     // 남은 시간 계산
     private fun calculateTime(orderTime: String): String {
         var orderYear = Integer.parseInt(orderTime.substring(0, 4))
