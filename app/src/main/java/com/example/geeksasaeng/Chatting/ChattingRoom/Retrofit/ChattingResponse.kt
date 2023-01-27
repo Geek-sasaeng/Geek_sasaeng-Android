@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.util.ArrayList
 
 data class CreateChattingRoomRequest(
     @SerializedName("accountNumber") val accountNumber: String,
@@ -62,7 +63,7 @@ data class ChattingMemberAddResult(
 
 // 강제퇴장
 data class ChattingMemberForcedExitRequest(
-    @SerializedName("removedMemberId") val removedMemberId: String,
+    @SerializedName("removedMemberIdList") val removedMemberIdList: ArrayList<String>,
     @SerializedName("roomId") val roomId: String
 )
 
@@ -190,6 +191,7 @@ data class MatchingEndResult(
 )
 
 data class MemberData(
+    @SerializedName("id") val id: String,
     @SerializedName("nickName") val nickName: String,
     @SerializedName("profileImgUrl") val profileImgUrl: String,
     @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean

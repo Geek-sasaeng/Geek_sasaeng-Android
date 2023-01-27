@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteView
+import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
@@ -88,7 +90,9 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
         }
 
         binding.dialogLeaderPopupOptionUserExitTv.setOnClickListener { //강제 퇴장시키기
-
+            val intent = Intent(context, ChattingRoomForcedExitActivity::class.java)
+            intent.putExtra("roomId", roomId)
+            startActivity(intent)
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기

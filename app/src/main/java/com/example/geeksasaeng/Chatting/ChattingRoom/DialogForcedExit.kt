@@ -22,12 +22,12 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
     lateinit var binding: DialogChattingRoomForcedExitLeaderBinding
     private lateinit var dialogForcedExitRVAdapter: DialogForcedExitRVAdapter
 
+    private lateinit var roomId: String
+    private lateinit var mForcedExitMemberList: ArrayList<MemberData>
+    private lateinit var removedMemberIdList: ArrayList<String>
 
     override fun onResume() {
         super.onResume()
-        // Dialog 사이즈 조절 하기
-        // 와! 획기적이야..! 이때까지 dp로 했는데 이렇게 할 수 있다니.. 동적으로 크기도 변경할 수 있겠다!
-        // => 더 알아보고, 다른 코드도 이렇게 바꾸자
         val params = dialog!!.window!!.attributes
         params.width = WindowManager.LayoutParams.WRAP_CONTENT
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
@@ -42,9 +42,16 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
     ): View? {
         binding = DialogChattingRoomForcedExitLeaderBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
+        initData()
         initAdapter()
         initLClickListener()
         return binding.root
+    }
+
+    private fun initData() {
+        roomId = requireArguments().getString("roomId").toString()
+        mForcedExitMemberList = requireArguments().getParcelableArrayList<Parcelable?>("forcedExitList") as ArrayList<MemberData>
+        Log.d("DialogForcedExit", "roomID : ${roomId} / 받아온 List : $mForcedExitMemberList")
     }
 
     private fun initLClickListener() {
@@ -60,15 +67,18 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
     private fun sendForcedExitMember() { //★ 강제퇴장 api 호출
         mchattingService = ChattingService()
         mchattingService.setChattingMemberForcedExitView(this)
-        // TODO: 리스트에 있는 멤버하나하나 별로 강제퇴장 API 호출해줘야해?? (memberId,roomId필요) - 채팅방 만들어 진 후, TEST 필요
-        val chattingMemberForcedExitRequest = ChattingMemberForcedExitRequest("string","string")
+
+        for(member in mForcedExitMemberList) //강제퇴장 시킬 멤버 id 배열 구성
+            removedMemberIdList.add(member.id)
+
+        Log.d("DialogForcedExit", "mForcedExitMemberList : ${mForcedExitMemberList} / removedMemberIdList : $removedMemberIdList")
+
+        val chattingMemberForcedExitRequest = ChattingMemberForcedExitRequest(removedMemberIdList, roomId)
         mchattingService.chattingMemberForcedExit(chattingMemberForcedExitRequest)
     }
 
     private fun initAdapter() {
-        val mMemberList = requireArguments().getParcelableArrayList<Parcelable?>("forcedExitList") as MutableList<MemberData>
-        Log.d("forcedExitDialog", "dialog 받아온 List : $mMemberList")
-        dialogForcedExitRVAdapter = DialogForcedExitRVAdapter(mMemberList)
+        dialogForcedExitRVAdapter = DialogForcedExitRVAdapter(mForcedExitMemberList)
         binding.forcedExitRv.adapter = dialogForcedExitRVAdapter
         binding.forcedExitRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 

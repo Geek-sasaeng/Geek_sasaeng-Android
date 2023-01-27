@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Chatting.ChattingRoom.ChattingRoomForcedExitFragment"
+    tools:context=".Chatting.ChattingRoom.ChattingRoomForcedExitActivity"
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,7 +114,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/chatting_room_forced_exit_next_btn"
             android:layout_marginEnd="11dp"
-             />
+            />
 
         <ImageView
             android:id="@+id/chatting_room_forced_exit_next_btn"
