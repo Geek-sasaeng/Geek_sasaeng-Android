@@ -64,7 +64,10 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
             binding.itemChattingListSectionIv.setImageResource(R.drawable.ic_delivery_party_ic)
             binding.itemChattingListLastChatting.text = chatting.lastChatting
             binding.itemChattingListTimeTv.text = calculateTime(chatting.lastChattingTime)
-            Log.d("CHATTING-LIST-TIME-TEST", "current = ${calculateToday()} / chatting = ${chatting.lastChattingTime} / result = ${calculateTime(chatting.lastChattingTime)}")
+
+            if (chatting.lastChattingTime != "")
+                Log.d("CHATTING-LIST-TIME-TEST", "current = ${calculateToday()} / chatting = ${chatting.lastChattingTime} / result = ${calculateTime(chatting.lastChattingTime)}")
+
             binding.itemChattingListChattingNumberTv.text = chatting.newChattingNumber.toString()
             binding.itemChattingListLastChatting.setTextColor(Color.parseColor("#636363"))
         }
@@ -81,7 +84,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
     이후로는 날짜 표기
      */
 
-    private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
     var nowTime: Long = 0
     var date: Date? = null
     var todaySec: Int = 0
@@ -117,7 +120,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
                 set(Calendar.DAY_OF_MONTH, orderDay)
             }.timeInMillis + (60000 * 60 * orderHours) + (60000 * orderMinutes)
 
-            var remainTime = order - today
+            var remainTime = today - order
 
             var day = remainTime / (24*60*60*1000)
             var sec = (remainTime % (24*60*60*1000)) / 1000
@@ -135,7 +138,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
 
     // 오늘 날짜 계산
     fun calculateToday(): String {
-        nowTime = System.currentTimeMillis();
+        nowTime = System.currentTimeMillis() + 32400000
         date = Date(nowTime)
         return dateFormat.format(date)
     }
