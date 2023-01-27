@@ -73,17 +73,6 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
         }
     }
 
-    /*
-    방금 : 5분 이내의 채팅
-    10분 전 - 12시간 전
-    오늘 (13시간 이후-그날의 채팅)
-    어제
-    2일 전
-    3일 전
-    -----------
-    이후로는 날짜 표기
-     */
-
     private var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREAN)
     var nowTime: Long = 0
     var date: Date? = null
@@ -122,17 +111,39 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
 
             var remainTime = today - order
 
-            var day = remainTime / (24*60*60*1000)
-            var sec = (remainTime % (24*60*60*1000)) / 1000
-            var hour = sec / 3600
-            var minute = (sec % 3600) / 60
+            var day = Integer.parseInt((remainTime / (24*60*60*1000)).toString())
+            var sec = Integer.parseInt(((remainTime % (24*60*60*1000)) / 1000).toString())
+            var hour = Integer.parseInt((sec / 3600).toString())
+            var minute = Integer.parseInt(((sec % 3600) / 60).toString())
 
+            /*
+            방금 : 5분 이내의 채팅
+            10분 전 - 12시간 전
+            오늘 (13시간 이후-그날의 채팅)
+            어제
+            2일 전
+            3일 전
+            -----------
+            이후로는 날짜 표기 (23.01.27)
+             */
+
+            if (day > 3) return "날짜날짜"
+            else if (day in 2..3) return "${day}일 전"
+            else if (day == 1) return "어제"
+            else if (hour >= 13) return "오늘"
+            else if (hour in 1..12) return "${hour}시간 전"
+            else if (minute in 6..59) return "${minute}분 전"
+            else if (minute in 0..5) return "방금"
+            else return "else"
+
+            /*
             return if (day > 0)
-                "${day}일 ${hour}시간 ${minute}분 남았어요"
+                "${day}일 전"
             else if (hour > 0)
-                "${hour}시간 ${minute}분 남았어요"
+                "${hour}시간 ${minute}분 전"
             else
-                "${minute}분 남았어요"
+                "${minute}분 전"
+            */
         } else return ""
     }
 
