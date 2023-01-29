@@ -78,7 +78,6 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
     var date: Date? = null
     var todaySec: Int = 0
 
-    // 남은 시간 계산
     fun calculateTime(orderTime: String): String {
         if (orderTime != "") {
             var orderYear = Integer.parseInt(orderTime.substring(0, 4))
@@ -135,21 +134,11 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
             else if (minute in 6..59) return "${minute}분 전"
             else if (minute in 0..5) return "방금"
             else return "else"
-
-            /*
-            return if (day > 0)
-                "${day}일 전"
-            else if (hour > 0)
-                "${hour}시간 ${minute}분 전"
-            else
-                "${minute}분 전"
-            */
         } else return ""
     }
 
-    // 오늘 날짜 계산
     fun calculateToday(): String {
-        nowTime = System.currentTimeMillis() + 32400000
+        nowTime = System.currentTimeMillis()
         date = Date(nowTime)
         return dateFormat.format(date)
     }
