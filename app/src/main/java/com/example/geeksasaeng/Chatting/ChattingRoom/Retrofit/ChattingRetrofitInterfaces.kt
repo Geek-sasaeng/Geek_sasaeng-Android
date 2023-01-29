@@ -25,7 +25,7 @@ interface ChattingRetrofitInterfaces {
     ): Call<SendChattingResponse>
 
     //방장이 배달 파티 채팅 멤버를 강제퇴장
-    @DELETE("/party-chat-room/members")
+    @PATCH("/party-chat-room/members")
     fun chattingMemberForcedExit(
         @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
     ): Call<ChattingMemberForcedExitResponse>
