@@ -8,26 +8,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.MatchingEndView
+import com.example.geeksasaeng.Home.Party.CreateParty.DialogDt
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogMatchingEndLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.properties.Delegates
 
 class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     lateinit var binding: DialogMatchingEndLayoutBinding
     private lateinit var chattingService: ChattingService
-    lateinit var uuid: String
+    private var partyId by Delegates.notNull<Int>()
+
+    private lateinit var dialogMatchingEndNextClickListener: MatchingEndClickListener
+
+    interface MatchingEndClickListener{
+        fun onMatchingEndClicked()
+    }
 
     override fun onStart() {
         super.onStart()
         chattingService = ChattingService() //서비스 객체생성
         chattingService.setMatchingEndView(this)
+        dialogMatchingEndNextClickListener =  activity as MatchingEndClickListener
     }
 
     override fun onResume() {
@@ -45,14 +56,14 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
     ): View? {
         binding = DialogMatchingEndLayoutBinding.inflate(inflater, container, false)
         initListener()
-        uuid = requireArguments().getString("roomUuid")!!
+        partyId = requireArguments().getInt("partyId")!!
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
     }
 
     private fun initListener(){
         binding.matchingEndOkayBtn.setOnClickListener { //완료버튼
-            chattingService.matchingEndSender(uuid) //★매칭마감 api호출
+            chattingService.matchingEndSender(partyId) //★매칭마감 api호출
         }
 
         binding.matchingEndCancelBtn.setOnClickListener { //X버튼
@@ -62,17 +73,20 @@ class DialogMatchingEnd: DialogFragment(), MatchingEndView {
 
     //매칭마감 성공
     override fun onMatchingEndSuccess() {
-        Log.d("matchingEnd", "매칭 마감 실패")
         this.dismiss()
         Toast.makeText(requireContext(), "매칭이 마감되었습니다", Toast.LENGTH_SHORT).show() //TODO: 일단은 시스템 메세지로 해뒀는데 이거 FIGMA에서 커스텀 되어있다..
-        // TODO: 매칭 마감 성공
+
+        //1) ChattingRoomActivity에 매칭마감 정보전달
+        dialogMatchingEndNextClickListener.onMatchingEndClicked()
+        //2) LeaderOptionDialog에 매칭마감 정보전달
+        val result = "true"
+        setFragmentResult("isMatchFinish", bundleOf("bundleKey" to result))
     }
 
     //매칭마감 실패
     override fun onMatchingEndFailure(message: String) {
         CustomToastMsg.createToast((activity as SignUpNaverActivity), message, "#80A8A8A8", 53)?.show()
         Log.d("matchingEnd", "매칭 마감 실패")
-
     }
 
     private fun getCurrentDateTime(): String {

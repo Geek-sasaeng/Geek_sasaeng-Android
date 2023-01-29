@@ -162,6 +162,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         authorStatus = result.authorStatus
         belongStatus = result.belongStatus
+        Glide.with(binding.root.context).load(result.chiefProfileImgUrl).into(binding.lookHostProfileIv)
 
         // 글쓴이, 파티 멤버 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
         if (authorStatus == true || belongStatus == "Y") binding.lookPartyRequestTv.text = "채팅방 가기"

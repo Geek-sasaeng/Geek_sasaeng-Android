@@ -339,18 +339,19 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/profile_my_activity2_cv"
                         app:layout_constraintTop_toBottomOf="@id/profile_my_activity"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="17dp"
                         android:layout_marginStart="20dp"
+                        android:layout_marginBottom="22dp"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="4dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="22dp">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:id="@+id/profile_my_activity1_type_tv"
@@ -611,9 +612,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/profile_my_info" />
 
-                <!--문의하기-->
+                <!--고객 센터-->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profile_inquiry"
+                    android:id="@+id/profile_customer_service"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="23dp"
@@ -623,11 +624,11 @@
                     app:layout_constraintTop_toBottomOf="@id/profile_bottom_line1">
 
                     <TextView
-                        android:id="@+id/profile_inquiry_tv"
+                        android:id="@+id/profile_customer_service_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/spoqa_medium"
-                        android:text="문의하기"
+                        android:text="고객 센터"
                         android:textColor="@color/top"
                         android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -635,15 +636,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/profile_inquiry_btn"
+                        android:id="@+id/profile_customer_service_btn"
                         android:layout_width="16.5dp"
                         android:layout_height="16.5dp"
                         android:backgroundTint="@color/white"
                         android:clickable="false"
                         android:src="@drawable/ic_arrow_right_profile"
-                        app:layout_constraintBottom_toBottomOf="@id/profile_inquiry_tv"
+                        app:layout_constraintBottom_toBottomOf="@id/profile_customer_service_tv"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/profile_inquiry_tv" />
+                        app:layout_constraintTop_toTopOf="@id/profile_customer_service_tv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -656,54 +657,7 @@
                     android:background="@color/line"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profile_inquiry" />
-
-                <!--이용 약관 보기-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/profile_tos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginEnd="28dp"
-                    android:paddingVertical="5dp"
-                    app:layout_constraintTop_toBottomOf="@id/profile_bottom_line2">
-
-                    <TextView
-                        android:id="@+id/profile_tos_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/spoqa_medium"
-                        android:text="이용 약관 보기"
-                        android:textColor="@color/top"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/profile_tos_btn"
-                        android:layout_width="16.5dp"
-                        android:layout_height="16.5dp"
-                        android:backgroundTint="@color/white"
-                        android:clickable="false"
-                        android:src="@drawable/ic_arrow_right_profile"
-                        app:layout_constraintBottom_toBottomOf="@id/profile_tos_tv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/profile_tos_tv" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:id="@+id/profile_bottom_line3"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="18dp"
-                    android:layout_marginTop="9dp"
-                    android:background="@color/line"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/profile_tos"/>
+                    app:layout_constraintTop_toBottomOf="@id/profile_customer_service"/>
 
                 <!--로그아웃-->
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -714,7 +668,7 @@
                     android:layout_marginTop="9dp"
                     android:layout_marginEnd="28dp"
                     android:paddingVertical="5dp"
-                    app:layout_constraintTop_toBottomOf="@id/profile_bottom_line3">
+                    app:layout_constraintTop_toBottomOf="@id/profile_bottom_line2">
 
                     <TextView
                         android:id="@+id/profile_logout_tv"

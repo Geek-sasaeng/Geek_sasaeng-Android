@@ -164,7 +164,7 @@ class StepNaverOneFragment: BaseFragment<FragmentStepNaverOneBinding>(FragmentSt
         binding.stepNaverOneNicknameEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
+                val nickPattern = Pattern.compile("^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,8}\$") //패턴 생성 (한글,또는 영문으로 이루어진 3-8자를 조건으로 둠)
                 val macher = nickPattern.matcher(binding.stepNaverOneNicknameEt.text.toString()) //사용자가 입력한 닉네임과 패턴 비교
 
                 //조건이 맞으면 중복확인 버튼 활성화, 안맞으면 비활성화 시키기

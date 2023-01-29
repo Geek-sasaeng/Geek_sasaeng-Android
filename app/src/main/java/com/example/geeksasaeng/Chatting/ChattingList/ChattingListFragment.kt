@@ -13,12 +13,13 @@ import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDetailResult
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.google.gson.annotations.SerializedName
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
-    ChattingListView, ChattingDetailView {
+    ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
@@ -55,11 +56,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         getChattingList()
     }
 
-    private fun getChattingDetail(roomId: String) {
-        chattingListService.setChattingDetailView(this)
-        chattingListService.getChattingDetail(roomId)
-    }
-
     private fun initAdapter() {
         if (checkBinding) {
             chattingListRVAdapter = ChattingListRVAdapter(chattingList)
@@ -76,7 +72,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                     roomTitle = chattingRoomData.roomTitle
                     roomId = chattingRoomData.roomId
 
-                    getChattingDetail(roomId)
+                    //ChattingRoomActivity 실행
+                    val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    intent.putExtra("roomName", roomTitle)
+                    intent.putExtra("roomId", roomId)
+                    startActivity(intent)
                 }
             })
         }
@@ -156,24 +156,4 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         Log.d("GET-CHATTING-LIST", "code = $code, msg = $msg")
     }
 
-    override fun getChattingDetailSuccess(result: ChattingDetailResult) {
-        val intent = Intent(activity, ChattingRoomActivity::class.java)
-
-        intent.putExtra("accountNumber", result.accountNumber)
-        intent.putExtra("bank", result.bank)
-        intent.putExtra("chiefId", result.chiefId)
-        intent.putExtra("enterTime", result.enterTime)
-        intent.putExtra("isChief", result.isChief)
-        intent.putExtra("isOrderFinish", result.isOrderFinish)
-        intent.putExtra("isRemittanceFinish", result.isRemittanceFinish)
-
-        intent.putExtra("roomName", roomTitle)
-        intent.putExtra("roomId", roomId)
-
-        startActivity(intent)
-    }
-
-    override fun getChattingDetailFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
-    }
 }

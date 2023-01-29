@@ -1,6 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
-import android.content.Context
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -26,7 +26,6 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
@@ -38,31 +37,32 @@ import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    ChattingMemberLeavePartyView, ChattingMemberLeaveChatView, MemberOptionView,
-    LeaderOptionView, ChattingLeaderLeavePartyView, ChattingLeaderLeaveChatView,
-    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView {
+    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
+    ChattingDetailView, DialogMatchingEnd.MatchingEndClickListener {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
     // 채팅 리스트에서 받아오는 값들
     private lateinit var roomName: String
     private lateinit var roomId: String
+
+    //상세보기 api로 부터 받아올 정보들
     private lateinit var accountNumber: String
     private lateinit var bank: String
     private var chiefId by Delegates.notNull<Int>()
     private lateinit var enterTime: String
     private var isChief: Boolean = false
+    private var isMatchingFinish: Boolean = false
     private var isOrderFinish: Boolean = false
     private var isRemittanceFinish: Boolean = false
+    private var partyId by Delegates.notNull<Int>()
 
-    private var checkRemittance: Boolean = false
     private lateinit var participants: ArrayList<Any>
     private lateinit var chattingRoomRVAdapter: ChattingRoomRVAdapter
     private lateinit var chattingService: ChattingService
@@ -71,7 +71,6 @@ class ChattingRoomActivity :
 
     // topLayoutFlag (모든 파티원 X = False / 모든 파티원 O = True)
     private var topLayoutFlag = false
-    private var leader = false
 
     // Chatting
     // WebSocket
@@ -92,26 +91,17 @@ class ChattingRoomActivity :
 
     override fun initAfterBinding() {
         chatDB = ChatDatabase.getDBInstance(applicationContext)!!
-
-        accountNumber = intent.getStringExtra("accountNumber").toString()
-        bank = intent.getStringExtra("bank").toString()
-        chiefId = intent.getIntExtra("chiefId", 0)
-        enterTime = intent.getStringExtra("enterTime").toString()
-        isChief = intent.getBooleanExtra("isChief", false)
-        isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
-        isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
-
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
-
         binding.chattingRoomTitleTv.text = roomName
 
+        initChattingService()
+        chattingService.getChattingDetail(roomId) //채팅방 상세 조회 api 호출!!
         initClickListener()
         initTextChangedListener()
         initSendChatListener()
         initAdapter()
-        initChattingService()
-//        optionClickListener()
+        optionClickListener()
 
         // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
         // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
@@ -168,16 +158,6 @@ class ChattingRoomActivity :
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
-    private fun initTopLayout(){
-        //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
-        //TODO: 그렇지 않았다면~~
-        if(leader){ //리더면 상단 바 구성을 다르게 해줘야하므로
-            binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
-            binding.chattingRoomSectionIv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutStatusTv.visibility = View.INVISIBLE
-            binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE
-        }
-    }
 
     private fun getJSONtoChatting(message: String): Chat {
         var chatting = JSONObject(message)
@@ -232,10 +212,6 @@ class ChattingRoomActivity :
 //        changeParticipantsListener.remove()
         Log.d("CHATTING-SYSTEM-TEST", "END")
         WebSocketManager.close()
-    }
-
-    private fun getBankAndAccountNumber() {
-        // TODO: 계좌번호 불러오기
     }
 
     private fun initAdapter() {
@@ -310,27 +286,27 @@ class ChattingRoomActivity :
 
     private fun initChattingService() {
         chattingService = ChattingService()
-        chattingService.setChattingMemberLeavePartyView(this)
-        chattingService.setChattingMemberLeaveChatView(this)
-        chattingService.setChattingLeaderLeavePartyView(this)
-        chattingService.setChattingLeaderLeaveChatView(this)
         chattingService.setSendChattingView(this)
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
+        chattingService.setChattingDetailView(this) //채팅방 상세 조회용
     }
 
     private fun optionClickListener() {
         binding.chattingRoomOptionBtn.setOnClickListener {
-            if (leader) {
+            if (isChief) {
                 val optionDialog = LeaderOptionDialog()
-                optionDialog.setLeaderOptionView(this)
                 val bundle = Bundle()
-//                bundle.putString("roomUuid", roomUuid)
+                bundle.putInt("partyId", partyId)
+                bundle.putString("roomId", roomId)
+                bundle.putBoolean("isMatchingFinish", isMatchingFinish)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingLeaderOptionDialog")
             } else {
                 val optionDialog = MemberOptionDialog()
-                optionDialog.setOptionView(this)
+                val bundle = Bundle()
+                bundle.putString("roomId", roomId)
+                optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")
             }
         }
@@ -436,49 +412,6 @@ class ChattingRoomActivity :
         return formatter.format(Calendar.getInstance().time)
     }
 
-    // 일반 유저 나가기
-    override fun MemberExistClick() {
-        //val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(roomUuid)
-        //chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
-    }
-
-    override fun chattingMemberLeavePartySuccess(result: String) {
-
-    }
-
-    override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
-
-    }
-
-    override fun chattingMemberLeaveChatSuccess(result: String) {
-
-    }
-
-    override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
-
-    }
-
-    // 방장 나가기
-    override fun LeaderExistClick() {
-        // TODO: FIREBASE 버전에서 수정하기
-    }
-
-    override fun chattingLeaderLeavePartySuccess(result: String, leaderMap: HashMap<String, String>) {
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
-    }
-
-    override fun chattingLeaderLeavePartyFailure(code: Int, message: String) {
-
-    }
-
-    override fun chattingLeaderLeaveChatSuccess(result: String, leaderMap: HashMap<String, String>) {
-        //이전에 해뒀던 코드에서 leaderMap을 인자로 받아오길래 그래도 둠! 필요없어지면 지우기
-    }
-
-    override fun chattingLeaderLeaveChatFailure(code: Int, message: String) {
-
-    }
-
     private fun calculateToday(): String {
         val nowTime = System.currentTimeMillis();
         val date = Date(nowTime)
@@ -533,5 +466,46 @@ class ChattingRoomActivity :
 
     override fun chattingRemittanceCompleteFailure(code: Int, message: String) {
         Log.d("remittanceComplete","실패 : "+message)
+    }
+
+    //채팅방 상세조회
+    override fun getChattingDetailSuccess(result: ChattingDetailResult) {
+        Log.d("chatDetail", "채팅방 디테일 불러오기 성공 :${result.toString()}")
+        accountNumber = result.accountNumber
+        bank = result.bank
+        chiefId = result.chiefId
+        enterTime = result.enterTime
+        isChief = result.isChief
+        isMatchingFinish = result.isMatchingFinish
+        isOrderFinish = result.isOrderFinish
+        isRemittanceFinish = result.isRemittanceFinish
+        partyId = result.partyId
+
+        initTopLayout() // 받아온 정보로 상단바 설정
+    }
+
+    private fun initTopLayout(){ //채팅방 상단 바 설정
+
+        if(isOrderFinish||isRemittanceFinish){ //주문 또는 송금 완료했으면 안보이게 해주기
+            binding.chattingRoomTopLayout.visibility = View.INVISIBLE
+        }else{
+            if(isChief){ //리더면 상단 바 구성을 다르게 해줘야하므로
+                binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE //주문완료 버튼 보이게 하기
+                binding.chattingRoomSectionIv.visibility = View.INVISIBLE // 계좌 아이콘
+                binding.chattingRoomTopLayoutAccountNumberTv.visibility = View.INVISIBLE //계좌번호 textView
+                binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.INVISIBLE // 송금완료 버튼
+            }else{
+                binding.chattingRoomTopLayoutAccountNumberTv.text = bank + "  " + accountNumber
+            }
+        }
+    }
+
+    override fun getChattingDetailFailure(code: Int, msg: String) {
+        Log.d("chatDetail", "채팅방 디테일 불러오기 실패 :$msg")
+        //finish()
+    }
+
+    override fun onMatchingEndClicked() {
+        isMatchingFinish = true
     }
 }

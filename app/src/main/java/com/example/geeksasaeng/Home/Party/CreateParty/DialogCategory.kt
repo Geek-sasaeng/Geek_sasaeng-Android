@@ -38,7 +38,7 @@ class DialogCategory : DialogFragment() {
         Log.d("dialogCate", createPartyVM.getCategory().toString())
         if(createPartyVM.getCategory().toString()!="null"){
             categoryString = createPartyVM.getCategory().toString() //categoryString값에 원래 저장되어있던 값 지정
-            
+
             //default 체크 작업
             when(categoryString){
                 "한식"-> binding.categoryRadio1.isChecked = true
@@ -53,6 +53,10 @@ class DialogCategory : DialogFragment() {
                 "기타"-> binding.categoryRadio10.isChecked = true
                 else->{}
             }
+        }else{ // 설정된 값이 없을 때, 한식을 default값으로 지정!
+            categoryString = "한식"
+            binding.categoryRadio1.isChecked = true
+            createPartyVM.setCategory(categoryString)
         }
     }
 

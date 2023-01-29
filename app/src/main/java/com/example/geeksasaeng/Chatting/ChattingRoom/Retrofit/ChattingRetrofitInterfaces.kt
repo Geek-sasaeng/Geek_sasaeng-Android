@@ -67,16 +67,22 @@ interface ChattingRetrofitInterfaces {
         @Body chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest
     ): Call<ChattingPartyLeaderLeaveChatResponse>
 
-    //배달 완료 알림 보내기
-    @POST("/delivery-party/complicated")
-    fun partyDeliveryComplicated(
-        @Body chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest
-    ): Call<ChattingDeliveryComplicatedResponse>
+    //배달 완료 알림
+    @POST("/party-chat-room/delivery-complete")
+    fun partyDeliveryComplete(
+        @Body chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest
+    ): Call<ChattingDeliveryCompleteResponse>
 
     //배달파티 수동 매칭마감
-    @PATCH("/delivery-party/{roomUuid}/matching-status")
+    @PATCH("/delivery-party/{partyId}/matching-status")
     fun matchingEnd(
-        @Path("roomUuid") roomUuid: String
+        @Path("partyId") partyId: Int
     ): Call<MatchingEndResponse>
+
+    //채팅방 상세조회
+    @GET("/party-chat-room/{chatRoomId}")
+    fun getChattingDetail(
+        @Path("chatRoomId") chatRoomId: String
+    ): Call<ChattingDetailResponse>
 
 }

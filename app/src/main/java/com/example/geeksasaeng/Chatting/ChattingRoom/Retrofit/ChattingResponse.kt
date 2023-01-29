@@ -103,7 +103,7 @@ data class ChattingRemittanceCompleteRequest(
 
 //파티 멤버 나가기 for 배달파티
 data class ChattingPartyMemberLeavePartyRequest(
-    @SerializedName("uuid") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyMemberLeavePartyResponse(
@@ -115,60 +115,68 @@ data class ChattingPartyMemberLeavePartyResponse(
 
 //파티 멤버 나가기 for 채팅방
 data class ChattingPartyMemberLeaveChatRequest(
-    @SerializedName("roomId") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyMemberLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
+    @SerializedName("result") val result: ChattingPartyMemberLeaveChatResult
+)
+
+
+data class ChattingPartyMemberLeaveChatResult(
+    @SerializedName("message") val message: String
 )
 
 //방장 나가기 for 배달파티
 data class ChattingPartyLeaderLeavePartyRequest(
     @SerializedName("nickName") val nickName: String?,
-    @SerializedName("uuid") val uuid: String
+    @SerializedName("roomId") val roomId: String
 )
 
 data class ChattingPartyLeaderLeavePartyResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingPartyLeaderLeavePartyResult
+)
+
+data class ChattingPartyLeaderLeavePartyResult(
     @SerializedName("result") val result: String
 )
 
 //방장 나가기 for 채팅방
 data class ChattingPartyLeaderLeaveChatRequest(
-    @SerializedName("roomId") val uuid: String,
+    @SerializedName("roomId") val roomId: String,
 )
 
 data class ChattingPartyLeaderLeaveChatResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: String
+    @SerializedName("result") val result: ChattingPartyLeaderLeaveChatResult
+)
+
+data class ChattingPartyLeaderLeaveChatResult(
+    @SerializedName("message") val message: String
 )
 
 //배달완료 알림보내기
-data class ChattingDeliveryComplicatedRequest(
-    @SerializedName("uuid") val uuid: String
+data class ChattingDeliveryCompleteRequest(
+    @SerializedName("roomId") val roomId: String
 )
 
-data class ChattingDeliveryComplicatedResponse(
+data class ChattingDeliveryCompleteResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ChattingDeliveryComplicatedResult
-)
-
-data class ChattingDeliveryComplicatedResult(
-    @SerializedName("body") val body: ArrayList<Any>,
-    @SerializedName("statusCode") val statusCode: String,
-    @SerializedName("statusCodeValue") val statusCodeValue: Int
+    @SerializedName("result") val result: String
 )
 
 //배달파티 수동 매칭마감
+
 data class MatchingEndResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
@@ -186,3 +194,23 @@ data class MemberData(
     @SerializedName("profileImgUrl") val profileImgUrl: String,
     @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean
 ): Serializable
+
+//채팅방 상세조회
+data class ChattingDetailResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingDetailResult
+)
+
+data class ChattingDetailResult(
+    @SerializedName("accountNumber") val accountNumber: String,
+    @SerializedName("bank") val bank: String,
+    @SerializedName("chiefId") val chiefId: Int,
+    @SerializedName("enterTime") val enterTime: String,
+    @SerializedName("isChief") val isChief: Boolean,
+    @SerializedName("isMatchingFinish") val isMatchingFinish: Boolean,
+    @SerializedName("isOrderFinish") val isOrderFinish: Boolean,
+    @SerializedName("isRemittanceFinish") val isRemittanceFinish: Boolean,
+    @SerializedName("partyId") val partyId: Int
+)

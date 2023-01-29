@@ -4,25 +4,32 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat
+import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryComplicatedView
+import androidx.fragment.app.setFragmentResultListener
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDeliveryCompleteView
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomOptionLeaderPopupBinding
 
-class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
+class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
 
     lateinit var binding: DialogChattingRoomOptionLeaderPopupBinding
-    private var roomUuid : String? = null
-    private lateinit var leaderOptionView: LeaderOptionView
+    private var partyId : Int = 0
+    private lateinit var roomId: String
+    private var isMatchingFinish : Boolean = false
 
-    fun setLeaderOptionView(leaderOptionView: LeaderOptionView){
-        this.leaderOptionView = leaderOptionView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener("isMatchFinish"){ key, bundle ->
+            val result = bundle.getString("bundleKey")
+            if (result=="true"){
+                isMatchingFinish = true
+                binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+                binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
+            }
+        }
     }
 
     override fun onCreateView(
@@ -31,8 +38,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogChattingRoomOptionLeaderPopupBinding.inflate(inflater, container, false)
-        roomUuid = requireArguments().getString("roomUuid")
-        Log.d("roomUuid", roomUuid.toString())
+
+        partyId = requireArguments().getInt("partyId")
+        roomId = requireArguments().getString("roomId").toString()
+        isMatchingFinish = requireArguments().getBoolean("isMatchingFinish")
+        Log.d("matching", isMatchingFinish.toString())
+
         initListener()
         initMatchingEndListener()
         dialog?.window?.setGravity(Gravity.TOP or Gravity.RIGHT)
@@ -43,9 +54,11 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
 
     override fun onResume() {
         super.onResume()
-        val width = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_width)
-        val height = resources.getDimensionPixelSize(R.dimen.chatting_room_option_leader_height)
-        dialog?.window?.setLayout(width,height)
+        Log.d("life", "LeaderOptionDialog-> onResume")
+        val params = dialog!!.window!!.attributes
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
     }
 
     private fun initListener(){
@@ -54,16 +67,22 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         binding.dialogLeaderPopupOptionAlarmTv.setOnClickListener { //배달 완료 알림보내기
             val dialog = DialogSendAlarm()
             val bundle = Bundle()
-            dialog.setChattingDeliveryComplicatedView(this)
-            bundle.putString("roomUuid", roomUuid)
+            dialog.setChattingDeliveryCompleteView(this)
+            bundle.putString("roomId", roomId)
             dialog.arguments = bundle
             dialog.show(parentFragmentManager, "CustomDialog")
+        }
+
+        Log.d("matching", isMatchingFinish.toString())
+        if (isMatchingFinish){ //매칭 마감 여부에 따라 textView 색깔 다르게 해주기
+            binding.dialogLeaderPopupOptionMatchingEndTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+            binding.dialogLeaderPopupOptionMatchingEndTv.isEnabled = false
         }
 
         binding.dialogLeaderPopupOptionMatchingEndTv.setOnClickListener { //매칭마감하기 기능
             val warningDialog = DialogMatchingEnd()
             val bundle = Bundle()
-            bundle.putString("roomUuid", roomUuid)
+            bundle.putInt("partyId", partyId)
             warningDialog.arguments = bundle
             warningDialog.show(parentFragmentManager, "MatchingEndWarningDialog")
         }
@@ -73,7 +92,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기
-            leaderOptionView.LeaderExistClick()
+            val dialogChattingExit = DialogChattingExit()
+            val bundle = Bundle()
+            bundle.putString("roomId", roomId)
+            bundle.putBoolean("isCheif",true)
+            dialogChattingExit.arguments = bundle
+            dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
         }
     }
 
@@ -81,12 +105,12 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryComplicatedView {
         // TODO: 매칭 마감 확인
     }
 
-    override fun chattingDeliveryComplicatedSuccess() {
+    override fun chattingDeliveryCompleteSuccess() {
         Log.d("deliveryAlarm", "배달완료 알림보내기 성공")
         CustomToastMsg.createToast(requireContext(), "배달완료 알림 전송이 완료되었습니다", "#8029ABE2", 53)?.show()
     }
 
-    override fun chattingDeliveryComplicatedFailure(message: String) {
+    override fun chattingDeliveryCompleteFailure(message: String) {
         Log.d("deliveryAlarm", "배달완료 알림보내기 실패")
         CustomToastMsg.createToast(requireContext(), message, "#8029ABE2", 53)?.show()
     }

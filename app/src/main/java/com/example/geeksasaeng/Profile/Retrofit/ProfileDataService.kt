@@ -6,9 +6,12 @@ import com.example.geeksasaeng.Utils.ApplicationClass.Companion.retrofit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.getJwt
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Path
 
 class ProfileDataService {
 
@@ -19,6 +22,9 @@ class ProfileDataService {
     private lateinit var profileMyInfoView: ProfileMyInfoView
     private lateinit var profileMyPreActivityView: ProfileMyPreActivityView
     private lateinit var profileWithdrawalView: ProfileWithdrawalView
+    private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
+    private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
+    private lateinit var profilePasswordChangeView: ProfilePasswordChangeView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -39,6 +45,15 @@ class ProfileDataService {
     }
     fun setProfileWithdrawalView(profileWithdrawalView: ProfileWithdrawalView) {
         this.profileWithdrawalView = profileWithdrawalView
+    }
+    fun setProfileMemberInfoModifyView(profileMemberInfoModifyView: ProfileMemberInfoModifyView) {
+        this.profileMemberInfoModifyView = profileMemberInfoModifyView
+    }
+    fun setProfilePasswordCheckingView(profilePasswordCheckingView: ProfilePasswordCheckingView) {
+        this.profilePasswordCheckingView = profilePasswordCheckingView
+    }
+    fun setProfilePasswordChangeView(profilePasswordChangeView: ProfilePasswordChangeView) {
+        this.profilePasswordChangeView = profilePasswordChangeView
     }
 
     // 진행 중인 활동 조회
@@ -157,4 +172,77 @@ class ProfileDataService {
             }
         })
     }
+
+    // 회원 정보 수정
+    fun profileMemberInfoModifySender(profileImg: MultipartBody.Part?, data: HashMap<String, RequestBody>) {
+        profileDataService?.profileMemberInfoModify(profileImg, data)?.enqueue(object: Callback<ProfileMemberInfoModifyResponse> {
+            override fun onResponse(
+                call: Call<ProfileMemberInfoModifyResponse>,
+                response: Response<ProfileMemberInfoModifyResponse>
+            ) {
+                Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("sendImg/ PROFILE-MODIFY-RESP", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileMemberInfoModifyView.onProfileMemberInfoModifySuccess(resp.result)
+                        4000 -> Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", "서버 오류")
+                        else -> profileMemberInfoModifyView.onProfileMemberInfoModifyFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileMemberInfoModifyResponse>, t: Throwable) {
+                Log.d("sendImg/ PROFILE-MODIFY-RESPONSE", "ProfileDataService-onFailure : profileMemberInfoModifyFailed", t)
+            }
+        })
+    }
+
+    // 비밀번호 일치 확인
+    fun profilePasswordCheckingSender(body: ProfilePasswordCheckingRequest) {
+        profileDataService?.profilePasswordChecking(body)?.enqueue(object: Callback<ProfilePasswordCheckingResponse> {
+            override fun onResponse(
+                call: Call<ProfilePasswordCheckingResponse>,
+                response: Response<ProfilePasswordCheckingResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", resp.toString())
+                    when (resp.code) {
+                        1203 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        4000 -> Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", "서버 오류")
+                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfilePasswordCheckingResponse>, t: Throwable) {
+                Log.d("PROFILE-PASSWORD-CHECKING-RESPONSE", "ProfileDataService-onFailure : profilePasswordCheckingFailed", t)
+            }
+        })
+    }
+
+    // 비밀번호 변경
+    fun profilePasswordChangeSender(body: ProfilePasswordChangeRequest) {
+        profileDataService?.profilePasswordChange(body)?.enqueue(object: Callback<ProfilePasswordChangeResponse> {
+
+            override fun onResponse(call: Call<ProfilePasswordChangeResponse>, response: Response<ProfilePasswordChangeResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", resp.toString())
+                    when (resp.code) {
+                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        4000 -> Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "서버 오류")
+                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfilePasswordChangeResponse>, t: Throwable) {
+                Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "ProfileDataService-onFailure : profilePasswordChangeFailed", t)
+            }
+        })
+    }
+
 }
+

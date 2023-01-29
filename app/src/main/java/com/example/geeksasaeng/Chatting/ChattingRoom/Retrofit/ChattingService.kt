@@ -1,7 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import android.util.Log
-import com.example.geeksasaeng.Chatting.ChattingRoom.DialogForcedExit
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
 import retrofit2.Call
@@ -19,8 +18,9 @@ class ChattingService {
     private lateinit var chattingMemberLeaveChatView: ChattingMemberLeaveChatView
     private lateinit var chattingLeaderLeavePartyView: ChattingLeaderLeavePartyView
     private lateinit var chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView
-    private lateinit var chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView
+    private lateinit var chattingDeliveryCompleteView: ChattingDeliveryCompleteView
     private lateinit var matchingEndView: MatchingEndView
+    private lateinit var getChattingDetailView: ChattingDetailView
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
@@ -54,11 +54,14 @@ class ChattingService {
     fun setChattingLeaderLeaveChatView(chattingLeaderLeaveChatView: ChattingLeaderLeaveChatView){
         this.chattingLeaderLeaveChatView = chattingLeaderLeaveChatView
     }
-    fun setChattingDeliveryComplicatedView(chattingDeliveryComplicatedView: ChattingDeliveryComplicatedView){
-        this.chattingDeliveryComplicatedView = chattingDeliveryComplicatedView
+    fun setChattingDeliveryCompleteView(chattingDeliveryCompleteView: ChattingDeliveryCompleteView){
+        this.chattingDeliveryCompleteView = chattingDeliveryCompleteView
     }
     fun setMatchingEndView(matchingEndView: MatchingEndView){
         this.matchingEndView = matchingEndView
+    }
+    fun setChattingDetailView(getChattingDetailView: ChattingDetailView) {
+        this.getChattingDetailView = getChattingDetailView
     }
 
     // 채팅방 생성
@@ -198,7 +201,7 @@ class ChattingService {
                 }
             }
             override fun onFailure(call: Call<ChattingPartyMemberLeavePartyResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                Log.d("exit", "멤버 배달파티 나가기 실패 => onFailure"+t.toString())
             }
         })
     }
@@ -218,13 +221,13 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<ChattingPartyMemberLeaveChatResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-CHATTING", "실패")
+                Log.d("exit", "멤버 채팅방 나가기 실패 => onFailure"+t.toString()+t.toString())
             }
         })
     }
 
     // 파티장 나가기 for 배달 파티
-    fun getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest, leaderMap: HashMap<String, String>){
+    fun getChattingPartyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest){
         chattingService?.partyLeaderPartyLeave(chattingPartyLeaderLeavePartyRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeavePartyResponse> {
                 override fun onResponse(
                     call: Call<ChattingPartyLeaderLeavePartyResponse>,
@@ -234,70 +237,68 @@ class ChattingService {
                         val chattingPartyLeaderLeavePartyResponse = response.body()!!
 
                         when (chattingPartyLeaderLeavePartyResponse.code) {
-                            1000 -> chattingLeaderLeavePartyView.chattingLeaderLeavePartySuccess(chattingPartyLeaderLeavePartyResponse.result!!, leaderMap)
+                            1000 -> chattingLeaderLeavePartyView.chattingLeaderLeavePartySuccess(chattingPartyLeaderLeavePartyResponse.result)
                             else -> chattingLeaderLeavePartyView.chattingLeaderLeavePartyFailure(chattingPartyLeaderLeavePartyResponse.code, chattingPartyLeaderLeavePartyResponse.message)
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<ChattingPartyLeaderLeavePartyResponse>, t: Throwable) {
-                    Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                    Log.d("exit", "방장 배달파티 나가기 실패 => onFailure"+t.toString())
                 }
             })
     }
 
     // 파티장 나가기 for 채팅방
-    fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest, leaderMap: HashMap<String, String>){
+    fun getChattingPartyLeaderChatLeave(chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest){
         chattingService?.partyLeaderChattingLeave(chattingPartyLeaderLeaveChatRequest)?.enqueue(object : Callback<ChattingPartyLeaderLeaveChatResponse> {
-            override fun onResponse(
-                call: Call<ChattingPartyLeaderLeaveChatResponse>,
-                response: Response<ChattingPartyLeaderLeaveChatResponse>
-            ) {
+
+            override fun onResponse(call: Call<ChattingPartyLeaderLeaveChatResponse>, response: Response<ChattingPartyLeaderLeaveChatResponse>) {
+                Log.d("exit", "방장 채팅방 나가기 : "+chattingPartyLeaderLeaveChatRequest.toString())
+                Log.d("exit", "방장 채팅방 나가기 : "+response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyLeaderLeaveChatResponse = response.body()!!
 
                     when (chattingPartyLeaderLeaveChatResponse.code) {
-                        1000 -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatSuccess(chattingPartyLeaderLeaveChatResponse.result!!, leaderMap)
+                        1000 -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatSuccess(chattingPartyLeaderLeaveChatResponse.result!!)
                         else -> chattingLeaderLeaveChatView.chattingLeaderLeaveChatFailure(chattingPartyLeaderLeaveChatResponse.code, chattingPartyLeaderLeaveChatResponse.message)
                     }
                 }
             }
 
             override fun onFailure(call: Call<ChattingPartyLeaderLeaveChatResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-LEAVE-DELIVERY-PARTY", "실패")
+                Log.d("exit", "방장 채팅방 나가기 실패 => onFailure"+ t.toString())
             }
         })
     }
 
     //배달완료 알림보내기
-    fun sendDeliveryComplicatedAlarm(chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest){
-        Log.d("deliveryComplicated", "Bearer " + getJwt() + "            :           "+chattingDeliveryComplicatedRequest.toString())
-        chattingService?.partyDeliveryComplicated(chattingDeliveryComplicatedRequest)?.enqueue(object : Callback<ChattingDeliveryComplicatedResponse?>{
-                override fun onResponse(
-                    call: Call<ChattingDeliveryComplicatedResponse?>,
-                    response: Response<ChattingDeliveryComplicatedResponse?>
-                ) {
-                    Log.d("deliveryComplicated", response.toString())
+    fun sendDeliveryCompleteAlarm(chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest){
+        Log.d("deliveryAlarm", "Bearer " + getJwt() + "            :           "+chattingDeliveryCompleteRequest.toString())
+        chattingService?.partyDeliveryComplete(chattingDeliveryCompleteRequest)?.enqueue(object : Callback<ChattingDeliveryCompleteResponse?>{
+                override fun onResponse(call: Call<ChattingDeliveryCompleteResponse?>,response: Response<ChattingDeliveryCompleteResponse?>) {
+                    Log.d("deliveryAlarm", response.toString())
+                    Log.d("deliveryAlarm", response.body().toString())
                     if (response.isSuccessful && response.code() == 200) {
                         val resp = response.body()!!
                         when(resp.code){
-                            1000->chattingDeliveryComplicatedView.chattingDeliveryComplicatedSuccess()
-                            else->chattingDeliveryComplicatedView.chattingDeliveryComplicatedFailure(resp.message)
+                            1000->chattingDeliveryCompleteView.chattingDeliveryCompleteSuccess()
+                            else->chattingDeliveryCompleteView.chattingDeliveryCompleteFailure(resp.message)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<ChattingDeliveryComplicatedResponse?>, t: Throwable) {
-                    Log.d("delivery-배달완료알람", "실패"+ t.toString())
+                override fun onFailure(call: Call<ChattingDeliveryCompleteResponse?>, t: Throwable) {
+                    Log.d("deliveryAlarm", "실패"+ t.toString())
                     //TODO: 계속 타임아웃 오류나...
                 }
             })
     }
 
     //배달파티 수동 매칭마감
-    fun matchingEndSender(roomUuid: String){
-        Log.d("matchingEND","Bearer " + getJwt()+"/"+roomUuid.toString())
-        chattingService?.matchingEnd(roomUuid)?.enqueue(object : Callback<MatchingEndResponse>{
+    fun matchingEndSender(partyId: Int){
+        Log.d("matchingEND","Bearer " + getJwt()+"/"+partyId.toString())
+        chattingService?.matchingEnd(partyId)?.enqueue(object : Callback<MatchingEndResponse>{
             override fun onResponse(call: Call<MatchingEndResponse>, response: Response<MatchingEndResponse>) {
                 Log.d("matchingEND", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
@@ -311,6 +312,24 @@ class ChattingService {
             }
             override fun onFailure(call: Call<MatchingEndResponse>, t: Throwable) {
                 Log.d("MATCHINGEND-RESPONSE", "ChattingDataService-onFailure : MatchingEndFailed", t)
+            }
+        })
+    }
+
+    //채팅방 상세조회
+    fun getChattingDetail(chatRoomId: String) {
+        chattingService?.getChattingDetail(chatRoomId)?.enqueue(object: Callback<ChattingDetailResponse> {
+            override fun onResponse(call: Call<ChattingDetailResponse>, response: Response<ChattingDetailResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> getChattingDetailView.getChattingDetailSuccess(resp.result)
+                        else -> getChattingDetailView.getChattingDetailFailure(resp.code, resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ChattingDetailResponse>, t: Throwable) {
+                Log.d("RETROFIT-SERVICE", "ChattingListService-getChattingDetail-Failure")
             }
         })
     }
