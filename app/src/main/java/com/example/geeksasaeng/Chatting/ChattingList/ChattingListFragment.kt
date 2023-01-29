@@ -266,7 +266,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
             }
 
             Log.d("CHATTING-SYSTEM-TEST", "out chattingRoomList = $chattingRoomList")
-            chattingListRVAdapter.addAllItems(chattingRoomList)
             chattingListRVAdapter.notifyDataSetChanged()
         }
 

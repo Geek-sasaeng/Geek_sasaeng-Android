@@ -50,7 +50,7 @@ class ChattingListRVAdapter(private var chattingList: java.util.ArrayList<Chatti
         this.notifyDataSetChanged()
     }
 
-    fun addAllItems(items: java.util.ArrayList<ChattingList?>) {
+    fun addAllItems(items: ArrayList<ChattingList?>) {
         chattingList.addAll(items)
         this.notifyDataSetChanged()
     }
