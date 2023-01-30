@@ -112,12 +112,6 @@ class ChattingRoomActivity :
         initChattingService()
 //        optionClickListener()
 
-        // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
-        // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
-//        Thread {
-//            initRabbitMQSetting()
-//        }.start()
-
         // 이전 채팅을 가져오기 위한 초기 작업
         // DB 비동기 처리를 위해 코루틴 사용!
         CoroutineScope(Dispatchers.IO).launch {
@@ -142,35 +136,9 @@ class ChattingRoomActivity :
         }
     }
 
-//    private fun initRabbitMQSetting() {
-//        factory.setUri(rabbitMQUri)
-//        // RabbitMQ 연결
-//        val conn: Connection = factory.newConnection()
-//        // Send and Receive 가능하도록 해주는 부분!
-//        val channel = conn.createChannel()
-//        // durable = true로 설정!!
-//        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
-//        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-//        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
-//
-//        lateinit var originalMessage: String
-//        lateinit var chatResponseMessage: Chat
-//
-//        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-//            originalMessage = String(delivery.body, Charsets.UTF_8)
-//            chatResponseMessage = getJSONtoChatting(originalMessage)
-//            chatDB.chatDao().insert(chatResponseMessage)
-//
-//            chattingList.add(chatResponseMessage)
-//        }
-//
-//        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
-//    }
-
     private fun initTopLayout() {
         //TODO: 주문 또는 송금 완료했으면 안보이게 해주기
         //TODO: 그렇지 않았다면~~
-        Log.d("CHATTING-ROOM-TEST", "leader = $isChief")
         if (isChief) { //리더면 상단 바 구성을 다르게 해줘야하므로
             binding.chattingRoomTopLayoutOrderCompleteBtn.visibility = View.VISIBLE
             binding.chattingRoomSectionIv.visibility = View.GONE
@@ -183,42 +151,6 @@ class ChattingRoomActivity :
             binding.chattingRoomTopLayoutRemittanceCompleteBtn.visibility = View.VISIBLE
             binding.chattingRoomTopLayoutStatusTv.text = "$bank  $accountNumber"
         }
-    }
-
-    private fun getJSONtoChatting(message: String): Chat {
-        var chatting = JSONObject(message)
-        var chatId = chatting.getString("chatId")
-        var content = chatting.getString("content")
-        var chatRoomId = chatting.getString("chatRoomId")
-        var isSystemMessage = chatting.getBoolean("isSystemMessage")
-        var memberId = chatting.getInt("memberId")
-        var nickName = chatting.getString("nickName")
-        var profileImgUrl = chatting.getString("profileImgUrl")
-
-        // JsonArray를 ArrayList로 바꾸기 위한 과정!
-        // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
-        var readMembers = ArrayList<String>()
-        var readMembersTemp = chatting.getJSONArray("readMembers")
-        if (readMembersTemp != null) {
-            for (i in 0 until readMembersTemp.length()) {
-                readMembers.add(readMembersTemp.getInt(i).toString())
-            }
-        }
-
-        var createdAt = chatting.getString("createdAt")
-        var chatType = chatting.getString("chatType")
-        var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
-        var isImageMessage = chatting.getBoolean("isImageMessage")
-
-        // ViewType 설정 부분
-        var viewType: Int = if (isSystemMessage.toString() == "true") systemChatting
-        else if (isImageMessage.toString() == "true") imageChatting
-        else if (memberId.toString() == QUEUE_NAME) myChatting
-        else yourChatting
-
-        var isLeader: Boolean = chiefId == memberId
-
-        return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     override fun onResume() {
@@ -238,10 +170,6 @@ class ChattingRoomActivity :
 //        changeParticipantsListener.remove()
         Log.d("CHATTING-SYSTEM-TEST", "END")
         WebSocketManager.close()
-    }
-
-    private fun getBankAndAccountNumber() {
-        // TODO: 계좌번호 불러오기
     }
 
     private fun initAdapter() {
@@ -359,20 +287,10 @@ class ChattingRoomActivity :
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.chattingRoomChattingTextEt.text.isNotEmpty()) {
-                    binding.chattingRoomSendTv.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.main
-                        )
-                    )
+                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.main))
                     binding.chattingRoomSendTv.isEnabled = true
                 } else {
-                    binding.chattingRoomSendTv.setTextColor(
-                        ContextCompat.getColor(
-                            applicationContext,
-                            R.color.gray_2
-                        )
-                    )
+                    binding.chattingRoomSendTv.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray_2))
                     binding.chattingRoomSendTv.isEnabled = false
                 }
             }
@@ -390,47 +308,54 @@ class ChattingRoomActivity :
     // 메시지 전송
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
+            Log.d("CHATTING-SYSTEM-TEST", "1")
             thread {
                 kotlin.run {
                     WebSocketManager.connect()
+                    Log.d("CHATTING-SYSTEM-TEST", "2")
+
+                    Log.d("CHATTING-SYSTEM-TEST", "3")
+                    var content = binding.chattingRoomChattingTextEt.text.toString()
+                    var chatRoomId = roomId
+                    var isSystemMessage = false
+                    var memberId = getMemberId()
+                    var profileImgUrl = getProfileImgUrl()
+                    var chatType = "publish"
+                    var chatId = "none"
+                    var jwt = getJwt()
+
+                    // 전송할 데이터를 JSON Type 변수에 저장
+                    val jsonObject = JSONObject()
+                    jsonObject.put("content", content)
+                    jsonObject.put("chatRoomId", chatRoomId)
+                    jsonObject.put("isSystemMessage", isSystemMessage)
+                    jsonObject.put("memberId", memberId)
+                    jsonObject.put("profileImgUrl", profileImgUrl)
+                    jsonObject.put("chatType", chatType)
+                    jsonObject.put("chatId", chatId)
+                    jsonObject.put("jwt", jwt)
+                    Log.d("CHATTING-SYSTEM-TEST", "4")
+
+                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+                    Log.d("CHATTING-SYSTEM-TEST", "5")
+
+                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
+                    WebSocketManager.sendMessage(chatData.toString())
+                    Log.d("CHATTING-SYSTEM-TEST", "6")
+
+                    binding.chattingRoomChattingTextEt.setText("")
+
+                    if ( WebSocketManager .sendMessage( " Client send " )) {
+                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
+                        Log.d("CHATTING-SYSTEM-TEST", "7")
+                    }
+
+                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+
+                    chattingService.sendChatting(sendChatData)
+                    Log.d("CHATTING-SYSTEM-TEST", "8")
                 }
             }
-
-            // TODO: 메시지 전송
-            var content = binding.chattingRoomChattingTextEt.text.toString()
-            var chatRoomId = roomId
-            var isSystemMessage = false
-            var memberId = getMemberId()
-            var profileImgUrl = getProfileImgUrl()
-            var chatType = "publish"
-            var chatId = "none"
-            var jwt = getJwt()
-
-            // 전송할 데이터를 JSON Type 변수에 저장
-            val jsonObject = JSONObject()
-            jsonObject.put("content", content)
-            jsonObject.put("chatRoomId", chatRoomId)
-            jsonObject.put("isSystemMessage", isSystemMessage)
-            jsonObject.put("memberId", memberId)
-            jsonObject.put("profileImgUrl", profileImgUrl)
-            jsonObject.put("chatType", chatType)
-            jsonObject.put("chatId", chatId)
-            jsonObject.put("jwt", jwt)
-
-            val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
-
-            Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
-            WebSocketManager.sendMessage(chatData.toString())
-
-            binding.chattingRoomChattingTextEt.setText("")
-
-            if ( WebSocketManager .sendMessage( " Client send " )) {
-                Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
-            }
-
-            var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
-
-            chattingService.sendChatting(sendChatData)
         }
     }
 
