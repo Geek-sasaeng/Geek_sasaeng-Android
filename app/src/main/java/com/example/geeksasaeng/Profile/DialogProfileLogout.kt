@@ -6,15 +6,19 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.DialogLogoutBinding
+import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 
 class DialogProfileLogout: DialogFragment() {
 
     lateinit var binding: DialogLogoutBinding
+    // RoomDB
+    private lateinit var chatDB: ChatDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +26,10 @@ class DialogProfileLogout: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogLogoutBinding.inflate(inflater, container, false)
+        chatDB = ChatDatabase.getDBInstance(applicationContext)!!
+
         initListener()
+
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
     }
@@ -32,6 +39,8 @@ class DialogProfileLogout: DialogFragment() {
             this.dismiss()
             (context as MainActivity).finish()
             removeAutoLogin()
+            chatDB.chatDao().deleteAllChats()
+
             startActivity(Intent(activity, LoginActivity::class.java))
         }
 

@@ -72,11 +72,6 @@ class ChattingRoomActivity :
     // Chatting
     // WebSocket
     private var chatClient = OkHttpClient()
-    // RabbitMQ
-//    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
-//    private val factory = ConnectionFactory()
-    // QUEUE_NAME = MemberID!
-    var QUEUE_NAME = getMemberId().toString()
     private val chattingList = arrayListOf<Chat>()
     // RoomDB
     private lateinit var chatDB: ChatDatabase
