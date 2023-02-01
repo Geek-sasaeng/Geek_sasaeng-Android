@@ -11,6 +11,11 @@ interface ChattingMemberAddView {
     fun chattingMemberAddFailure(code: Int, message: String)
 }
 
+interface PreChattingMemberForcedExitView {
+    fun preChattingMemberForcedExitSuccess(result: PreChattingMemberForcedExitResult)
+    fun preChattingMemberForcedExitFailure(code: Int, message: String)
+}
+
 interface ChattingMemberForcedExitView {
     fun chattingMemberForcedExitSuccess(result: ChattingMemberForcedExitResult)
     fun chattingMemberForcedExitFailure(code: Int, message: String)

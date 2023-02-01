@@ -61,6 +61,23 @@ data class ChattingMemberAddResult(
     @SerializedName("remittance") val remittance: Boolean
 )
 
+// 강제퇴장을 위한 조회 api
+// 강제퇴장
+
+data class PreChattingMemberForcedExitResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: PreChattingMemberForcedExitResult
+)
+
+data class PreChattingMemberForcedExitResult(
+    @SerializedName("chatMemberId") val chatMemberId: String,
+    @SerializedName("memberId") val memberId: Int,
+    @SerializedName("userName") val userName: String,
+    @SerializedName("userProfileImgUrl") val userProfileImgUrl: String
+)
+
 // 강제퇴장
 data class ChattingMemberForcedExitRequest(
     @SerializedName("removedMemberIdList") val removedMemberIdList: ArrayList<String>,

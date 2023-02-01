@@ -10,6 +10,7 @@ import retrofit2.Response
 class ChattingService {
     private lateinit var createChattingRoomView: CreateChattingRoomView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
+    private lateinit var preChattingMemberForcedExitView: PreChattingMemberForcedExitView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
     private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
     private lateinit var chattingRemittanceCompleteView: ChattingRemittanceCompleteView
@@ -32,6 +33,9 @@ class ChattingService {
     }
     fun setSendChattingView(sendChattingView: SendChattingView) {
         this.sendChattingView = sendChattingView
+    }
+    fun setPreChattingMemberForcedExitView(preChattingMemberForcedExitView: PreChattingMemberForcedExitView) {
+        this.preChattingMemberForcedExitView = preChattingMemberForcedExitView
     }
     fun setChattingMemberForcedExitView(chattingMemberForcedExitView: ChattingMemberForcedExitView) {
         this.chattingMemberForcedExitView = chattingMemberForcedExitView
@@ -116,6 +120,26 @@ class ChattingService {
             }
             override fun onFailure(call: Call<SendChattingResponse>, t: Throwable) {
                 Log.d("CHATTING-SEND", "실패")
+            }
+        })
+    }
+
+    //강제퇴장 조회 api
+    fun prechattingMemberForcedExit(partyId: Int, roomId: String) {
+        chattingService?.preChattingMemberForcedExit(partyId,roomId)?.enqueue(object: Callback<PreChattingMemberForcedExitResponse> {
+
+            override fun onResponse(call: Call<PreChattingMemberForcedExitResponse>, response: Response<PreChattingMemberForcedExitResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> preChattingMemberForcedExitView.preChattingMemberForcedExitSuccess(resp.result)
+                        else -> preChattingMemberForcedExitView.preChattingMemberForcedExitFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PreChattingMemberForcedExitResponse>, t: Throwable) {
+                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패")
             }
         })
     }

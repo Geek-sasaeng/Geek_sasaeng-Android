@@ -24,6 +24,13 @@ interface ChattingRetrofitInterfaces {
         @Body sendChattingRequest: SendChattingRequest
     ): Call<SendChattingResponse>
 
+    //배달 파티 채팅방 멤버 정보 조회 for 강제퇴장
+    @GET("/party-chat-room/{partyId}/{roomId}/members")
+    fun preChattingMemberForcedExit(
+        @Path("partyId") partyId: Int,
+        @Path("roomId") roomId: String
+    ): Call<PreChattingMemberForcedExitResponse>
+
     //방장이 배달 파티 채팅 멤버를 강제퇴장
     @PATCH("/party-chat-room/members")
     fun chattingMemberForcedExit(
