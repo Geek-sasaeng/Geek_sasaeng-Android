@@ -35,7 +35,6 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
 
     override fun initAfterBinding() {
         initChattingService()
-        initAdapter()
         initClickListener()
     }
 
@@ -95,9 +94,7 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
             Log.d("preForcedExit-success", i.toString())
             mMemberList.add(MemberData(i.chatMemberId, i.memberId, i.userName,i.userProfileImgUrl,false))
         }
-        mMemberList.add(MemberData("1,",1, "긱사생1","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-
-
+        initAdapter()
     }
 
     override fun preChattingMemberForcedExitFailure(code: Int, message: String) {

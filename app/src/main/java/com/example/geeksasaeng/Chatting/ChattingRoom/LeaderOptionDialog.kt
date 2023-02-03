@@ -94,6 +94,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
             intent.putExtra("partyId", partyId)
             intent.putExtra("roomId", roomId)
             startActivity(intent)
+            dismiss()
         }
 
         binding.dialogLeaderPopupOptionChattingExitTv.setOnClickListener{ //채팅 나가기

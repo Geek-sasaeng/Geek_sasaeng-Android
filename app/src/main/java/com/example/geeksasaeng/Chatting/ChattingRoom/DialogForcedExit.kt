@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.Adapter.DialogForcedExitRVAdapter
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogChattingRoomForcedExitLeaderBinding
 
 
@@ -24,7 +26,7 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
 
     private lateinit var roomId: String
     private lateinit var mForcedExitMemberList: ArrayList<MemberData>
-    private lateinit var removedMemberIdList: ArrayList<String>
+    private var removedMemberIdList: ArrayList<String> = ArrayList()
 
     override fun onResume() {
         super.onResume()
@@ -68,8 +70,10 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
         mchattingService = ChattingService()
         mchattingService.setChattingMemberForcedExitView(this)
 
-        for(member in mForcedExitMemberList) //강제퇴장 시킬 멤버 id 배열 구성
+        for (member in mForcedExitMemberList){ //강제퇴장 시킬 멤버 id 배열 구성{
+            Log.d("DialogForcedExit-member", member.toString())
             removedMemberIdList.add(member.chatMemberId)
+        }
 
         Log.d("DialogForcedExit", "mForcedExitMemberList : ${mForcedExitMemberList} / removedMemberIdList : $removedMemberIdList")
 
@@ -86,6 +90,8 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
 
     override fun chattingMemberForcedExitSuccess(result: ChattingMemberForcedExitResult) {
         Log.d("DialogForcedExit", result.toString())
+        requireActivity().finish()
+        CustomToastMsg.createToast(requireContext(), "강제 퇴장이 완료되었습니다", "#8029ABE2", 53)?.show()
     }
 
     override fun chattingMemberForcedExitFailure(code: Int, message: String) {
