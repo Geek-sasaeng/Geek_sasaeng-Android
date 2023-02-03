@@ -127,10 +127,12 @@ class ChattingService {
     //강제퇴장 조회 api
     fun prechattingMemberForcedExit(partyId: Int, roomId: String) {
         chattingService?.preChattingMemberForcedExit(partyId,roomId)?.enqueue(object: Callback<PreChattingMemberForcedExitResponse> {
-
             override fun onResponse(call: Call<PreChattingMemberForcedExitResponse>, response: Response<PreChattingMemberForcedExitResponse>) {
+                Log.d("preForcedExit", "$partyId/$roomId")
+                Log.d("preForcedExit", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
+                    Log.d("preForcedExit-resp", resp.toString())
                     when (resp.code) {
                         1000 -> preChattingMemberForcedExitView.preChattingMemberForcedExitSuccess(resp.result)
                         else -> preChattingMemberForcedExitView.preChattingMemberForcedExitFailure(resp.code, resp.message)
@@ -139,7 +141,8 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<PreChattingMemberForcedExitResponse>, t: Throwable) {
-                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패")
+                Log.d("preForcedExit", "실패 : $t")
+                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패 : $t")
             }
         })
     }

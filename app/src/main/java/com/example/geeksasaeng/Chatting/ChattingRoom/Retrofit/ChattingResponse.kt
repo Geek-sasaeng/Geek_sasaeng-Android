@@ -68,7 +68,7 @@ data class PreChattingMemberForcedExitResponse(
     @SerializedName("code") val code: Int,
     @SerializedName("isSuccess") val isSuccess : Boolean,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: PreChattingMemberForcedExitResult
+    @SerializedName("result") val result: Array<PreChattingMemberForcedExitResult>
 )
 
 data class PreChattingMemberForcedExitResult(
@@ -208,9 +208,10 @@ data class MatchingEndResult(
 )
 
 data class MemberData(
-    @SerializedName("id") val id: String,
-    @SerializedName("nickName") val nickName: String,
-    @SerializedName("profileImgUrl") val profileImgUrl: String,
+    @SerializedName("chatMemberId") val chatMemberId: String,
+    @SerializedName("memberId") val memberId: Int,
+    @SerializedName("userName") val userName: String,
+    @SerializedName("userProfileImgUrl") val userProfileImgUrl: String,
     @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean
 ): Serializable
 

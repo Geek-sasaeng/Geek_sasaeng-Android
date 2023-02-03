@@ -12,7 +12,7 @@ interface ChattingMemberAddView {
 }
 
 interface PreChattingMemberForcedExitView {
-    fun preChattingMemberForcedExitSuccess(result: PreChattingMemberForcedExitResult)
+    fun preChattingMemberForcedExitSuccess(result: Array<PreChattingMemberForcedExitResult>)
     fun preChattingMemberForcedExitFailure(code: Int, message: String)
 }
 

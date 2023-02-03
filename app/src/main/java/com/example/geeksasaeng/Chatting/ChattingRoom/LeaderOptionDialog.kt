@@ -91,6 +91,7 @@ class LeaderOptionDialog: DialogFragment(), ChattingDeliveryCompleteView {
 
         binding.dialogLeaderPopupOptionUserExitTv.setOnClickListener { //강제 퇴장시키기
             val intent = Intent(context, ChattingRoomForcedExitActivity::class.java)
+            intent.putExtra("partyId", partyId)
             intent.putExtra("roomId", roomId)
             startActivity(intent)
         }

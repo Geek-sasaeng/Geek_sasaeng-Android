@@ -69,7 +69,7 @@ class DialogForcedExit: DialogFragment(), ChattingMemberForcedExitView{
         mchattingService.setChattingMemberForcedExitView(this)
 
         for(member in mForcedExitMemberList) //강제퇴장 시킬 멤버 id 배열 구성
-            removedMemberIdList.add(member.id)
+            removedMemberIdList.add(member.chatMemberId)
 
         Log.d("DialogForcedExit", "mForcedExitMemberList : ${mForcedExitMemberList} / removedMemberIdList : $removedMemberIdList")
 

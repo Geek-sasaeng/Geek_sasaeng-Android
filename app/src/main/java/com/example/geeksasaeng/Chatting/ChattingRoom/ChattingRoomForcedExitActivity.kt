@@ -7,19 +7,25 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geeksasaeng.Chatting.ChattingRoom.Adapter.ChattingRoomForcedExitRVAdapter
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.MemberData
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
+import com.example.geeksasaeng.Home.Delivery.DeliveryBannerResult
+import com.example.geeksasaeng.Home.Delivery.Retrofit.DeliveryService
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.Utils.BaseFragment
+import com.example.geeksasaeng.Utils.getJwt
 import com.example.geeksasaeng.Utils.removeForcedExitCheckList
 import com.example.geeksasaeng.databinding.ActivityChattingRoomForcedExitBinding
+import kotlin.properties.Delegates
 
-class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedExitBinding>(ActivityChattingRoomForcedExitBinding::inflate) {
+class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedExitBinding>(ActivityChattingRoomForcedExitBinding::inflate), PreChattingMemberForcedExitView {
 
     private lateinit var chattingRoomForcedExitRVAdapter: ChattingRoomForcedExitRVAdapter
+    private var partyId by Delegates.notNull<Int>()
     private lateinit var roomId: String
     private var mMemberList: MutableList<MemberData> = ArrayList()
     private var mForcedExitMemberList: MutableList<MemberData> = ArrayList()
+    private lateinit var chattingDataService: ChattingService
 
     override fun onDestroy() {
         Log.d("forcedExit", "fragment-onDestroy")
@@ -28,28 +34,22 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
     }
 
     override fun initAfterBinding() {
+        initChattingService()
         initAdapter()
         initClickListener()
+    }
+
+    private fun initChattingService() {
+        chattingDataService = ChattingService()
+        chattingDataService.setPreChattingMemberForcedExitView(this)
+        //partyId, roomId 받아오기
+        partyId = intent.getIntExtra("partyId",-1)
         roomId = intent.getStringExtra("roomId").toString()
+        Log.d("preForcedExit", getJwt().toString())
+        chattingDataService.prechattingMemberForcedExit(partyId, roomId) //★배달 파티 채팅방 멤버 정보를 조회 API 호출!
     }
 
     private fun initAdapter() {
-        /*
-         더미 데이터 => TODO: 채팅방에 있는 멤버들 정보 가져오기
-         */
-
-        mMemberList.clear()
-        mMemberList.add(MemberData("1", "긱사생1","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("2", "긱사생2","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("3", "긱사생3","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("4", "긱사생4","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("5", "긱사생5","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("6", "긱사생6","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("7", "긱사생7","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("8", "긱사생8","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("9", "긱사생9","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-        mMemberList.add(MemberData("10", "긱사생10","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
-
         chattingRoomForcedExitRVAdapter = ChattingRoomForcedExitRVAdapter(mMemberList)
         binding.chattingRoomForcedExitRv.adapter = chattingRoomForcedExitRVAdapter
         binding.chattingRoomForcedExitRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -87,5 +87,20 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
                 dialog.show(supportFragmentManager, "DialogForcedExitLeader")
             }
         }
+    }
+
+    override fun preChattingMemberForcedExitSuccess(results: Array<PreChattingMemberForcedExitResult>) {
+        mMemberList.clear()
+        for (i in results) {
+            Log.d("preForcedExit-success", i.toString())
+            mMemberList.add(MemberData(i.chatMemberId, i.memberId, i.userName,i.userProfileImgUrl,false))
+        }
+        mMemberList.add(MemberData("1,",1, "긱사생1","https://geeksasaeng-s3.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84+%EC%9D%B4%EB%AF%B8%EC%A7%80/baseProfileImg.png",false))
+
+
+    }
+
+    override fun preChattingMemberForcedExitFailure(code: Int, message: String) {
+        Log.d("preForcedExit-failure", message)
     }
 }
