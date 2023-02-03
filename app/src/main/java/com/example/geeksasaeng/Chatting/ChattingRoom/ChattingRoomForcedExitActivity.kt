@@ -81,6 +81,7 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
                 // TODO: 나중에 넘길때는 mForcedExitMemberList를 체크한 순서가 아니라, 채팅방 멤버 정렬 순으로 넣어주는게 더 좋아보여!
                 // 나중에 실제 데이터 들어오면 그거 속성값 중에 하나 정렬순서로 삼아서 하면 될 것 같기두?
                 bundle.putString("roomId", roomId)
+                bundle.putInt("partyId",partyId)
                 bundle.putParcelableArrayList("forcedExitList", mForcedExitMemberList as ArrayList<out Parcelable?>?) //강제퇴장리스트 넘겨주기
                 dialog.arguments = bundle
                 dialog.show(supportFragmentManager, "DialogForcedExitLeader")

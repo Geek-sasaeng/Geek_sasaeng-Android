@@ -176,6 +176,7 @@ class ChattingService {
         chattingService?.deliveryPartyMemberForcedExit(deliveryPartyMemberForcedExitRequest)?.enqueue(object: Callback<DeliveryPartyMemberForcedExitResponse> {
 
             override fun onResponse(call: Call<DeliveryPartyMemberForcedExitResponse>, response: Response<DeliveryPartyMemberForcedExitResponse>) {
+                Log.d("DialogForcedExit for 배달파티", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -186,6 +187,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<DeliveryPartyMemberForcedExitResponse>, t: Throwable) {
+                Log.d("DialogForcedExit for 배달파티- onFailure", t.toString())
                 Log.d("DELIVERY-PARTY-MEMBER-FORCED-EXIT", "실패")
             }
         })
