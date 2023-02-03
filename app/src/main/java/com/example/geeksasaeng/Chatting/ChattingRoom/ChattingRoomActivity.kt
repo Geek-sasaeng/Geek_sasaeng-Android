@@ -73,6 +73,11 @@ class ChattingRoomActivity :
     // WebSocket
     private var chatClient = OkHttpClient()
     private val chattingList = arrayListOf<Chat>()
+    // RabbitMQ
+    private val rabbitMQUri = "amqp://" + BuildConfig.RABBITMQ_ID + ":" + BuildConfig.RABBITMQ_PWD + "@" + BuildConfig.RABBITMQ_ADDRESS
+    private val factory = ConnectionFactory()
+    // QUEUE_NAME = MemberID!
+    var QUEUE_NAME = getMemberId().toString()
     // RoomDB
     private lateinit var chatDB: ChatDatabase
 
@@ -115,8 +120,16 @@ class ChattingRoomActivity :
 
             for (i in 0 until chattingSize) {
                 // roomId가 같은 경우에만 가져오도록 설정!
-                if (roomId == allChatting[i].chatRoomId)
+                if (roomId == allChatting[i].chatRoomId) {
                     chattingList.add(allChatting[i])
+                    // chattingRoomRVAdapter.addItem(allChatting[i])
+                }
+
+                // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
+                // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
+                Thread {
+                    initRabbitMQSetting()
+                }.start()
             }
 
             // 채팅 제일 밑으로 가는 방법!
@@ -129,6 +142,80 @@ class ChattingRoomActivity :
             smoothScroller.targetPosition = chattingSize
             binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
         }
+    }
+
+    private fun initRabbitMQSetting() {
+        factory.setUri(rabbitMQUri)
+        // RabbitMQ 연결
+        val conn: Connection = factory.newConnection()
+        // Send and Receive 가능하도록 해주는 부분!
+        val channel = conn.createChannel()
+        // durable = true로 설정!!
+        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
+        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
+
+        lateinit var originalMessage: String
+        lateinit var chatResponseMessage: Chat
+
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            originalMessage = String(delivery.body, Charsets.UTF_8)
+            chatResponseMessage = getJSONtoChatting(originalMessage)
+            Log.d("CHATTING-TEST", "newMessage = $chatResponseMessage")
+            chatDB.chatDao().insert(chatResponseMessage)
+            // Log.d("CHATTING-TEST", "chattingList 1 = $chattingList")
+            var result = chatDB.chatDao().getAllChats()
+            var resultTemp = result[result.size - 1]
+            Log.d("CHATTING-TEST", "resultTemp = $resultTemp")
+            chattingList.add(chatResponseMessage)
+            Log.d("CHATTING-TEST", "Last chattingList = ${chattingList[chattingList.size - 1]}")
+            // chattingRoomRVAdapter.addItem(chatResponseMessage)
+            // chattingRoomRVAdapter.notifyDataSetChanged()
+        }
+
+        // chattingRoomRVAdapter.addItem(chatResponseMessage)
+        // chattingRoomRVAdapter.notifyDataSetChanged()
+        // Log.d("CHATTING-TEST", "chattingList 2 = $chattingList")
+
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
+    }
+
+    private fun getJSONtoChatting(message: String): Chat {
+        var chatting = JSONObject(message)
+        var chatId = chatting.getString("chatId")
+        var content = chatting.getString("content")
+        var chatRoomId = chatting.getString("chatRoomId")
+        var isSystemMessage = chatting.getBoolean("isSystemMessage")
+        var memberId = chatting.getInt("memberId")
+        var nickName = chatting.getString("nickName")
+        var profileImgUrl = chatting.getString("profileImgUrl")
+
+        // JsonArray를 ArrayList로 바꾸기 위한 과정!
+        // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
+        var readMembers = java.util.ArrayList<String>()
+        var readMembersTemp = chatting.getJSONArray("readMembers")
+        if (readMembersTemp != null) {
+            for (i in 0 until readMembersTemp.length()) {
+                readMembers.add(readMembersTemp.getInt(i).toString())
+            }
+        }
+
+        var createdAt = chatting.getString("createdAt")
+        var chatType = chatting.getString("chatType")
+        var unreadMemberCnt = chatting.getInt("unreadMemberCnt")
+        var isImageMessage = chatting.getBoolean("isImageMessage")
+
+        // ViewType 설정 부분
+        var viewType: Int = if (isSystemMessage.toString() == "true") systemChatting
+        else if (isImageMessage.toString() == "true") imageChatting
+        else if (memberId.toString() == QUEUE_NAME) myChatting
+        else yourChatting
+
+        // var isLeader: Boolean = chiefId == memberId
+        // TODO: 리더인지 아닌지 데이터 넘기기
+        var isLeader = true
+
+        return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
     }
 
     private fun initTopLayout() {

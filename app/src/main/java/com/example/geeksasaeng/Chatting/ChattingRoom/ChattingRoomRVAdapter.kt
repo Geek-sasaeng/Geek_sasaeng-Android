@@ -153,7 +153,11 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     }
 
     fun addItem(item: Chat) {
+        Log.d("CHATTING-TEST", "adapter item = $item")
+        if (chattingList.size > 0)
+            Log.d("CHATTING-TEST", "itemList1 = ${chattingList[chattingList.size - 1]}")
         chattingList.add(item)
+        Log.d("CHATTING-TEST", "itemList2 = ${chattingList[chattingList.size - 1]}")
         this.notifyDataSetChanged()
     }
 
