@@ -21,6 +21,11 @@ interface ChattingMemberForcedExitView {
     fun chattingMemberForcedExitFailure(code: Int, message: String)
 }
 
+interface DeliveryPartyMemberForcedExitView {
+    fun deliveryPartyMemberForcedExitSuccess(result: DeliveryPartyMemberForcedExitResult)
+    fun deliveryPartyMemberForcedExitFailure(code: Int, message: String)
+}
+
 interface ChattingOrderCompleteView {
     fun chattingOrderCompleteSuccess(result: String)
     fun chattingOrderCompleteFailure(code: Int, message: String)

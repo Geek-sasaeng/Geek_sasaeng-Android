@@ -31,11 +31,17 @@ interface ChattingRetrofitInterfaces {
         @Path("roomId") roomId: String
     ): Call<PreChattingMemberForcedExitResponse>
 
-    //방장이 배달 파티 채팅 멤버를 강제퇴장
+    //방장이 배달 파티 채팅 멤버를 강제퇴장 for 채팅방
     @PATCH("/party-chat-room/members")
     fun chattingMemberForcedExit(
         @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
     ): Call<ChattingMemberForcedExitResponse>
+
+    //배달 파티 멤버 강제퇴장 for 배달파티
+    @PATCH("/delivery-party-members")
+    fun deliveryPartyMemberForcedExit(
+        @Body deliveryPartyMemberForcedExitRequest: DeliveryPartyMemberForcedExitRequest
+    ): Call<DeliveryPartyMemberForcedExitResponse>
 
     //주문 완료
     @PATCH("/party-chat-room/order")

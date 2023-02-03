@@ -78,7 +78,7 @@ data class PreChattingMemberForcedExitResult(
     @SerializedName("userProfileImgUrl") val userProfileImgUrl: String
 )
 
-// 강제퇴장
+// 강제퇴장 for 채팅방
 data class ChattingMemberForcedExitRequest(
     @SerializedName("removedChatMemberIdList") val removedChatMemberIdList: ArrayList<String>,
     @SerializedName("roomId") val roomId: String
@@ -92,6 +92,23 @@ data class ChattingMemberForcedExitResponse(
 )
 
 data class ChattingMemberForcedExitResult(
+    @SerializedName("message") val message: String
+)
+
+// 강제퇴장 for 배달파티
+data class DeliveryPartyMemberForcedExitRequest(
+    @SerializedName("membersId") val membersId: ArrayList<Int>,
+    @SerializedName("partyId") val partyId: Int
+)
+
+data class DeliveryPartyMemberForcedExitResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: DeliveryPartyMemberForcedExitResult
+)
+
+data class DeliveryPartyMemberForcedExitResult(
     @SerializedName("message") val message: String
 )
 
