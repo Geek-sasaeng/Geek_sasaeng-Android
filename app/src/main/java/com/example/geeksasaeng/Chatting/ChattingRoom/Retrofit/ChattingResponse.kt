@@ -80,7 +80,7 @@ data class PreChattingMemberForcedExitResult(
 
 // 강제퇴장
 data class ChattingMemberForcedExitRequest(
-    @SerializedName("removedMemberIdList") val removedMemberIdList: ArrayList<String>,
+    @SerializedName("removedChatMemberIdList") val removedChatMemberIdList: ArrayList<String>,
     @SerializedName("roomId") val roomId: String
 )
 
