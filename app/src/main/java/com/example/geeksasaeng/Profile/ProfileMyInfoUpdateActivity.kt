@@ -33,9 +33,9 @@ import java.util.regex.Pattern
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
     SignUpNickCheckView {
 
-    private var dormitoryId = 1 //default 기숙사 아이디
+    private var dormitoryId = getDormitoryId() //기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
-    private lateinit var loginId :String  //로그인 id -api용
+    private lateinit var loginId :String //로그인 id -api용
     private lateinit var currentImageURI : Uri // 새로 지정할 프로필 Url
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
 
@@ -100,7 +100,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
                     binding.profileMyInfoUpdateNicknameCheckBtn.isEnabled = false
                     binding.profileMyInfoUpdateNicknameCheckBtn.isClickable = false
                     binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE
-                    binding.profileMyInfoUpdateNicknameExplainationTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.main))
+                    binding.profileMyInfoUpdateNicknameExplainationTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.error))
+                    binding.profileMyInfoUpdateNicknameExplainationTv.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
                     binding.profileMyInfoUpdateNicknameExplainationTv.text = "3-8자 영문 혹은 한글로 입력해주세요"
                     if(binding.profileMyInfoUpdateNicknameExplainationTv.visibility == View.INVISIBLE){
                         binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE // 보이게 만들기

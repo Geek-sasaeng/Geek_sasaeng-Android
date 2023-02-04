@@ -77,7 +77,6 @@
             android:id="@+id/profile_my_info_update_pwd_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:text="비밀번호"
             android:maxLines="1"
             android:inputType="textPassword"
@@ -103,6 +102,18 @@
             app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_et"
             app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_et"/>
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/profile_my_info_update_pwd_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_et"
+            app:layout_constraintStart_toStartOf="@id/profile_my_info_update_pwd_et"
+            android:fontFamily="@font/spoqa_medium"
+            android:textSize="13sp"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/error"/>
 
         <TextView
             android:id="@+id/profile_my_info_update_pwd_check_title_tv"
@@ -116,13 +127,12 @@
             android:layout_marginTop="19dp"
             android:layout_marginStart="23dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_et" />
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_info_tv" />
 
         <EditText
             android:id="@+id/profile_my_info_update_pwd_check_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:text="비밀번호"
             android:maxLines="1"
             android:inputType="textPassword"
@@ -148,6 +158,18 @@
             app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_check_et"
             app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_check_et"/>
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/profile_my_info_update_pwd_check_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호가 다릅니다. 다시 확인해주세요"
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_check_et"
+            app:layout_constraintStart_toStartOf="@id/profile_my_info_update_pwd_check_et"
+            android:fontFamily="@font/spoqa_medium"
+            android:textSize="13sp"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/error"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

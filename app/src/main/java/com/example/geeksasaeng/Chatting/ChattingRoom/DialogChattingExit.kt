@@ -76,22 +76,22 @@ class DialogChattingExit: DialogFragment(),
     // 일반 유저 나가기 성공 /실패
 
     override fun chattingMemberLeavePartySuccess(result: String) {
-        Log.d("exit","멤버 파티 나가기 성공" + result)
+        Log.d("exit","멤버 파티 나가기 성공 : " + result)
         requireActivity().finish()
     }
 
     override fun chattingMemberLeavePartyFailure(code: Int, message: String) {
-        Log.d("exit","멤버 파티 나가기 실패" + message)
+        Log.d("exit","멤버 파티 나가기 실패 : " + message)
     }
 
     override fun chattingMemberLeaveChatSuccess(result: ChattingPartyMemberLeaveChatResult) {
-        Log.d("exit","멤버 채팅 나가기 성공" + result)
+        Log.d("exit","멤버 채팅 나가기 성공 : " + result)
         val chattingPartyMemberLeavePartyRequest = ChattingPartyMemberLeavePartyRequest(partyId)
         chattingService.getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)
     }
 
     override fun chattingMemberLeaveChatFailure(code: Int, message: String) {
-        Log.d("exit", "멤버 채팅 나가기 실패" + message)
+        Log.d("exit", "멤버 채팅 나가기 실패 : " + message)
     }
 
     // 방장 나가기 성공 /실패

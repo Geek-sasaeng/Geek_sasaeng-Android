@@ -245,6 +245,8 @@ class ChattingService {
     fun getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest: ChattingPartyMemberLeavePartyRequest){
         chattingService?.partyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)?.enqueue(object : Callback<ChattingPartyMemberLeavePartyResponse> {
             override fun onResponse(call: Call<ChattingPartyMemberLeavePartyResponse>, response: Response<ChattingPartyMemberLeavePartyResponse>) {
+                Log.d("exit", "배달파티 나가기 response : ${chattingPartyMemberLeavePartyRequest.toString()}")
+                Log.d("exit", "배달파티 나가기 response : ${response.toString()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyMemberLeavePartyResponse = response.body()!!
                     when (chattingPartyMemberLeavePartyResponse.code) {
