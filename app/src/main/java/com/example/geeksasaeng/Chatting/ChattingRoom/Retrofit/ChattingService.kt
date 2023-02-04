@@ -373,6 +373,8 @@ class ChattingService {
     fun getChattingDetail(chatRoomId: String) {
         chattingService?.getChattingDetail(chatRoomId)?.enqueue(object: Callback<ChattingDetailResponse> {
             override fun onResponse(call: Call<ChattingDetailResponse>, response: Response<ChattingDetailResponse>) {
+                Log.d("chatDetail", "채팅방 디테일 chatRoomId :${chatRoomId.toString()} / jwt : ${getJwt()}")
+                Log.d("chatDetail", "채팅방 디테일 response :${response.toString()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -382,6 +384,7 @@ class ChattingService {
                 }
             }
             override fun onFailure(call: Call<ChattingDetailResponse>, t: Throwable) {
+                Log.d("chatDetail", "채팅방 디테일 onFailure :${t.toString()}")
                 Log.d("RETROFIT-SERVICE", "ChattingListService-getChattingDetail-Failure")
             }
         })

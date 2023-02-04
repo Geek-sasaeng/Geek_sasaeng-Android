@@ -37,8 +37,9 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     lateinit var loadingAnimationView: LottieAnimationView
     private var deliveryItemId: Int? = null
     private var status: String? = null
-    private var authorStatus: Boolean? = null
-    private var belongStatus: String? = null
+    private var authorStatus: Boolean? = null // 방장 여부
+    private var belongStatus: String? = null // 이 파티에 들어온 적 있는지 여부
+    private var activeStatus: Boolean? = null // 현재 참여중인지 여부
     private var dialogPartyRequest: DialogPartyRequest? = null
     private var remainTime : Long = 0
     private var timerTask : Timer? = null
@@ -137,7 +138,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
 
         // 매칭 신청 or 채팅방 가기 버튼 누를경우
         binding.lookPartyRequestTv.setOnClickListener {
-            if (authorStatus == true || belongStatus == "Y") {
+            if (authorStatus == true || activeStatus == true) {
                 showPartyChattingRoom()
             } else {
                 dialogPartyRequest = DialogPartyRequest(partyData.id, partyData.partyChatRoomId)
@@ -156,12 +157,18 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     //상세보기 api 성공시
     override fun partyDetailSuccess(result: PartyDetailResult) {
         partyData = result
-
         binding.lookPartyWhite.visibility = View.GONE
         loadingStop()
 
+        if (partyData.belongStatus == "Y" && !partyData.activeStatus){ // 나간 파티원의 경우 ( 들어온 적은 있는데, 활성화 되어있지 않은 상태)
+            var dialogPartyRevisit = DialogPartyRevisit() // 배달 파티에 진입을 못하게 안내 메세지를 띄워준다.
+            dialogPartyRevisit.isCancelable = false // 외부 영역 터치로 빠져나가지 못하게 막음
+            dialogPartyRevisit.show(childFragmentManager, "DialogPartyRevisit")
+        }
+
         authorStatus = result.authorStatus
         belongStatus = result.belongStatus
+        activeStatus = result.activeStatus
         Glide.with(binding.root.context).load(result.chiefProfileImgUrl).into(binding.lookHostProfileIv)
 
         // 글쓴이, 파티 멤버 -> 채팅방 가기로 초기 설정   |   일반 유저 -> 신청하기로 초기 설정
@@ -169,7 +176,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         else binding.lookPartyRequestTv.text = "신청하기"
 
         if (result.chiefProfileImgUrl != null)
-            //binding.lookHostProfile.setImageURI(Uri.parse(result.chiefProfileImgUrl))
+        //binding.lookHostProfile.setImageURI(Uri.parse(result.chiefProfileImgUrl))
             Glide.with(this)
                 .load(result.chiefProfileImgUrl)
                 .into(binding.lookHostProfileIv)
@@ -322,6 +329,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
         joinPartyChattingRoom()
 
         belongStatus = "Y"
+        activeStatus = true
         binding.lookPartyRequestTv.text = "채팅방 가기"
         binding.lookMatchingNumber.text = (partyData.currentMatching+1).toString() + "/" + partyData.maxMatching // 현재 매칭 수 + 1
 
