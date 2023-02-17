@@ -25,6 +25,7 @@ class ProfileDataService {
     private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
     private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
     private lateinit var profilePasswordChangeView: ProfilePasswordChangeView
+    private lateinit var profileViewDormitoryView: ProfileViewDormitoryView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -54,6 +55,9 @@ class ProfileDataService {
     }
     fun setProfilePasswordChangeView(profilePasswordChangeView: ProfilePasswordChangeView) {
         this.profilePasswordChangeView = profilePasswordChangeView
+    }
+    fun setProfileViewDormitoryView(profileViewDormitoryView: ProfileViewDormitoryView) {
+        this.profileViewDormitoryView = profileViewDormitoryView
     }
 
     // 진행 중인 활동 조회
@@ -244,5 +248,27 @@ class ProfileDataService {
         })
     }
 
+    // 대학교별 기숙사 목록 조회
+    fun profileViewDormiotrySender(universityId: Int) {
+        profileDataService?.profileViewDormitory(universityId)?.enqueue(object: Callback<ProfileViewDormitoryResponse> {
+
+            override fun onResponse(call: Call<ProfileViewDormitoryResponse>, response: Response<ProfileViewDormitoryResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("profileViewDormiotrySender", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileViewDormitoryView.onProfileViewDormitorySuccess(resp.result)
+                        4000 -> Log.d("profileViewDormiotrySender", "서버 오류")
+                        else -> profileViewDormitoryView.onProfileViewDormitoryFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileViewDormitoryResponse>, t: Throwable) {
+                Log.d("profileViewDormiotrySender", "profileViewDormiotrySender : $t")
+            }
+
+        })
+    }
 }
 

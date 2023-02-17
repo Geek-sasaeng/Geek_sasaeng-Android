@@ -14,9 +14,8 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
+import com.example.geeksasaeng.ChatSetting.Chat
+import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
@@ -31,13 +30,15 @@ import java.util.regex.Pattern
 
 
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
-    SignUpNickCheckView {
+    SignUpNickCheckView, ProfileViewDormitoryView {
 
     private var dormitoryId = getDormitoryId() //기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
     private lateinit var loginId :String //로그인 id -api용
     private lateinit var currentImageURI : Uri // 새로 지정할 프로필 Url
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
+    private lateinit var profileDataService : ProfileDataService //기숙사 리스트 불러오기 용
+    private var dormitoryList : ArrayList<ProfileViewDormitoryResult> = arrayListOf<ProfileViewDormitoryResult>()
 
     override fun initAfterBinding() {
         initData()
@@ -45,6 +46,12 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         initClickListener()
         initRadioButton()
         initTextWatcher()
+        initGetDormiotryList()
+    }
+
+    private fun initGetDormiotryList() {
+        // 대학교별 기숙사 정보 얻어오기
+        profileDataService.profileViewDormiotrySender(1) // TODO: 일단 가천대만 지원하니까 1로 값을 줌
     }
 
     private fun initData() {
@@ -80,6 +87,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private fun initView() {
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpNickCheckView(this)//닉네임 중복확인 뷰 연결
+        profileDataService = ProfileDataService()
+        profileDataService.setProfileViewDormitoryView(this)
     }
 
     private fun initTextWatcher() {
@@ -230,5 +239,60 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             binding.profileMyInfoUpdateCompleteTv.isEnabled = false
             binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.bababa_color))
         }
+    }
+
+    override fun onProfileViewDormitorySuccess(result: ArrayList<ProfileViewDormitoryResult>) {
+        Log.d("getDormitoryList", "성공")
+        dormitoryList.clear()
+        for (i in result){
+            Log.d("getDormitoryList", "${i.id}, ${i.name}")
+            dormitoryList.add(i)
+        }
+        dormitoryViewChange()
+    }
+
+    private fun dormitoryViewChange() { //지금은 일단 radioGroup으로 만들어놔서 임시방편으로 이렇게 했는데 gridLayout가진 recyclerView이용하는걸로 리팩토링 필요!
+        if (dormitoryList.size == 1){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==2){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==3){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==4){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
+        }else if (dormitoryList.size == 5){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text = dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
+        }
+        else if (dormitoryList.size == 5){
+            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text = dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb6.text = dormitoryList[5].name
+        }
+    }
+
+    override fun onProfileViewDormitoryFailure(message: String) {
+        Log.d("getDormitoryList", "실패")
     }
 }

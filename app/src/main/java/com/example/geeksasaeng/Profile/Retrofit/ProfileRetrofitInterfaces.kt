@@ -61,5 +61,11 @@ interface ProfileRetrofitInterfaces {
         @Body profilePasswordChangeRequest: ProfilePasswordChangeRequest
     ) : Call<ProfilePasswordChangeResponse>
 
+    //대학교별 기숙사 목록 조회
+    @GET("/{universityId}/dormitories")
+    fun profileViewDormitory(
+        @Path("universityId") universityId: Int
+    ): Call<ProfileViewDormitoryResponse>
+
 
 }

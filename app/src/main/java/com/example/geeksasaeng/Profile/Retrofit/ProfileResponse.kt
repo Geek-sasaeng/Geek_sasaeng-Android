@@ -163,3 +163,17 @@ data class ProfilePasswordChangeResponse(
     @SerializedName("message") val message: String,
     @SerializedName("result") val result: String
 )
+
+// 대학교별 기숙사 목록 조회
+
+data class ProfileViewDormitoryResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ArrayList<ProfileViewDormitoryResult>
+)
+
+data class ProfileViewDormitoryResult(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String
+)
