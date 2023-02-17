@@ -253,42 +253,42 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     private fun dormitoryViewChange() { //TODO: 지금은 일단 radioGroup으로 만들어놔서 임시방편으로 이렇게 했는데 추후, gridLayout recyclerView 이용하는걸로 리팩토링 필요!
         if (dormitoryList.size == 1){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb1.text = "제 " + dormitoryList[0].name
             binding.profileMyInfoUpdateDormitoryRb2.visibility = View.INVISIBLE
             binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
             binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
         }else if (dormitoryList.size ==2){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
-            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
             binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
             binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
         }else if (dormitoryList.size ==3){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
-            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
-            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
             binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
         }else if (dormitoryList.size ==4){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
-            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
-            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
-            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
             binding.profileMyInfoUpdateDormitoryRb5.visibility = View.INVISIBLE
             binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
         }else if (dormitoryList.size == 5){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
-            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
-            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
-            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
-            binding.profileMyInfoUpdateDormitoryRb5.text = dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text =  "제 " +dormitoryList[4].name
             binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
         }
         else if (dormitoryList.size == 5){
-            binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
-            binding.profileMyInfoUpdateDormitoryRb2.text = dormitoryList[1].name
-            binding.profileMyInfoUpdateDormitoryRb3.text = dormitoryList[2].name
-            binding.profileMyInfoUpdateDormitoryRb4.text = dormitoryList[3].name
-            binding.profileMyInfoUpdateDormitoryRb5.text = dormitoryList[4].name
-            binding.profileMyInfoUpdateDormitoryRb6.text = dormitoryList[5].name
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text =  "제 " +dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb6.text =  "제 " +dormitoryList[5].name
         }
     }
 
