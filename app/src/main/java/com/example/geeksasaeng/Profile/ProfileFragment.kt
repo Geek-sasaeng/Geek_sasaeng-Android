@@ -2,22 +2,21 @@ package com.example.geeksasaeng.Profile
 
 import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
+import com.example.geeksasaeng.Utils.getProfileImgUrl
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate)
     , ProfileMyPreActivityView, ProfileMyInfoView {
@@ -37,11 +36,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var userId: Int = 0
 
     override fun initAfterBinding() {
-        binding.profileCardNickNameTv.text = getNickname()
-        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.profileCardUnivTv.text = universityName
-        binding.profileCardDormitoryNameTv.text = dormitoryName
-
         // clearBackStack()
         initRetrofitService()
         initClickListener()
@@ -190,6 +184,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
+        Log.d("profile","나의 정보 조회 성공")
         userId = result.id
         nickName = result.nickname
         universityName = result.universityName
@@ -200,6 +195,15 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
         val signUpDate = result.createdAt
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
+
+        //정보 설정
+        binding.profileCardNickNameTv.text = getNickname()
+        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.profileCardUnivTv.text = universityName
+        binding.profileCardDormitoryNameTv.text = dormitoryName
+        Glide.with(requireContext())
+            .load(getProfileImgUrl())
+            .into(binding.profileCardImgIv)
     }
 
     override fun onProfileMyInfoFailure(message: String) {

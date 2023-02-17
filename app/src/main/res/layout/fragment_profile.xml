@@ -227,8 +227,10 @@
                                 app:cardElevation="0dp"
                                 app:cardCornerRadius="55dp">
                                 <ImageView
+                                    android:id="@+id/profile_card_img_iv"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/profile_thumbs_up" />
                             </androidx.cardview.widget.CardView>
 
