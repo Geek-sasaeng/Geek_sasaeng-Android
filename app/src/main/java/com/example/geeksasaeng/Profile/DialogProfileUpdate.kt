@@ -1,11 +1,16 @@
 package com.example.geeksasaeng.Profile
 
+import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.MediaStore
+import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,19 +18,24 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.DialogProfileUpdateBinding
+import com.google.firebase.messaging.ImageDownload
+import io.reactivex.Single
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.URL
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
@@ -85,42 +95,68 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
 
         Log.d("sendImg- editProfile",currentImageURI.toString())
         if(currentImageURI.toString() != getProfileImgUrl()){ // 프로필 이미지가 변경할게 있다면,
-            Log.d("sendImg- editProfile?",currentImageURI.path.toString())
             val file = File(absolutelyPath(currentImageURI!!))
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile) //폼데이터
+
+            Log.d("sendImg-정보", "$dormitoryId/$nickname/$profileImg")
+
+            //나머지 dormitoryId랑 nickname
+            val mapData = HashMap<String, RequestBody>()
+            val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
+            val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickname)
+            mapData.put("dormitoryId", dormitoryIdRequest)
+            mapData.put("nickname", nicknameRequest)
+
+            profileDataService.profileMemberInfoModifySender(profileImg,mapData) // 프로필 수정 api 호출 ★
         }else{
-            val file = File(currentImageURI.toString())
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-            profileImg = MultipartBody.Part.createFormData("profileImg", file.name, requestFile) //폼데이터
+            var glideFile : File
+            Glide.with(requireContext())
+                .downloadOnly()
+                .load(currentImageURI)
+                .into(object: CustomTarget<File>(){
+                    override fun onResourceReady(resource: File,
+                        transition: com.bumptech.glide.request.transition.Transition<in File>?
+                    ) {
+                        Log.d("sendImg- editProfile4",resource.toString())
+                        glideFile = resource
+                        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), glideFile)
+                        profileImg = MultipartBody.Part.createFormData("profileImg", glideFile.name, requestFile) //폼데이터
+                        Log.d("sendImg-정보2", "$dormitoryId/$nickname/$profileImg")
+
+                        //나머지 dormitoryId랑 nickname
+                        val mapData = HashMap<String, RequestBody>()
+                        val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
+                        val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickname)
+                        mapData.put("dormitoryId", dormitoryIdRequest)
+                        mapData.put("nickname", nicknameRequest)
+
+                        profileDataService.profileMemberInfoModifySender(profileImg,mapData) // 프로필 수정 api 호출 ★
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        // 아래 resource가 들어간 뷰가 사라지는 등의 경우의 처리
+                    }
+                })
         }
-
-        Log.d("sendImg-정보", "$dormitoryId/$nickname/$profileImg")
-
-        //나머지 dormitoryId랑 nickname
-        val mapData = HashMap<String, RequestBody>()
-        val dormitoryIdRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), dormitoryId.toString())
-        val nicknameRequest: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), nickname)
-        mapData.put("dormitoryId", dormitoryIdRequest)
-        mapData.put("nickname", nicknameRequest)
-
-        profileDataService.profileMemberInfoModifySender(profileImg,mapData) // 프로필 수정 api 호출 ★
     }
 
     override fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult) {
-        Log.d("sendImg", "성공:"+result.toString())
+        Log.d("editProfile", "성공:"+result.toString())
         saveDormitoryId(result.dormitoryId)
         saveDormitory("제 "+result.dormitoryName)
         saveNickname(result.nickname)
         saveProfileImgUrl(result.profileImgUrl)
+        requireActivity().finish() // 수정이 되면, 나의 정보 화면으로 나가주기
     }
 
     override fun onProfileMemberInfoModifyFailure(message: String) {
-        Log.d("sendImg", "실패:"+ message)
+        Log.d("editProfile", "실패:"+ message)
     }
 
     // 절대경로 변환
     fun absolutelyPath(path: Uri): String {
+        Log.d("sendImg-",path.toString())
         var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         var c: Cursor = requireActivity().contentResolver.query(path, proj, null, null, null)!!
         var index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -128,4 +164,6 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
         var result = c.getString(index)
         return result
     }
+
+
 }

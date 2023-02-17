@@ -39,6 +39,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     override fun initAfterBinding() {
         binding.profileCardNickNameTv.text = getNickname()
         binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.profileCardUnivTv.text = universityName
+        binding.profileCardDormitoryNameTv.text = dormitoryName
 
         // clearBackStack()
         initRetrofitService()
@@ -198,8 +200,6 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
         val signUpDate = result.createdAt
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
-        binding.profileCardUnivTv.text = result.universityName
-        binding.profileCardDormitoryNameTv.text = result.dormitoryName
     }
 
     override fun onProfileMyInfoFailure(message: String) {
