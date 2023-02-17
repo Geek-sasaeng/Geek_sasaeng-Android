@@ -235,9 +235,9 @@ class ProfileDataService {
                     val resp = response.body()!!
                     Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", resp.toString())
                     when (resp.code) {
-                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        1000 -> profilePasswordChangeView.onProfilePasswordChangeSuccess()
                         4000 -> Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "서버 오류")
-                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                        else -> profilePasswordChangeView.onProfilePasswordChangeFailure(resp.message)
                     }
                 }
             }

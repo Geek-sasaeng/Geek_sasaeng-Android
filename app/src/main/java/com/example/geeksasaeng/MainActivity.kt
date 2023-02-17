@@ -52,7 +52,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
 
-        } else setFragment(R.id.main_frm, HomeFragment())
+        } else if (status == "ProfileFragment"){
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, ProfileFragment())
+            transaction.commit()
+        }
+        else setFragment(R.id.main_frm, HomeFragment())
 
         // getAppKeyHash() //카카오맵 해시키 얻는 용
         // FCM Token 확인하기 위한 코드

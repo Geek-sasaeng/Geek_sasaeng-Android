@@ -251,7 +251,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         dormitoryViewChange()
     }
 
-    private fun dormitoryViewChange() { //지금은 일단 radioGroup으로 만들어놔서 임시방편으로 이렇게 했는데 gridLayout가진 recyclerView이용하는걸로 리팩토링 필요!
+    private fun dormitoryViewChange() { //TODO: 지금은 일단 radioGroup으로 만들어놔서 임시방편으로 이렇게 했는데 추후, gridLayout recyclerView 이용하는걸로 리팩토링 필요!
         if (dormitoryList.size == 1){
             binding.profileMyInfoUpdateDormitoryRb1.text = dormitoryList[0].name
             binding.profileMyInfoUpdateDormitoryRb2.visibility = View.INVISIBLE
