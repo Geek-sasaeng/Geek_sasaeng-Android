@@ -81,6 +81,7 @@
                     android:id="@+id/look_host_profile_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_default_profile" />
 
             </androidx.cardview.widget.CardView>
