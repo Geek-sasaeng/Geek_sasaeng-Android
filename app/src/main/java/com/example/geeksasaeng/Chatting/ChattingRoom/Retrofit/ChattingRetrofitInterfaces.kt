@@ -43,28 +43,46 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingRemittanceCompleteResponse>
 
     // <<delivery-party>>//
-    // 파티 멤버 나가기
+    // 파티 멤버 나가기 for 배달파티
     @PATCH("/delivery-party/member")
+    fun partyMemberPartyLeave(
+        @Body chattingPartyMemberLeavePartyRequest: ChattingPartyMemberLeavePartyRequest
+    ): Call<ChattingPartyMemberLeavePartyResponse>
+
+    //배달 파티멤버가 스스로 퇴장 for 채팅방
+    @DELETE("/party-chat-room/members/self")
     fun partyMemberChattingLeave(
-        @Body chattingPartyMemeberLeaveRequest: ChattingPartyMemberLeaveRequest
-    ): Call<ChattingPartyMemberLeaveResponse>
+        @Body chattingPartyMemberLeaveChatRequest: ChattingPartyMemberLeaveChatRequest
+    ): Call<ChattingPartyMemberLeaveChatResponse>
 
-    // 파티장 나가기
+    // 배달파티 방장 삭제 및 교체 for 배달파티
     @PATCH("/delivery-party/chief")
-    fun partyLeaderChattingLeave(
-        @Body chattingPartyMemberLeaveRequest: ChattingPartyLeaderLeaveRequest
-    ): Call<ChattingPartyLeaderLeaveResponse>
+    fun partyLeaderPartyLeave(
+        @Body chattingPartyLeaderLeavePartyRequest: ChattingPartyLeaderLeavePartyRequest
+    ): Call<ChattingPartyLeaderLeavePartyResponse>
 
-    //배달 완료 알림 보내기
-    @POST("/delivery-party/complicated")
-    fun partyDeliveryComplicated(
-        @Body chattingDeliveryComplicatedRequest: ChattingDeliveryComplicatedRequest
-    ): Call<ChattingDeliveryComplicatedResponse>
+    // 배달파티 방장 삭제 및 교체 for 채팅방
+    @PATCH("/party-chat-room/chief")
+    fun partyLeaderChattingLeave(
+        @Body chattingPartyLeaderLeaveChatRequest: ChattingPartyLeaderLeaveChatRequest
+    ): Call<ChattingPartyLeaderLeaveChatResponse>
+
+    //배달 완료 알림
+    @POST("/party-chat-room/delivery-complete")
+    fun partyDeliveryComplete(
+        @Body chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest
+    ): Call<ChattingDeliveryCompleteResponse>
 
     //배달파티 수동 매칭마감
-    @PATCH("/delivery-party/{roomUuid}/matching-status")
+    @PATCH("/delivery-party/{partyId}/matching-status")
     fun matchingEnd(
-        @Path("roomUuid") roomUuid: String
+        @Path("partyId") partyId: Int
     ): Call<MatchingEndResponse>
+
+    //채팅방 상세조회
+    @GET("/party-chat-room/{chatRoomId}")
+    fun getChattingDetail(
+        @Path("chatRoomId") chatRoomId: String
+    ): Call<ChattingDetailResponse>
 
 }

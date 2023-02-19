@@ -16,6 +16,8 @@ import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDetailResult
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getMemberId
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
@@ -28,7 +30,7 @@ import org.json.JSONObject
 
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
-    ChattingListView, ChattingDetailView {
+    ChattingListView {
     lateinit var loadingAnimationView: LottieAnimationView
     private lateinit var chattingListRVAdapter: ChattingListRVAdapter
     lateinit var chattingListService: ChattingListService
@@ -167,7 +169,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
                     roomTitle = chattingRoomData.roomTitle
                     roomId = chattingRoomData.roomId
 
-                    getChattingDetail(roomId)
+                    //ChattingRoomActivity 실행
+                    val intent = Intent(activity, ChattingRoomActivity::class.java)
+                    intent.putExtra("roomName", roomTitle)
+                    intent.putExtra("roomId", roomId)
+                    startActivity(intent)
                 }
             })
         }
@@ -278,27 +284,5 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     override fun getChattingListFailure(code: Int, msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT)
         Log.d("GET-CHATTING-LIST", "code = $code, msg = $msg")
-    }
-
-    override fun getChattingDetailSuccess(result: ChattingDetailResult) {
-        val intent = Intent(activity, ChattingRoomActivity::class.java)
-
-        intent.putExtra("accountNumber", result.accountNumber)
-        intent.putExtra("bank", result.bank)
-        intent.putExtra("chiefId", result.chiefId)
-        intent.putExtra("enterTime", result.enterTime)
-        intent.putExtra("isChief", result.isChief)
-        intent.putExtra("isOrderFinish", result.isOrderFinish)
-        intent.putExtra("isRemittanceFinish", result.isRemittanceFinish)
-
-        intent.putExtra("roomName", roomTitle)
-        intent.putExtra("roomId", roomId)
-
-        startActivity(intent)
-    }
-
-    override fun getChattingDetailFailure(code: Int, msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT)
-        Log.d("GET-CHATTING-DETAIL-LIST", "code = $code, msg = $msg")
     }
 }

@@ -33,6 +33,7 @@ import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyDefaultLocResult
 import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyDefaultLocView
 import com.example.geeksasaeng.Home.Party.Retrofit.CreatePartyService
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.getDormitoryId
 import com.example.geeksasaeng.databinding.ActivityCreatePartyBinding
 import com.example.geeksasaeng.databinding.DialogLocationLayoutBinding
 import net.daum.mf.map.api.MapPOIItem
@@ -77,8 +78,7 @@ class DialogLocation: DialogFragment(), CreatePartyDefaultLocView, MapView.Curre
             drawMap(createPartyVM.getMapPoint()!!)
             setAddress(createPartyVM.getMapPoint()!!)
         }else { // 디폴트로 맵 그려주기
-            //TODO: DormitoryId는 어디서 얻어오지?
-            createPartyService.getDefaultLoc(1) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
+            createPartyService.getDefaultLoc(getDormitoryId()) //★ default 기숙사 위치 불러오는 함수 호출 => 이게 성공하면 onSuccess에서 맵까지 그려줌
         }
     }
 

@@ -84,7 +84,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/chatting_room_top_layout_status_tv"
+            android:id="@+id/chatting_room_top_layout_account_number_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="계좌번호"

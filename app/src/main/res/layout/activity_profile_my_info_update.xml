@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_my_info_update_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profile_my_info_update_back_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_back"
+            android:layout_marginStart="25dp"
+            app:layout_constraintTop_toTopOf="@id/profile_my_info_update_title"
+            app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_my_info_update_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나의 정보 수정"
+            android:textColor="@color/top"
+            android:fontFamily="@font/spoqa_bold"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/profile_my_info_update_complete_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:text="완료"
+            android:textColor="#BABABA"
+            android:textSize="16sp"
+            android:textFontWeight="700"
+            android:fontFamily="@font/spoqa_medium"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:overScrollMode="never">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--프로필-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_user_img_cv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="14dp"
+                android:layout_width="157dp"
+                android:layout_height="157dp"
+                app:cardCornerRadius="78.5dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/profile_my_info_update_user_img_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/profile_thumbs_up"
+                    android:scaleType="fitXY"/>
+
+                <ImageView
+                    android:id="@+id/profile_my_info_update_user_img_change_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_profile_change"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/profile_my_info_update_dormitory_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기숙사"
+                android:textColor="@color/gray_2"
+                android:textSize="12sp"
+                android:textFontWeight="500"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_marginTop="64dp"
+                android:layout_marginStart="23dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_user_img_cv" />
+
+            <RadioGroup
+                android:id="@+id/profile_my_info_update_dormitory_rg1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_dormitory_title_tv"
+                android:layout_marginHorizontal="28dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginStart="23dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginStart="23dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/profile_my_info_update_dormitory_rg2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/profile_my_info_update_dormitory_rg1"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_dormitory_rg1"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginStart="23dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+
+                <RadioButton
+                    android:id="@+id/profile_my_info_update_dormitory_rb6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="7dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginStart="23dp"
+                    android:button="@null"
+                    android:background="@drawable/selector_radio_btn_background_line_gray0"
+                    android:textColor="@drawable/selector_text_gray1_main_checked"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="별별학사"
+                    android:textSize="15sp"/>
+            </RadioGroup>
+
+
+            <TextView
+                android:id="@+id/profile_my_info_update_nickname_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="닉네임"
+                android:textColor="@color/gray_2"
+                android:textSize="12sp"
+                android:textFontWeight="500"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_marginTop="54dp"
+                android:layout_marginStart="23dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_dormitory_rg2" />
+
+
+            <EditText
+                android:id="@+id/profile_my_info_update_nickname_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="14dp"
+                android:paddingLeft="12dp"
+                android:gravity="bottom"
+                android:backgroundTint="@color/gray_0"
+                android:fontFamily="@font/spoqa_medium"
+                android:hint="닉네임"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:textColor="@color/top"
+                android:textColorHint="@color/gray_2"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/profile_my_info_update_nickname_check_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_nickname_title_tv" />
+
+            <TextView
+                android:id="@+id/profile_my_info_update_nickname_explaination_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3-8자 영문 혹은 한글로 입력해주세요"
+                android:textColor="@color/main"
+                android:textSize="13dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="7dp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_nickname_et"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/profile_my_info_update_nickname_check_btn"
+                android:layout_width="81dp"
+                android:layout_height="35dp"
+                android:text="중복 확인"
+                android:enabled="false"
+                android:clickable="false"
+                android:textSize="13sp"
+                android:fontFamily="@font/spoqa_medium"
+                android:background="@drawable/selector_stroke_btn_main_enabled"
+                android:textColor="@drawable/selector_text_gray1_main_enabled"
+                android:layout_marginEnd="25dp"
+                app:layout_constraintTop_toTopOf="@id/profile_my_info_update_nickname_et"
+                app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_nickname_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/Widget.AppCompat.Button.Borderless" />
+
+            <TextView
+                android:id="@+id/profile_my_info_update_nickname_check_confirmed"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인 완료"
+                android:textColor="@color/main"
+                android:textSize="13sp"
+                android:fontFamily="@font/spoqa_medium"
+                app:layout_constraintStart_toStartOf="@id/profile_my_info_update_nickname_check_btn"
+                app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_nickname_check_btn"
+                app:layout_constraintTop_toTopOf="@id/profile_my_info_update_nickname_check_btn"
+                app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_nickname_check_btn"/>
+
+           <Button
+                android:id="@+id/profile_my_info_update_password_change_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 변경하기"
+                android:textSize="15sp"
+                android:fontFamily="@font/spoqa_medium"
+                android:background="@drawable/round_border_button_gray0"
+                android:textColor="@color/top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_nickname_et"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="150dp"
+                android:layout_marginBottom="50dp"
+                android:paddingVertical="15dp"
+                android:paddingHorizontal="95dp"
+                style="@style/Widget.AppCompat.Button.Borderless" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

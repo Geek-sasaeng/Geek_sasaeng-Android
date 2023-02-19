@@ -7,10 +7,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/chatting_exit_title"
+            android:id="@+id/dialog_profile_update_title_layout"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@color/line"
@@ -19,22 +19,21 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/chatting_exit_tv"
+                android:id="@+id/dialog_profile_update_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/spoqa_medium"
-                android:text="채팅 나가기"
+                android:text="수정 완료하기"
                 android:textColor="@color/gray_2"
                 android:textSize="14sp"
-                android:layout_marginHorizontal="94dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/chatting_exit_cancel_btn"
-                android:layout_width="wrap_content"
+                android:id="@+id/dialog_profile_update_cancel_btn"
+                android:layout_width="26dp"
                 android:layout_height="16dp"
                 android:layout_marginEnd="20dp"
                 android:padding="2dp"
@@ -46,39 +45,39 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/chatting_exit_content_tv"
+            android:id="@+id/dialog_profile_update_line_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
             android:fontFamily="@font/spoqa_medium"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="이 채팅방을 나간 후로는\n채팅에 참여할 수 없어요.\n채팅 나가기를 진행할까요?"
+            android:text="@string/profile_update"
             android:textColor="@color/black"
             android:lineHeight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chatting_exit_title" />
+            app:layout_constraintBottom_toTopOf="@id/dialog_profile_update_line"
+            app:layout_constraintTop_toBottomOf="@id/dialog_profile_update_title_layout" />
 
         <View
-            android:id="@+id/chatting_exit_line"
+            android:id="@+id/dialog_profile_update_line"
             android:layout_width="0dp"
             android:layout_height="1.7dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="13dp"
             android:background="@color/gray_0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chatting_exit_content_tv" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_profile_update_line_tv" />
 
         <TextView
-            android:id="@+id/chatting_exit_ok_btn"
+            android:id="@+id/dialog_profile_update_ok_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="18dp"
             android:layout_marginBottom="22dp"
             android:layout_marginHorizontal="110dp"
             android:fontFamily="@font/spoqa_medium"
@@ -89,7 +88,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chatting_exit_line" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_profile_update_line" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

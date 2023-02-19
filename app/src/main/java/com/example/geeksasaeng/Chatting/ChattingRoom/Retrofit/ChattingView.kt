@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
+
 interface CreateChattingRoomView {
     fun createChattingRoomSuccess(result: CreateChattingResult)
     fun createChattingRoomFailure(code: Int, message: String)
@@ -30,22 +31,37 @@ interface SendChattingView {
     fun sendChattingFailure(code: Int, message: String)
 }
 
-interface ChattingMemberLeaveView {
-    fun chattingMemberLeaveSuccess(result: String)
-    fun chattingMemberLeaveFailure(code: Int, message: String)
+interface ChattingMemberLeavePartyView {
+    fun chattingMemberLeavePartySuccess(result: String)
+    fun chattingMemberLeavePartyFailure(code: Int, message: String)
 }
 
-interface ChattingLeaderLeaveView {
-    fun chattingLeaderLeaveSuccess(result: String, leaderMap: HashMap<String, String>)
-    fun chattingLeaderLeaveFailure(code: Int, message: String)
+interface ChattingMemberLeaveChatView {
+    fun chattingMemberLeaveChatSuccess(result: ChattingPartyMemberLeaveChatResult)
+    fun chattingMemberLeaveChatFailure(code: Int, message: String)
 }
 
-interface ChattingDeliveryComplicatedView {
-    fun chattingDeliveryComplicatedSuccess()
-    fun chattingDeliveryComplicatedFailure(message: String)
+interface ChattingLeaderLeavePartyView {
+    fun chattingLeaderLeavePartySuccess(result: ChattingPartyLeaderLeavePartyResult)
+    fun chattingLeaderLeavePartyFailure(code: Int, message: String)
+}
+
+interface ChattingLeaderLeaveChatView {
+    fun chattingLeaderLeaveChatSuccess(result: ChattingPartyLeaderLeaveChatResult)
+    fun chattingLeaderLeaveChatFailure(code: Int, message: String)
+}
+
+interface ChattingDeliveryCompleteView {
+    fun chattingDeliveryCompleteSuccess()
+    fun chattingDeliveryCompleteFailure(message: String)
 }
 
 interface MatchingEndView {
     fun onMatchingEndSuccess()
     fun onMatchingEndFailure(message: String)
+}
+
+interface ChattingDetailView {
+    fun getChattingDetailSuccess(result: ChattingDetailResult)
+    fun getChattingDetailFailure(code: Int, msg: String)
 }

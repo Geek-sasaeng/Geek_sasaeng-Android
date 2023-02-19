@@ -16,6 +16,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyPreActivityView {

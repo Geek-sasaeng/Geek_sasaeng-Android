@@ -16,11 +16,11 @@ class ChattingUserBottomFragment: BottomSheetDialogFragment()  {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_chatting_user_bottom, container, false)
+        initData()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    private fun initData() {
+        //TODO: 정보 띄우기
     }
 
 }

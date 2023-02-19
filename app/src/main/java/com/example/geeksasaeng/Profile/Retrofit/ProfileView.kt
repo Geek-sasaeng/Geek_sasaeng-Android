@@ -35,3 +35,22 @@ interface ProfileWithdrawalView {
     fun onProfileWithdrawalSuccess()
     fun onProfileWithdrawalFailure(message: String)
 }
+
+// 회원 정보 수정
+interface ProfileMemberInfoModifyView {
+    abstract val contentResolver: Any
+    fun onProfileMemberInfoModifySuccess(result: ProfileMemberInfoModifyResult)
+    fun onProfileMemberInfoModifyFailure(message: String)
+}
+
+// 비밀번호 일치 확인
+interface ProfilePasswordCheckingView {
+    fun onProfilePasswordCheckingSuccess()
+    fun onProfilePasswordCheckingFailure(message: String)
+}
+
+// 비밀번호 수정
+interface ProfilePasswordChangeView {
+    fun onProfilePasswordChangeSuccess()
+    fun onProfilePasswordChangeFailure(message: String)
+}

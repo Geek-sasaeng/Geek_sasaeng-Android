@@ -5,12 +5,9 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
-import com.example.geeksasaeng.Chatting.ChattingRoom.DialogMatchingEnd
-import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
@@ -23,10 +20,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate)
-    ,ProfileMyOngoingActivityView, ProfileMyInfoView {
+    , ProfileMyPreActivityView, ProfileMyInfoView {
 
     lateinit var profiledataService: ProfileDataService
-    private var profileMyOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
+    //private var profileMyOngoingActivityList = ArrayList<ProfileMyOngoingActivityResult>()
+    private var myPreActivityList = java.util.ArrayList<EndedDeliveryPartiesVoList>()
 
     // 나의정보 상세보기 다이얼로그에 넘겨줄 정보들
     private var nickName = String()
@@ -35,6 +33,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var loginId = String()
     private var emailAddress = String()
     private var formattingPhoneNumber = String()
+    private var fomattingSignUpDate = String()
     private var userId: Int = 0
 
     override fun initAfterBinding() {
@@ -55,6 +54,11 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             transaction.commit()
         }*/
 
+        binding.profileCardLayoutBlueTop.setOnClickListener { //프로필 카드 상단 파란영역 클릭시 레벨 설명
+            val intent = Intent(activity, ProfileLevelIntroductionActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.profileCardLayoutWhile.setOnClickListener {
             val profileDetailDialog = DialogProfileDetail()
             val bundle = Bundle()
@@ -64,6 +68,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             bundle.putString("loginId", loginId)
             bundle.putString("emailAddress", emailAddress)
             bundle.putString("phoneNumber", formattingPhoneNumber)
+            bundle.putString("signUpDate", fomattingSignUpDate)
             profileDetailDialog.arguments = bundle
             profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
         }
@@ -73,17 +78,13 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정
-            (context as MainActivity).supportFragmentManager.beginTransaction().addToBackStack("profile_my_info").replace(R.id.main_frm, ProfileMyInfoFragment()).commit()
+            val intent = Intent(activity, ProfileMyInfoUpdateActivity::class.java)
+            intent.putExtra("loginId", loginId)
+            startActivity(intent)
         }
 
-        binding.profileInquiry.setOnClickListener { //문의하기
-            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://pf.kakao.com/_Sxolhxj")) //긱사생 카카오톡 플러스 친구 링크
-            startActivity(urlIntent)
-        }
-
-        binding.profileTos.setOnClickListener { //서비스 이용 약관 보기
-            val intent = Intent(activity, Tos2Activity::class.java)
-            intent.putExtra("status","profile")
+        binding.profileCustomerService.setOnClickListener { //고객 센터
+            val intent = Intent(activity, ProfileCustomerServiceActivity::class.java)
             startActivity(intent)
         }
 
@@ -105,45 +106,34 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     private fun initRetrofitService() {
         profiledataService = ProfileDataService() // 서비스 객체 생성
-        profiledataService.setProfileMyOngoingActivityView(this)
-        profiledataService.profileMyOngoingActivitySender()
+        profiledataService.setMyPreActivityView(this)
+        profiledataService.profileMyPreActivitySender(0)//cursor =0부터 시작!
         profiledataService.setMyInfoView(this)
         profiledataService.profileMyInfoSender()
     }
 
-    override fun onProfileMyOngoingActivitySuccess(result: ArrayList<ProfileMyOngoingActivityResult>?) {
-        profileMyOngoingActivityList = result!!
-        for (i in 0 until result.size) {
-            recentActivityBind(result[i], i)
-        }
-    }
-
-    override fun onProfileMyOngoingActivityFailure(message: String) {
-        showToast(message)
-    }
-
-    private fun recentActivityBind(activity: ProfileMyOngoingActivityResult, index: Int) {
+    private fun recentActivityBind(activity: EndedDeliveryPartiesVoList, index: Int) {
         when (index) {
             0 -> {
                 binding.profileMyActivity1TypeTv.text = "배달파티"
                 binding.profileMyActivity1Cv.visibility = View.VISIBLE
                 binding.profileMyActivity1Iv.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profileMyActivity1TitleTv.text = activity.title
-                val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+                val fomattingDate = activity.updatedAt.substring(0,4)+"."+activity.updatedAt.substring(5,7)+"."+activity.updatedAt.substring(8,10)
                 binding.profileMyActivity1DateTv.text = fomattingDate
             } 1 -> {
                 binding.profileMyActivity2TypeTv.text = "배달파티"
                 binding.profileMyActivity2Cv.visibility = View.VISIBLE
                 binding.profileMyActivity2Iv.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profileMyActivity2TitleTv.text = activity.title
-                val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+                val fomattingDate = activity.updatedAt.substring(0,4)+"."+activity.updatedAt.substring(5,7)+"."+activity.updatedAt.substring(8,10)
                 binding.profileMyActivity2DateTv.text = fomattingDate
             } 2 -> {
                 binding.profileMyActivity3TypeTv.text = "배달파티"
                 binding.profileMyActivity3Cv.visibility = View.VISIBLE
                 binding.profileMyActivity3Iv.setImageResource(R.drawable.ic_delivery_party_ic)
                 binding.profileMyActivity3TitleTv.text = activity.title
-            val fomattingDate = activity.createdAt.substring(0,4)+"."+activity.createdAt.substring(5,7)+"."+activity.createdAt.substring(8,10)
+            val fomattingDate = activity.updatedAt.substring(0,4)+"."+activity.updatedAt.substring(5,7)+"."+activity.updatedAt.substring(8,10)
                 binding.profileMyActivity3DateTv.text = fomattingDate
             }
         }
@@ -151,7 +141,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     private fun initRecentActivityClickListener() {
         binding.profileMyActivity1Cv.setOnClickListener {
-            val activityId = profileMyOngoingActivityList[0].id
+            val activityId = myPreActivityList[0].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
@@ -166,7 +156,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyActivity2Cv.setOnClickListener {
-            val activityId = profileMyOngoingActivityList[1].id
+            val activityId = myPreActivityList[1].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
@@ -181,7 +171,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyActivity3Cv.setOnClickListener {
-            val activityId = profileMyOngoingActivityList[2].id
+            val activityId = myPreActivityList[2].id
 
             val transaction: FragmentTransaction = (context as MainActivity).supportFragmentManager.beginTransaction()
 
@@ -206,6 +196,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         emailAddress = result.emailAddress
         var phoneNumber = result.phoneNumber
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
+        val signUpDate = result.createdAt
+        fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
         binding.profileCardUnivTv.text = result.universityName
         binding.profileCardDormitoryNameTv.text = result.dormitoryName
     }
@@ -213,4 +205,32 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     override fun onProfileMyInfoFailure(message: String) {
         Log.d("profile","나의 정보 조회 실패")
     }
+
+
+
+    override fun onProfileMyPreActivityViewSuccess(result: ProfileMyPreActivityResult) {
+
+        var result = result.endedDeliveryPartiesVoList
+
+        for (i in 0 until result.size) {
+            val party = result[i]
+            val item = EndedDeliveryPartiesVoList(party.foodCategory, party.id, party.maxMatching, party.title, party.updatedAt)
+            myPreActivityList.add(item)
+        }
+
+        if (myPreActivityList.size == 0){ //진행했던 활동이 하나도 없으면
+            binding.profileMyActivity.visibility = View.GONE
+            binding.profileMyActivityNoInfoLayout.visibility = View.VISIBLE
+        }else{
+            for (i in 0 until myPreActivityList.size) {
+                recentActivityBind(myPreActivityList[i], i)
+            }
+        }
+    }
+
+    override fun onProfileMyPreActivityViewFailure(message: String) {
+        showToast(message)
+    }
+
+
 }
