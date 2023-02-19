@@ -345,7 +345,7 @@ class ChattingRoomActivity :
         }
 
         binding.chattingRoomTopLayoutRemittanceCompleteBtn.setOnClickListener { //송금완료 버튼
-            Log.d("remittanceComplete-request",ChattingRemittanceCompleteRequest(roomId).toString()  )
+            Log.d("remittanceComplete",ChattingRemittanceCompleteRequest(roomId).toString()  )
             chattingService.chattingRemittanceComplete(ChattingRemittanceCompleteRequest(roomId))
         }
     }

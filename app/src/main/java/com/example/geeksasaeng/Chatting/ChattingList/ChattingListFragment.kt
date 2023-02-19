@@ -1,23 +1,20 @@
 package com.example.geeksasaeng.Chatting.ChattingList
 
 import android.content.Intent
-import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.*
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+//import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
 import com.example.geeksasaeng.Chatting.ChattingStorage.ChattingStorageFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
-import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingDetailResult
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getMemberId
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
@@ -146,11 +143,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         var isLeader = true
 
         return Chat(chatId, content, chatRoomId, isSystemMessage, memberId, nickName, profileImgUrl, readMembers, createdAt, chatType, unreadMemberCnt, isImageMessage, viewType, isLeader)
-    }
-
-    private fun getChattingDetail(roomId: String) {
-        chattingListService.setChattingDetailView(this)
-        chattingListService.getChattingDetail(roomId)
     }
 
     private fun initAdapter() {
