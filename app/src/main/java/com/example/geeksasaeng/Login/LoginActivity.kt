@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.Home.HomeFragment
 // import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
 // import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
@@ -50,7 +51,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         // 네이버 로그인
         binding.loginNaverBtn.setOnClickListener {
-//            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+            NaverIdLoginSDK.initialize(this, BuildConfig.OAUTH_CLIENT_ID, BuildConfig.OAUTH_CLIENT_SECRET, BuildConfig.OAUTH_CLIENT_NAME)
 
             val profileCallback = object : NidProfileCallback<NidProfileResponse> {
                 override fun onSuccess(response: NidProfileResponse) {

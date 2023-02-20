@@ -33,10 +33,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         //buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key'] //카카오맵-안쓰는 코드
+
+        // RabbitMQ
         buildConfigField "String", "RABBITMQ_ID", properties['rabbitMQ_ID']
         buildConfigField "String", "RABBITMQ_PWD", properties['rabbitMQ_pwd']
         buildConfigField "String", "RABBITMQ_ADDRESS", properties['rabbitMQ_address']
-        manifestPlaceholders = [kakaoNativeAppKey: kakao_native_app_key] //메니페스트에서 쓸 수 있도록 key-value매핑
+
+        // NaverLogin
+        buildConfigField "String", "OAUTH_CLIENT_ID", properties['oauth_client_id']
+        buildConfigField "String", "OAUTH_CLIENT_SECRET", properties['oauth_client_secret']
+        buildConfigField "String", "OAUTH_CLIENT_NAME", properties['oauth_client_name']
+
+        manifestPlaceholders = [kakaoNativeAppKey: kakao_native_app_key] // 메니페스트에서 쓸 수 있도록 key-value매핑
     }
 
     buildTypes {
