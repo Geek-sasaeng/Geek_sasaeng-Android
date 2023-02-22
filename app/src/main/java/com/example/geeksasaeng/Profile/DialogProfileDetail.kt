@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
+import com.example.geeksasaeng.Utils.getProfileImgUrl
 import com.example.geeksasaeng.databinding.DialogProfileDetailLayoutBinding
 import java.util.Locale
 
@@ -60,6 +62,9 @@ class DialogProfileDetail : DialogFragment()  {
         binding.dialogProfileDetailEmailTv.text = emailAddress
         binding.dialogProfileDetailPhoneTv.text = phoneNumber
         binding.dialogProfileDetailSignUpDateTv.text = signUpDate
+        Glide.with(this)
+            .load(getProfileImgUrl())
+            .into(binding.dialogProfileDetailImgIv)
     }
 
 }
