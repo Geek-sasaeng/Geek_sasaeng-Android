@@ -130,8 +130,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 1기숙사"
+                    android:textSize="14sp"/>
 
                 <RadioButton
                     android:id="@+id/profile_my_info_update_dormitory_rb2"
@@ -144,8 +144,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 2기숙사"
+                    android:textSize="14sp"/>
 
                 <RadioButton
                     android:id="@+id/profile_my_info_update_dormitory_rb3"
@@ -158,8 +158,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 3기숙사"
+                    android:textSize="14sp"/>
             </RadioGroup>
 
             <RadioGroup
@@ -181,8 +181,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 4기숙사"
+                    android:textSize="14sp"/>
 
                 <RadioButton
                     android:id="@+id/profile_my_info_update_dormitory_rb5"
@@ -195,8 +195,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 5기숙사"
+                    android:textSize="14sp"/>
 
                 <RadioButton
                     android:id="@+id/profile_my_info_update_dormitory_rb6"
@@ -209,8 +209,8 @@
                     android:background="@drawable/selector_radio_btn_background_line_gray0"
                     android:textColor="@drawable/selector_text_gray1_main_checked"
                     android:fontFamily="@font/spoqa_medium"
-                    android:text="별별학사"
-                    android:textSize="15sp"/>
+                    android:text="제 6기숙사"
+                    android:textSize="14sp"/>
             </RadioGroup>
 
 
