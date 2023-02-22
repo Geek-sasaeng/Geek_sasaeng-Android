@@ -53,6 +53,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             transaction.commit()
 
         } else if (status == "ProfileFragment"){
+            binding.mainBottomNavi.setSelectedItemId(R.id.profileFragment) // 바텀 네비 아이콘을 나의정보로 바꿔주는 코드
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, ProfileFragment())
             transaction.commit()
