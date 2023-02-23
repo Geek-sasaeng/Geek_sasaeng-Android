@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomForcedExitFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingUserReportFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.HomeFragment
@@ -57,6 +58,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
 
+        } else if (status == "chatReport") {
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+            val memberId = intent.getStringExtra("memberId")
+            Log.d("CHATTING-SERVICE", "memberId = $memberId")
+            val bundle = Bundle()
+            bundle.putString("memberId", memberId)
+
+            val chattingUserReportFragment = ChattingUserReportFragment()
+            chattingUserReportFragment.arguments = bundle
+
+            transaction.replace(R.id.main_frm, chattingUserReportFragment)
+            transaction.commit()
         } else setFragment(R.id.main_frm, HomeFragment())
 
         // getAppKeyHash() //카카오맵 해시키 얻는 용
@@ -136,5 +150,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 return
             }
         }
+
+        finish()
     }
 }
