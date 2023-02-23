@@ -85,4 +85,9 @@ interface ChattingRetrofitInterfaces {
         @Path("chatRoomId") chatRoomId: String
     ): Call<ChattingDetailResponse>
 
+    @GET("/party-chat-room/{chatRoomId}/{memberId}/member-profile")
+    fun getChattingUserProfile(
+        @Path("chatRoomId") chatRoomId: String,
+        @Path("memberId") memberId: Int
+    ): Call<ChattingUserProfileResponse>
 }

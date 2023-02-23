@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
@@ -44,7 +45,7 @@ import kotlin.properties.Delegates
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
     WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
-    ChattingDetailView, DialogMatchingEnd.MatchingEndClickListener {
+    ChattingDetailView, DialogMatchingEnd.MatchingEndClickListener, ChattingUserProfileView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
 
@@ -88,6 +89,14 @@ class ChattingRoomActivity :
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     // 이미지의 uri를 담을 ArrayList 객체
     var albumImageList: ArrayList<Uri> = ArrayList()
+
+    // 유저의 프로필 정보
+    lateinit var member: String
+    lateinit var grade: String
+    lateinit var userNickname: String
+    lateinit var userProfileImgUrl: String
+    lateinit var userMemberId: String
+    val bottomSheetDialogFragment = ChattingUserBottomFragment()
 
     override fun initAfterBinding() {
         chatDB = ChatDatabase.getDBInstance(applicationContext)!!
@@ -244,17 +253,34 @@ class ChattingRoomActivity :
         binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
-            override fun onUserProfileClicked(nickname: String, profileImgUrl: String?, memberId: String) {
-                val bottomSheetDialogFragment = ChattingUserBottomFragment()
-                var bundle = Bundle(2)
-                bundle.putString("nickname", nickname)
-                bundle.putString("profileImgUrl", profileImgUrl)
-                bundle.putString("memberId", memberId)
-                bottomSheetDialogFragment.arguments = bundle
-                bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
-                bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
+            override fun onUserProfileClicked(profileImgUrl: String?, memberId: String) {
+                chattingService.getChattingUserProfile(roomId, memberId.toInt())
+                userProfileImgUrl = profileImgUrl.toString()
+                userMemberId = memberId
             }
         })
+    }
+
+    override fun getChattingUserProfileSuccess(result: ChattingUserProfileResult) {
+        var isChief = !result.isChief
+        member = if (isChief) "파티원" else "파티장"
+        member = result.grade + " | " + member
+        userNickname = result.userName
+
+        var bundle = Bundle(2)
+        bundle.putString("chatRoomId", roomId)
+        bundle.putString("nickname", userNickname)
+        bundle.putString("profileImgUrl", userProfileImgUrl)
+        bundle.putString("memberId", userMemberId)
+        bundle.putString("member", member)
+
+        bottomSheetDialogFragment.arguments = bundle
+        bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
+    }
+
+    override fun getChattingUserProfileFailure(code: Int, msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 
     private fun initClickListener() {
@@ -317,6 +343,7 @@ class ChattingRoomActivity :
         chattingService.setChattingOrderCompleteView(this) //방장용 주문완료 setview
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
         chattingService.setChattingDetailView(this) //채팅방 상세 조회용
+        chattingService.setChattingUserProfileView(this)
     }
 
     private fun optionClickListener() {
