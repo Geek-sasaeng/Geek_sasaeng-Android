@@ -74,7 +74,7 @@ class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(),
         }
 
         binding.dialogProfileUpdateOkBtn.setOnClickListener {
-            Log.d("sendImg- dialogProfileUpdateOkBtn",currentImageURI.toString())
+            Log.d("dialogProfileUpdate",currentImageURI.toString())
             editProfile()
         }
     }

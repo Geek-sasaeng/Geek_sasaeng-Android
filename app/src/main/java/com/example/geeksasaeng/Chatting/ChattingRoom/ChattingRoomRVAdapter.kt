@@ -107,7 +107,8 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
 
             binding.itemYourChattingNicknameTv.text = chatting.nickName
             binding.itemYourChattingProfileIv.setOnClickListener {
-                mCilckListener.onUserProfileClicked()
+                Log.d("CHATTING-SERVICE", "nickname = ${chatting.nickName} / profileImgUrl = ${chatting.profileImgUrl}")
+                mCilckListener.onUserProfileClicked(chatting.nickName, chatting.profileImgUrl)
             }
 
             binding.itemYourChattingTimeTv.text = setTime(chatting.createdAt)
@@ -119,7 +120,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     }
 
     interface OnUserProfileClickListener{
-        fun onUserProfileClicked()
+        fun onUserProfileClicked(nickname: String, profileImgUrl: String?)
     }
 
     fun setOnUserProfileClickListener(clickListener: OnUserProfileClickListener){

@@ -244,10 +244,15 @@ class ChattingRoomActivity :
         binding.chattingRoomChattingRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         chattingRoomRVAdapter.setOnUserProfileClickListener(object : ChattingRoomRVAdapter.OnUserProfileClickListener{
-            override fun onUserProfileClicked() {
+            override fun onUserProfileClicked(nickname: String, profileImgUrl: String?) {
                 //사용자 프로필
                 Log.d("bottom", "실행됨.")
                 val bottomSheetDialogFragment = ChattingUserBottomFragment()
+                var bundle = Bundle(2)
+                bundle.putString("nickname", nickname)
+                bundle.putString("profileImgUrl", profileImgUrl)
+                Log.d("CHATTING-SERVICE", "nickname = $nickname / profileImgUrl = $profileImgUrl")
+                bottomSheetDialogFragment.arguments = bundle
                 bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
                 bottomSheetDialogFragment.show(supportFragmentManager, "bottomSheet")
             }
