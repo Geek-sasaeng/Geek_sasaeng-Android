@@ -1,8 +1,7 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.MyInfoUpdate
 
 import android.app.Activity
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,11 +9,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.geeksasaeng.ChatSetting.Chat
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
@@ -22,10 +19,6 @@ import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 import java.util.regex.Pattern
 
 
@@ -158,7 +151,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
 
         binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
-            val dialogProfileUpdate = DialogProfileUpdate(contentResolver)
+            val dialogProfileUpdate = DialogProfileMyInfoUpdate(contentResolver)
             val bundle = Bundle()
             bundle.putInt("dormitoryId", dormitoryId)
             bundle.putString("loginId", loginId)

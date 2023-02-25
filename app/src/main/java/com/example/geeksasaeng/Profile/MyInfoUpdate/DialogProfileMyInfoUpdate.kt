@@ -1,16 +1,12 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.MyInfoUpdate
 
-import android.content.Context
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.MediaStore
-import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,26 +15,20 @@ import android.view.WindowManager
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
 import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.DialogProfileUpdateBinding
-import com.google.firebase.messaging.ImageDownload
-import io.reactivex.Single
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileOutputStream
-import java.util.*
 import kotlin.collections.HashMap
 
 
-class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
+class DialogProfileMyInfoUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
     lateinit var binding: DialogProfileUpdateBinding
     lateinit var profileDataService: ProfileDataService //내 정보 수정용
 

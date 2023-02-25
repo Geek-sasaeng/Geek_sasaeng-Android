@@ -10,6 +10,10 @@ import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.CustomerService.ProfileCustomerServiceActivity
+import com.example.geeksasaeng.Profile.MyInfoUpdate.ProfileMyInfoUpdateActivity
+import com.example.geeksasaeng.Profile.ProfileCard.DialogProfileDetail
+import com.example.geeksasaeng.Profile.ProfileCard.ProfileLevelIntroductionActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
@@ -70,7 +74,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         binding.profileMyActivity.setOnClickListener { //나의 활동 보기
-            startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
+            startActivity(Intent(activity, ProfileMyPreActivityActivity::class.java))
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정

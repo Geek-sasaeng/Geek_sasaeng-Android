@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.ProfileCard
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

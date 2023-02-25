@@ -2,24 +2,20 @@ package com.example.geeksasaeng.Profile
 
 
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Adapter.MyPreActivityRVAdapter
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityProfileMyActivityBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyPreActivityView {
+class ProfileMyPreActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(ActivityProfileMyActivityBinding::inflate), ProfileMyPreActivityView {
 
     private var myPreActivityList = ArrayList<EndedDeliveryPartiesVoList>()
     lateinit var myPreActivityRVAdapter: MyPreActivityRVAdapter
@@ -120,7 +116,7 @@ class ProfileMyActivityActivity: BaseActivity<ActivityProfileMyActivityBinding>(
                 var activityItemId = data.id
 
                 //액티비티에서 => 나의 해당 글의 lookParty로 이동하는 법 ☆
-                val intent = Intent(this@ProfileMyActivityActivity, MainActivity::class.java)
+                val intent = Intent(this@ProfileMyPreActivityActivity, MainActivity::class.java)
                 intent.putExtra("status", "myActivity")
                 intent.putExtra("deliveryItemId", activityItemId.toString())
                 startActivity(intent)

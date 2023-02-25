@@ -81,19 +81,19 @@
             android:name=".Chatting.ChattingRoom.ChattingRoomForcedExitActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Profile.ProfileMyActivityActivity"
+            android:name=".Profile.ProfileMyPreActivityActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Profile.ProfileMyInfoUpdateActivity"
+            android:name=".Profile.MyInfoUpdate.ProfileMyInfoUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Profile.ProfileMyInfoUpdatePwdActivity"
+            android:name=".Profile.MyInfoUpdate.ProfileMyInfoUpdatePwdActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Profile.ProfileCustomerServiceActivity"
+            android:name=".Profile.CustomerService.ProfileCustomerServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Profile.ProfileLevelIntroductionActivity"
+            android:name=".Profile.ProfileCard.ProfileLevelIntroductionActivity"
             android:screenOrientation="portrait" />
 
         <!-- 카카오맵 APP KEY 추가 -->

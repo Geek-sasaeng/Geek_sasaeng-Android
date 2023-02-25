@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.ProfileCard
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
