@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Profile.MyInfoUpdate
 
 import android.content.Intent
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -36,6 +37,26 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
             Log.d("passwordChange", "완료 눌러짐")
             val profilePasswordChangeRequest = ProfilePasswordChangeRequest(binding.profileMyInfoUpdatePwdCheckEt.text.toString(), binding.profileMyInfoUpdatePwdEt.text.toString())
             profiledataService.profilePasswordChangeSender(profilePasswordChangeRequest)
+        }
+
+        binding.profileMyInfoPwdToggleBtn.setOnClickListener { //비밀번호 눈 아이콘 토글버튼
+            if ((binding.profileMyInfoUpdatePwdEt.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) or (binding.profileMyInfoUpdatePwdEt.inputType == 129)) { //왜 129로 뜰까?? 이상하네 (InputType.TYPE_TEXT_VARIATION_PASSWORD이 128인데)
+                binding.profileMyInfoUpdatePwdEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.profileMyInfoPwdToggleBtn.isChecked = true
+            } else {
+                binding.profileMyInfoUpdatePwdEt.inputType =  InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.profileMyInfoPwdToggleBtn.isChecked = false
+            }
+        }
+
+        binding.profileMyInfoPwdCheckToggleBtn.setOnClickListener { //비밀번호 확인 눈 아이콘 토글버튼
+            if ((binding.profileMyInfoUpdatePwdCheckEt.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) or (binding.profileMyInfoUpdatePwdEt.inputType == 129)) { //왜 129로 뜰까?? 이상하네 (InputType.TYPE_TEXT_VARIATION_PASSWORD이 128인데)
+                binding.profileMyInfoUpdatePwdCheckEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.profileMyInfoPwdCheckToggleBtn.isChecked = true
+            } else {
+                binding.profileMyInfoUpdatePwdCheckEt.inputType =  InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.profileMyInfoPwdCheckToggleBtn.isChecked = false
+            }
         }
     }
 
