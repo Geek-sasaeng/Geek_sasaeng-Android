@@ -1,14 +1,9 @@
 package com.example.geeksasaeng.Profile.Adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.geeksasaeng.Profile.NoticeFragment
 import com.example.geeksasaeng.Profile.Retrofit.ProfileAnnouncementResult
-import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.ItemNoticeBinding
 
 class NoticeRVAdapter(private var noticeList: ArrayList<ProfileAnnouncementResult>) : RecyclerView.Adapter<NoticeRVAdapter.ViewHolder>(){
