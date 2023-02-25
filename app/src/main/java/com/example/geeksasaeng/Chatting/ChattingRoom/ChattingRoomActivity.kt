@@ -15,11 +15,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.PrimaryKey
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Chatting.ChattingList.*
+import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingList
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.*
@@ -34,6 +36,7 @@ import com.rabbitmq.client.Delivery
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -408,6 +411,7 @@ class ChattingRoomActivity :
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
             Log.d("CHATTING-SYSTEM-TEST", "1")
+            /*
             thread {
                 kotlin.run {
                     WebSocketManager.connect()
@@ -453,7 +457,66 @@ class ChattingRoomActivity :
 
                     chattingService.sendChatting(sendChatData)
                     Log.d("CHATTING-SYSTEM-TEST", "8")
+
+                    chattingRoomRVAdapter.notifyDataSetChanged()
+                    Log.d("CHATTING-SYSTEM-TEST", "9")
                 }
+            }
+             */
+
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    WebSocketManager.connect()
+                    Log.d("CHATTING-SYSTEM-TEST", "2")
+
+                    Log.d("CHATTING-SYSTEM-TEST", "3")
+                    var content = binding.chattingRoomChattingTextEt.text.toString()
+                    var chatRoomId = roomId
+                    var isSystemMessage = false
+                    var memberId = getMemberId()
+                    var profileImgUrl = getProfileImgUrl()
+                    var chatType = "publish"
+                    var chatId = "none"
+                    var jwt = getJwt()
+
+                    // 전송할 데이터를 JSON Type 변수에 저장
+                    val jsonObject = JSONObject()
+                    jsonObject.put("content", content)
+                    jsonObject.put("chatRoomId", chatRoomId)
+                    jsonObject.put("isSystemMessage", isSystemMessage)
+                    jsonObject.put("memberId", memberId)
+                    jsonObject.put("profileImgUrl", profileImgUrl)
+                    jsonObject.put("chatType", chatType)
+                    jsonObject.put("chatId", chatId)
+                    jsonObject.put("jwt", jwt)
+                    Log.d("CHATTING-SYSTEM-TEST", "4")
+
+                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+                    Log.d("CHATTING-SYSTEM-TEST", "5")
+
+                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
+                    WebSocketManager.sendMessage(chatData.toString())
+                    Log.d("CHATTING-SYSTEM-TEST", "6")
+
+                    binding.chattingRoomChattingTextEt.setText("")
+
+                    if ( WebSocketManager .sendMessage( " Client send " )) {
+                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
+                        Log.d("CHATTING-SYSTEM-TEST", "7")
+                    }
+
+                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+
+                    chattingService.sendChatting(sendChatData)
+//                    chattingList.add(Chat(chatId, content, chatRoomId, isSystemMessage,
+//                        nickName, profileImgUrl, createdAt. unreadMemberCnt,
+//                        isImageMessage, viewType, isLeader))
+                    Log.d("CHATTING-SYSTEM-TEST", "8")
+                }
+
+                Log.d("CHATTING-SYSTEM-TEST", "9")
+                chattingRoomRVAdapter.notifyDataSetChanged()
+                Log.d("CHATTING-SYSTEM-TEST", "10")
             }
         }
     }
