@@ -10,6 +10,7 @@ import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.removeAutoLogin
+import com.example.geeksasaeng.Utils.removeIsSocial
 import com.example.geeksasaeng.databinding.DialogLogoutBinding
 
 class DialogProfileLogout: DialogFragment() {
@@ -32,6 +33,7 @@ class DialogProfileLogout: DialogFragment() {
             this.dismiss()
             (context as MainActivity).finish()
             removeAutoLogin()
+            removeIsSocial()
             startActivity(Intent(activity, LoginActivity::class.java))
         }
 

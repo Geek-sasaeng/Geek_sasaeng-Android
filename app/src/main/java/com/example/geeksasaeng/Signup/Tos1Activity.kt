@@ -22,8 +22,7 @@ class Tos1Activity : BaseActivity<ActivityTos1Binding>(ActivityTos1Binding::infl
             isSocial = intent.getBooleanExtra("isSocial", false)
         }
 
-        Log.d("cherry", "social"+intent.getBooleanExtra("isSocial", false).toString())
-        initClickListener() 
+        initClickListener()
     }
 
     private fun initClickListener(){
@@ -32,7 +31,6 @@ class Tos1Activity : BaseActivity<ActivityTos1Binding>(ActivityTos1Binding::infl
         }
 
         binding.tos1CheckBtn.setOnClickListener {
-            Log.d("cherry", isSocial.toString())
             if (isSocial){ // 소셜회원가입일때
                 socialServiceTemrsAgree = true
             }else{// 일반 회원가입일때

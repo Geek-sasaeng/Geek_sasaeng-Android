@@ -75,6 +75,10 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             .load(getProfileImgUrl())
             .into(binding.profileMyInfoUpdateUserImgIv)
         currentImageURI = getProfileImgUrl()!!.toUri()
+
+        if (getIsSocial()!!){ //소셜로그인한 상태면 비밀번호 변경 안뜨게 하기 위함
+            binding.profileMyInfoUpdatePasswordChangeBtn.visibility = View.INVISIBLE
+        }
     }
 
     private fun initView() {

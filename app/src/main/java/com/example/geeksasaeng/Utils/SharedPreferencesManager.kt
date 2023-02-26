@@ -77,6 +77,18 @@ fun saveUuid(uuid: String) {
     editor.apply()
 }
 
+// isSocial
+fun removeIsSocial(){
+    val editor = mSharedPreferences.edit()
+    editor.remove("isSocial")
+    editor.commit()
+}
+fun saveIsSocial(isSocial: Boolean) {
+    val editor = mSharedPreferences.edit()
+    editor.putBoolean("isSocial", isSocial)
+    editor.apply()
+}
+
 // 자동로그인
 fun removeAutoLogin() {
     val editor = mSharedPreferences.edit()
@@ -126,6 +138,7 @@ fun saveForcedExitCheckList(forcedExitCheckList: MutableList<Boolean>){
 
 
 fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
+fun getIsSocial(): Boolean? = mSharedPreferences.getBoolean("isSocial", false)
 fun getNickname(): String? = mSharedPreferences.getString("nickname", null)
 fun getMemberId(): Int? = mSharedPreferences.getInt("memberId", 0)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
