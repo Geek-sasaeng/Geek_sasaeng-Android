@@ -60,3 +60,9 @@ interface ProfileViewDormitoryView {
     fun onProfileViewDormitorySuccess(result: ArrayList<ProfileViewDormitoryResult>)
     fun onProfileViewDormitoryFailure(message: String)
 }
+
+// 로그아웃
+interface ProfileLogoutView {
+    fun onProfileLogoutSuccess(result: String)
+    fun onProfileLogoutFailure(message: String)
+}

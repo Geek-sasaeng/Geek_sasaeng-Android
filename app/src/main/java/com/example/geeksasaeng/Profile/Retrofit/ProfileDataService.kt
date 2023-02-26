@@ -26,6 +26,7 @@ class ProfileDataService {
     private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
     private lateinit var profilePasswordChangeView: ProfilePasswordChangeView
     private lateinit var profileViewDormitoryView: ProfileViewDormitoryView
+    private lateinit var profileLogoutView: ProfileLogoutView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -58,6 +59,9 @@ class ProfileDataService {
     }
     fun setProfileViewDormitoryView(profileViewDormitoryView: ProfileViewDormitoryView) {
         this.profileViewDormitoryView = profileViewDormitoryView
+    }
+    fun setProfileLogoutView(profileLogoutView: ProfileLogoutView) {
+        this.profileLogoutView = profileLogoutView
     }
 
     // 진행 중인 활동 조회
@@ -266,6 +270,29 @@ class ProfileDataService {
 
             override fun onFailure(call: Call<ProfileViewDormitoryResponse>, t: Throwable) {
                 Log.d("profileViewDormiotrySender", "profileViewDormiotrySender : $t")
+            }
+
+        })
+    }
+
+    // 로그아웃
+    fun profileLogoutSender() {
+        profileDataService?.profileLogout( )?.enqueue(object: Callback<ProfileLogoutResponse> {
+
+            override fun onResponse(call: Call<ProfileLogoutResponse>, response: Response<ProfileLogoutResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("logout", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileLogoutView.onProfileLogoutSuccess(resp.result)
+                        4000 -> Log.d("logout", "서버 오류")
+                        else -> profileLogoutView.onProfileLogoutFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileLogoutResponse>, t: Throwable) {
+                Log.d("logout", "logout : $t")
             }
 
         })

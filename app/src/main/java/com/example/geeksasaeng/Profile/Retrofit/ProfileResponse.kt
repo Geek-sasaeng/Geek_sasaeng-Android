@@ -177,3 +177,12 @@ data class ProfileViewDormitoryResult(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
 )
+
+// 로그아웃
+
+data class ProfileLogoutResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: String
+)

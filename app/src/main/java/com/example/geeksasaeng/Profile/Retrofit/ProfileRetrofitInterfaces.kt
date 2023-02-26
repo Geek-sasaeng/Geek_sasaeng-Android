@@ -67,5 +67,10 @@ interface ProfileRetrofitInterfaces {
         @Path("universityId") universityId: Int
     ): Call<ProfileViewDormitoryResponse>
 
+    //로그아웃-(Fcm토큰 최신화때문에 로그아웃시 해당 멤버 fcm 정보 삭제)
+    @DELETE("/logout")
+    fun profileLogout(
+    ): Call<ProfileLogoutResponse>
+
 
 }
