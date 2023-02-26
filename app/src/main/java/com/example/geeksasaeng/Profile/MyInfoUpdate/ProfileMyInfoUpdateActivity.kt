@@ -12,6 +12,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.example.geeksasaeng.Home.Party.LookParty.DialogPartyDelete
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
@@ -23,7 +24,8 @@ import java.util.regex.Pattern
 
 
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
-    SignUpNickCheckView, ProfileViewDormitoryView {
+    SignUpNickCheckView, ProfileViewDormitoryView,
+    DialogProfileImageUpdate.ProfileImageAlbumUpdateListener {
 
     private var dormitoryId = getDormitoryId() //기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
@@ -32,6 +34,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
     private lateinit var profileDataService : ProfileDataService //기숙사 리스트 불러오기 용
     private var dormitoryList : ArrayList<ProfileViewDormitoryResult> = arrayListOf<ProfileViewDormitoryResult>()
+    private var isDefaultImage : Boolean = false
 
     override fun initAfterBinding() {
         initData()
@@ -161,16 +164,15 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             bundle.putString("loginId", loginId)
             bundle.putString("nickname", nickName)
             bundle.putString("currentImageURI", currentImageURI.toString())
+            bundle.putBoolean("isDefaultImage", isDefaultImage)
             dialogProfileUpdate.arguments= bundle
             dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
 
         }
 
         binding.profileUserImgCv.setOnClickListener { //사용자 프로필
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-            intent.type = "image/*"
-            startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
+            var dialogFragment = DialogProfileImageUpdate()
+            dialogFragment.show(supportFragmentManager, "DialogProfileImageUpdate")
         }
 
         binding.profileMyInfoUpdateNicknameCheckBtn.setOnClickListener {
@@ -184,22 +186,6 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         binding.profileMyInfoUpdatePasswordChangeBtn.setOnClickListener { // 비밀번호 변경
             val dialogProfileCurrentPwdChecking = DialogProfileCurrentPwdChecking()
             dialogProfileCurrentPwdChecking.show(supportFragmentManager, "DialogProfileCurrentPwdChecking")
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-
-        if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
-            currentImageURI = intent?.data!!
-            Log.d("sendImg- onActivityResult",currentImageURI.toString())
-            binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
-            checkingModifiability()
-        } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
-            Log.d("ActivityResult", "사진 선택 취소")
-        }
-        else{
-            Log.d("ActivityResult", "something wrong")
         }
     }
 
@@ -225,8 +211,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     private fun checkingModifiability() {
         var modifiability = (binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility==View.VISIBLE) ||
-                (dormitoryId!= getDormitoryId()) || (currentImageURI.toString() != getProfileImgUrl() )
-        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니면
+                (dormitoryId!= getDormitoryId()) || (currentImageURI.toString() != getProfileImgUrl() || isDefaultImage)
+        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니거나, 기본 이미지로 변경했으면
 
         if (modifiability) { //수정이 가능하면
             binding.profileMyInfoUpdateCompleteTv.isEnabled = true
@@ -291,5 +277,34 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     override fun onProfileViewDormitoryFailure(message: String) {
         Log.d("getDormitoryList", "실패")
+    }
+
+    override fun onAlbumClicked() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.type = "image/*"
+        startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
+    }
+
+    override fun onDefaultImageClicked() {
+        isDefaultImage = true
+        binding.profileMyInfoUpdateUserImgIv.setImageResource(R.drawable.profile_thumbs_up)
+        checkingModifiability()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
+        if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
+            currentImageURI = intent?.data!!
+            Log.d("sendImg- onActivityResult",currentImageURI.toString())
+            binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
+            checkingModifiability()
+        } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
+            Log.d("ActivityResult", "사진 선택 취소")
+        }
+        else{
+            Log.d("ActivityResult", "something wrong")
+        }
     }
 }
