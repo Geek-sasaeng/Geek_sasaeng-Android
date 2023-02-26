@@ -39,23 +39,23 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
             profiledataService.profilePasswordChangeSender(profilePasswordChangeRequest)
         }
 
-        binding.profileMyInfoPwdToggleBtn.setOnClickListener { //비밀번호 눈 아이콘 토글버튼
+        binding.profileMyInfoPwdEyeBtn.setOnClickListener { //비밀번호 눈 아이콘 토글버튼
             if ((binding.profileMyInfoUpdatePwdEt.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) or (binding.profileMyInfoUpdatePwdEt.inputType == 129)) { //왜 129로 뜰까?? 이상하네 (InputType.TYPE_TEXT_VARIATION_PASSWORD이 128인데)
                 binding.profileMyInfoUpdatePwdEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                binding.profileMyInfoPwdToggleBtn.isChecked = true
+                binding.profileMyInfoPwdEyeBtn.setImageResource(R.drawable.ic_pwd_on)
             } else {
                 binding.profileMyInfoUpdatePwdEt.inputType =  InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                binding.profileMyInfoPwdToggleBtn.isChecked = false
+                binding.profileMyInfoPwdEyeBtn.setImageResource(R.drawable.ic_pwd_off  )
             }
         }
 
-        binding.profileMyInfoPwdCheckToggleBtn.setOnClickListener { //비밀번호 확인 눈 아이콘 토글버튼
-            if ((binding.profileMyInfoUpdatePwdCheckEt.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) or (binding.profileMyInfoUpdatePwdEt.inputType == 129)) { //왜 129로 뜰까?? 이상하네 (InputType.TYPE_TEXT_VARIATION_PASSWORD이 128인데)
+        binding.profileMyInfoPwdCheckEyeBtn.setOnClickListener { //비밀번호 눈 아이콘 토글버튼
+            if ((binding.profileMyInfoUpdatePwdCheckEt.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) or (binding.profileMyInfoUpdatePwdCheckEt.inputType == 129)) { //왜 129로 뜰까?? 이상하네 (InputType.TYPE_TEXT_VARIATION_PASSWORD이 128인데)
                 binding.profileMyInfoUpdatePwdCheckEt.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                binding.profileMyInfoPwdCheckToggleBtn.isChecked = true
+                binding.profileMyInfoPwdCheckEyeBtn.setImageResource(R.drawable.ic_pwd_on)
             } else {
                 binding.profileMyInfoUpdatePwdCheckEt.inputType =  InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                binding.profileMyInfoPwdCheckToggleBtn.isChecked = false
+                binding.profileMyInfoPwdCheckEyeBtn.setImageResource(R.drawable.ic_pwd_off  )
             }
         }
     }
@@ -71,9 +71,9 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
 
                 if (macher.matches()) { //조건식에 맞는 비밀번호가 들어오면
                     binding.profileMyInfoUpdatePwdInfoTv.visibility = View.GONE
-                    binding.profileMyInfoUpdatePwdEt.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.gray_0)
+                    binding.profileMyInfoUpdatePwdLine.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.gray_0)
                 } else{
-                    binding.profileMyInfoUpdatePwdEt.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
+                    binding.profileMyInfoUpdatePwdLine.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
                     if(binding.profileMyInfoUpdatePwdInfoTv.visibility == View.GONE){
                         binding.profileMyInfoUpdatePwdInfoTv.visibility = View.VISIBLE // 보이게 만들기
                     }
@@ -89,9 +89,9 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
 
                 if (binding.profileMyInfoUpdatePwdCheckEt.text.toString() == binding.profileMyInfoUpdatePwdEt.text.toString()) {
                     binding.profileMyInfoUpdatePwdCheckInfoTv.visibility = View.GONE
-                    binding.profileMyInfoUpdatePwdCheckEt.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.gray_0)
+                    binding.profileMyInfoUpdatePwdCheckLine.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.gray_0)
                 } else{
-                    binding.profileMyInfoUpdatePwdCheckEt.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
+                    binding.profileMyInfoUpdatePwdCheckLine.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
                     if(binding.profileMyInfoUpdatePwdCheckInfoTv.visibility == View.GONE){
                         binding.profileMyInfoUpdatePwdCheckInfoTv.visibility = View.VISIBLE // 보이게 만들기
                     }

@@ -3,4 +3,3 @@
     <item android:drawable="@drawable/ic_pwd_on" android:state_checked="true"/>
     <item android:drawable="@drawable/ic_pwd_off"/>
 </selector>
-

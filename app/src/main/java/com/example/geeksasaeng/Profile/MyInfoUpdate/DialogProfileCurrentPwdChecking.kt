@@ -48,6 +48,11 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
     }
 
     private fun initClickListener() {
+
+        binding.dialogProfileCurrentPwdCheckingBackIv.setOnClickListener {
+            dismiss()
+        }
+
         binding.dialogProfileCurrentPwdCheckingNextBtn.setOnClickListener {
             val pwRegex = """^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$)[A-Za-z\d!@#$%^+\-=]{8,}$"""
             val pwPattern = Pattern.compile(pwRegex)
