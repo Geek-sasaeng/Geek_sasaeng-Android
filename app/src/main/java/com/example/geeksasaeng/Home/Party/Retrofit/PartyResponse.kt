@@ -17,6 +17,7 @@ data class PartyDetailResult(
     @SerializedName("authorStatus") val authorStatus: Boolean,
     @SerializedName("belongStatus") val belongStatus: String,
     @SerializedName("chief") val chief: String,
+    @SerializedName("chiefGrade") val chiefGrade: String,
     @SerializedName("chiefId") val chiefId: Int,
     @SerializedName("chiefProfileImgUrl") val chiefProfileImgUrl: String?,
     @SerializedName("content") val content: String,

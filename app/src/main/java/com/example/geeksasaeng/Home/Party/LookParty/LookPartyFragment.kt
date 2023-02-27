@@ -184,6 +184,7 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
             binding.lookHostProfileIv.setImageResource(R.drawable.ic_default_profile2)
 
         binding.lookHostName.text = result.chief
+        binding.lookHostGrade.text = result.chiefGrade
         binding.lookContent.text = result.content
         partyMatchingNumber = result.maxMatching
         binding.lookMatchingNumber.text = result.currentMatching.toString() + "/" + result.maxMatching

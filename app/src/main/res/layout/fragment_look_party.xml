@@ -87,7 +87,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/look_host_level"
+                android:id="@+id/look_host_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="신입생"
@@ -110,7 +110,7 @@
                 android:layout_marginStart="5dp"
                 app:layout_constraintTop_toTopOf="@id/look_host_profile_cv"
                 app:layout_constraintBottom_toBottomOf="@id/look_host_profile_cv"
-                app:layout_constraintStart_toEndOf="@id/look_host_level" />
+                app:layout_constraintStart_toEndOf="@id/look_host_grade" />
 
             <TextView
                 android:id="@+id/look_post_date"
