@@ -207,7 +207,7 @@
                     android:id="@+id/dialog_profile_detail_bar_iv"
                     android:layout_width="24.32dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/ic_profile_card_bar"
+                    android:src="@drawable/ic_profile_card_heart_bar_level1"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="-1dp"
                     app:layout_constraintStart_toStartOf="parent"

@@ -106,9 +106,9 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     private fun initRetrofitService() {
         profiledataService = ProfileDataService() // 서비스 객체 생성
-        profiledataService.setMyPreActivityView(this)
+        profiledataService.setMyPreActivityView(this) //★
         profiledataService.profileMyPreActivitySender(0)//cursor =0부터 시작!
-        profiledataService.setMyInfoView(this)
+        profiledataService.setMyInfoView(this) //★
         profiledataService.profileMyInfoSender()
     }
 
@@ -200,23 +200,32 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         val signUpDate = result.createdAt
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
 
+        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
         //정보 설정
         binding.profileCardNickNameTv.text = getNickname()
-        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         binding.profileCardUnivTv.text = universityName
         binding.profileCardDormitoryNameTv.text = dormitoryName
         Glide.with(requireContext())
             .load(getProfileImgUrl())
             .into(binding.profileCardImgIv)
+        //등급
+        binding.profileCardLayoutBlueTopGrade.text = result.grade
+        if(result.grade == "복학생"){
+            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level2)
+        }else if(result.grade == "졸업생"){
+            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level3)
+        }
+        //승급까지 남은 학점
+        binding.profileCardLayoutBlueTopLeftCredit.text = result.nextGradeAndRemainCredits
     }
 
     override fun onProfileMyInfoFailure(message: String) {
         Log.d("profile","나의 정보 조회 실패")
     }
 
-
-
     override fun onProfileMyPreActivityViewSuccess(result: ProfileMyPreActivityResult) {
+        Log.d("profile", "진행한 활동 불러오기 성공")
 
         var result = result.endedDeliveryPartiesVoList
 
@@ -232,8 +241,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }else{
             for (i in 0 until myPreActivityList.size) {
                 recentActivityBind(myPreActivityList[i], i)
+                Log.d("profile", i.toString())
             }
         }
+
     }
 
     override fun onProfileMyPreActivityViewFailure(message: String) {

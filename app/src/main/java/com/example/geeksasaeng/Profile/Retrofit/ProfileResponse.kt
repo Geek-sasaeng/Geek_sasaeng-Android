@@ -76,11 +76,13 @@ data class ProfileMyInfoResult(
     @SerializedName("emailAddress") val emailAddress: String,
     @SerializedName("emailId") val emailId: Int,
     @SerializedName("fcmToken") val fcmToken: String,
+    @SerializedName("grade") val grade: String,
     @SerializedName("id") val id: Int,
     @SerializedName("informationAgreeStatus") val informationAgreeStatus: String,
     @SerializedName("loginId") val loginId: String,
-    @SerializedName("memberLoginType") val memberLoginType: String,
     @SerializedName("loginStatus") val loginStatus: String,
+    @SerializedName("memberLoginType") val memberLoginType: String,
+    @SerializedName("nextGradeAndRemainCredits") val nextGradeAndRemainCredits: String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("perDayReportingCount") val perDayReportingCount: Int,
     @SerializedName("phoneNumber") val phoneNumber: String,
@@ -88,7 +90,7 @@ data class ProfileMyInfoResult(
     @SerializedName("reportedCount") val reportedCount: Int,
     @SerializedName("universityId") val universityId: Int,
     @SerializedName("universityName") val universityName: String,
-)
+) //parties는 반영 안함.. 어디에 쓰는거지??
 
 // 진행했던 활동 조회
 data class ProfileMyPreActivityResponse(
