@@ -198,7 +198,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
     }
 
-    // (저장권한 읽기)권한 요청 메소드
+    // (저장권한 읽기) 권한 요청 메소드
     fun requestReadExternalStoragePermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
     }
