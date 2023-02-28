@@ -228,6 +228,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         Log.d("profile", "진행한 활동 불러오기 성공")
 
         var result = result.endedDeliveryPartiesVoList
+        
+        myPreActivityList.clear()
 
         for (i in 0 until result.size) {
             val party = result[i]

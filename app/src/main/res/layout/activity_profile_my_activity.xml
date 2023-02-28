@@ -51,8 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            
-
             <TextView
                 android:id="@+id/profile_my_activity_tv"
                 android:layout_width="wrap_content"
@@ -60,14 +58,12 @@
                 android:text="내가 만들었던 활동들을\n한 눈에 확인해보세요"
                 android:textSize="24sp"
                 android:textColor="@color/top"
-                android:textFontWeight="500"
                 android:fontFamily="@font/spoqa_medium"
-                android:lineHeight="35dp"
+                android:lineSpacingExtra="4sp"
                 android:layout_marginTop="39dp"
                 android:layout_marginStart="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <ImageView
                 android:id="@+id/profile_my_activity_filter_iv"
@@ -170,26 +166,17 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
                 android:id="@+id/profile_my_info_preparing_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@color/white"
-                android:visibility="invisible"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="150dp"
+                android:src="@drawable/ic_logo_preparing"
                 app:layout_constraintTop_toBottomOf="@id/profile_my_activity_rg"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_logo_preparing"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
