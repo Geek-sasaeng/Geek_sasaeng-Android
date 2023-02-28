@@ -90,6 +90,11 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             Log.d("partyUpdate", orderTime.toString())
 
             binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = hashTag as Boolean // 같이 먹어요 해시태그
+            if (binding.deliveryPartyUpdateTogetherCheckBtn.isChecked) { // 같이먹어요 textView
+                binding.deliveryPartyUpdateTogetherTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.main))
+            } else {
+                binding.deliveryPartyUpdateTogetherTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
+            }
             binding.deliveryPartyUpdateTitleEt.setText(title) //제목
             binding.deliveryPartyUpdateContentEt.setText(content) // 콘텐츠
             binding.deliveryPartyUpdateDate2Tv.text = "${orderTime!!.substring(5, 7)}월 ${orderTime!!.substring(8, 10)}일" +" "+ "${orderTime!!.substring(11, 13)}시 ${orderTime!!.substring(14, 16)}분"
@@ -134,7 +139,8 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
     }
 
     private fun checking(){
-        Log.d("cherry", ( hashTag.toString() != requireArguments().getBoolean("hashTag").toString()||
+        Log.d("cherry-받아온 hashtag/ 지금 hashtag", requireArguments().getBoolean("hashTag").toString()+"/"+hashTag.toString())
+        Log.d("cherry-checking", ( hashTag.toString() != requireArguments().getBoolean("hashTag").toString()||
                 content.toString() != requireArguments().getString("content").toString()||
                 title.toString() != requireArguments().getString("title").toString()||
                 orderTime.toString() != requireArguments().getString("orderTime").toString() ||
@@ -189,7 +195,7 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             activity?.supportFragmentManager?.popBackStack()
         }
 
-        //완료버튼
+        //완료버튼 ★
         binding.deliveryPartyUpdateCompleteBtnTv.setOnClickListener {
             Log.d("cherry", "버튼 눌려짐")
             var numCategory : Int = 0
@@ -220,12 +226,13 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
             } else {
                 binding.deliveryPartyUpdateTogetherTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_2))
             }
+            hashTag = binding.deliveryPartyUpdateTogetherCheckBtn.isChecked
+            checking()
         }
 
         binding.deliveryPartyUpdateTogetherTv.setOnClickListener {
             //체크되어있었으면 해제, 안체크 되어있었으면 체크 시키기
             binding.deliveryPartyUpdateTogetherCheckBtn.isChecked = !binding.deliveryPartyUpdateTogetherCheckBtn.isChecked
-            hashTag = binding.deliveryPartyUpdateTogetherCheckBtn.isChecked
         }
 
         // 여기서 부터 dialog 띄우는 부분
