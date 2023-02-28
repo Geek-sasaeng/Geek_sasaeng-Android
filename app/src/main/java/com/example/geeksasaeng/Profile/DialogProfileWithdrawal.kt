@@ -12,6 +12,7 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileWithdrawalView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.databinding.DialogWithdralBinding
 
@@ -64,10 +65,9 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
     }
 
     override fun onProfileWithdrawalSuccess() {
-        Toast.makeText(activity, "회원 탈퇴가 완료되었습니다", Toast.LENGTH_SHORT).show()
-
         (context as MainActivity).finish()
         removeAutoLogin()
+        CustomToastMsg.createToast(requireContext(), "탈퇴가 완료되었습니다", "#8029ABE2", 53)?.show()
         startActivity(Intent(activity, LoginActivity::class.java))
     }
 

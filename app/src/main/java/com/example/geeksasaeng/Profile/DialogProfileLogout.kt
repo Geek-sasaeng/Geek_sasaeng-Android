@@ -13,6 +13,7 @@ import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
 import com.example.geeksasaeng.Profile.Retrofit.ProfileLogoutView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.Utils.removeIsSocial
 import com.example.geeksasaeng.databinding.DialogLogoutBinding
@@ -56,7 +57,7 @@ class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
         this.dismiss()
         (context as MainActivity).finish()
         removeAutoLogin()
-        removeIsSocial()
+        CustomToastMsg.createToast(requireContext(), "로그아웃 되었습니다", "#8029ABE2", 53)?.show()
         startActivity(Intent(activity, LoginActivity::class.java))
     }
 
