@@ -94,6 +94,7 @@
                 android:textSize="15sp"
                 android:fontFamily="@font/spoqa_medium"
                 android:textColor="@color/gray_3"
+                app:layout_constraintBottom_toTopOf="@id/dialog_profile_detail_sign_up_date_tv"
                 app:layout_constraintTop_toBottomOf="@id/dialog_profile_detail_phone_title_tv"
                 app:layout_constraintStart_toStartOf="@id/dialog_profile_detail_phone_title_tv"
                 android:layout_marginTop="9dp" />

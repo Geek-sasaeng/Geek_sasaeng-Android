@@ -38,6 +38,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var formattingPhoneNumber = String()
     private var fomattingSignUpDate = String()
     private var userId: Int = 0
+    private var grade = String()
+    private var nextGradeAndRemainCredits = String()
 
     override fun initAfterBinding() {
         // clearBackStack()
@@ -68,6 +70,9 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             bundle.putString("loginId", loginId)
             bundle.putString("emailAddress", emailAddress)
             bundle.putString("phoneNumber", formattingPhoneNumber)
+            bundle.putString("signUpDate", fomattingSignUpDate)
+            bundle.putString("grade", grade)
+            bundle.putString("nextGradeAndRemainCredits", nextGradeAndRemainCredits)
             bundle.putString("signUpDate", fomattingSignUpDate)
             profileDetailDialog.arguments = bundle
             profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
@@ -199,6 +204,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
         val signUpDate = result.createdAt
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
+        grade = result.grade
+        nextGradeAndRemainCredits = result.nextGradeAndRemainCredits
 
         binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
@@ -210,14 +217,14 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             .load(getProfileImgUrl())
             .into(binding.profileCardImgIv)
         //등급
-        binding.profileCardLayoutBlueTopGrade.text = result.grade
-        if(result.grade == "복학생"){
+        binding.profileCardLayoutBlueTopGrade.text = grade
+        if(grade == "복학생"){
             binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level2)
-        }else if(result.grade == "졸업생"){
+        }else if(grade == "졸업생"){
             binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level3)
         }
         //승급까지 남은 학점
-        binding.profileCardLayoutBlueTopLeftCredit.text = result.nextGradeAndRemainCredits
+        binding.profileCardLayoutBlueTopLeftCredit.text = nextGradeAndRemainCredits
     }
 
     override fun onProfileMyInfoFailure(message: String) {
