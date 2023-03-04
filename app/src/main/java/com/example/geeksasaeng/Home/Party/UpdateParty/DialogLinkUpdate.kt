@@ -55,8 +55,6 @@ class DialogLinkUpdate : DialogFragment() {
         val storeUrl = arguments?.getString("Link")
         if(storeUrl!="null"){ // 이미 입력되어있는 url이 있으면 띄워주기
             binding.dialogLinkUpdateSearchEt.setText(storeUrl) //String을 Editable로 못 바꾸므로 setText함수 이용해주기
-        }else{
-            binding.dialogLinkUpdateSearchEt.setText("링크를 입력해주세요")
         }
     }
 
@@ -80,6 +78,10 @@ class DialogLinkUpdate : DialogFragment() {
             //자기는 종료
             parentFragmentManager.beginTransaction()
                 .remove(this).commit()
+        }
+
+        binding.dialogLinkUpdateSkipBtn.setOnClickListener {
+            dismiss()
         }
 
     }
