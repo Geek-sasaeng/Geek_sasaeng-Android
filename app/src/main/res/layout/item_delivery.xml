@@ -77,7 +77,7 @@
         android:textColor="@color/gray_0"
         android:textSize="12sp"
         android:fontFamily="@font/spoqa_medium"
-        android:text="#같이 먹고 싶어요"
+        android:text="같이 먹고 싶어요"
         android:layout_marginStart="30dp"
         app:layout_constraintTop_toTopOf="@id/delivery_item_category"
         app:layout_constraintBottom_toBottomOf="@id/delivery_item_category"
