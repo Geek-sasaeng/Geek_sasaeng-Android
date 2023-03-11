@@ -11,9 +11,15 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseActivity
+import com.example.geeksasaeng.Utils.saveRecentSearch
 import com.example.geeksasaeng.databinding.ActivitySearchBinding
 
 class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding::inflate) {
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Log.d("searchFlag", "뒤로가기 눌림")
+    }
 
     override fun initAfterBinding() {
         initClickListener()
@@ -28,12 +34,13 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.search_frm, SearchBasicFragment())
                         .addToBackStack("SearchBasic").commit()
+                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE) //이거 안하면 뒤로가기 2번 눌러야되더라.
                 }
             }
         })
     }
 
-    fun initClickListener() {
+    private fun initClickListener() {
         binding.searchBtn.setOnClickListener {
             var keyword = binding.searchEt.text.toString()
             var keywordCheck = keyword.replace(" ", "")
@@ -41,6 +48,7 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
             if (keywordCheck.isEmpty()) {
                 showToast("검색어를 입력해주세요")
             } else {
+                saveRecentSearch(keyword)
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
 
@@ -66,5 +74,10 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
                 true
             } else false
         }
+    }
+
+    fun doSearch(keyword: String){
+        binding.searchEt.setText(keyword)
+        binding.searchBtn.performClick()
     }
 }
