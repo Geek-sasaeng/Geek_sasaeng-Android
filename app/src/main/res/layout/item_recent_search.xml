@@ -20,6 +20,7 @@
         android:id="@+id/item_recent_search_delete_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
         android:src="@drawable/search_delete_ic"
         android:background="@android:color/transparent"
         android:layout_marginStart="6dp"

@@ -49,8 +49,11 @@ class SearchActivity: BaseActivity<ActivitySearchBinding>(ActivitySearchBinding:
                 showToast("검색어를 입력해주세요")
             } else {
                 saveRecentSearch(keyword)
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
+                if(currentFocus!=null){ //키보드가 띄워져있는 경우, 내려주기
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+                }
 
                 supportFragmentManager.popBackStack("SearchDetail", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
