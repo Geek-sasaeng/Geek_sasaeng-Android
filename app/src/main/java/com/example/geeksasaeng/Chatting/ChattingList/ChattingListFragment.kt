@@ -91,7 +91,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         // durable = true로 설정!!
         // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
         channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-        Log.d("CHATTING-SYSTEM-TEST", "Waiting for messages")
 
         lateinit var originalMessage: String
         lateinit var chatResponseMessage: Chat
