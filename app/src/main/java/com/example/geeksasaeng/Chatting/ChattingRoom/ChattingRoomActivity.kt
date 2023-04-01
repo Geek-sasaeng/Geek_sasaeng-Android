@@ -138,12 +138,6 @@ class ChattingRoomActivity :
                         chattingRoomRVAdapter.addItem(allChatting[i])
                     }
                 }
-
-                // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
-                // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
-                Thread {
-                    initRabbitMQSetting()
-                }.start()
             }
 
             // 채팅 제일 밑으로 가는 방법!
@@ -156,6 +150,8 @@ class ChattingRoomActivity :
             smoothScroller.targetPosition = chattingSize
             binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
         }
+
+        Log.d("CHATTING-SYSTEM-TEST", "chattingList = ${chattingRoomRVAdapter.getAllItems()}")
     }
 
     private fun initRabbitMQSetting() {
