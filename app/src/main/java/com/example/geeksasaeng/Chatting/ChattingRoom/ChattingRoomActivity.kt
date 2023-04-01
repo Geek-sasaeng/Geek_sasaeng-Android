@@ -136,8 +136,10 @@ class ChattingRoomActivity :
             for (i in 0 until chattingSize) {
                 // roomId가 같은 경우에만 가져오도록 설정!
                 if (roomId == allChatting[i].chatRoomId) {
-                    chattingList.add(allChatting[i])
-                    // chattingRoomRVAdapter.addItem(allChatting[i])
+                    // chattingList.add(allChatting[i])
+                    withContext(Dispatchers.Main) {
+                        chattingRoomRVAdapter.addItem(allChatting[i])
+                    }
                 }
 
                 // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
@@ -157,6 +159,8 @@ class ChattingRoomActivity :
             smoothScroller.targetPosition = chattingSize
             binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
         }
+
+        Log.d("CHATTING-SYSTEM-TEST", "chattingList = ${chattingRoomRVAdapter.getAllItems()}")
     }
 
     private fun initRabbitMQSetting() {
@@ -182,7 +186,7 @@ class ChattingRoomActivity :
             var result = chatDB.chatDao().getAllChats()
             var resultTemp = result[result.size - 1]
             Log.d("CHATTING-TEST", "resultTemp = $resultTemp")
-            chattingList.add(chatResponseMessage)
+            chattingRoomRVAdapter.addItem(chatResponseMessage)
             Log.d("CHATTING-TEST", "Last chattingList = ${chattingList[chattingList.size - 1]}")
             // chattingRoomRVAdapter.addItem(chatResponseMessage)
             // chattingRoomRVAdapter.notifyDataSetChanged()
@@ -410,116 +414,165 @@ class ChattingRoomActivity :
 
     // 메시지 전송
     private fun initSendChatListener() {
-        binding.chattingRoomSendTv.setOnClickListener {
-            Log.d("CHATTING-SYSTEM-TEST", "1")
-            /*
-            thread {
-                kotlin.run {
-                    WebSocketManager.connect()
-                    Log.d("CHATTING-SYSTEM-TEST", "2")
-
-                    Log.d("CHATTING-SYSTEM-TEST", "3")
-                    var content = binding.chattingRoomChattingTextEt.text.toString()
-                    var chatRoomId = roomId
-                    var isSystemMessage = false
-                    var memberId = getMemberId()
-                    var profileImgUrl = getProfileImgUrl()
-                    var chatType = "publish"
-                    var chatId = "none"
-                    var jwt = getJwt()
-
-                    // 전송할 데이터를 JSON Type 변수에 저장
-                    val jsonObject = JSONObject()
-                    jsonObject.put("content", content)
-                    jsonObject.put("chatRoomId", chatRoomId)
-                    jsonObject.put("isSystemMessage", isSystemMessage)
-                    jsonObject.put("memberId", memberId)
-                    jsonObject.put("profileImgUrl", profileImgUrl)
-                    jsonObject.put("chatType", chatType)
-                    jsonObject.put("chatId", chatId)
-                    jsonObject.put("jwt", jwt)
-                    Log.d("CHATTING-SYSTEM-TEST", "4")
-
-                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
-                    Log.d("CHATTING-SYSTEM-TEST", "5")
-
-                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
-                    WebSocketManager.sendMessage(chatData.toString())
-                    Log.d("CHATTING-SYSTEM-TEST", "6")
-
-                    binding.chattingRoomChattingTextEt.setText("")
-
-                    if ( WebSocketManager .sendMessage( " Client send " )) {
-                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
-                        Log.d("CHATTING-SYSTEM-TEST", "7")
-                    }
-
-                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
-
-                    chattingService.sendChatting(sendChatData)
-                    Log.d("CHATTING-SYSTEM-TEST", "8")
-
-                    chattingRoomRVAdapter.notifyDataSetChanged()
-                    Log.d("CHATTING-SYSTEM-TEST", "9")
-                }
-            }
-             */
-
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    WebSocketManager.connect()
-                    Log.d("CHATTING-SYSTEM-TEST", "2")
-
-                    Log.d("CHATTING-SYSTEM-TEST", "3")
-                    var content = binding.chattingRoomChattingTextEt.text.toString()
-                    var chatRoomId = roomId
-                    var isSystemMessage = false
-                    var memberId = getMemberId()
-                    var profileImgUrl = getProfileImgUrl()
-                    var chatType = "publish"
-                    var chatId = "none"
-                    var jwt = getJwt()
-
-                    // 전송할 데이터를 JSON Type 변수에 저장
-                    val jsonObject = JSONObject()
-                    jsonObject.put("content", content)
-                    jsonObject.put("chatRoomId", chatRoomId)
-                    jsonObject.put("isSystemMessage", isSystemMessage)
-                    jsonObject.put("memberId", memberId)
-                    jsonObject.put("profileImgUrl", profileImgUrl)
-                    jsonObject.put("chatType", chatType)
-                    jsonObject.put("chatId", chatId)
-                    jsonObject.put("jwt", jwt)
-                    Log.d("CHATTING-SYSTEM-TEST", "4")
-
-                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
-                    Log.d("CHATTING-SYSTEM-TEST", "5")
-
-                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
-                    WebSocketManager.sendMessage(chatData.toString())
-                    Log.d("CHATTING-SYSTEM-TEST", "6")
-
-                    binding.chattingRoomChattingTextEt.setText("")
-
-                    if ( WebSocketManager .sendMessage( " Client send " )) {
-                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
-                        Log.d("CHATTING-SYSTEM-TEST", "7")
-                    }
-
-                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
-
-                    chattingService.sendChatting(sendChatData)
-//                    chattingList.add(Chat(chatId, content, chatRoomId, isSystemMessage,
-//                        nickName, profileImgUrl, createdAt. unreadMemberCnt,
-//                        isImageMessage, viewType, isLeader))
-                    Log.d("CHATTING-SYSTEM-TEST", "8")
-                }
-
-                Log.d("CHATTING-SYSTEM-TEST", "9")
-                chattingRoomRVAdapter.notifyDataSetChanged()
-                Log.d("CHATTING-SYSTEM-TEST", "10")
-            }
-        }
+//        binding.chattingRoomSendTv.setOnClickListener {
+//            Log.d("CHATTING-SYSTEM-TEST", "1")
+//            /*
+//            thread {
+//                kotlin.run {
+//                    WebSocketManager.connect()
+//                    Log.d("CHATTING-SYSTEM-TEST", "2")
+//
+//                    Log.d("CHATTING-SYSTEM-TEST", "3")
+//                    var content = binding.chattingRoomChattingTextEt.text.toString()
+//                    var chatRoomId = roomId
+//                    var isSystemMessage = false
+//                    var memberId = getMemberId()
+//                    var profileImgUrl = getProfileImgUrl()
+//                    var chatType = "publish"
+//                    var chatId = "none"
+//                    var jwt = getJwt()
+//
+//                    // 전송할 데이터를 JSON Type 변수에 저장
+//                    val jsonObject = JSONObject()
+//                    jsonObject.put("content", content)
+//                    jsonObject.put("chatRoomId", chatRoomId)
+//                    jsonObject.put("isSystemMessage", isSystemMessage)
+//                    jsonObject.put("memberId", memberId)
+//                    jsonObject.put("profileImgUrl", profileImgUrl)
+//                    jsonObject.put("chatType", chatType)
+//                    jsonObject.put("chatId", chatId)
+//                    jsonObject.put("jwt", jwt)
+//                    Log.d("CHATTING-SYSTEM-TEST", "4")
+//
+//                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+//                    Log.d("CHATTING-SYSTEM-TEST", "5")
+//
+//                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
+//                    WebSocketManager.sendMessage(chatData.toString())
+//                    Log.d("CHATTING-SYSTEM-TEST", "6")
+//
+//                    binding.chattingRoomChattingTextEt.setText("")
+//
+//                    if ( WebSocketManager .sendMessage( " Client send " )) {
+//                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
+//                        Log.d("CHATTING-SYSTEM-TEST", "7")
+//                    }
+//
+//                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+//
+//                    chattingService.sendChatting(sendChatData)
+//                    Log.d("CHATTING-SYSTEM-TEST", "8")
+//
+//                    chattingRoomRVAdapter.notifyDataSetChanged()
+//                    Log.d("CHATTING-SYSTEM-TEST", "9")
+//                }
+//            }
+//             */
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                withContext(Dispatchers.IO) {
+//                    WebSocketManager.connect()
+//                    Log.d("CHATTING-SYSTEM-TEST", "2")
+//
+//                    Log.d("CHATTING-SYSTEM-TEST", "3")
+//                    var content = binding.chattingRoomChattingTextEt.text.toString()
+//                    var chatRoomId = roomId
+//                    var isSystemMessage = false
+//                    var memberId = getMemberId()
+//                    var profileImgUrl = getProfileImgUrl()
+//                    var chatType = "publish"
+//                    var chatId = "none"
+//                    var jwt = getJwt()
+//
+//                    // 전송할 데이터를 JSON Type 변수에 저장
+//                    val jsonObject = JSONObject()
+//                    jsonObject.put("content", content)
+//                    jsonObject.put("chatRoomId", chatRoomId)
+//                    jsonObject.put("isSystemMessage", isSystemMessage)
+//                    jsonObject.put("memberId", memberId)
+//                    jsonObject.put("profileImgUrl", profileImgUrl)
+//                    jsonObject.put("chatType", chatType)
+//                    jsonObject.put("chatId", chatId)
+//                    jsonObject.put("jwt", jwt)
+//                    Log.d("CHATTING-SYSTEM-TEST", "4")
+//
+//                    val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+//                    Log.d("CHATTING-SYSTEM-TEST", "5")
+//
+//                    Log.d("CHATTING-SYSTEM-TEST", chatData.toString())
+//                    WebSocketManager.sendMessage(chatData.toString())
+//                    Log.d("CHATTING-SYSTEM-TEST", "6")
+//
+//                    binding.chattingRoomChattingTextEt.setText("")
+//
+//                    if ( WebSocketManager .sendMessage( " Client send " )) {
+//                        Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
+//                        Log.d("CHATTING-SYSTEM-TEST", "7")
+//                    }
+//
+//                    /*
+//                        val chatId: String?,
+//                        val chatRoomId: String,
+//                        val chatType: String?,
+//                        val content: String,
+//                        val isSystemMessage: Boolean?,
+//                        val jwt: String?,
+//                        val memberId: Int?,
+//                        val profileImgUrl: String?
+//                     */
+//
+//                    /*
+//                        val chatId: String,
+//                        val content: String?,
+//                        val chatRoomId: String,
+//                        val isSystemMessage: Boolean,
+//                        val memberId: Int,
+//                        val nickName: String,
+//                        val profileImgUrl: String?,
+//                        val readMembers: ArrayList<String>,
+//                        val createdAt: String,
+//                        val chatType: String,
+//                        val unreadMemberCnt: Int,
+//                        val isImageMessage: Boolean,
+//                        val viewType: Int,
+//                        val isLeader: Boolean
+//                     */
+//                    var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
+//                    chattingService.sendChatting(sendChatData)
+//                }
+//            }
+//
+//            // 이전 채팅을 가져오기 위한 초기 작업
+//            // DB 비동기 처리를 위해 코루틴 사용!
+//            CoroutineScope(Dispatchers.IO).launch {
+//                var allChatting = chatDB.chatDao().getAllChats()
+//                var chattingSize = allChatting.size
+//
+//                for (i in 0 until chattingSize) {
+//                    // roomId가 같은 경우에만 가져오도록 설정!
+//                    if (roomId == allChatting[i].chatRoomId) {
+//                        chattingList.add(allChatting[i])
+//                        // chattingRoomRVAdapter.addItem(allChatting[i])
+//                    }
+//
+//                    // Main Thread에서 Network 관련 작업을 하려고 하면 NetworkOnMainThreadException 발생!!
+//                    // So, 새로운 Thread를 만들어 그 안에서 작동되도록!!!!
+//                    Thread {
+//                        initRabbitMQSetting()
+//                    }.start()
+//                }
+//
+//                // 채팅 제일 밑으로 가는 방법!
+//                val smoothScroller: RecyclerView.SmoothScroller by lazy {
+//                    object : LinearSmoothScroller(this@ChattingRoomActivity) {
+//                        override fun getVerticalSnapPreference() = SNAP_TO_START
+//                    }
+//                }
+//
+//                smoothScroller.targetPosition = chattingSize
+//                binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
+//            }
+//        }
     }
 
     private fun getCurrentDateTime(): String {
@@ -553,6 +606,7 @@ class ChattingRoomActivity :
 
     override fun sendChattingSuccess(result: String) {
         Log.d("CHATTING-SYSTEM-TEST", "Send Chatting Success")
+        chattingRoomRVAdapter.notifyDataSetChanged()
     }
 
     override fun sendChattingFailure(code: Int, message: String) {
