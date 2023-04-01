@@ -22,11 +22,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.URL
-
 
 class DialogProfileUpdate(override val contentResolver: Any) : DialogFragment(), ProfileMemberInfoModifyView {
     lateinit var binding: DialogProfileUpdateBinding

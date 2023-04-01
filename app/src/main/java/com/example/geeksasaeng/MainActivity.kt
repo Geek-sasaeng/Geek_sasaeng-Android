@@ -7,8 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
-import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomForcedExitFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingUserReportFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
