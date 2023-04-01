@@ -11,9 +11,19 @@ interface ChattingMemberAddView {
     fun chattingMemberAddFailure(code: Int, message: String)
 }
 
+interface PreChattingMemberForcedExitView {
+    fun preChattingMemberForcedExitSuccess(result: Array<PreChattingMemberForcedExitResult>)
+    fun preChattingMemberForcedExitFailure(code: Int, message: String)
+}
+
 interface ChattingMemberForcedExitView {
     fun chattingMemberForcedExitSuccess(result: ChattingMemberForcedExitResult)
     fun chattingMemberForcedExitFailure(code: Int, message: String)
+}
+
+interface DeliveryPartyMemberForcedExitView {
+    fun deliveryPartyMemberForcedExitSuccess(result: DeliveryPartyMemberForcedExitResult)
+    fun deliveryPartyMemberForcedExitFailure(code: Int, message: String)
 }
 
 interface ChattingOrderCompleteView {

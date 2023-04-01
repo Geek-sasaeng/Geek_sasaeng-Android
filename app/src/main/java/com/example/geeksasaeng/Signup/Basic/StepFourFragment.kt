@@ -18,6 +18,7 @@ import com.example.geeksasaeng.Signup.Retrofit.SignUpView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Signup.Tos1Activity
 import com.example.geeksasaeng.Signup.Tos2Activity
+import com.example.geeksasaeng.Utils.saveIsSocial
 import com.example.geeksasaeng.databinding.FragmentStepFourBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_SHORT
 import okhttp3.internal.notifyAll

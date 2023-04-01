@@ -25,6 +25,8 @@ class ProfileDataService {
     private lateinit var profileMemberInfoModifyView: ProfileMemberInfoModifyView
     private lateinit var profilePasswordCheckingView: ProfilePasswordCheckingView
     private lateinit var profilePasswordChangeView: ProfilePasswordChangeView
+    private lateinit var profileViewDormitoryView: ProfileViewDormitoryView
+    private lateinit var profileLogoutView: ProfileLogoutView
 
     private val profileDataService = NetworkModule.getInstance()?.create(ProfileRetrofitInterfaces::class.java)
 
@@ -54,6 +56,12 @@ class ProfileDataService {
     }
     fun setProfilePasswordChangeView(profilePasswordChangeView: ProfilePasswordChangeView) {
         this.profilePasswordChangeView = profilePasswordChangeView
+    }
+    fun setProfileViewDormitoryView(profileViewDormitoryView: ProfileViewDormitoryView) {
+        this.profileViewDormitoryView = profileViewDormitoryView
+    }
+    fun setProfileLogoutView(profileLogoutView: ProfileLogoutView) {
+        this.profileLogoutView = profileLogoutView
     }
 
     // 진행 중인 활동 조회
@@ -231,9 +239,9 @@ class ProfileDataService {
                     val resp = response.body()!!
                     Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", resp.toString())
                     when (resp.code) {
-                        1000 -> profilePasswordCheckingView.onProfilePasswordCheckingSuccess()
+                        1000 -> profilePasswordChangeView.onProfilePasswordChangeSuccess()
                         4000 -> Log.d("PROFILE-PASSWORD-CHANGE-RESPONSE", "서버 오류")
-                        else -> profilePasswordCheckingView.onProfilePasswordCheckingFailure(resp.message)
+                        else -> profilePasswordChangeView.onProfilePasswordChangeFailure(resp.message)
                     }
                 }
             }
@@ -244,5 +252,50 @@ class ProfileDataService {
         })
     }
 
+    // 대학교별 기숙사 목록 조회
+    fun profileViewDormiotrySender(universityId: Int) {
+        profileDataService?.profileViewDormitory(universityId)?.enqueue(object: Callback<ProfileViewDormitoryResponse> {
+
+            override fun onResponse(call: Call<ProfileViewDormitoryResponse>, response: Response<ProfileViewDormitoryResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("profileViewDormiotrySender", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileViewDormitoryView.onProfileViewDormitorySuccess(resp.result)
+                        4000 -> Log.d("profileViewDormiotrySender", "서버 오류")
+                        else -> profileViewDormitoryView.onProfileViewDormitoryFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileViewDormitoryResponse>, t: Throwable) {
+                Log.d("profileViewDormiotrySender", "profileViewDormiotrySender : $t")
+            }
+
+        })
+    }
+
+    // 로그아웃
+    fun profileLogoutSender() {
+        profileDataService?.profileLogout( )?.enqueue(object: Callback<ProfileLogoutResponse> {
+
+            override fun onResponse(call: Call<ProfileLogoutResponse>, response: Response<ProfileLogoutResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("logout", resp.toString())
+                    when (resp.code) {
+                        1000 -> profileLogoutView.onProfileLogoutSuccess(resp.result)
+                        4000 -> Log.d("logout", "서버 오류")
+                        else -> profileLogoutView.onProfileLogoutFailure(resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileLogoutResponse>, t: Throwable) {
+                Log.d("logout", "logout : $t")
+            }
+
+        })
+    }
 }
 

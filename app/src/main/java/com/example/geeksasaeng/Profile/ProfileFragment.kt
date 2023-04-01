@@ -2,22 +2,25 @@ package com.example.geeksasaeng.Profile
 
 import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.Profile.CustomerService.ProfileCustomerServiceActivity
+import com.example.geeksasaeng.Profile.MyInfoUpdate.ProfileMyInfoUpdateActivity
+import com.example.geeksasaeng.Profile.ProfileCard.DialogProfileDetail
+import com.example.geeksasaeng.Profile.ProfileCard.ProfileLevelIntroductionActivity
 import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
-import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
+import com.example.geeksasaeng.Utils.getProfileImgUrl
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate)
     , ProfileMyPreActivityView, ProfileMyInfoView {
@@ -35,11 +38,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var formattingPhoneNumber = String()
     private var fomattingSignUpDate = String()
     private var userId: Int = 0
+    private var grade = String()
+    private var nextGradeAndRemainCredits = String()
 
     override fun initAfterBinding() {
-        binding.profileCardNickNameTv.text = getNickname()
-        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
         // clearBackStack()
         initRetrofitService()
         initClickListener()
@@ -69,12 +71,15 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
             bundle.putString("emailAddress", emailAddress)
             bundle.putString("phoneNumber", formattingPhoneNumber)
             bundle.putString("signUpDate", fomattingSignUpDate)
+            bundle.putString("grade", grade)
+            bundle.putString("nextGradeAndRemainCredits", nextGradeAndRemainCredits)
+            bundle.putString("signUpDate", fomattingSignUpDate)
             profileDetailDialog.arguments = bundle
             profileDetailDialog.show(parentFragmentManager, "profileDetailDialog")
         }
 
         binding.profileMyActivity.setOnClickListener { //나의 활동 보기
-            startActivity(Intent(activity, ProfileMyActivityActivity::class.java))
+            startActivity(Intent(activity, ProfileMyPreActivityActivity::class.java))
         }
 
         binding.profileMyInfo.setOnClickListener { //나의 정보 수정
@@ -106,9 +111,9 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
 
     private fun initRetrofitService() {
         profiledataService = ProfileDataService() // 서비스 객체 생성
-        profiledataService.setMyPreActivityView(this)
+        profiledataService.setMyPreActivityView(this) //★
         profiledataService.profileMyPreActivitySender(0)//cursor =0부터 시작!
-        profiledataService.setMyInfoView(this)
+        profiledataService.setMyInfoView(this) //★
         profiledataService.profileMyInfoSender()
     }
 
@@ -188,6 +193,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     }
 
     override fun onProfileMyInfoSuccess(result: ProfileMyInfoResult) {
+        Log.d("profile","나의 정보 조회 성공")
         userId = result.id
         nickName = result.nickname
         universityName = result.universityName
@@ -198,19 +204,39 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         formattingPhoneNumber = PhoneNumberUtils.formatNumber(phoneNumber, Locale.getDefault().country) //01012345678 => 010-1234-5678로 포맷팅
         val signUpDate = result.createdAt
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
-        binding.profileCardUnivTv.text = result.universityName
-        binding.profileCardDormitoryNameTv.text = result.dormitoryName
+        grade = result.grade
+        nextGradeAndRemainCredits = result.nextGradeAndRemainCredits
+
+        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
+        //정보 설정
+        binding.profileCardNickNameTv.text = getNickname()
+        binding.profileCardUnivTv.text = universityName
+        binding.profileCardDormitoryNameTv.text = dormitoryName
+        Glide.with(requireContext())
+            .load(getProfileImgUrl())
+            .into(binding.profileCardImgIv)
+        //등급
+        binding.profileCardLayoutBlueTopGrade.text = grade
+        if(grade == "복학생"){
+            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level2)
+        }else if(grade == "졸업생"){
+            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level3)
+        }
+        //승급까지 남은 학점
+        binding.profileCardLayoutBlueTopLeftCredit.text = nextGradeAndRemainCredits
     }
 
     override fun onProfileMyInfoFailure(message: String) {
         Log.d("profile","나의 정보 조회 실패")
     }
 
-
-
     override fun onProfileMyPreActivityViewSuccess(result: ProfileMyPreActivityResult) {
+        Log.d("profile", "진행한 활동 불러오기 성공")
 
         var result = result.endedDeliveryPartiesVoList
+        
+        myPreActivityList.clear()
 
         for (i in 0 until result.size) {
             val party = result[i]
@@ -224,8 +250,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }else{
             for (i in 0 until myPreActivityList.size) {
                 recentActivityBind(myPreActivityList[i], i)
+                Log.d("profile", i.toString())
             }
         }
+
     }
 
     override fun onProfileMyPreActivityViewFailure(message: String) {

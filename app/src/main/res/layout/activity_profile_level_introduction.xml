@@ -41,116 +41,130 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/profile_level_introduction_text1_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/top"
-        android:text="긱사생의 학년 기준을\n알려드릴게요."
-        android:fontFamily="@font/spoqa_bold"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="31dp"/>
-
-    <TextView
-        android:id="@+id/profile_level_introduction_text2_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/top"
-        android:fontFamily="@font/spoqa_medium"
-        android:text="긱사생에서는 회원의 활동 수에 따라 이수한 \n학점의 수가 계산됩니다."
-        app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text1_tv"
-        app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="36dp"
-        android:layout_marginTop="10dp"/>
-
-    <ImageView
-        android:id="@+id/profile_level_introduction_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_level_img"
-        app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text2_tv"
-        app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
-        android:layout_marginTop="28dp"/>
-
-    <TextView
-        android:id="@+id/profile_level_introduction_text3_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/top"
-        android:fontFamily="@font/spoqa_bold"
-        android:textSize="16sp"
-        android:text="나도 선배가 될 수 있어요."
-        app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
-        app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_iv"
-        android:layout_marginTop="28dp"/>
-
-    <TextView
-        android:id="@+id/profile_level_introduction_text4_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="긱사생에서 제공하는 서비스의 누적 활동 수가 5번 이상일 시, 처음 [신입] 단계에서 [복학] 단계로 업그레이드 되며, 누적 활동 수가 20번 이상일 시, [복학]단계에서 [졸업]단계로 업그레이드 됩니다."
-        android:textSize="16sp"
-        android:textColor="@color/top"
-        android:fontFamily="@font/spoqa_medium"
-        app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text3_tv"
-        app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text2_tv"
-        app:layout_constraintEnd_toEndOf="@id/profile_level_introduction_text2_tv"
-        android:layout_marginTop="10dp"/>
-
-    <TextView
-        android:id="@+id/profile_level_introduction_text5_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이제 긱사생 활동을 더 즐기러 가볼까요?"
-        android:textSize="13sp"
-        android:textColor="@color/main"
-        android:fontFamily="@font/spoqa_medium"
-        app:layout_constraintBottom_toTopOf="@id/profile_level_introduction_btn"
-        app:layout_constraintStart_toStartOf="@id/profile_level_introduction_btn"
-        app:layout_constraintEnd_toEndOf="@id/profile_level_introduction_btn"
-        android:layout_marginBottom="12dp"
-        />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/profile_level_introduction_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="28dp"
-        android:layout_marginBottom="29dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/main"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="0dp">
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/profile_level_introduction_text1_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:text="배달파티 하러 가기"
+                android:textSize="24sp"
+                android:textColor="@color/top"
+                android:text="긱사생의 학년 기준을\n알려드릴게요."
                 android:fontFamily="@font/spoqa_bold"
-                android:layout_marginHorizontal="73dp"
-                android:layout_marginVertical="13dp"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="31dp"/>
+
+            <TextView
+                android:id="@+id/profile_level_introduction_text2_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/top"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="긱사생에서는 회원의 활동 수에 따라 이수한 학점의 수가 계산됩니다."
+                app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text1_tv"
+                app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="36dp"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:id="@+id/profile_level_introduction_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_level_img"
+                app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text2_tv"
+                app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
+                android:layout_marginTop="28dp"/>
+
+            <TextView
+                android:id="@+id/profile_level_introduction_text3_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/top"
+                android:fontFamily="@font/spoqa_bold"
+                android:textSize="16sp"
+                android:text="나도 선배가 될 수 있어요."
+                app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text1_tv"
+                app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_iv"
+                android:layout_marginTop="28dp"/>
+
+            <TextView
+                android:id="@+id/profile_level_introduction_text4_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="긱사생에서 제공하는 서비스의 누적 활동 수가 5번 이상일 시, 처음 [신입] 단계에서 [복학] 단계로 업그레이드 되며, 누적 활동 수가 20번 이상일 시, [복학]단계에서 [졸업]단계로 업그레이드 됩니다."
+                android:textSize="16sp"
+                android:textColor="@color/top"
+                android:fontFamily="@font/spoqa_medium"
+                app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text3_tv"
+                app:layout_constraintStart_toStartOf="@id/profile_level_introduction_text2_tv"
+                app:layout_constraintEnd_toEndOf="@id/profile_level_introduction_text2_tv"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/profile_level_introduction_text5_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이제 긱사생 활동을 더 즐기러 가볼까요?"
+                android:textSize="13sp"
+                android:textColor="@color/main"
+                android:fontFamily="@font/spoqa_medium"
+                app:layout_constraintTop_toBottomOf="@id/profile_level_introduction_text4_tv"
+                app:layout_constraintBottom_toTopOf="@id/profile_level_introduction_btn"
+                app:layout_constraintStart_toStartOf="@id/profile_level_introduction_btn"
+                app:layout_constraintEnd_toEndOf="@id/profile_level_introduction_btn"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="12dp"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_level_introduction_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="28dp"
+                android:layout_marginBottom="29dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:backgroundTint="@color/main"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_level_introduction_go_main_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:text="배달파티 하러 가기"
+                        android:fontFamily="@font/spoqa_bold"
+                        android:layout_marginHorizontal="73dp"
+                        android:layout_marginVertical="13dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-
-
-
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

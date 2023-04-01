@@ -61,5 +61,16 @@ interface ProfileRetrofitInterfaces {
         @Body profilePasswordChangeRequest: ProfilePasswordChangeRequest
     ) : Call<ProfilePasswordChangeResponse>
 
+    //대학교별 기숙사 목록 조회
+    @GET("/{universityId}/dormitories")
+    fun profileViewDormitory(
+        @Path("universityId") universityId: Int
+    ): Call<ProfileViewDormitoryResponse>
+
+    //로그아웃-(Fcm토큰 최신화때문에 로그아웃시 해당 멤버 fcm 정보 삭제)
+    @DELETE("/logout")
+    fun profileLogout(
+    ): Call<ProfileLogoutResponse>
+
 
 }

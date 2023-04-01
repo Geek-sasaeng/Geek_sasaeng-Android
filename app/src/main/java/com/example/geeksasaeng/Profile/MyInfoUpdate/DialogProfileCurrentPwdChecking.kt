@@ -1,10 +1,9 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.MyInfoUpdate
 
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +48,11 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
     }
 
     private fun initClickListener() {
+
+        binding.dialogProfileCurrentPwdCheckingBackIv.setOnClickListener {
+            dismiss()
+        }
+
         binding.dialogProfileCurrentPwdCheckingNextBtn.setOnClickListener {
             val pwRegex = """^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\-=])(?=\S+$)[A-Za-z\d!@#$%^+\-=]{8,}$"""
             val pwPattern = Pattern.compile(pwRegex)

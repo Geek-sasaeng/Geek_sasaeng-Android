@@ -76,8 +76,8 @@ class ChattingRoomForcedExitRVAdapter(var memberList: MutableList<MemberData>) :
             if(position >= mcheckboxList.size) //뷰가 바인딩 될 때, 체크박스리스트에 객체를 하나씩 추가해준다.
                 mcheckboxList.add(position, false)
             binding.itemChattingRoomForcedExitCheckBox.isChecked = mcheckboxList[position] //체크 상태 유지
-            Glide.with(binding.root.context).load(member.profileImgUrl).into(binding.itemChattingRoomForcedExitImageIv)
-            binding.itemChattingRoomForcedExitTv.text = member.nickName
+            Glide.with(binding.root.context).load(member.userProfileImgUrl).into(binding.itemChattingRoomForcedExitImageIv)
+            binding.itemChattingRoomForcedExitTv.text = member.userName
         }
     }
 

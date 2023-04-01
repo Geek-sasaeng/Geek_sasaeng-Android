@@ -1,4 +1,4 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.ProfileCard
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
+import com.example.geeksasaeng.Utils.getProfileImgUrl
 import com.example.geeksasaeng.databinding.DialogProfileDetailLayoutBinding
 import java.util.Locale
 
@@ -23,6 +25,8 @@ class DialogProfileDetail : DialogFragment()  {
     var emailAddress: String? = null
     var phoneNumber: String? = null
     var signUpDate: String? = null
+    var grade: String? = null
+    var nextGradeAndRemainCredits: String? = null
 
     override fun onResume() {
         super.onResume()
@@ -52,6 +56,8 @@ class DialogProfileDetail : DialogFragment()  {
         emailAddress =requireArguments().getString("emailAddress")
         phoneNumber =requireArguments().getString("phoneNumber") //이미 포맷팅된 전화번호가 넘어옴
         signUpDate =requireArguments().getString("signUpDate") //이미 포맷팅된 가입일이 넘어옴
+        grade =requireArguments().getString("grade")
+        nextGradeAndRemainCredits  =requireArguments().getString("nextGradeAndRemainCredits")
 
         binding.dialogProfileDetailNickNameTv.text = nickName
         binding.dialogProfileDetailUnivTv.text = universityName
@@ -59,7 +65,12 @@ class DialogProfileDetail : DialogFragment()  {
         binding.dialogProfileDetailIdTv.text = loginId
         binding.dialogProfileDetailEmailTv.text = emailAddress
         binding.dialogProfileDetailPhoneTv.text = phoneNumber
-        binding.dialogProfileDetailSignUpDateTv.text = signUpDate
+        binding.dialogProfileDetailSignUpDateTv.text = "가입일 ㅣ $signUpDate"
+        binding.dialogProfileDetailBlueTopGrade.text = grade
+        binding.dialogProfileDetailBlueTopLeftCredit.text = nextGradeAndRemainCredits
+        Glide.with(this)
+            .load(getProfileImgUrl())
+            .into(binding.dialogProfileDetailImgIv)
     }
 
 }

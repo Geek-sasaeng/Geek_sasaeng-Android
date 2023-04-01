@@ -45,7 +45,7 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("why-filter", "onBindViewHolder 실행됨")
+        Log.d("why-filter", "onBindViewHolder 실행됨" + mDeliveryList.toString())
         itemBind(viewHolder as ItemViewHolder, position)
         timerBind(viewHolder as ItemViewHolder, position)
         viewHolder.itemView.setOnClickListener {
@@ -112,11 +112,13 @@ class DeliveryRVAdapter(private var deliveryList: ArrayList<DeliveryPartiesVoLis
     }
 
     fun setArrayList(list: ArrayList<DeliveryPartiesVoList?>){
+        Log.d("deliveryList", "RVAdapter-setArrayList안(before)" + mDeliveryList.toString())
         Log.d("why-1",mDeliveryList.toString()+list.toString())
         //mDeliveryList.clear()
         //mDeliveryList.addAll(list)
         mDeliveryList = list //TODO: 얕은복사-왜 얘만되는진 모르겠지만..!
         Log.d("why-2",mDeliveryList.toString()+list.toString())
+        Log.d("deliveryList", "RVAdapter-setArrayList안(after)" + mDeliveryList.toString())
         notifyDataSetChanged()
     }
 

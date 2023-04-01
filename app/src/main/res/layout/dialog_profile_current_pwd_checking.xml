@@ -68,7 +68,7 @@
             app:layout_constraintBottom_toTopOf="@id/dialog_profile_current_pwd_checking_next_btn"
             app:layout_constraintStart_toStartOf="@id/dialog_profile_current_pwd_checking_et"
             android:layout_marginStart="7dp"
-            android:layout_marginBottom="47dp"
+            android:layout_marginBottom="40dp"
             />
 
 

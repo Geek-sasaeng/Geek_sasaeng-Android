@@ -12,6 +12,7 @@ import com.example.geeksasaeng.databinding.DialogChattingRoomOptionNotLeaderPopu
 class MemberOptionDialog: DialogFragment() {
     lateinit var binding: DialogChattingRoomOptionNotLeaderPopupBinding
     private lateinit var roomId: String
+    private var partyId : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +25,8 @@ class MemberOptionDialog: DialogFragment() {
         dialog?.window?.setWindowAnimations(com.example.geeksasaeng.R.style.AnimationPopupStyle)
 
         roomId = requireArguments().getString("roomId").toString()
+        partyId = requireArguments().getInt("partyId")
+
         initListener()
         return binding.root
     }
@@ -46,6 +49,7 @@ class MemberOptionDialog: DialogFragment() {
             val dialogChattingExit = DialogChattingExit()
             val bundle = Bundle()
             bundle.putString("roomId", roomId)
+            bundle.putInt("partyId", partyId)
             bundle.putBoolean("isCheif",false)
             dialogChattingExit.arguments = bundle
             dialogChattingExit.show(parentFragmentManager, "DialogChattingExit")
