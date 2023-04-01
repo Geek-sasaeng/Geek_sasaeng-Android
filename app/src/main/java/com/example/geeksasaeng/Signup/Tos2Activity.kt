@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Signup
 
+import android.util.Log
 import android.view.View
 import com.example.geeksasaeng.Signup.Basic.StepFourFragment.Companion.privacyTemrsAgree
 import com.example.geeksasaeng.Signup.Naver.StepNaverTwoFragment.Companion.socialPrivacyTemrsAgree
@@ -16,7 +17,6 @@ class Tos2Activity : BaseActivity<ActivityTos2Binding>(ActivityTos2Binding::infl
 
         if(status!="signUp"){ // 내정보뷰에서 보는 경우가 있다.
             binding.tos2BottomBar.visibility = View.GONE
-            binding.tos2TitleTv.text = "서비스 이용 약관 보기"
         }else{ //회원가입창에서 들어온 경우
             isSocial = intent.getBooleanExtra("isSocial", false)
         }

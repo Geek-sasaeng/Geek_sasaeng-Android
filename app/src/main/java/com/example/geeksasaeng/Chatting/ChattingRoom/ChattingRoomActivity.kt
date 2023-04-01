@@ -362,6 +362,7 @@ class ChattingRoomActivity :
             } else {
                 val optionDialog = MemberOptionDialog()
                 val bundle = Bundle()
+                bundle.putInt("partyId", partyId)
                 bundle.putString("roomId", roomId)
                 optionDialog.arguments = bundle
                 optionDialog.show(supportFragmentManager, "chattingUserOptionDialog")

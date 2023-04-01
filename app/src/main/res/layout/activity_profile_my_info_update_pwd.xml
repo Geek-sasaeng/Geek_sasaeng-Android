@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -43,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="완료"
-            android:textColor="#BABABA"
+            android:enabled="false"
+            android:textColor="@color/bababa_color"
             android:textSize="16sp"
             android:textFontWeight="700"
             android:fontFamily="@font/spoqa_medium"
@@ -57,19 +59,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_toolbar">
 
         <TextView
             android:id="@+id/profile_my_info_update_pwd_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="39dp"
+            android:fontFamily="@font/spoqa_medium"
             android:text="비밀번호 변경"
             android:textColor="@color/gray_2"
-            android:textSize="12sp"
             android:textFontWeight="500"
-            android:fontFamily="@font/spoqa_medium"
-            android:layout_marginTop="39dp"
-            android:layout_marginStart="23dp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,77 +81,121 @@
             android:id="@+id/profile_my_info_update_pwd_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
-            android:text="비밀번호"
-            android:maxLines="1"
-            android:inputType="textPassword"
-            android:backgroundTint="@color/gray_0"
-            android:textColor="@color/top"
-            android:textSize="15sp"
-            android:textFontWeight="500"
-            android:layout_marginHorizontal="28dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@android:color/transparent"
             android:fontFamily="@font/spoqa_medium"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@color/top"
+            android:textFontWeight="500"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_title_tv"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_title_tv" />
+
+        <View
+            android:id="@+id/profile_my_info_update_pwd_line"
+            android:layout_width="0dp"
+            android:layout_height="1.2dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="7.7dp"
+            android:background="@color/gray_0"
+            app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/profile_my_info_update_pwd_on_iv"
-            android:layout_width="23dp"
-            android:layout_height="19dp"
-            android:padding="3dp"
-            android:src="@drawable/ic_pwd_on"
+            android:id="@+id/profile_my_info_pwd_eye_btn"
+            android:padding="5dp"
             android:layout_marginEnd="9dp"
-            app:layout_constraintTop_toTopOf="@id/profile_my_info_update_pwd_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_pwd"
             app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_et"
-            app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_et"/>
+            app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_line"
+            app:layout_constraintTop_toTopOf="@id/profile_my_info_update_pwd_et"/>
 
+        <TextView
+            android:id="@+id/profile_my_info_update_pwd_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/spoqa_medium"
+            android:text="문자, 숫자 및 특수문자 포함 8자 이상으로 입력해주세요"
+            android:textColor="@color/error"
+            android:textSize="11sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/profile_my_info_update_pwd_et"
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_et" />
 
         <TextView
             android:id="@+id/profile_my_info_update_pwd_check_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="19dp"
+            android:fontFamily="@font/spoqa_medium"
             android:text="비밀번호 확인"
             android:textColor="@color/gray_2"
-            android:textSize="12sp"
             android:textFontWeight="500"
-            android:fontFamily="@font/spoqa_medium"
-            android:layout_marginTop="19dp"
-            android:layout_marginStart="23dp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_et" />
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_info_tv" />
 
         <EditText
             android:id="@+id/profile_my_info_update_pwd_check_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
-            android:text="비밀번호"
-            android:maxLines="1"
-            android:inputType="textPassword"
-            android:backgroundTint="@color/gray_0"
-            android:textColor="@color/top"
-            android:textSize="15sp"
-            android:textFontWeight="500"
-            android:layout_marginHorizontal="28dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@android:color/transparent"
             android:fontFamily="@font/spoqa_medium"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@color/top"
+            android:textFontWeight="500"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_check_title_tv"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_check_title_tv" />
+
+        <View
+            android:id="@+id/profile_my_info_update_pwd_check_line"
+            android:layout_width="0dp"
+            android:layout_height="1.2dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="7.7dp"
+            android:background="@color/gray_0"
+            app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_check_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/profile_my_info_update_pwd_check_on_iv"
-            android:layout_width="23dp"
-            android:layout_height="19dp"
-            android:padding="3dp"
-            android:src="@drawable/ic_pwd_on"
+            android:id="@+id/profile_my_info_pwd_check_eye_btn"
+            android:padding="5dp"
             android:layout_marginEnd="9dp"
-            app:layout_constraintTop_toTopOf="@id/profile_my_info_update_pwd_check_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_pwd"
             app:layout_constraintBottom_toBottomOf="@id/profile_my_info_update_pwd_check_et"
-            app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_check_et"/>
+            app:layout_constraintEnd_toEndOf="@id/profile_my_info_update_pwd_check_line"
+            app:layout_constraintTop_toTopOf="@id/profile_my_info_update_pwd_check_et"/>
 
+        <TextView
+            android:id="@+id/profile_my_info_update_pwd_check_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/spoqa_medium"
+            android:text="비밀번호가 다릅니다. 다시 확인해주세요"
+            android:textColor="@color/error"
+            android:textSize="11sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/profile_my_info_update_pwd_check_et"
+            app:layout_constraintTop_toBottomOf="@id/profile_my_info_update_pwd_check_et" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

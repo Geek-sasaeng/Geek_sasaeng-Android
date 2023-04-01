@@ -169,6 +169,16 @@
                 app:layout_constraintBottom_toTopOf="@id/profile_customer_service_kakao_talk_arrow_iv"
                 android:layout_marginBottom="32dp"/>
 
+            <ImageView
+                android:layout_width="121dp"
+                android:layout_height="121dp"
+                android:src="@drawable/kakao_logo"
+                android:backgroundTint="@color/main"
+                android:background="@color/main"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="-39dp"/>
+
             <TextView
                 android:id="@+id/profile_customer_service_kakao_talk_tv2"
                 android:layout_width="wrap_content"
@@ -192,15 +202,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="16dp"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_logo_kakao_talk"
-                android:backgroundTint="@color/main"
-                android:background="@color/main"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

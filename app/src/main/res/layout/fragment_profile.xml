@@ -160,7 +160,7 @@
                                 android:id="@+id/profile_card_bar_iv"
                                 android:layout_width="24.32dp"
                                 android:layout_height="102dp"
-                                android:src="@drawable/ic_profile_card_bar"
+                                android:src="@drawable/ic_profile_card_heart_bar_level1"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginBottom="-1dp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -227,8 +227,10 @@
                                 app:cardElevation="0dp"
                                 app:cardCornerRadius="55dp">
                                 <ImageView
+                                    android:id="@+id/profile_card_img_iv"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/profile_thumbs_up" />
                             </androidx.cardview.widget.CardView>
 

@@ -24,11 +24,24 @@ interface ChattingRetrofitInterfaces {
         @Body sendChattingRequest: SendChattingRequest
     ): Call<SendChattingResponse>
 
-    //방장이 배달 파티 채팅 멤버를 강제퇴장
-    @DELETE("/party-chat-room/members")
+    //배달 파티 채팅방 멤버 정보 조회 for 강제퇴장
+    @GET("/party-chat-room/{partyId}/{roomId}/members")
+    fun preChattingMemberForcedExit(
+        @Path("partyId") partyId: Int,
+        @Path("roomId") roomId: String
+    ): Call<PreChattingMemberForcedExitResponse>
+
+    //방장이 배달 파티 채팅 멤버를 강제퇴장 for 채팅방
+    @PATCH("/party-chat-room/members")
     fun chattingMemberForcedExit(
         @Body chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest
     ): Call<ChattingMemberForcedExitResponse>
+
+    //배달 파티 멤버 강제퇴장 for 배달파티
+    @PATCH("/delivery-party-members")
+    fun deliveryPartyMemberForcedExit(
+        @Body deliveryPartyMemberForcedExitRequest: DeliveryPartyMemberForcedExitRequest
+    ): Call<DeliveryPartyMemberForcedExitResponse>
 
     //주문 완료
     @PATCH("/party-chat-room/order")
@@ -50,7 +63,7 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingPartyMemberLeavePartyResponse>
 
     //배달 파티멤버가 스스로 퇴장 for 채팅방
-    @DELETE("/party-chat-room/members/self")
+    @PATCH("/party-chat-room/members/self")
     fun partyMemberChattingLeave(
         @Body chattingPartyMemberLeaveChatRequest: ChattingPartyMemberLeaveChatRequest
     ): Call<ChattingPartyMemberLeaveChatResponse>
@@ -68,15 +81,15 @@ interface ChattingRetrofitInterfaces {
     ): Call<ChattingPartyLeaderLeaveChatResponse>
 
     //배달 완료 알림
-    @POST("/party-chat-room/delivery-complete")
+    @PATCH("/party-chat-room/delivery-complete")
     fun partyDeliveryComplete(
         @Body chattingDeliveryCompleteRequest: ChattingDeliveryCompleteRequest
     ): Call<ChattingDeliveryCompleteResponse>
 
     //배달파티 수동 매칭마감
-    @PATCH("/delivery-party/{partyId}/matching-status")
+    @PATCH("/party-chat-room/matching-status")
     fun matchingEnd(
-        @Path("partyId") partyId: Int
+        @Query("partyId") partyId: Int
     ): Call<MatchingEndResponse>
 
     //채팅방 상세조회

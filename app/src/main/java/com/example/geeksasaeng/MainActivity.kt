@@ -1,18 +1,16 @@
 package com.example.geeksasaeng
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomForcedExitFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingUserReportFragment
 import com.example.geeksasaeng.Community.CommunityFragment
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
 import com.example.geeksasaeng.Profile.ProfileFragment
@@ -24,6 +22,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     var status: String? = null
     var deliveryItemId: String? = null
+
+    private var backPressedTime: Long = 0
 
     override fun initAfterBinding() {
 
@@ -58,6 +58,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             transaction.replace(R.id.main_frm, lookPartyFragment)
             transaction.commit()
 
+        } else if (status == "ProfileFragment"){
+            binding.mainBottomNavi.setSelectedItemId(R.id.profileFragment) // 바텀 네비 아이콘을 나의정보로 바꿔주는 코드
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_frm, ProfileFragment())
+            transaction.commit()
         } else if (status == "chatReport") {
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
@@ -150,6 +155,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 return
             }
         }
+
+        //2초안에 뒤로가기 2번 누르면 종료
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finish()
+        } else {
+            Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
 
         finish()
     }

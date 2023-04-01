@@ -54,3 +54,15 @@ interface ProfilePasswordChangeView {
     fun onProfilePasswordChangeSuccess()
     fun onProfilePasswordChangeFailure(message: String)
 }
+
+// 대학교별 기숙사 목록 조회
+interface ProfileViewDormitoryView {
+    fun onProfileViewDormitorySuccess(result: ArrayList<ProfileViewDormitoryResult>)
+    fun onProfileViewDormitoryFailure(message: String)
+}
+
+// 로그아웃
+interface ProfileLogoutView {
+    fun onProfileLogoutSuccess(result: String)
+    fun onProfileLogoutFailure(message: String)
+}

@@ -1,8 +1,9 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.MyInfoUpdate
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.database.Cursor
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,34 +11,36 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyResult
-import com.example.geeksasaeng.Profile.Retrofit.ProfileMemberInfoModifyView
+import com.example.geeksasaeng.Home.Party.LookParty.DialogPartyDelete
+import com.example.geeksasaeng.Profile.Retrofit.*
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckRequest
 import com.example.geeksasaeng.Signup.Retrofit.SignUpNickCheckView
 import com.example.geeksasaeng.Signup.Retrofit.SignupDataService
 import com.example.geeksasaeng.Utils.*
 import com.example.geeksasaeng.databinding.ActivityProfileMyInfoUpdateBinding
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
+import com.google.android.material.snackbar.Snackbar
 import java.util.regex.Pattern
 
 
 class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBinding>(ActivityProfileMyInfoUpdateBinding::inflate),
-    SignUpNickCheckView {
+    SignUpNickCheckView, ProfileViewDormitoryView,
+    DialogProfileImageUpdate.ProfileImageAlbumUpdateListener {
 
-    private var dormitoryId = 1 //default 기숙사 아이디
+    private var dormitoryId = getDormitoryId() //기숙사 아이디
     private lateinit var nickName :String  //기존 닉네임
-    private lateinit var loginId :String  //로그인 id -api용
+    private lateinit var loginId :String //로그인 id -api용
     private lateinit var currentImageURI : Uri // 새로 지정할 프로필 Url
     private lateinit var signUpService : SignupDataService //닉네임 중복확인용
+    private lateinit var profileDataService : ProfileDataService //기숙사 리스트 불러오기 용
+    private var dormitoryList : ArrayList<ProfileViewDormitoryResult> = arrayListOf<ProfileViewDormitoryResult>()
+    private var isDefaultImage : Boolean = false
+
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
 
     override fun initAfterBinding() {
         initData()
@@ -45,6 +48,12 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         initClickListener()
         initRadioButton()
         initTextWatcher()
+        initGetDormiotryList()
+    }
+
+    private fun initGetDormiotryList() {
+        // 대학교별 기숙사 정보 얻어오기
+        profileDataService.profileViewDormiotrySender(1) // TODO: 일단 가천대만 지원하니까 1로 값을 줌
     }
 
     private fun initData() {
@@ -75,11 +84,17 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             .load(getProfileImgUrl())
             .into(binding.profileMyInfoUpdateUserImgIv)
         currentImageURI = getProfileImgUrl()!!.toUri()
+
+        if (getIsSocial()!!){ //소셜로그인한 상태면 비밀번호 변경 안뜨게 하기 위함
+            binding.profileMyInfoUpdatePasswordChangeBtn.visibility = View.INVISIBLE
+        }
     }
 
     private fun initView() {
         signUpService = SignupDataService() // 서비스 객체 생성
         signUpService.setSignUpNickCheckView(this)//닉네임 중복확인 뷰 연결
+        profileDataService = ProfileDataService()
+        profileDataService.setProfileViewDormitoryView(this)
     }
 
     private fun initTextWatcher() {
@@ -100,7 +115,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
                     binding.profileMyInfoUpdateNicknameCheckBtn.isEnabled = false
                     binding.profileMyInfoUpdateNicknameCheckBtn.isClickable = false
                     binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE
-                    binding.profileMyInfoUpdateNicknameExplainationTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.main))
+                    binding.profileMyInfoUpdateNicknameExplainationTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.error))
+                    binding.profileMyInfoUpdateNicknameExplainationTv.backgroundTintList = ContextCompat.getColorStateList(applicationContext, R.color.error) // 밑줄 색 빨간 색으로
                     binding.profileMyInfoUpdateNicknameExplainationTv.text = "3-8자 영문 혹은 한글로 입력해주세요"
                     if(binding.profileMyInfoUpdateNicknameExplainationTv.visibility == View.INVISIBLE){
                         binding.profileMyInfoUpdateNicknameExplainationTv.visibility = View.VISIBLE // 보이게 만들기
@@ -148,22 +164,24 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
 
         binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
-            val dialogProfileUpdate = DialogProfileUpdate(contentResolver)
+            val dialogProfileUpdate = DialogProfileMyInfoUpdate(contentResolver)
             val bundle = Bundle()
             bundle.putInt("dormitoryId", dormitoryId)
             bundle.putString("loginId", loginId)
             bundle.putString("nickname", nickName)
             bundle.putString("currentImageURI", currentImageURI.toString())
+            bundle.putBoolean("isDefaultImage", isDefaultImage)
             dialogProfileUpdate.arguments= bundle
             dialogProfileUpdate.show(supportFragmentManager, "DialogProfileUpdate")
 
         }
 
         binding.profileUserImgCv.setOnClickListener { //사용자 프로필
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
-            intent.type = "image/*"
-            startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
+            //저장공간 접근 권한 받기
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // 권한이 없을 경우 권한 요청 다이얼로그를 표시
+                requestReadExternalStoragePermission()
+            }
         }
 
         binding.profileMyInfoUpdateNicknameCheckBtn.setOnClickListener {
@@ -180,21 +198,39 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
+    // (저장권한 읽기) 권한 요청 메소드
+    fun requestReadExternalStoragePermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+    }
 
-        if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
-            currentImageURI = intent?.data!!
-            Log.d("sendImg- onActivityResult",currentImageURI.toString())
-            binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
-            checkingModifiability()
-        } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
-            Log.d("ActivityResult", "사진 선택 취소")
-        }
-        else{
-            Log.d("ActivityResult", "something wrong")
+    //권한 요청 결과 처리
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+                // 권한 부여 여부 확인
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 1. 권한 부여됨
+                    var dialogFragment = DialogProfileImageUpdate()
+                    dialogFragment.show(supportFragmentManager, "DialogProfileImageUpdate")
+                } else {
+                    // 2. 권한 거부됨
+                    // 사용자에게 권한이 필요하다는 메시지를 표시합니다.
+                    Snackbar.make(binding.root, "저장공간 읽기 권한이 필요합니다.", Snackbar.LENGTH_LONG)
+                        .setAction("권한 요청") {
+                            // 권한 요청 다시 실행
+                            requestReadExternalStoragePermission()
+                        }
+                        .show()
+                }
+                return
+            }
+            // 다른 권한 요청 코드 처리
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
         }
     }
+
 
     override fun onSignUpNickCheckSuccess(message: String) {
         // 사용가능한 닉네임일 경우
@@ -218,8 +254,8 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     private fun checkingModifiability() {
         var modifiability = (binding.profileMyInfoUpdateNicknameCheckConfirmed.visibility==View.VISIBLE) ||
-                (dormitoryId!= getDormitoryId()) || (currentImageURI.toString() != getProfileImgUrl() )
-        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니면
+                (dormitoryId!= getDormitoryId()) || (currentImageURI.toString() != getProfileImgUrl() || isDefaultImage)
+        // 확인완료가 보이거나, 기숙사id가 원래 기숙사id랑 다르거나, 프로필 이미지가 null이 아니거나, 기본 이미지로 변경했으면
 
         if (modifiability) { //수정이 가능하면
             binding.profileMyInfoUpdateCompleteTv.isEnabled = true
@@ -228,6 +264,90 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
         } else{
             binding.profileMyInfoUpdateCompleteTv.isEnabled = false
             binding.profileMyInfoUpdateCompleteTv.setTextColor(ContextCompat.getColor(applicationContext,R.color.bababa_color))
+        }
+    }
+
+    override fun onProfileViewDormitorySuccess(result: ArrayList<ProfileViewDormitoryResult>) {
+        Log.d("getDormitoryList", "성공")
+        dormitoryList.clear()
+        for (i in result){
+            Log.d("getDormitoryList", "${i.id}, ${i.name}")
+            dormitoryList.add(i)
+        }
+        dormitoryViewChange()
+    }
+
+    private fun dormitoryViewChange() { //TODO: 지금은 일단 radioGroup으로 만들어놔서 임시방편으로 이렇게 했는데 추후, gridLayout recyclerView 이용하는걸로 리팩토링 필요!
+        if (dormitoryList.size == 1){
+            binding.profileMyInfoUpdateDormitoryRb1.text = "제 " + dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==2){
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==3){
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRg2.visibility = View.GONE
+        }else if (dormitoryList.size ==4){
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.visibility = View.INVISIBLE
+            binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
+        }else if (dormitoryList.size == 5){
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text =  "제 " +dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb6.visibility = View.INVISIBLE
+        }
+        else if (dormitoryList.size == 5){
+            binding.profileMyInfoUpdateDormitoryRb1.text =  "제 " +dormitoryList[0].name
+            binding.profileMyInfoUpdateDormitoryRb2.text =  "제 " +dormitoryList[1].name
+            binding.profileMyInfoUpdateDormitoryRb3.text =  "제 " +dormitoryList[2].name
+            binding.profileMyInfoUpdateDormitoryRb4.text =  "제 " +dormitoryList[3].name
+            binding.profileMyInfoUpdateDormitoryRb5.text =  "제 " +dormitoryList[4].name
+            binding.profileMyInfoUpdateDormitoryRb6.text =  "제 " +dormitoryList[5].name
+        }
+    }
+
+    override fun onProfileViewDormitoryFailure(message: String) {
+        Log.d("getDormitoryList", "실패")
+    }
+
+    override fun onAlbumClicked() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        intent.type = "image/*"
+        startActivityForResult(intent, 1004) //requestCode 원하는 값 주면 된다
+    }
+
+    override fun onDefaultImageClicked() {
+        isDefaultImage = true
+        binding.profileMyInfoUpdateUserImgIv.setImageResource(R.drawable.profile_thumbs_up)
+        checkingModifiability()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
+        if (requestCode == 1004 && resultCode == Activity.RESULT_OK){
+            currentImageURI = intent?.data!!
+            Log.d("sendImg- onActivityResult",currentImageURI.toString())
+            binding.profileMyInfoUpdateUserImgIv.setImageURI(currentImageURI) // 이미지 뷰에 선택한 이미지 출력
+            checkingModifiability()
+        } else if (resultCode == Activity.RESULT_CANCELED){ // 사진선택 취소
+            Log.d("ActivityResult", "사진 선택 취소")
+        }
+        else{
+            Log.d("ActivityResult", "something wrong")
         }
     }
 }

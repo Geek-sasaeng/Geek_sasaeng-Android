@@ -2,6 +2,7 @@ package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.util.ArrayList
 
 data class CreateChattingRoomRequest(
     @SerializedName("accountNumber") val accountNumber: String,
@@ -60,9 +61,26 @@ data class ChattingMemberAddResult(
     @SerializedName("remittance") val remittance: Boolean
 )
 
+// 강제퇴장을 위한 조회 api
 // 강제퇴장
+
+data class PreChattingMemberForcedExitResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: Array<PreChattingMemberForcedExitResult>
+)
+
+data class PreChattingMemberForcedExitResult(
+    @SerializedName("chatMemberId") val chatMemberId: String,
+    @SerializedName("memberId") val memberId: Int,
+    @SerializedName("userName") val userName: String,
+    @SerializedName("userProfileImgUrl") val userProfileImgUrl: String
+)
+
+// 강제퇴장 for 채팅방
 data class ChattingMemberForcedExitRequest(
-    @SerializedName("removedMemberId") val removedMemberId: String,
+    @SerializedName("removedChatMemberIdList") val removedChatMemberIdList: ArrayList<String>,
     @SerializedName("roomId") val roomId: String
 )
 
@@ -74,6 +92,23 @@ data class ChattingMemberForcedExitResponse(
 )
 
 data class ChattingMemberForcedExitResult(
+    @SerializedName("message") val message: String
+)
+
+// 강제퇴장 for 배달파티
+data class DeliveryPartyMemberForcedExitRequest(
+    @SerializedName("membersId") val membersId: ArrayList<Int>,
+    @SerializedName("partyId") val partyId: Int
+)
+
+data class DeliveryPartyMemberForcedExitResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: DeliveryPartyMemberForcedExitResult
+)
+
+data class DeliveryPartyMemberForcedExitResult(
     @SerializedName("message") val message: String
 )
 
@@ -103,7 +138,7 @@ data class ChattingRemittanceCompleteRequest(
 
 //파티 멤버 나가기 for 배달파티
 data class ChattingPartyMemberLeavePartyRequest(
-    @SerializedName("roomId") val roomId: String,
+    @SerializedName("partyId") val partyId: Int
 )
 
 data class ChattingPartyMemberLeavePartyResponse(
@@ -115,7 +150,7 @@ data class ChattingPartyMemberLeavePartyResponse(
 
 //파티 멤버 나가기 for 채팅방
 data class ChattingPartyMemberLeaveChatRequest(
-    @SerializedName("roomId") val roomId: String,
+    @SerializedName("roomId") val roomId: String
 )
 
 data class ChattingPartyMemberLeaveChatResponse(
@@ -132,8 +167,8 @@ data class ChattingPartyMemberLeaveChatResult(
 
 //방장 나가기 for 배달파티
 data class ChattingPartyLeaderLeavePartyRequest(
-    @SerializedName("nickName") val nickName: String?,
-    @SerializedName("roomId") val roomId: String
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("partyId") val partyId: Int
 )
 
 data class ChattingPartyLeaderLeavePartyResponse(
@@ -190,8 +225,10 @@ data class MatchingEndResult(
 )
 
 data class MemberData(
-    @SerializedName("nickName") val nickName: String,
-    @SerializedName("profileImgUrl") val profileImgUrl: String,
+    @SerializedName("chatMemberId") val chatMemberId: String,
+    @SerializedName("memberId") val memberId: Int,
+    @SerializedName("userName") val userName: String,
+    @SerializedName("userProfileImgUrl") val userProfileImgUrl: String,
     @SerializedName("accountTransferStatus") val accountTransferStatus: Boolean
 ): Serializable
 

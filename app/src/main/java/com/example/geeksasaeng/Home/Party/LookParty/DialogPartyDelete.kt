@@ -9,6 +9,7 @@ import com.example.geeksasaeng.Home.Delivery.DeliveryFragment
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDataService
 import com.example.geeksasaeng.Home.Party.Retrofit.PartyDeleteView
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.databinding.DialogDeliveryDeleteBinding
 
 class DialogPartyDelete: DialogFragment(), PartyDeleteView {
@@ -58,6 +59,7 @@ class DialogPartyDelete: DialogFragment(), PartyDeleteView {
     override fun partyDeleteViewSuccess(code: Int) {
         // Toast.makeText(activity, code.toString(), Toast.LENGTH_SHORT).show()
         this.dismiss()
+        CustomToastMsg.createToast(requireContext(), "파티 삭제가 완료되었습니다", "#8029ABE2", 58)?.show()
         activity?.supportFragmentManager?.beginTransaction()!!.replace(R.id.main_frm, DeliveryFragment()).commit()
     }
 

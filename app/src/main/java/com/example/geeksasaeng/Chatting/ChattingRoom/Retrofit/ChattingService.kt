@@ -10,7 +10,9 @@ import retrofit2.Response
 class ChattingService {
     private lateinit var createChattingRoomView: CreateChattingRoomView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
+    private lateinit var preChattingMemberForcedExitView: PreChattingMemberForcedExitView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
+    private lateinit var deliveryPartyMemberForcedExitView: DeliveryPartyMemberForcedExitView
     private lateinit var chattingOrderCompleteView: ChattingOrderCompleteView
     private lateinit var chattingRemittanceCompleteView: ChattingRemittanceCompleteView
     private lateinit var sendChattingView: SendChattingView
@@ -34,8 +36,14 @@ class ChattingService {
     fun setSendChattingView(sendChattingView: SendChattingView) {
         this.sendChattingView = sendChattingView
     }
+    fun setPreChattingMemberForcedExitView(preChattingMemberForcedExitView: PreChattingMemberForcedExitView) {
+        this.preChattingMemberForcedExitView = preChattingMemberForcedExitView
+    }
     fun setChattingMemberForcedExitView(chattingMemberForcedExitView: ChattingMemberForcedExitView) {
         this.chattingMemberForcedExitView = chattingMemberForcedExitView
+    }
+    fun setDeliveryPartyMemberForcedExitView(deliveryPartyMemberForcedExitView: DeliveryPartyMemberForcedExitView) {
+        this.deliveryPartyMemberForcedExitView = deliveryPartyMemberForcedExitView
     }
     fun setChattingOrderCompleteView(chattingOrderCompleteView: ChattingOrderCompleteView) {
         this.chattingOrderCompleteView = chattingOrderCompleteView
@@ -124,7 +132,30 @@ class ChattingService {
         })
     }
 
-    // 방장이 배달 파티 채팅 멤버를 강제퇴장
+    //강제퇴장 조회 api
+    fun prechattingMemberForcedExit(partyId: Int, roomId: String) {
+        chattingService?.preChattingMemberForcedExit(partyId,roomId)?.enqueue(object: Callback<PreChattingMemberForcedExitResponse> {
+            override fun onResponse(call: Call<PreChattingMemberForcedExitResponse>, response: Response<PreChattingMemberForcedExitResponse>) {
+                Log.d("preForcedExit", "$partyId/$roomId")
+                Log.d("preForcedExit", response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    Log.d("preForcedExit-resp", resp.toString())
+                    when (resp.code) {
+                        1000 -> preChattingMemberForcedExitView.preChattingMemberForcedExitSuccess(resp.result)
+                        else -> preChattingMemberForcedExitView.preChattingMemberForcedExitFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PreChattingMemberForcedExitResponse>, t: Throwable) {
+                Log.d("preForcedExit", "실패 : $t")
+                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패 : $t")
+            }
+        })
+    }
+
+    // 방장이 배달 파티 채팅 멤버를 강제퇴장 for 채팅방
     fun chattingMemberForcedExit(chattingMemberForcedExitRequest: ChattingMemberForcedExitRequest) {
         chattingService?.chattingMemberForcedExit(chattingMemberForcedExitRequest)?.enqueue(object: Callback<ChattingMemberForcedExitResponse> {
 
@@ -140,6 +171,28 @@ class ChattingService {
 
             override fun onFailure(call: Call<ChattingMemberForcedExitResponse>, t: Throwable) {
                 Log.d("MEMBER-FORCED-EXIT", "실패")
+            }
+        })
+    }
+
+    // 방장이 배달 파티 채팅 멤버를 강제퇴장 for 배달파티
+    fun deliveryPartyMemberForcedExit(deliveryPartyMemberForcedExitRequest: DeliveryPartyMemberForcedExitRequest) {
+        chattingService?.deliveryPartyMemberForcedExit(deliveryPartyMemberForcedExitRequest)?.enqueue(object: Callback<DeliveryPartyMemberForcedExitResponse> {
+
+            override fun onResponse(call: Call<DeliveryPartyMemberForcedExitResponse>, response: Response<DeliveryPartyMemberForcedExitResponse>) {
+                Log.d("DialogForcedExit for 배달파티", response.toString())
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> deliveryPartyMemberForcedExitView.deliveryPartyMemberForcedExitSuccess(resp.result)
+                        else -> deliveryPartyMemberForcedExitView.deliveryPartyMemberForcedExitFailure(resp.code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DeliveryPartyMemberForcedExitResponse>, t: Throwable) {
+                Log.d("DialogForcedExit for 배달파티- onFailure", t.toString())
+                Log.d("DELIVERY-PARTY-MEMBER-FORCED-EXIT", "실패")
             }
         })
     }
@@ -196,6 +249,8 @@ class ChattingService {
     fun getChattingPartyMemberPartyLeave(chattingPartyMemberLeavePartyRequest: ChattingPartyMemberLeavePartyRequest){
         chattingService?.partyMemberPartyLeave(chattingPartyMemberLeavePartyRequest)?.enqueue(object : Callback<ChattingPartyMemberLeavePartyResponse> {
             override fun onResponse(call: Call<ChattingPartyMemberLeavePartyResponse>, response: Response<ChattingPartyMemberLeavePartyResponse>) {
+                Log.d("exit", "배달파티 나가기 response : ${chattingPartyMemberLeavePartyRequest.toString()}")
+                Log.d("exit", "배달파티 나가기 response : ${response.toString()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val chattingPartyMemberLeavePartyResponse = response.body()!!
                     when (chattingPartyMemberLeavePartyResponse.code) {
@@ -324,6 +379,8 @@ class ChattingService {
     fun getChattingDetail(chatRoomId: String) {
         chattingService?.getChattingDetail(chatRoomId)?.enqueue(object: Callback<ChattingDetailResponse> {
             override fun onResponse(call: Call<ChattingDetailResponse>, response: Response<ChattingDetailResponse>) {
+                Log.d("chatDetail", "채팅방 디테일 chatRoomId :${chatRoomId.toString()} / jwt : ${getJwt()}")
+                Log.d("chatDetail", "채팅방 디테일 response :${response.toString()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -333,6 +390,7 @@ class ChattingService {
                 }
             }
             override fun onFailure(call: Call<ChattingDetailResponse>, t: Throwable) {
+                Log.d("chatDetail", "채팅방 디테일 onFailure :${t.toString()}")
                 Log.d("RETROFIT-SERVICE", "ChattingListService-getChattingDetail-Failure")
             }
         })

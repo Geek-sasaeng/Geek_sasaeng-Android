@@ -1,8 +1,7 @@
-package com.example.geeksasaeng.Profile
+package com.example.geeksasaeng.Profile.CustomerService
 
 import android.content.Intent
 import android.net.Uri
-import com.example.geeksasaeng.Home.CreateParty.CreatePartyActivity
 import com.example.geeksasaeng.Signup.Tos1Activity
 import com.example.geeksasaeng.Signup.Tos2Activity
 import com.example.geeksasaeng.Utils.BaseActivity

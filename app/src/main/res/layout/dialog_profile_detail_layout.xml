@@ -94,6 +94,7 @@
                 android:textSize="15sp"
                 android:fontFamily="@font/spoqa_medium"
                 android:textColor="@color/gray_3"
+                app:layout_constraintBottom_toTopOf="@id/dialog_profile_detail_sign_up_date_tv"
                 app:layout_constraintTop_toBottomOf="@id/dialog_profile_detail_phone_title_tv"
                 app:layout_constraintStart_toStartOf="@id/dialog_profile_detail_phone_title_tv"
                 android:layout_marginTop="9dp" />
@@ -207,7 +208,7 @@
                     android:id="@+id/dialog_profile_detail_bar_iv"
                     android:layout_width="24.32dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/ic_profile_card_bar"
+                    android:src="@drawable/ic_profile_card_heart_bar_level1"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="-1dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -274,8 +275,10 @@
                     app:cardElevation="0dp"
                     app:cardCornerRadius="55dp">
                     <ImageView
+                        android:id="@+id/dialog_profile_detail_img_iv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="fitXY"
                         android:src="@drawable/profile_thumbs_up" />
                 </androidx.cardview.widget.CardView>
 

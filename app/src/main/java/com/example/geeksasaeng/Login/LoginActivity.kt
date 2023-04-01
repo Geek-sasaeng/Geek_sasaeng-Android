@@ -3,10 +3,8 @@ package com.example.geeksasaeng.Login
 import android.content.*
 import android.text.*
 import android.graphics.Color
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.Home.HomeFragment
@@ -119,6 +117,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun onLoginSuccess(code : Int , result: LoginResult) {
         val jwt = result.jwt
+        saveIsSocial(false)
         // 자동 로그인
         if (binding.loginAutologinCb.isChecked) {
             setAutoLogin(jwt)
@@ -145,6 +144,7 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         // 네이버 자동 로그인 자동 적용
         val jwt = result.jwt
         setAutoLogin(jwt)
+        saveIsSocial(true)
         if(result.loginStatus=="NEVER"){ //첫 로그인이면
             val intent = Intent(this, DormitoryActivity::class.java)
             intent.putExtra("nickName", result.nickName)

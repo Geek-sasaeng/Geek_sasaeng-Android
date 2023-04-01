@@ -12,9 +12,12 @@ data class PartyDetailResponse(
 )
 
 data class PartyDetailResult(
+    @SerializedName("activeStatus") val activeStatus: Boolean,
+    @SerializedName("authChief") val authChief: Boolean,
     @SerializedName("authorStatus") val authorStatus: Boolean,
     @SerializedName("belongStatus") val belongStatus: String,
     @SerializedName("chief") val chief: String,
+    @SerializedName("chiefGrade") val chiefGrade: String,
     @SerializedName("chiefId") val chiefId: Int,
     @SerializedName("chiefProfileImgUrl") val chiefProfileImgUrl: String?,
     @SerializedName("content") val content: String,

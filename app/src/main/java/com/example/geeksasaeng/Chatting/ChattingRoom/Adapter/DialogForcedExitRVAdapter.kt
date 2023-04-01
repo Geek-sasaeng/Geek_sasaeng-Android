@@ -23,8 +23,8 @@ class DialogForcedExitRVAdapter (var memberList: MutableList<MemberData>) : Recy
 
     inner class ViewHolder(val binding: ItemForcedExitDialogBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(member : MemberData){
-            Glide.with(binding.root.context).load(member.profileImgUrl).into(binding.itemForcedExitDialogImageIv)
-            binding.itemForcedExitDialogTv.text = member.nickName
+            Glide.with(binding.root.context).load(member.userProfileImgUrl).into(binding.itemForcedExitDialogImageIv)
+            binding.itemForcedExitDialogTv.text = member.userName
         }
     }
 
