@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingUserReportFragment
 import com.example.geeksasaeng.Community.CommunityFragment
 import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.LookParty.LookPartyFragment
@@ -60,8 +61,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.main_frm, ProfileFragment())
             transaction.commit()
-        }
-        else setFragment(R.id.main_frm, HomeFragment())
+        } else if (status == "chatReport") {
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+            val memberId = intent.getStringExtra("memberId")
+            Log.d("CHATTING-SERVICE", "memberId = $memberId")
+            val bundle = Bundle()
+            bundle.putString("memberId", memberId)
+
+            val chattingUserReportFragment = ChattingUserReportFragment()
+            chattingUserReportFragment.arguments = bundle
+
+            transaction.replace(R.id.main_frm, chattingUserReportFragment)
+            transaction.commit()
+        } else setFragment(R.id.main_frm, HomeFragment())
 
         // getAppKeyHash() //카카오맵 해시키 얻는 용
         // FCM Token 확인하기 위한 코드
@@ -149,5 +162,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         }
         backPressedTime = System.currentTimeMillis()
+
+        finish()
     }
 }

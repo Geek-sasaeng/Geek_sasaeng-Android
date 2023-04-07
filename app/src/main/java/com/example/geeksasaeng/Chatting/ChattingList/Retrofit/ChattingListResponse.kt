@@ -16,5 +16,8 @@ data class ChattingListResult(
 
 data class ChattingList(
     @SerializedName("roomId") val roomId: String,
-    @SerializedName("roomTitle") val roomTitle: String
+    @SerializedName("roomTitle") val roomTitle: String,
+    var lastChatting: String,
+    var lastChattingTime: String,
+    var newChattingNumber: Int
 )

@@ -75,3 +75,8 @@ interface ChattingDetailView {
     fun getChattingDetailSuccess(result: ChattingDetailResult)
     fun getChattingDetailFailure(code: Int, msg: String)
 }
+
+interface ChattingUserProfileView {
+    fun getChattingUserProfileSuccess(result: ChattingUserProfileResult)
+    fun getChattingUserProfileFailure(code: Int, msg: String)
+}

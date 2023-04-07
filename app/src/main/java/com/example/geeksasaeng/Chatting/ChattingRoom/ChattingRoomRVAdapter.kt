@@ -85,11 +85,13 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
 
             binding.itemMyChattingNicknameTv.text = chatting.nickName
             binding.itemMyChattingTimeTv.text = setTime(chatting.createdAt)
-            // binding.itemMyChattingProfileIv.setImageURI(Uri.parse(chatting.profileImgUrl))
             Glide.with(itemView.context)
                 .load(chatting.profileImgUrl)
                 .into(binding.itemMyChattingProfileIv)
-            Log.d("CHATTING-SYSTEM-TEST", "IMAGE URL = ${chatting.profileImgUrl}")
+            binding.itemMyChattingProfileIv.setOnClickListener {
+                Log.d("CHATTING-SERVICE", "nickname = ${chatting.nickName} / profileImgUrl = ${chatting.profileImgUrl}")
+                mCilckListener.onUserProfileClicked(chatting.profileImgUrl, chatting.readMembers[0])
+            }
         }
     }
 
@@ -107,7 +109,8 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
 
             binding.itemYourChattingNicknameTv.text = chatting.nickName
             binding.itemYourChattingProfileIv.setOnClickListener {
-                mCilckListener.onUserProfileClicked()
+                Log.d("CHATTING-SERVICE", "nickname = ${chatting.nickName} / profileImgUrl = ${chatting.profileImgUrl}")
+                mCilckListener.onUserProfileClicked(chatting.profileImgUrl, chatting.readMembers[0])
             }
 
             binding.itemYourChattingTimeTv.text = setTime(chatting.createdAt)
@@ -119,7 +122,7 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     }
 
     interface OnUserProfileClickListener{
-        fun onUserProfileClicked()
+        fun onUserProfileClicked(profileImgUrl: String?, memberId: String)
     }
 
     fun setOnUserProfileClickListener(clickListener: OnUserProfileClickListener){
@@ -161,6 +164,10 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
         chattingList.clear()
         chattingList.addAll(items)
         this.notifyDataSetChanged()
+    }
+
+    fun getAllItems(): ArrayList<Chat> {
+        return chattingList
     }
 
     fun returnPosition(): Int {

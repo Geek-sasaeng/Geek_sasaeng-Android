@@ -251,3 +251,16 @@ data class ChattingDetailResult(
     @SerializedName("isRemittanceFinish") val isRemittanceFinish: Boolean,
     @SerializedName("partyId") val partyId: Int
 )
+
+data class ChattingUserProfileResponse(
+    @SerializedName("code") val code: Int,
+    @SerializedName("isSuccess") val isSuccess : Boolean,
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: ChattingUserProfileResult
+)
+
+data class ChattingUserProfileResult(
+    @SerializedName("grade") val grade: String,
+    @SerializedName("isChief") val isChief: Boolean,
+    @SerializedName("userName") val userName: String
+)

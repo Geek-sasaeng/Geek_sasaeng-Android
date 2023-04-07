@@ -23,6 +23,7 @@ class ChattingService {
     private lateinit var chattingDeliveryCompleteView: ChattingDeliveryCompleteView
     private lateinit var matchingEndView: MatchingEndView
     private lateinit var getChattingDetailView: ChattingDetailView
+    private lateinit var chattingUserProfileView: ChattingUserProfileView
 
     private var chattingService = NetworkModule.getInstance()?.create(ChattingRetrofitInterfaces::class.java)
 
@@ -70,6 +71,9 @@ class ChattingService {
     }
     fun setChattingDetailView(getChattingDetailView: ChattingDetailView) {
         this.getChattingDetailView = getChattingDetailView
+    }
+    fun setChattingUserProfileView(chattingUserProfileView: ChattingUserProfileView)  {
+        this.chattingUserProfileView = chattingUserProfileView
     }
 
     // 채팅방 생성
@@ -166,7 +170,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<ChattingMemberForcedExitResponse>, t: Throwable) {
-                Log.d("CHATTING-MEMBER-FORCED-EXIT", "실패")
+                Log.d("MEMBER-FORCED-EXIT", "실패")
             }
         })
     }
@@ -388,6 +392,27 @@ class ChattingService {
             override fun onFailure(call: Call<ChattingDetailResponse>, t: Throwable) {
                 Log.d("chatDetail", "채팅방 디테일 onFailure :${t.toString()}")
                 Log.d("RETROFIT-SERVICE", "ChattingListService-getChattingDetail-Failure")
+            }
+        })
+    }
+
+    // 채팅방 유저 프로필 조회
+    fun getChattingUserProfile(chatRoomId: String, memberId: Int) {
+        chattingService?.getChattingUserProfile(chatRoomId, memberId)?.enqueue(object: Callback<ChattingUserProfileResponse> {
+            override fun onResponse(
+                call: Call<ChattingUserProfileResponse>,
+                response: Response<ChattingUserProfileResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> chattingUserProfileView.getChattingUserProfileSuccess(resp.result)
+                        else -> chattingUserProfileView.getChattingUserProfileFailure(resp.code, resp.message)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ChattingUserProfileResponse>, t: Throwable) {
+                Log.d("RETROFIT-SERVICE", "ChattingRoomService-getChattingUserProfile-Failure")
             }
         })
     }

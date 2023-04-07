@@ -49,10 +49,7 @@ object  WebSocketManager {
                 e.printStackTrace ()
             }
         } else {
-            Log.i(
-                TAG,
-                "reconnect over $MAX_NUM,please check url or network"
-            )
+            Log.i(TAG, "reconnect over $MAX_NUM,please check url or network")
         }
     }
 
