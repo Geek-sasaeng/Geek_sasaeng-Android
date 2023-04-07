@@ -16,4 +16,7 @@ interface ChatDao {
 
     @Query("Select * from ChatTable")
     fun getAllChats(): List<Chat>
+
+    @Query("Delete from ChatTable")
+    fun deleteAllChats()
 }

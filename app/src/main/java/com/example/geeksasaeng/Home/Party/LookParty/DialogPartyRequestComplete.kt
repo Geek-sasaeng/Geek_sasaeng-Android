@@ -13,6 +13,7 @@ import com.example.geeksasaeng.databinding.DialogPartyRequestCompleteBinding
 interface DialogPartyRequestCompleteView{
     fun showPartyChattingRoom()
 }
+
 class DialogPartyRequestComplete: DialogFragment() {
     lateinit var binding: DialogPartyRequestCompleteBinding
     lateinit var dialogPartyRequestCompleteView: DialogPartyRequestCompleteView
@@ -40,8 +41,6 @@ class DialogPartyRequestComplete: DialogFragment() {
         }
 
         binding.partyRequestCompleteGoBtn.setOnClickListener {
-            // 채팅방으로 이동하기
-            dialogPartyRequestCompleteView.showPartyChattingRoom()
             this.dismiss()
             (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingListFragment()).commit()
             // TODO: Bottom_navi 아이콘 채팅으로 변경해주기

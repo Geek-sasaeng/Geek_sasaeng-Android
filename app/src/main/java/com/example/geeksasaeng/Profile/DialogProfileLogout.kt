@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
+import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Login.LoginActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.Retrofit.ProfileDataService
@@ -17,11 +18,14 @@ import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.Utils.removeIsSocial
 import com.example.geeksasaeng.databinding.DialogLogoutBinding
+import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 
 class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
 
     lateinit var binding: DialogLogoutBinding
     lateinit var profileDataService: ProfileDataService
+    // RoomDB
+    private lateinit var chatDB: ChatDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,13 +33,22 @@ class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogLogoutBinding.inflate(inflater, container, false)
+        chatDB = ChatDatabase.getDBInstance(applicationContext)!!
+
         initListener()
+
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
         return binding.root
     }
 
     private fun initListener(){
         binding.logoutOkBtn.setOnClickListener {
+            this.dismiss()
+            (context as MainActivity).finish()
+            removeAutoLogin()
+            chatDB.chatDao().deleteAllChats()
+
+            startActivity(Intent(activity, LoginActivity::class.java))
             profileDataService = ProfileDataService()
             profileDataService.setProfileLogoutView(this)
             profileDataService.profileLogoutSender()
