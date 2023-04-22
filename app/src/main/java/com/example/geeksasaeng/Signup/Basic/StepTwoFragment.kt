@@ -77,7 +77,6 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
                     binding.stepTwoEmailCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.error))
                     binding.stepTwoEmailCheckMsgTv.text = "인증번호 입력 시간이 만료되었습니다."
                     // TODO: 인증번호 입력 시간이 만료 되었으므로 다음버튼 비활성화 시켜야하나?
-
                 }
             }
 
@@ -215,6 +214,7 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
         signUpVM.setEmailId(result.emailId)
         binding.stepTwoEmailCheckMsgTv.setTextColor(ContextCompat.getColor(requireContext(),R.color.main))
         binding.stepTwoEmailCheckMsgTv.text = "성공적으로 인증이 완료되었습니다"
+        binding.stepTwoEmailCheckMsgTv.visibility = View.GONE
         checkingNext()
     }
 

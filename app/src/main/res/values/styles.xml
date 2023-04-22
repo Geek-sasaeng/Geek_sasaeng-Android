@@ -14,7 +14,7 @@
 
     </style>
 
-    <style name="DormitoryPicker" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="DormitoryPicker">
         <!--<item name="android:textColorPrimary"> @color/white </item>-->
         <item name="android:textColorPrimary"> #8C8C8C </item>
         <item name="android:textSize" > 20sp </item>
