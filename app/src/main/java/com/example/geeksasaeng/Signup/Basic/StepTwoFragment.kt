@@ -267,15 +267,14 @@ class StepTwoFragment : BaseFragment<FragmentStepTwoBinding>(FragmentStepTwoBind
 
     private fun checkingNext(){
         if(binding.stepTwoEmailCheckMsgTv.text.toString() == "성공적으로 인증이 완료되었습니다"){
-            binding.stepTwoNextBtn.isEnabled = true;
+            binding.stepTwoNextBtn.isEnabled = true
             binding.stepTwoNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.main))
             binding.stepTwoNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            timerTask!!.cancel()
         }else{
-            binding.stepTwoNextBtn.isEnabled = false;
+            binding.stepTwoNextBtn.isEnabled = false
             binding.stepTwoNextBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),R.color.gray_0))
             binding.stepTwoNextBtn.setTextColor(ContextCompat.getColor(requireContext(),R.color.gray_2))
         }
     }
-
-
 }
