@@ -43,7 +43,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     private fun initClickListener() {
         binding.loginLoginBtn.setOnClickListener {
-            Log.d("login","로그인버튼 클릭됨")
             login()
         }
 
@@ -111,7 +110,6 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
     private fun getLoginUser(): Login {
         val loginId = binding.loginIdEt.text.toString()
         val password = binding.loginPwdEt.text.toString()
-        Log.d("login", loginId.toString()+"/"+password)
         return Login(loginId, password, fcmToken)
     }
 

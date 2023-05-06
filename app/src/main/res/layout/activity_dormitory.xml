@@ -61,13 +61,13 @@
         android:layout_height="45dp"
         android:backgroundTint="@color/gray_0"
         android:background="@drawable/round_border"
-        app:layout_constraintTop_toTopOf="@id/domitory_picker"
-        app:layout_constraintBottom_toBottomOf="@id/domitory_picker"
-        app:layout_constraintStart_toStartOf="@id/domitory_picker"
-        app:layout_constraintEnd_toEndOf="@id/domitory_picker"/>
+        app:layout_constraintTop_toTopOf="@id/dormitory_picker"
+        app:layout_constraintBottom_toBottomOf="@id/dormitory_picker"
+        app:layout_constraintStart_toStartOf="@id/dormitory_picker"
+        app:layout_constraintEnd_toEndOf="@id/dormitory_picker"/>
 
     <NumberPicker
-        android:id="@+id/domitory_picker"
+        android:id="@+id/dormitory_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +75,7 @@
         app:layout_constraintTop_toTopOf="@id/dormitory_logo_img"
         app:layout_constraintBottom_toBottomOf="@id/dormitory_logo_img"
         android:selectionDividerHeight="0dp"
+        android:includeFontPadding="false"
         android:theme="@style/DormitoryPicker" />
 
     <androidx.appcompat.widget.AppCompatButton
