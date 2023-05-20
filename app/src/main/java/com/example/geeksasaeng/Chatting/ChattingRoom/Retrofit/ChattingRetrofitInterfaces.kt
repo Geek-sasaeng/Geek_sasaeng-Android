@@ -24,6 +24,11 @@ interface ChattingRetrofitInterfaces {
         @Body sendChattingRequest: SendChattingRequest
     ): Call<SendChattingResponse>
 
+    @POST("/party-chat-room/chatimage")
+    fun sendImgChatting(
+        @Body sendImageChattingRequest: ImageChattingRequest
+    ): Call<SendChattingResponse>
+
     //배달 파티 채팅방 멤버 정보 조회 for 강제퇴장
     @GET("/party-chat-room/{partyId}/{roomId}/members")
     fun preChattingMemberForcedExit(

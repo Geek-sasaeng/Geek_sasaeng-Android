@@ -19,6 +19,7 @@ import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.BaseFragment
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.Utils.getProfileImgUrl
+import com.example.geeksasaeng.Utils.saveEmail
 import com.example.geeksasaeng.databinding.FragmentProfileBinding
 import java.util.*
 
@@ -225,6 +226,8 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
         //승급까지 남은 학점
         binding.profileCardLayoutBlueTopLeftCredit.text = nextGradeAndRemainCredits
+
+        saveEmail(result.emailAddress)
     }
 
     override fun onProfileMyInfoFailure(message: String) {

@@ -9,6 +9,7 @@ import retrofit2.Response
 
 class ChattingService {
     private lateinit var createChattingRoomView: CreateChattingRoomView
+    private lateinit var sendImageChattingView: SendImageChattingView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var preChattingMemberForcedExitView: PreChattingMemberForcedExitView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
@@ -29,6 +30,9 @@ class ChattingService {
 
     fun setCreateChattingView(createChattingRoomView: CreateChattingRoomView) {
         this.createChattingRoomView = createChattingRoomView
+    }
+    fun setSendImageChattingView(sendImageChattingView: SendImageChattingView) {
+        this.sendImageChattingView = sendImageChattingView
     }
     fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
         this.chattingMemberAddView = chattingMemberAddView
@@ -92,6 +96,27 @@ class ChattingService {
             }
             override fun onFailure(call: Call<CreateChattingRoomResponse>, t: Throwable) {
                 Log.d("CHATTING-CREATE", "실패")
+            }
+        })
+    }
+
+    // 이미지 채팅 전송
+    fun sendImgChatting(imageChattingRequest: ImageChattingRequest) {
+        chattingService?.sendImgChatting(imageChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
+            override fun onResponse(
+                call: Call<SendChattingResponse>,
+                response: Response<SendChattingResponse>
+            ) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> sendImageChattingView.sendImageChattingSuccessView(resp)
+                        else -> sendImageChattingView.sendImageChattingFailureView()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<SendChattingResponse>, t: Throwable) {
+                Log.d("CHATTING-IMG-CHATTING", "실패")
             }
         })
     }
