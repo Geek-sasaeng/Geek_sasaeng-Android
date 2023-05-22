@@ -40,8 +40,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
@@ -113,22 +119,43 @@ class ChattingRoomActivity :
                         var content = binding.chattingRoomChattingTextEt.text.toString()
                         var chatRoomId = roomId
                         var isSystemMessage = false
-                        var memberId = getMemberId()
+                        var email = getEmail()
                         var profileImgUrl = getProfileImgUrl()
                         var chatType = "publish"
                         var chatId = "none"
-                        var jwt = getJwt()
+                        var images = arrayListOf(imageUri)
+                        var isImageMessage = true
+
+                        var file: File
+                        var requestFile: RequestBody
+                        var multipartFile = mutableListOf<MultipartBody.Part?>()
+
+                        if (imageUri != null) {
+                            file = File(ImageTranslator.optimizeBitmap(this@ChattingRoomActivity, imageUri!!)!!)
+                            requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                            multipartFile.add(MultipartBody.Part.createFormData("images", file.name, requestFile))
+                        }
+
+                        // chatId, chatRoomId, chatType, content, images(file), isImageMessage, isSystemMessage
+                        val mapData = HashMap<String, RequestBody>()
+                        mapData.put("chatId", RequestBody.create("text/plain".toMediaTypeOrNull(), chatId))
+                        mapData.put("chatRoomId", RequestBody.create("text/plain".toMediaTypeOrNull(), chatRoomId))
+                        mapData.put("chatType", RequestBody.create("text/plain".toMediaTypeOrNull(), chatType))
+                        mapData.put("content", RequestBody.create("text/plain".toMediaTypeOrNull(), content))
+                        mapData.put("isImageMessage", RequestBody.create("text/plain".toMediaTypeOrNull(), isImageMessage.toString()))
+                        mapData.put("isSystemMessage", RequestBody.create("text/plain".toMediaTypeOrNull(), isSystemMessage.toString()))
 
                         // 전송할 데이터를 JSON Type 변수에 저장
                         val jsonObject = JSONObject()
                         jsonObject.put("content", content)
                         jsonObject.put("chatRoomId", chatRoomId)
                         jsonObject.put("isSystemMessage", isSystemMessage)
-                        jsonObject.put("memberId", memberId)
+                        jsonObject.put("email", email)
                         jsonObject.put("profileImgUrl", profileImgUrl)
                         jsonObject.put("chatType", chatType)
                         jsonObject.put("chatId", chatId)
-                        jsonObject.put("jwt", jwt)
+                        jsonObject.put("images", images)
+                        jsonObject.put("isImageMessage", isImageMessage)
 
                         val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
                         WebSocketManager.sendMessage(chatData.toString())
@@ -137,10 +164,7 @@ class ChattingRoomActivity :
                             Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
                         }
 
-                        var sendChatData = ImageChattingRequest("", roomId, false, getEmail(), getProfileImgUrl(), "publish", "none", arrayListOf(imageUri.toString()), true)
-                        chattingService.sendImgChatting(sendChatData)
-
-                        Log.d("CHATTING-SYSTEM-TEST", "sendChatData = $sendChatData")
+                        chattingService.sendImgChatting(multipartFile, mapData)
 
                         // 보낸 채팅을 다시 받아오기 위함
                         Thread {
@@ -422,6 +446,7 @@ class ChattingRoomActivity :
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
         chattingService.setChattingDetailView(this) //채팅방 상세 조회용
         chattingService.setChattingUserProfileView(this)
+        chattingService.setSendImageChattingView(this)
     }
 
     private fun optionClickListener() {

@@ -3,6 +3,8 @@ package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 import android.util.Log
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -101,12 +103,14 @@ class ChattingService {
     }
 
     // 이미지 채팅 전송
-    fun sendImgChatting(imageChattingRequest: ImageChattingRequest) {
-        chattingService?.sendImgChatting(imageChattingRequest)?.enqueue(object: Callback<SendChattingResponse> {
+    fun sendImgChatting(images: MutableList<MultipartBody.Part?>, data: HashMap<String, RequestBody>) {
+        chattingService?.sendImgChatting(images, data)?.enqueue(object: Callback<SendChattingResponse> {
             override fun onResponse(
                 call: Call<SendChattingResponse>,
                 response: Response<SendChattingResponse>
             ) {
+                Log.d("API-TEST", "response = $response")
+                Log.d("API-TEST", "sendImageChatting = ${response.body()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -175,7 +179,6 @@ class ChattingService {
 
             override fun onFailure(call: Call<PreChattingMemberForcedExitResponse>, t: Throwable) {
                 Log.d("preForcedExit", "실패 : $t")
-                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패 : $t")
             }
         })
     }
@@ -205,7 +208,6 @@ class ChattingService {
         chattingService?.deliveryPartyMemberForcedExit(deliveryPartyMemberForcedExitRequest)?.enqueue(object: Callback<DeliveryPartyMemberForcedExitResponse> {
 
             override fun onResponse(call: Call<DeliveryPartyMemberForcedExitResponse>, response: Response<DeliveryPartyMemberForcedExitResponse>) {
-                Log.d("DialogForcedExit for 배달파티", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -216,8 +218,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<DeliveryPartyMemberForcedExitResponse>, t: Throwable) {
-                Log.d("DialogForcedExit for 배달파티- onFailure", t.toString())
-                Log.d("DELIVERY-PARTY-MEMBER-FORCED-EXIT", "실패")
+                Log.d("MEMBER-FORCED-EXIT", "실패")
             }
         })
     }
