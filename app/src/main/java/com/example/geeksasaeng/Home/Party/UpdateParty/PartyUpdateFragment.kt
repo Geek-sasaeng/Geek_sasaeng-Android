@@ -350,6 +350,7 @@ class PartyUpdateFragment: BaseFragment<FragmentDeliveryPartyUpdateBinding>(Frag
 
     //수정 성공, 실패
     override fun onUpdatePartySuccess() {
+        Log.d("cherry", "수정성공")
         //종료
         activity?.supportFragmentManager?.beginTransaction()
             ?.remove(this)?.commit()

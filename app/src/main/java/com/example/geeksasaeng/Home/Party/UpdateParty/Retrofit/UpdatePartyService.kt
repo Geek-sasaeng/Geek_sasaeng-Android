@@ -19,8 +19,10 @@ class UpdatePartyService {
     }
 
     fun updatePartySender(dormitoryId: Int, partyId:Int, updatePartyRequest: UpdatePartyRequest){
+
         updatePartyService?.updateParty(dormitoryId, updatePartyRequest, partyId)?.enqueue(object:Callback<UpdatePartyResponse> {
             override fun onResponse(call: Call<UpdatePartyResponse>, response: Response<UpdatePartyResponse>) {
+                Log.d("cherry", "수정하기 response="+response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: UpdatePartyResponse = response.body()!!
                     when (resp.code) {
