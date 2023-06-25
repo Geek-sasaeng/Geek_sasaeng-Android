@@ -1,5 +1,7 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -22,6 +24,13 @@ interface ChattingRetrofitInterfaces {
     @POST("/party-chat-room/chat")
     fun sendChatting(
         @Body sendChattingRequest: SendChattingRequest
+    ): Call<SendChattingResponse>
+
+    @Multipart
+    @POST("/party-chat-room/chatimage")
+    fun sendImgChatting(
+        @Part images: MutableList<MultipartBody.Part?>,
+        @PartMap data: HashMap<String, RequestBody>
     ): Call<SendChattingResponse>
 
     //배달 파티 채팅방 멤버 정보 조회 for 강제퇴장

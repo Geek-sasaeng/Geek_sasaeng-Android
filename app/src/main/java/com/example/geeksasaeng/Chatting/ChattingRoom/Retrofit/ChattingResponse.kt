@@ -43,6 +43,18 @@ data class SendChattingResponse(
     @SerializedName("result") val result: String
 )
 
+data class ImageChattingRequest(
+    @SerializedName("content") val content: String,
+    @SerializedName("chatRoomId") val chatRoomId: String,
+    @SerializedName("isSystemMessage") val isSystemMessage: Boolean?,
+    // @SerializedName("email") val email: String?,
+    // @SerializedName("profileImgUrl") val profileImgUrl: String?,
+    @SerializedName("chatType") val chatType: String?,
+    @SerializedName("chatId") val chatId: String?,
+    @SerializedName("images") val images: ArrayList<String>,
+    @SerializedName("isImageMessage") val isImageMessage: Boolean
+)
+
 data class ChattingMemberAddRequest(
     @SerializedName("partyChatRoomId") val partyChatRoomId: String
 )

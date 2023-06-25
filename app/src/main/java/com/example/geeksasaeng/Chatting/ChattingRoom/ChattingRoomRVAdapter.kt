@@ -140,6 +140,28 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     inner class ImageChattingViewHolder(val binding: ItemChattingImageBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(chatting: Chat) {
             // 사진 전송 관련 View 작업
+            Log.d("API-TEST", "chatting = $chatting")
+            // binding.itemImageChattingIn//
+
+            Glide.with(itemView.context).load(chatting.content).into(binding.itemChattingImageIv)
+
+            if (chatting.isLeader) { //리더라면 프로필 테두리 파랗게
+                binding.itemImageChattingProfileCv.strokeColor = Color.parseColor("#3266EB")
+            }
+
+            if (chatting.unreadMemberCnt.toString() == "0")
+                binding.itemImageChattingNotReadTv.visibility = View.INVISIBLE
+            else binding.itemImageChattingNotReadTv.text = chatting.unreadMemberCnt.toString()
+
+            binding.itemImageChattingNicknameTv.text = chatting.nickName
+            binding.itemImageChattingTimeTv.text = setTime(chatting.createdAt)
+            Glide.with(itemView.context)
+                .load(chatting.profileImgUrl)
+                .into(binding.itemImageChattingProfileIv)
+
+            binding.itemImageChattingProfileIv.setOnClickListener {
+                mCilckListener.onUserProfileClicked(chatting.profileImgUrl, chatting.readMembers[0])
+            }
         }
     }
 

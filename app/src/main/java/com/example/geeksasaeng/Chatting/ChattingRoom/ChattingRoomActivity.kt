@@ -1,21 +1,29 @@
 package com.example.geeksasaeng.Chatting.ChattingRoom
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Message
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.ChatSetting.*
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
@@ -27,16 +35,19 @@ import com.example.geeksasaeng.databinding.ActivityChattingRoomBinding
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.rabbitmq.client.Connection
-import com.rabbitmq.client.ConnectionFactory
-import com.rabbitmq.client.DeliverCallback
-import com.rabbitmq.client.Delivery
+import com.rabbitmq.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
@@ -44,7 +55,7 @@ import kotlin.properties.Delegates
 
 class ChattingRoomActivity :
     BaseActivity<ActivityChattingRoomBinding>(ActivityChattingRoomBinding::inflate),
-    WebSocketListenerInterface, SendChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
+    WebSocketListenerInterface, SendChattingView, SendImageChattingView, ChattingOrderCompleteView, ChattingRemittanceCompleteView,
     ChattingDetailView, DialogMatchingEnd.MatchingEndClickListener, ChattingUserProfileView {
 
     private val TAG = "CHATTING-ROOM-ACTIVITY"
@@ -90,6 +101,81 @@ class ChattingRoomActivity :
     // 이미지의 uri를 담을 ArrayList 객체
     var albumImageList: ArrayList<Uri> = ArrayList()
 
+    private var imageUri: Uri? = null
+
+    companion object{
+        // 갤러리 권한 요청
+        const val REQ_GALLERY = 1
+    }
+
+    private val imageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            imageUri = result.data?.data
+            imageUri?.let{
+                Log.d("API-TEST", "imageUri = $imageUri")
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
+                        WebSocketManager.connect()
+                        var content = binding.chattingRoomChattingTextEt.text.toString()
+                        var chatRoomId = roomId
+                        var isSystemMessage = false
+                        var email = getEmail()
+                        var profileImgUrl = getProfileImgUrl()
+                        var chatType = "publish"
+                        var chatId = "none"
+                        var images = arrayListOf(imageUri)
+                        var isImageMessage = true
+
+                        var file: File
+                        var requestFile: RequestBody
+                        var multipartFile = mutableListOf<MultipartBody.Part?>()
+
+                        if (imageUri != null) {
+                            file = File(ImageTranslator.optimizeBitmap(this@ChattingRoomActivity, imageUri!!)!!)
+                            requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                            multipartFile.add(MultipartBody.Part.createFormData("images", file.name, requestFile))
+                        }
+
+                        // chatId, chatRoomId, chatType, content, images(file), isImageMessage, isSystemMessage
+                        val mapData = HashMap<String, RequestBody>()
+                        mapData.put("chatId", RequestBody.create("text/plain".toMediaTypeOrNull(), chatId))
+                        mapData.put("chatRoomId", RequestBody.create("text/plain".toMediaTypeOrNull(), chatRoomId))
+                        mapData.put("chatType", RequestBody.create("text/plain".toMediaTypeOrNull(), chatType))
+                        mapData.put("content", RequestBody.create("text/plain".toMediaTypeOrNull(), content))
+                        mapData.put("isImageMessage", RequestBody.create("text/plain".toMediaTypeOrNull(), isImageMessage.toString()))
+                        mapData.put("isSystemMessage", RequestBody.create("text/plain".toMediaTypeOrNull(), isSystemMessage.toString()))
+
+                        // 전송할 데이터를 JSON Type 변수에 저장
+                        val jsonObject = JSONObject()
+                        jsonObject.put("content", content)
+                        jsonObject.put("chatRoomId", chatRoomId)
+                        jsonObject.put("isSystemMessage", isSystemMessage)
+                        jsonObject.put("email", email)
+                        jsonObject.put("profileImgUrl", profileImgUrl)
+                        jsonObject.put("chatType", chatType)
+                        jsonObject.put("chatId", chatId)
+                        jsonObject.put("images", images)
+                        jsonObject.put("isImageMessage", isImageMessage)
+
+                        val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
+                        WebSocketManager.sendMessage(chatData.toString())
+
+                        if ( WebSocketManager .sendMessage( " Client send " )) {
+                            Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )
+                        }
+
+                        chattingService.sendImgChatting(multipartFile, mapData)
+
+                        // 보낸 채팅을 다시 받아오기 위함
+                        Thread {
+                            initRabbitMQSetting()
+                        }.start()
+                    }
+                }
+            }
+        }
+    }
+
     // 유저의 프로필 정보
     lateinit var member: String
     lateinit var grade: String
@@ -108,9 +194,6 @@ class ChattingRoomActivity :
         isChief = intent.getBooleanExtra("isChief", false)
         isOrderFinish = intent.getBooleanExtra("isOrderFinish", false)
         isRemittanceFinish = intent.getBooleanExtra("isRemittanceFinish", false)
-
-        Log.d("CHATTING-ROOM-TEST", "accountNumber = $accountNumber / bank = $bank / isChief = $isChief")
-
         roomName = intent.getStringExtra("roomName").toString()
         roomId = intent.getStringExtra("roomId").toString()
 
@@ -136,6 +219,7 @@ class ChattingRoomActivity :
                     withContext(Dispatchers.Main) {
                         // Main Thread 에서만 View 관련 작업 가능!
                         chattingRoomRVAdapter.addItem(allChatting[i])
+                        Log.d("CHATTING-SYSTEM-TEST", "allChatting = ${allChatting[i]}")
                     }
                 }
             }
@@ -170,12 +254,15 @@ class ChattingRoomActivity :
 
         val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
             originalMessage = String(delivery.body, Charsets.UTF_8)
+            Log.d("CHATTING-SYSTEM-TEST", "originalMessage = $originalMessage")
             chatResponseMessage = getJSONtoChatting(originalMessage)
             chatDB.chatDao().insert(chatResponseMessage)
             var result = chatDB.chatDao().getAllChats()
             var resultTemp = result[result.size - 1]
             chattingRoomRVAdapter.addItem(chatResponseMessage)
+            Log.d("CHATTING-SYSTEM-TEST", "chattingRoom chatResponseMessage = $chatResponseMessage")
         }
+        Log.d("CHATTING-SYSTEM-TEST", "deliverCallback = ${deliverCallback}")
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
@@ -276,22 +363,50 @@ class ChattingRoomActivity :
         }
 
         binding.chattingRoomAlbumIv.setOnClickListener(View.OnClickListener {
+            val writePermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            val readPermission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            
+            Log.d("API-TEST", "writePermission = $writePermission\nreadPermission = $readPermission")
+
+            // 권한 확인
+            if (writePermission == PackageManager.PERMISSION_DENIED || readPermission == PackageManager.PERMISSION_DENIED) {
+                // 권한 요청
+                Log.d("API-TEST", "권한 요청")
+                ActivityCompat.requestPermissions(this, arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ), REQ_GALLERY
+                )
+            } else {
+                Log.d("API-TEST", "권한 있음")
+                // 권한이 있는 경우 갤러리 실행
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                imageResult.launch(intent)
+            }
+
+            Log.d("API-TEST", "AlbumClick")
+
 //            val intent = Intent(Intent.ACTION_PICK)
 //            intent.type = MediaStore.Images.Media.CONTENT_TYPE
 //            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 //            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            
-            // startActivityForResult -> registerForActivityResult로 변경하기
-            // startActivityForResult(intent, 2222)
+//
+//             startActivityForResult -> registerForActivityResult로 변경하기
+//             startActivityForResult(intent, 2222)
 //            resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 //                if (result.resultCode == Activity.RESULT_OK) {
 //                    getImageFromAlbum(result.data)
 //                }
 //            }
-
-            // resultLauncher.launch(intent)
-            // var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }
-            // launcher.launch("image/*")
+//
+//             resultLauncher.launch(intent)
+//             var launcher = registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri -> setImage(uri) }
+//             launcher.launch("image/*")
         })
     }
 
@@ -331,6 +446,7 @@ class ChattingRoomActivity :
         chattingService.setChattingRemittanceCompleteView(this) //멤버용 송금완료 setView
         chattingService.setChattingDetailView(this) //채팅방 상세 조회용
         chattingService.setChattingUserProfileView(this)
+        chattingService.setSendImageChattingView(this)
     }
 
     private fun optionClickListener() {
@@ -429,6 +545,8 @@ class ChattingRoomActivity :
 
                     var sendChatData = SendChattingRequest(chatId, chatRoomId, chatType, content, isSystemMessage, jwt, memberId, profileImgUrl)
                     chattingService.sendChatting(sendChatData)
+
+                    Log.d("CHATTING-SYSTEM-TEST", "sendChatData = $sendChatData")
 
                     // 보낸 채팅을 다시 받아오기 위함
                     Thread {
@@ -540,5 +658,13 @@ class ChattingRoomActivity :
 
     override fun onMatchingEndClicked() {
         isMatchingFinish = true
+    }
+
+    override fun sendImageChattingSuccessView(result: SendChattingResponse) {
+        Log.d("SEND-IMAGE-CHATTING", "성공\nresult = $result")
+    }
+
+    override fun sendImageChattingFailureView() {
+        Log.d("SEND-IMAGE-CHATTING", "실패")
     }
 }

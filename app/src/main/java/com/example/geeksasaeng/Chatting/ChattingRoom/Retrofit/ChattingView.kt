@@ -6,6 +6,11 @@ interface CreateChattingRoomView {
     fun createChattingRoomFailure(code: Int, message: String)
 }
 
+interface SendImageChattingView {
+    fun sendImageChattingSuccessView(result: SendChattingResponse)
+    fun sendImageChattingFailureView()
+}
+
 interface ChattingMemberAddView {
     fun chattingMemberAddSuccess(result: ChattingMemberAddResult)
     fun chattingMemberAddFailure(code: Int, message: String)
