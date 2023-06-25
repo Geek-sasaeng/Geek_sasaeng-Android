@@ -3,12 +3,15 @@ package com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit
 import android.util.Log
 import com.example.geeksasaeng.Utils.NetworkModule
 import com.example.geeksasaeng.Utils.getJwt
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ChattingService {
     private lateinit var createChattingRoomView: CreateChattingRoomView
+    private lateinit var sendImageChattingView: SendImageChattingView
     private lateinit var chattingMemberAddView: ChattingMemberAddView
     private lateinit var preChattingMemberForcedExitView: PreChattingMemberForcedExitView
     private lateinit var chattingMemberForcedExitView: ChattingMemberForcedExitView
@@ -29,6 +32,9 @@ class ChattingService {
 
     fun setCreateChattingView(createChattingRoomView: CreateChattingRoomView) {
         this.createChattingRoomView = createChattingRoomView
+    }
+    fun setSendImageChattingView(sendImageChattingView: SendImageChattingView) {
+        this.sendImageChattingView = sendImageChattingView
     }
     fun setChattingMemberAddView(chattingMemberAddView: ChattingMemberAddView) {
         this.chattingMemberAddView = chattingMemberAddView
@@ -96,6 +102,29 @@ class ChattingService {
         })
     }
 
+    // 이미지 채팅 전송
+    fun sendImgChatting(images: MutableList<MultipartBody.Part?>, data: HashMap<String, RequestBody>) {
+        chattingService?.sendImgChatting(images, data)?.enqueue(object: Callback<SendChattingResponse> {
+            override fun onResponse(
+                call: Call<SendChattingResponse>,
+                response: Response<SendChattingResponse>
+            ) {
+                Log.d("API-TEST", "response = $response")
+                Log.d("API-TEST", "sendImageChatting = ${response.body()}")
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp = response.body()!!
+                    when (resp.code) {
+                        1000 -> sendImageChattingView.sendImageChattingSuccessView(resp)
+                        else -> sendImageChattingView.sendImageChattingFailureView()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<SendChattingResponse>, t: Throwable) {
+                Log.d("CHATTING-IMG-CHATTING", "실패")
+            }
+        })
+    }
+
     // 채팅방 멤버 추가
     fun addChattingMember(chattingMemberAddRequest: ChattingMemberAddRequest) {
         chattingService?.chattingMemberAdd(chattingMemberAddRequest)?.enqueue(object: Callback<ChattingMemberAddResponse> {
@@ -150,7 +179,6 @@ class ChattingService {
 
             override fun onFailure(call: Call<PreChattingMemberForcedExitResponse>, t: Throwable) {
                 Log.d("preForcedExit", "실패 : $t")
-                Log.d("PRE-CHATTING-MEMBER-FORCED-EXIT", "실패 : $t")
             }
         })
     }
@@ -180,7 +208,6 @@ class ChattingService {
         chattingService?.deliveryPartyMemberForcedExit(deliveryPartyMemberForcedExitRequest)?.enqueue(object: Callback<DeliveryPartyMemberForcedExitResponse> {
 
             override fun onResponse(call: Call<DeliveryPartyMemberForcedExitResponse>, response: Response<DeliveryPartyMemberForcedExitResponse>) {
-                Log.d("DialogForcedExit for 배달파티", response.toString())
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
@@ -191,8 +218,7 @@ class ChattingService {
             }
 
             override fun onFailure(call: Call<DeliveryPartyMemberForcedExitResponse>, t: Throwable) {
-                Log.d("DialogForcedExit for 배달파티- onFailure", t.toString())
-                Log.d("DELIVERY-PARTY-MEMBER-FORCED-EXIT", "실패")
+                Log.d("MEMBER-FORCED-EXIT", "실패")
             }
         })
     }

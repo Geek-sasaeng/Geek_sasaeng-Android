@@ -48,6 +48,19 @@ fun saveProfileImgUrl(url: String){
     editor.apply()
 }
 
+// 이메일
+fun removeEmail() {
+    val editor = mSharedPreferences.edit()
+    editor.remove("email")
+    editor.commit()
+}
+
+fun saveEmail(email: String) {
+    val editor = mSharedPreferences.edit()
+    editor.putString("email", email)
+    editor.apply()
+}
+
 // 기숙사 정보
 fun removeDormitory(){
     val editor = mSharedPreferences.edit()
@@ -208,6 +221,7 @@ fun getMemberId(): Int? = mSharedPreferences.getInt("memberId", 0)
 fun getProfileImgUrl(): String? = mSharedPreferences.getString("profileImgUrl", null)
 fun getDormitoryId(): Int = mSharedPreferences.getInt("dormitoryId", -1)
 fun getDormitory(): String? = mSharedPreferences.getString("dormitory", null)
+fun getEmail(): String? = mSharedPreferences.getString("email", null)
 fun getJwt(): String? = mSharedPreferences.getString("jwt", null)
 fun isAutoLogin(): Boolean? = mSharedPreferences.getBoolean("autoLogin", false)
 fun getLoginId(): String? = mSharedPreferences.getString("loginId", null) // TODO: ?? save가 없는뎅..

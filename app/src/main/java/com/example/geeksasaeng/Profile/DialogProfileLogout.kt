@@ -1,5 +1,6 @@
 package com.example.geeksasaeng.Profile
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.geeksasaeng.Chatting.ChattingList.Retrofit.ChattingListService
 import com.example.geeksasaeng.ChatSetting.ChatRoomDB.ChatDatabase
 import com.example.geeksasaeng.Login.LoginActivity
@@ -19,6 +22,10 @@ import com.example.geeksasaeng.Utils.removeAutoLogin
 import com.example.geeksasaeng.Utils.removeIsSocial
 import com.example.geeksasaeng.databinding.DialogLogoutBinding
 import com.navercorp.nid.NaverIdLoginSDK.applicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
 
@@ -33,7 +40,7 @@ class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogLogoutBinding.inflate(inflater, container, false)
-        chatDB = ChatDatabase.getDBInstance(applicationContext)!!
+        chatDB = ChatDatabase.getDBInstance(dialog?.context!!)!!
 
         initListener()
 
@@ -46,7 +53,10 @@ class DialogProfileLogout: DialogFragment(), ProfileLogoutView {
             this.dismiss()
             (context as MainActivity).finish()
             removeAutoLogin()
-            chatDB.chatDao().deleteAllChats()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                chatDB.chatDao().deleteAllChats()
+            }
 
             startActivity(Intent(activity, LoginActivity::class.java))
             profileDataService = ProfileDataService()
