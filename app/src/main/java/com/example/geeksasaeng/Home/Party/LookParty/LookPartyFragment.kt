@@ -15,6 +15,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Chatting.ChattingList.ParticipantsInfo
 import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingRoomActivity
+import com.example.geeksasaeng.Home.HomeFragment
 import com.example.geeksasaeng.Home.Party.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.Profile.ProfileFragment
@@ -396,12 +397,6 @@ class LookPartyFragment: BaseFragment<FragmentLookPartyBinding>(FragmentLookPart
     }
 
     override fun onBackPressed() {
-        (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ProfileFragment()).commit()
+        (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, HomeFragment()).commit()
     }
-
-/*    override fun onBackPressed() {
-        Log.d("back", "내가만든 onBackpressed실행됨")
-        (context as MainActivity).supportFragmentManager.beginTransaction().remove(this).commit()
-        (context as MainActivity).supportFragmentManager.popBackStack()
-    }*/
 }

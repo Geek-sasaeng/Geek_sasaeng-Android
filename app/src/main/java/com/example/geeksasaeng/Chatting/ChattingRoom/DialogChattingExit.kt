@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.*
 import com.example.geeksasaeng.Home.Party.CreateParty.DialogLocation
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Utils.CustomToastMsg
 import com.example.geeksasaeng.Utils.getNickname
 import com.example.geeksasaeng.databinding.DialogChattingExitBinding
 import com.example.geeksasaeng.databinding.DialogChattingRoomForcedExitLeaderBinding
@@ -77,6 +78,7 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingMemberLeavePartySuccess(result: String) {
         Log.d("exit","멤버 파티 나가기 성공 : " + result)
+        CustomToastMsg.createToast(requireContext(), "채팅에서 나갔습니다", "#8029ABE2", 53)?.show()
         requireActivity().finish()
     }
 
@@ -98,6 +100,7 @@ class DialogChattingExit: DialogFragment(),
 
     override fun chattingLeaderLeavePartySuccess(result: ChattingPartyLeaderLeavePartyResult) {
         Log.d("exit","방장 파티 나가기 성공"+ result)
+        CustomToastMsg.createToast(requireContext(), "채팅에서 나갔습니다", "#8029ABE2", 53)?.show()
         requireActivity().finish()
     }
 

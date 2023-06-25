@@ -1,7 +1,10 @@
 package com.example.geeksasaeng.Utils
 
+import android.preference.PreferenceManager
 import android.util.Log
+import com.example.geeksasaeng.Home.Search.DeliverySearchRecent
 import com.example.geeksasaeng.Utils.ApplicationClass.Companion.mSharedPreferences
+import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -149,6 +152,67 @@ fun saveForcedExitCheckList(forcedExitCheckList: MutableList<Boolean>){
     editor.apply()
 }
 
+// 최근 검색어
+// 최근 검색어를 SharedPreference에 저장하는 함수
+fun saveRecentSearch(keyword: String) {
+    val editor = mSharedPreferences.edit()
+
+    // 기존 검색어 리스트를 가져옴
+    val recentSearches = getRecentSearches()
+
+    // 검색어가 이미 리스트에 존재하는 경우, 해당 검색어를 맨 앞으로 이동시킵니다.
+    if (recentSearches.contains(keyword)) {
+        recentSearches.remove(keyword)
+    }
+    recentSearches.add(0, keyword)
+
+    // 최근 검색어 리스트를 JSONArray 형태로 변환하여 SharedPreference에 저장
+    val a = JSONArray()
+    for (i in 0 until recentSearches.size) {
+        a.put(recentSearches[i])
+    }
+
+    if (!recentSearches.isEmpty()) {
+        editor.putString("recent_searches", a.toString())
+    } else {
+        editor.putString("recent_searches", null)
+    }
+    editor.apply()
+}
+
+// 최근 검색어를 SharedPreference에서 삭제하는 함수
+fun deleteRecentSearch(keyword: String) {
+    Log.d("searchFlag", "삭제함수 실행됨 :${keyword}")
+    val editor = mSharedPreferences.edit()
+
+    // 기존 검색어 리스트를 가져옴
+    val recentSearches = getRecentSearches()
+    removeRecentSearch()
+
+    // 검색어를 리스트에서 제거
+    recentSearches.remove(keyword)
+
+    Log.d("searchFlag", "삭제함수 실행됨 :${recentSearches}")
+    // 최근 검색어 리스트를 JSONArray 형태로 변환하여 SharedPreference에 저장
+    val a = JSONArray()
+    for (i in 0 until recentSearches.size) {
+        a.put(recentSearches[i])
+    }
+
+    if (!recentSearches.isEmpty()) {
+        editor.putString("recent_searches", a.toString())
+    } else {
+        editor.putString("recent_searches", null)
+    }
+    editor.apply()
+}
+
+fun removeRecentSearch(){
+    val editor = mSharedPreferences.edit()
+    editor.remove("recent_searches")
+    editor.commit()
+}
+
 
 fun getUuid(): String? = mSharedPreferences.getString("uuid", null)
 fun getIsSocial(): Boolean? = mSharedPreferences.getBoolean("isSocial", false)
@@ -177,4 +241,21 @@ fun getForcedExitCheckList(): MutableList<Boolean> {
         }
     }
     return forcedExitCheckList
+}
+fun getRecentSearches(): MutableList<String> {
+    val json = mSharedPreferences.getString("recent_searches", null)
+    val recentSearches = ArrayList<String>()
+    if (json != null) {
+        try {
+            val a = JSONArray(json)
+            for (i in 0 until a.length()) {
+                val keyword = a.optString(i)
+                recentSearches.add(keyword.toString())
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+    }
+    Log.d("searchFlag", "불러오기함수 실행됨 :${recentSearches}")
+    return recentSearches
 }
