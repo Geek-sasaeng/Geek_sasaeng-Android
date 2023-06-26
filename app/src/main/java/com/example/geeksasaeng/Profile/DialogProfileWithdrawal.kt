@@ -21,8 +21,7 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
     lateinit var binding: DialogWithdralBinding
     lateinit var profileWithdrawalService: ProfileDataService
     private var userId: Int = 0
-
-
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
