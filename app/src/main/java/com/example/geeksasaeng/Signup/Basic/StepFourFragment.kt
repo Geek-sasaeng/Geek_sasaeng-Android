@@ -46,6 +46,7 @@ class StepFourFragment : BaseFragment<FragmentStepFourBinding>(FragmentStepFourB
     private fun initClickListener() {
         binding.stepFourAgree1MoreIv.setOnClickListener {
             val intent = Intent(activity, Tos1Activity::class.java)
+            intent.putExtra("status","signUp")
             intent.putExtra("isSocial", false)
             startActivity(intent)
         }

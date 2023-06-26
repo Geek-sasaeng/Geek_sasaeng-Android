@@ -167,7 +167,7 @@
         android:id="@+id/step_three_check_msg_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00분 00초 남았어요"
+        android:text="05분 00초 남았어요"
         android:textColor="@color/main"
         android:textSize="13dp"
         android:fontFamily="@font/spoqa_medium"
