@@ -163,11 +163,9 @@ class ProfileDataService {
     }
 
     // 회원 탈퇴
-    fun profileWithdrawalSender(id: Int, body: ProfileWithdrawalRequest) {
-        profileDataService?.profileWithdrawal(id, body)?.enqueue(object: Callback<ProfileWithdrawalResponse> {
+    fun profileWithdrawalSender() {
+        profileDataService?.profileWithdrawal()?.enqueue(object: Callback<ProfileWithdrawalResponse> {
             override fun onResponse(call: Call<ProfileWithdrawalResponse>, response: Response<ProfileWithdrawalResponse>) {
-                Log.d("API-TEST", "response = $response")
-                Log.d("API-TEST", "response.body = ${response.body()}")
                 if (response.isSuccessful && response.code() == 200) {
                     val resp = response.body()!!
                     when (resp.code) {
