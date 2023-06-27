@@ -474,7 +474,7 @@ class ChattingRoomActivity :
         }
 
         binding.chattingRoomTopLayoutOrderCompleteBtn.setOnClickListener { // 주문완료 버튼
-            Log.d("orderComplete-request",ChattingOrderCompleteRequest(roomId).toString()  )
+            Log.d("orderComplete-request",ChattingOrderCompleteRequest(roomId).toString())
             chattingService.chattingOrderComplete(ChattingOrderCompleteRequest(roomId))
         }
 
@@ -604,6 +604,9 @@ class ChattingRoomActivity :
     }
 
     override fun chattingOrderCompleteFailure(code: Int, message: String) {
+        if(message=="마감된 채팅방을 찾을 수 없습니다."){
+            CustomToastMsg.createToast(this, "아직 매칭이 마감되지 않았습니다", "#8029ABE2", 53)?.show()
+        }
         Log.d("orderComplete","실패 : "+message)
     }
 
