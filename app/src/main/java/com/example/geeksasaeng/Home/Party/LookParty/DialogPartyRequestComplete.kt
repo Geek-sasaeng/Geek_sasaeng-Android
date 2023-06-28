@@ -46,11 +46,5 @@ class DialogPartyRequestComplete: DialogFragment() {
             // TODO: Bottom_navi 아이콘 채팅으로 변경해주기
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        val width = resources.getDimensionPixelSize(R.dimen.party_request_complete_width)
-        val height = resources.getDimensionPixelSize(R.dimen.party_request_complete_height)
-        dialog?.window?.setLayout(width,height)
-    }
+    
 }
