@@ -7,6 +7,7 @@ import android.view.*
 import androidx.fragment.app.DialogFragment
 import com.example.geeksasaeng.Chatting.ChattingList.ChattingListFragment
 import com.example.geeksasaeng.MainActivity
+import com.example.geeksasaeng.MyBottomNaviCallback
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.databinding.DialogPartyRequestCompleteBinding
 
@@ -17,6 +18,7 @@ interface DialogPartyRequestCompleteView{
 class DialogPartyRequestComplete: DialogFragment() {
     lateinit var binding: DialogPartyRequestCompleteBinding
     lateinit var dialogPartyRequestCompleteView: DialogPartyRequestCompleteView
+    lateinit var bottomNaviCallback: MyBottomNaviCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,8 +45,9 @@ class DialogPartyRequestComplete: DialogFragment() {
         binding.partyRequestCompleteGoBtn.setOnClickListener {
             this.dismiss()
             (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, ChattingListFragment()).commit()
-            // TODO: Bottom_navi 아이콘 채팅으로 변경해주기
+            //바텀내비 바꾸기
+            bottomNaviCallback = activity as MyBottomNaviCallback
+            bottomNaviCallback.changeBottomIcon(R.id.chattingFragment)
         }
     }
-    
 }
