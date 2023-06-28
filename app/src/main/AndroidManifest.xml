@@ -21,6 +21,14 @@
         android:theme="@style/Theme.Geeksasaeng"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -48,10 +56,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Login.DormitoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -63,6 +67,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Home.Party.ReportParty.PartyReportOptionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Home.Party.ReportParty.PartyReportActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -81,6 +89,9 @@
             android:name=".Chatting.ChattingRoom.ChattingRoomForcedExitActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Chatting.ChattingRoom.ChattingUserReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Profile.ProfileMyPreActivityActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -94,9 +105,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Profile.ProfileCard.ProfileLevelIntroductionActivity"
-            android:screenOrientation="portrait" />
-
-        <!-- 카카오맵 APP KEY 추가 -->
+            android:screenOrientation="portrait" /> <!-- 카카오맵 APP KEY 추가 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="${kakaoNativeAppKey}" />
