@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/chatting_room_forced_exit_btn"
+            android:id="@+id/chatting_room_forced_exit_back_btn"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_back"

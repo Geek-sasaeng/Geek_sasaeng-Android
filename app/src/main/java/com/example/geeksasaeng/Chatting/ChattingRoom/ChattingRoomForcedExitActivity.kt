@@ -73,6 +73,11 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
     }
 
     private fun initClickListener() {
+        
+        binding.chattingRoomForcedExitBackBtn.setOnClickListener {
+            finish()
+        }
+        
         binding.chattingRoomForcedExitNext.setOnClickListener {
             if(mForcedExitMemberList.size>0){
                 //다음버튼 누를 시, 다이얼로그 띄우기
@@ -95,6 +100,7 @@ class ChattingRoomForcedExitActivity : BaseActivity<ActivityChattingRoomForcedEx
             Log.d("preForcedExit-success", i.toString())
             mMemberList.add(MemberData(i.chatMemberId, i.memberId, i.userName,i.userProfileImgUrl,false))
         }
+        binding.chattingRoomForcedExitMemberNumber.text = "${mForcedExitMemberList.size}/${mMemberList.size}명"
         initAdapter()
     }
 
