@@ -45,6 +45,9 @@ class ChattingUserBottomFragment: BottomSheetDialogFragment()  {
         memberId = arguments?.getString("memberId").toString()
         member = arguments?.getString("member").toString()
 
+        if (nickname == getNickname()){ // 내 프로필이면 신고하기 칸 gone으로 바꿔주기
+            binding.chattingUserBottomReport.visibility = View.GONE
+        }
         initData()
         initClickListener()
 
