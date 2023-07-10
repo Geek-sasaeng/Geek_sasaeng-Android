@@ -181,6 +181,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
         binding.profileUserImgCv.setOnClickListener { //사용자 프로필
             //저장공간 접근 권한 받기
+            Log.d("profile", "프로필 이미지 클릭됨")
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없을 경우 권한 요청 다이얼로그를 표시
                 requestReadExternalStoragePermission()

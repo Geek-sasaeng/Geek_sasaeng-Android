@@ -41,12 +41,20 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
     private var userId: Int = 0
     private var grade = String()
     private var nextGradeAndRemainCredits = String()
+    private var checkBinding: Boolean = false
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        checkBinding = false
+    }
 
     override fun initAfterBinding() {
         // clearBackStack()
+        checkBinding = true
         initRetrofitService()
         initClickListener()
         initRecentActivityClickListener()
+        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun initClickListener() {
@@ -207,26 +215,25 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         fomattingSignUpDate = signUpDate.substring(0,4)+"."+signUpDate.substring(5,7)+"."+signUpDate.substring(8,10)
         grade = result.grade
         nextGradeAndRemainCredits = result.nextGradeAndRemainCredits
-
-        binding.profileSignOutTv.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
         //정보 설정
-        binding.profileCardNickNameTv.text = getNickname()
-        binding.profileCardUnivTv.text = universityName
-        binding.profileCardDormitoryNameTv.text = dormitoryName
-        Glide.with(requireContext())
-            .load(getProfileImgUrl())
-            .into(binding.profileCardImgIv)
-        //등급
-        binding.profileCardLayoutBlueTopGrade.text = grade
-        if(grade == "복학생"){
-            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level2)
-        }else if(grade == "졸업생"){
-            binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level3)
+        if(checkBinding){
+            binding.profileCardNickNameTv.text = getNickname()
+            binding.profileCardUnivTv.text = universityName
+            binding.profileCardDormitoryNameTv.text = dormitoryName
+            binding.profileCardImgIv.visibility = View.VISIBLE
+            Glide.with(requireContext())
+                .load(getProfileImgUrl())
+                .into(binding.profileCardImgIv)
+            //등급
+            binding.profileCardLayoutBlueTopGrade.text = grade
+            if(grade == "복학생"){
+                binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level2)
+            }else if(grade == "졸업생"){
+                binding.profileCardBarIv.setImageResource(R.drawable.ic_profile_card_heart_bar_level3)
+            }
+            //승급까지 남은 학점
+            binding.profileCardLayoutBlueTopLeftCredit.text = nextGradeAndRemainCredits
         }
-        //승급까지 남은 학점
-        binding.profileCardLayoutBlueTopLeftCredit.text = nextGradeAndRemainCredits
-
         saveEmail(result.emailAddress)
     }
 
@@ -248,8 +255,10 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>(FragmentProfileBindi
         }
 
         if (myPreActivityList.size == 0){ //진행했던 활동이 하나도 없으면
-            binding.profileMyActivity.visibility = View.GONE
-            binding.profileMyActivityNoInfoLayout.visibility = View.VISIBLE
+            if(checkBinding){
+                binding.profileMyActivity.visibility = View.GONE
+                binding.profileMyActivityNoInfoLayout.visibility = View.VISIBLE
+            }
         }else{
             for (i in 0 until myPreActivityList.size) {
                 recentActivityBind(myPreActivityList[i], i)
