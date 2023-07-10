@@ -165,6 +165,9 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
         binding.profileMyInfoUpdateCompleteTv.setOnClickListener { //완료 버튼
             val dialogProfileUpdate = DialogProfileMyInfoUpdate(contentResolver)
+            if(binding.profileMyInfoUpdateNicknameCheckConfirmed.text == "확인 완료"){
+                nickName = binding.profileMyInfoUpdateNicknameEt.text.toString()
+            }
             val bundle = Bundle()
             bundle.putInt("dormitoryId", dormitoryId)
             bundle.putString("loginId", loginId)

@@ -71,6 +71,7 @@ class DialogProfileCurrentPwdChecking: DialogFragment(), ProfilePasswordChecking
     override fun onProfilePasswordCheckingSuccess() {
         binding.dialogProfileCurrentPwdCheckingExplanationTv.visibility = View.INVISIBLE
         startActivity(Intent(activity, ProfileMyInfoUpdatePwdActivity::class.java))
+        dismiss()
     }
 
     override fun onProfilePasswordCheckingFailure(message: String) {

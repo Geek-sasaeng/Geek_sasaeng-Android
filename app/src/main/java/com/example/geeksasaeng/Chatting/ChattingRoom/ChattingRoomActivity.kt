@@ -310,7 +310,7 @@ class ChattingRoomActivity :
 
     private fun webSocketStart() {
         Log.d("CHATTING-SYSTEM-TEST", "webSocketStart")
-        WebSocketManager.init("ws://geeksasaeng.shop:8080/chatting", this)
+        WebSocketManager.init("ws://geek-sasaeng.shop:8080/chatting", this)
     }
 
     // 종료 시 리스너 제거

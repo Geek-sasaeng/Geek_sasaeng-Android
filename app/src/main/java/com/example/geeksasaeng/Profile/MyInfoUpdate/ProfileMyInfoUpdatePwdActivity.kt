@@ -115,10 +115,11 @@ class ProfileMyInfoUpdatePwdActivity: BaseActivity<ActivityProfileMyInfoUpdatePw
         Log.d("passwordChange", "비밀번호 변경 성공")
         CustomToastMsg.createToast(this, "비밀번호를 변경하였습니다", "#8029ABE2", 53)?.show()
         //나의 정보 화면 = ProfileFragment로 이동하기
-        val intent = Intent(this, MainActivity::class.java)
+        /*val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("status", "ProfileFragment")
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
+        startActivity(intent)*/
+        finish()
     }
 
     override fun onProfilePasswordChangeFailure(message: String) {
