@@ -67,6 +67,8 @@ class LoginDataService() {
         loginService?.naverLogin(accessToken)?.enqueue(object: Callback<SocialLoginResponse>{
             override fun onResponse(call: Call<SocialLoginResponse>, response: Response<SocialLoginResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
+                    Log.d("API-TEST", "socialLogin code = ${response.body()!!.code}")
+                    Log.d("API-TEST", "socialLogin code = ${response.body()!!.message}")
                     val socialLoginResponse: SocialLoginResponse = response.body()!!
                     when (socialLoginResponse.code) {
                         1000 -> socialLoginView.onSocialLoginSuccess(socialLoginResponse.code, socialLoginResponse.result!!) // 로그인

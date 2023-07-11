@@ -8,13 +8,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.geeksasaeng.BuildConfig
 import com.example.geeksasaeng.Home.HomeFragment
-// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_ID
-// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_NAME
-// import com.example.geeksasaeng.Config.Secret.Secret.OAUTH_CLIENT_SECRET
+// import com.example.geeksasaeng.Secret.OAUTH_CLIENT_ID
+// import com.example.geeksasaeng.Secret.OAUTH_CLIENT_NAME
+// import com.example.geeksasaeng.Secret.OAUTH_CLIENT_SECRET
 import com.example.geeksasaeng.databinding.ActivityLoginBinding
 import com.example.geeksasaeng.Login.Retrofit.*
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
+import com.example.geeksasaeng.Secret.OAUTH_CLIENT_ID
+import com.example.geeksasaeng.Secret.OAUTH_CLIENT_NAME
+import com.example.geeksasaeng.Secret.OAUTH_CLIENT_SECRET
 import com.example.geeksasaeng.Signup.Basic.SignUpActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverActivity
 import com.example.geeksasaeng.Signup.Naver.SignUpNaverViewModel
@@ -36,9 +39,9 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun initAfterBinding() {
         signUpNaverVM = ViewModelProvider(this).get(SignUpNaverViewModel::class.java)
+        getFireBasetoken()
         setTextChangedListener()
         initClickListener()
-        getFireBasetoken()
     }
 
     private fun initClickListener() {
@@ -48,25 +51,31 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
         // 네이버 로그인
         binding.loginNaverBtn.setOnClickListener {
-            NaverIdLoginSDK.initialize(this, BuildConfig.OAUTH_CLIENT_ID, BuildConfig.OAUTH_CLIENT_SECRET, BuildConfig.OAUTH_CLIENT_NAME)
+            NaverIdLoginSDK.initialize(this, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+            Log.d("API-TEST", "OAUTH_CLIENT_ID = ${OAUTH_CLIENT_ID}\nOAUTH_CLIENT_SECRET = ${OAUTH_CLIENT_SECRET}\nOAUTH_CLIENT_NAME = ${OAUTH_CLIENT_NAME}")
 
             val profileCallback = object : NidProfileCallback<NidProfileResponse> {
                 override fun onSuccess(response: NidProfileResponse) {
+                    Log.d("API-TEST", "profileCallback onSuccess")
                     loginId = response.profile?.email.toString()
                     phoneNumber = response.profile?.mobile.toString()
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
+                    Log.d("API-TEST", "profileCallback onFailure")
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                     val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
                     Toast.makeText(this@LoginActivity, "errorCode: ${errorCode}\n" + "errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
+                    Log.d("API-TEST", "profileCallback errorCode = $errorCode / errorDescription = $errorDescription")
                 }
                 override fun onError(errorCode: Int, message: String) {
                     onFailure(errorCode, message)
+                    Log.d("API-TEST", "profileCallback onError")
                 }
             }
 
             val oauthLoginCallback = object : OAuthLoginCallback {
                 override fun onSuccess() {
+                    Log.d("API-TEST", "oauthLoginCallback onSuccess")
                     // 로그인 유저 정보 가져오기
                     NidOAuthLogin().callProfileApi(profileCallback)
                     // removeSP()
@@ -74,15 +83,18 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
                     // accessToken 서버로 보냄
                     val accessToken = NaverIdLoginSDK.getAccessToken().toString()
+                    Log.d("API-TEST", "accessToken = $accessToken")
                     socialLogin(accessToken)
                 }
                 override fun onFailure(httpStatus: Int, message: String) {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
                     val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
                     // removeSP()
-                    Log.d("NAVER-LOGIN", "FAILED : $errorCode $errorDescription")
+                    Log.d("API-TEST", "oauthLoginCallback onFailure")
+                    Log.d("API-TEST", "oauthLoginCallback errorCode = $errorCode / errorDescription = $errorDescription")
                 }
                 override fun onError(errorCode: Int, message: String) {
+                    Log.d("API-TEST", "oauthLoginCallback onError")
                     onFailure(errorCode, message)
                 }
             }
@@ -137,8 +149,18 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         }
     }
 
+    override fun onLoginFailure(message: String) {
+        // 2011 : 비밀번호가 틀립니다
+        // 2012 : 탈퇴한 회원
+        // 2400 : 존재하지 않는 아이디
+        CustomToastMsg.createToast(this, "로그인 실패! 다시 시도해주세요", "#80A8A8A8", 26)?.show() //gray_2색상 //80붙여서 투명도 50%줌
+        Log.d("API-TEST", "API onLoginFailure")
+/*        showToast(message)*/
+    }
+
     // 소셜 로그인 성공
     override fun onSocialLoginSuccess(code: Int, result: SocialLoginResult) {
+        Log.d("API-TEST", "onSocialLoginSuccess")
         // 네이버 자동 로그인 자동 적용
         val jwt = result.jwt
         setAutoLogin(jwt)
@@ -160,18 +182,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     // 소셜 로그인 회원가입 창으로 이동
     override fun onSocialLoginToRegister(message: String, accessToken: String) {
+        Log.d("API-TEST", "onSocialLoginToRegister")
         val signUpNaverIntent = Intent(this, SignUpNaverActivity::class.java)
         signUpNaverIntent.putExtra("accessToken", accessToken)
         startActivity(signUpNaverIntent)
         showToast("회원가입이 되지않아 회원가입 창으로 이동합니다.")
-    }
-
-    override fun onLoginFailure(message: String) {
-        // 2011 : 비밀번호가 틀립니다
-        // 2012 : 탈퇴한 회원
-        // 2400 : 존재하지 않는 아이디
-        CustomToastMsg.createToast(this, message, "#80A8A8A8", 26)?.show() //gray_2색상 //80붙여서 투명도 50%줌
-/*        showToast(message)*/
     }
 
     private fun setTextChangedListener() {
@@ -208,10 +223,12 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
         })
     }
     private fun getFireBasetoken(){
+        Log.d("API-TEST", "getFireBaseToken")
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
                 task ->
             if(task.isSuccessful) {
                 fcmToken = task.result?:""
+                Log.d("API-TEST", "getFireBaseToken = $fcmToken")
                 Log.d("FCM-TOKEN-RESPONSE", fcmToken.toString())
             }
         }
@@ -219,11 +236,11 @@ class LoginActivity: BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::in
 
     override fun onSignUpSocialSuccess() {
         showToast("성공")
-        Log.d("signup", "회원가입에 성공하였습니다.")
+        Log.d("API-TEST", "onSignUpSocialSuccess")
     }
 
     override fun onSignUpSocialFailure(message: String) {
         showToast("실패 $message")
-        Log.d("signup", "회원가입에 실패하였습니다.\n$message")
+        Log.d("API-TEST", "onSignUpSocialFailure")
     }
 }

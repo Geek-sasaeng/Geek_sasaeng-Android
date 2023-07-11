@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class ApplicationClass: Application() {
     companion object {
         const val Authorization_TOKEN: String = "Authorization"         // JWT Token Key
-        const val BASE_URL = "https://geeksasaeng.shop"
+        const val BASE_URL = "https://geek-sasaeng.shop/swagger-ui/"
         //const val BASE_URL = "http://192.168.1.2:8080"
         const val TAG: String = "geeksasaeng-pref" // Log, SharedPreference
 
