@@ -1,11 +1,14 @@
 package com.example.geeksasaeng.Home.Party.LookParty
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.geeksasaeng.Chatting.ChattingRoom.ChattingUserReportActivity
+import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportActivity
 import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportFragment
 import com.example.geeksasaeng.Home.Party.UpdateParty.PartyUpdateFragment
 import com.example.geeksasaeng.MainActivity
@@ -49,16 +52,18 @@ class DialogDeliveryOptionOtherPopup: DialogFragment() {
             // 신고하기
             this.dismiss()
 
-            val transaction = (context as MainActivity).supportFragmentManager.beginTransaction()
-
+/*            val transaction = (context as MainActivity).supportFragmentManager.beginTransaction()
             val bundle = Bundle()
             bundle.putInt("reportedDeliveryPartyId", reportedDeliveryPartyId)
             bundle.putInt("reportedMemberId", reportedMemberId)
-
             val partyReportFragment = PartyReportFragment()
             partyReportFragment.arguments = bundle
+            transaction.addToBackStack("partyReport").replace(R.id.main_frm, partyReportFragment).commit()*/
 
-            transaction.addToBackStack("partyReport").replace(R.id.main_frm, partyReportFragment).commit()
+            val intent = Intent(activity, PartyReportActivity::class.java)
+            intent.putExtra("reportedDeliveryPartyId", reportedDeliveryPartyId)
+            intent.putExtra("reportedMemberId", reportedMemberId)
+            startActivity(intent)
         }
     }
 }

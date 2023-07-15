@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingService
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingUserProfileResult
 import com.example.geeksasaeng.Chatting.ChattingRoom.Retrofit.ChattingUserProfileView
+import com.example.geeksasaeng.Home.Party.ReportParty.PartyReportOptionActivity
 import com.example.geeksasaeng.MainActivity
 import com.example.geeksasaeng.R
 import com.example.geeksasaeng.Utils.getNickname
@@ -44,6 +45,9 @@ class ChattingUserBottomFragment: BottomSheetDialogFragment()  {
         memberId = arguments?.getString("memberId").toString()
         member = arguments?.getString("member").toString()
 
+        if (nickname == getNickname()){ // 내 프로필이면 신고하기 칸 gone으로 바꿔주기
+            binding.chattingUserBottomReport.visibility = View.GONE
+        }
         initData()
         initClickListener()
 
@@ -62,9 +66,11 @@ class ChattingUserBottomFragment: BottomSheetDialogFragment()  {
 
     private fun initClickListener() {
         binding.chattingUserBottomReport.setOnClickListener {
-            // val intent = Intent(activity, ChattingUserReportFragment::class.java)
-            val intent = Intent(activity, MainActivity::class.java)
-            intent.putExtra("status", "chatReport")
+            //val intent = Intent(activity, MainActivity::class.java)
+            //intent.putExtra("status", "chatReport")
+            //intent.putExtra("memberId", memberId)
+            //startActivity(intent)
+            val intent = Intent(activity, ChattingUserReportActivity::class.java)
             intent.putExtra("memberId", memberId)
             startActivity(intent)
         }

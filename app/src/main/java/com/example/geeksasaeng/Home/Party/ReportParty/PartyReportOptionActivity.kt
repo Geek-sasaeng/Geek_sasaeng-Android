@@ -63,6 +63,10 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
     override fun partyReportViewFailure(message: String) {
         val dialog = DialogReportParty()
         val bundle = Bundle()
+        var message = message
+        if (message == "하루 신고 최대 횟수를 초과하셨습니다."){
+            message = "하루 최대 신고 횟수를\n 초과하셨습니다."
+        }
         bundle.putString("msg", message)
         dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")
@@ -101,6 +105,10 @@ class PartyReportOptionActivity: BaseActivity<ActivityPartyReportOptionBinding>(
     override fun userReportViewFailure(message: String) {
         val dialog = DialogReportParty()
         val bundle = Bundle()
+        var message = message
+        if (message == "하루 신고 최대 횟수를 초과하셨습니다."){
+            message = "하루 최대 신고 횟수를\n 초과하셨습니다."
+        }
         bundle.putString("msg", message)
         dialog.arguments = bundle
         dialog.show(supportFragmentManager, "CustomDialog")

@@ -16,7 +16,12 @@ import com.example.geeksasaeng.Utils.BaseActivity
 import com.example.geeksasaeng.databinding.ActivityMainBinding
 import java.security.MessageDigest
 
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+interface MyBottomNaviCallback {
+    fun changeBottomIcon(input: Int)
+}
+
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),
+    MyBottomNaviCallback {
 
     var status: String? = null
     var deliveryItemId: String? = null
@@ -165,4 +170,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         //finish()
     }
+
+    override fun changeBottomIcon(input: Int) {
+        binding.mainBottomNavi.setSelectedItemId(input) // 바텀 네비 아이콘을 바꿔주는 코드
+    }
+
 }
