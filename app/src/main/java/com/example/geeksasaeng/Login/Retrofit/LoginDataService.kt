@@ -63,8 +63,8 @@ class LoginDataService() {
         })
     }
 
-    fun socialLogin(accessToken: SocialLogin){
-        loginService?.naverLogin(accessToken)?.enqueue(object: Callback<SocialLoginResponse>{
+    fun socialLogin(token: SocialLogin){
+        loginService?.naverLogin(token)?.enqueue(object: Callback<SocialLoginResponse>{
             override fun onResponse(call: Call<SocialLoginResponse>, response: Response<SocialLoginResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
                     Log.d("API-TEST", "socialLogin code = ${response.body()!!.code}")
