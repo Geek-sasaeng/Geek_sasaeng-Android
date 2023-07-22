@@ -185,6 +185,10 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없을 경우 권한 요청 다이얼로그를 표시
                 requestReadExternalStoragePermission()
+            }else{
+                // 권한이 있을 경우 바로 다이얼로그 띄우기
+                var dialogFragment = DialogProfileImageUpdate()
+                dialogFragment.show(supportFragmentManager, "DialogProfileImageUpdate")
             }
         }
 
@@ -209,6 +213,7 @@ class ProfileMyInfoUpdateActivity: BaseActivity<ActivityProfileMyInfoUpdateBindi
 
     //권한 요청 결과 처리
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        Log.d("profile", "프로필 이미지로 onRequestPermissionsResult 진입함")
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
                 // 권한 부여 여부 확인
