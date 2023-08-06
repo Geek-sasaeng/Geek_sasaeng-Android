@@ -51,7 +51,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
 
     override fun onResume() {
         super.onResume()
-        initChattingList()
+        // initChattingList()
     }
 
     override fun onDestroyView() {
@@ -86,24 +86,24 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         factory.setUri(rabbitMQUri)
         // RabbitMQ 연결
         val conn: Connection = factory.newConnection()
-        // Send and Receive 가능하도록 해주는 부분!
-        val channel = conn.createChannel()
-        // durable = true로 설정!!
-        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
+//        // Send and Receive 가능하도록 해주는 부분!
+//        val channel = conn.createChannel()
+//        // durable = true로 설정!!
+//        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+//        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
 
         lateinit var originalMessage: String
         lateinit var chatResponseMessage: Chat
 
-        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-            originalMessage = String(delivery.body, Charsets.UTF_8)
-            chatResponseMessage = getJSONtoChatting(originalMessage)
-            chatDB.chatDao().insert(chatResponseMessage)
-
-            chattingList.add(chatResponseMessage)
-        }
-
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
+//        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+//            originalMessage = String(delivery.body, Charsets.UTF_8)
+//            chatResponseMessage = getJSONtoChatting(originalMessage)
+//            chatDB.chatDao().insert(chatResponseMessage)
+//
+//            chattingList.add(chatResponseMessage)
+//        }
+//
+//        channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
     }
 
     private fun getJSONtoChatting(message: String): Chat {
@@ -120,10 +120,8 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
         // RoomDB를 위해 Int Type을 String Type으로 변경해줌!!
         var readMembers = java.util.ArrayList<String>()
         var readMembersTemp = chatting.getJSONArray("readMembers")
-        if (readMembersTemp != null) {
-            for (i in 0 until readMembersTemp.length()) {
-                readMembers.add(readMembersTemp.getInt(i).toString())
-            }
+        for (i in 0 until readMembersTemp.length()) {
+            readMembers.add(readMembersTemp.getInt(i).toString())
         }
 
         var createdAt = chatting.getString("createdAt")

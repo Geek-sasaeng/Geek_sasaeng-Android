@@ -72,7 +72,7 @@ class LoginDataService() {
                     val socialLoginResponse: SocialLoginResponse = response.body()!!
                     when (socialLoginResponse.code) {
                         1000 -> socialLoginView.onSocialLoginSuccess(socialLoginResponse.code, socialLoginResponse.result!!) // 로그인
-                        2807 -> socialLoginView.onSocialLoginToRegister(socialLoginResponse.message, accessToken.accessToken)
+                        2807 -> socialLoginView.onSocialLoginToRegister(socialLoginResponse.message, token.accessToken)
                         4000 -> Log.d("LOGIN", "서버 오류")
                         else -> socialLoginView.onLoginFailure(socialLoginResponse.message)
                     }
