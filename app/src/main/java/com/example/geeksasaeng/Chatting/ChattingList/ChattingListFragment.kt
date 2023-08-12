@@ -20,10 +20,10 @@ import com.example.geeksasaeng.Utils.getMemberId
 import com.example.geeksasaeng.databinding.FragmentChattingBinding
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
-import com.rabbitmq.client.DeliverCallback
-import com.rabbitmq.client.Delivery
 import kotlinx.coroutines.*
 import org.json.JSONObject
+import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 
 class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChattingBinding::inflate),
@@ -85,16 +85,49 @@ class ChattingListFragment : BaseFragment<FragmentChattingBinding>(FragmentChatt
     private fun initRabbitMQSetting() {
         factory.setUri(rabbitMQUri)
         // RabbitMQ 연결
+        try {
+            Log.d("API-TEST", "1")
+            factory.newConnection().use { connection ->
+                Log.d("API-TEST", "2")
+                connection.createChannel().use { channel ->
+                    Log.d("API-TEST", "3")
+                    for (i in 0..100000) {
+                        Log.d("API-TEST", "4")
+                        channel.queueDeclare(QUEUE_NAME, false, false, false, null)
+                        Log.d("API-TEST", "5")
+                        val message =
+                            "Hello World!" + (Math.random() * 100).toInt()
+                        Log.d("API-TEST", "6")
+                        channel.basicPublish("", QUEUE_NAME, null, message.toByteArray())
+                        Log.d("API-TEST", "7")
+                        println(" [x] Set '$message'")
+                        Thread.sleep(10)
+                        Log.d("API-TEST", "10")
+                    }
+                }
+            }
+        } catch (e: TimeoutException) {
+            e.printStackTrace()
+            Log.d("API-TEST", "e = $e")
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.d("API-TEST", "e = $e")
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+            Log.d("API-TEST", "e = $e")
+        }
+
+
         val conn: Connection = factory.newConnection()
-//        // Send and Receive 가능하도록 해주는 부분!
+////        // Send and Receive 가능하도록 해주는 부분!
 //        val channel = conn.createChannel()
-//        // durable = true로 설정!!
-//        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
+////        // durable = true로 설정!!
+////        // 참고 : https://teragoon.wordpress.com/2012/01/26/message-durability%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%9E%83%EC%96%B4%EB%B2%84%EB%A6%AC%EC%A7%80-%EC%95%8A%EA%B8%B0-durabletrue-propspersistent_text_plain-2/
 //        channel.queueDeclare(QUEUE_NAME, true, false, false, null)
-
-        lateinit var originalMessage: String
-        lateinit var chatResponseMessage: Chat
-
+//
+//        lateinit var originalMessage: String
+//        lateinit var chatResponseMessage: Chat
+//
 //        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
 //            originalMessage = String(delivery.body, Charsets.UTF_8)
 //            chatResponseMessage = getJSONtoChatting(originalMessage)
