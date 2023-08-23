@@ -35,11 +35,8 @@ interface ProfileRetrofitInterfaces {
     ): Call<ProfileMyPreActivityResponse>
 
     // 회원 탈퇴 api
-    @PATCH("/members/account-delete/{id}")
-    fun profileWithdrawal(
-        @Path("id") id: Int,
-        @Body profileWithdrawalRequest: ProfileWithdrawalRequest
-    ): Call<ProfileWithdrawalResponse>
+    @PATCH("/members/account-delete")
+    fun profileWithdrawal(): Call<ProfileWithdrawalResponse>
 
     // 멤버 정보 수정하기
     @Multipart

@@ -21,8 +21,7 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
     lateinit var binding: DialogWithdralBinding
     lateinit var profileWithdrawalService: ProfileDataService
     private var userId: Int = 0
-
-
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +38,7 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
         initService()
 
         binding.withdrawalOkBtn.setOnClickListener {
-            this.dismiss()
+            profileWithdrawalService.profileWithdrawalSender()
         }
 
         binding.withdrawalCancelBtn.setOnClickListener {
@@ -47,14 +46,9 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
         }
     }
 
-//    private fun getWithdrawalRequest(): ProfileWithdrawalRequest {
-//        return ProfileWithdrawalRequest(userId, profileWithdrawalRequest)
-//    }
-
     private fun initService() {
         profileWithdrawalService = ProfileDataService()
         profileWithdrawalService.setProfileWithdrawalView(this)
-        // profileWithdrawalService.profileWithdrawalSender(getWithdrawalRequest())
     }
 
     override fun onResume() {
@@ -68,6 +62,7 @@ class DialogProfileWithdrawal: DialogFragment(), ProfileWithdrawalView {
         (context as MainActivity).finish()
         removeAutoLogin()
         CustomToastMsg.createToast(requireContext(), "탈퇴가 완료되었습니다", "#8029ABE2", 53)?.show()
+        dismiss()
         startActivity(Intent(activity, LoginActivity::class.java))
     }
 
