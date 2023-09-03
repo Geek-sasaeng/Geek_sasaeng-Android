@@ -180,6 +180,9 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     fun addItem(item: Chat) {
         chattingList.add(item)
         this.notifyDataSetChanged()
+        Log.d("CHATTING-SYSTEM-TEST", "additem - notifydatasetchaged")
+        Log.d("CHATTING-SYSTEM-TEST", item.content.toString())
+         //스크롤 최 하단으로 내리기
     }
 
     fun addAllItems(items: ArrayList<Chat>) {

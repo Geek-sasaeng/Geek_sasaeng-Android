@@ -37,7 +37,7 @@ class DialogPartyRevisit: DialogFragment() {
 
     private fun initViewSetting() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명하게 만들어줘야 둥근 테두리가 보인다.
-        //동적인 화면 크기 구성
+        //다이얼로그! 동적인 화면 크기 구성
         val params = dialog!!.window!!.attributes
         params.width = WindowManager.LayoutParams.WRAP_CONTENT
         params.height = WindowManager.LayoutParams.WRAP_CONTENT

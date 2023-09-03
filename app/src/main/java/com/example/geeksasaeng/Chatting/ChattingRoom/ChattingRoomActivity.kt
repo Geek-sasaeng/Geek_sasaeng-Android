@@ -253,6 +253,7 @@ class ChattingRoomActivity :
         lateinit var chatResponseMessage: Chat
 
         val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            Log.d("CHATTING-SYSTEM-TEST", "deliverCallback이 불려짐")
             originalMessage = String(delivery.body, Charsets.UTF_8)
             Log.d("CHATTING-SYSTEM-TEST", "originalMessage = $originalMessage")
             chatResponseMessage = getJSONtoChatting(originalMessage)
@@ -265,6 +266,7 @@ class ChattingRoomActivity :
         Log.d("CHATTING-SYSTEM-TEST", "deliverCallback = ${deliverCallback}")
 
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
+
     }
 
     private fun getJSONtoChatting(message: String): Chat {
@@ -508,7 +510,7 @@ class ChattingRoomActivity :
         // TODO: 실시간 채팅 시간 확인
     }
 
-    // 메시지 전송
+    // 메세지 전송
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
