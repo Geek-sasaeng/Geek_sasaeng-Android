@@ -48,7 +48,7 @@
         android:layout_height="0dp"
         android:background="@color/white"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/tos1_bottom_bar"
+        app:layout_constraintBottom_toTopOf="@id/tos1_bottom_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tos1_toolbar"
@@ -1128,57 +1128,58 @@
 
     </ScrollView>
 
-    <View
-        android:id="@+id/tos1_bottom_bar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tos1_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@color/main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/tos1_bottom_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/spoqa_medium"
-        android:text="개인정보 수집 및 이용동의"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/tos1_bottom_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tos1_bottom_bar"
-        app:layout_constraintVertical_bias="0.515" />
-
-    <LinearLayout
-        android:id="@+id/tos1_check_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="22dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tos1_bottom_bar"
-        app:layout_constraintBottom_toBottomOf="@id/tos1_bottom_bar"
-        >
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
+            android:id="@+id/tos1_bottom_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="동의"
+            android:layout_marginStart="30dp"
             android:fontFamily="@font/spoqa_medium"
-            android:textSize="16sp"
+            android:text="개인정보 수집 및 이용동의"
             android:textColor="@color/white"
-            android:layout_marginRight="11dp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.515" />
 
-        <ImageView
-            android:id="@+id/tos1_next_btn"
-            android:layout_width="12dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_next"
-            android:backgroundTint="@color/white"
-            android:layout_gravity="center_vertical"/>
+        <LinearLayout
+            android:id="@+id/tos1_check_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="동의"
+                android:fontFamily="@font/spoqa_medium"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_marginRight="11dp" />
+
+            <ImageView
+                android:id="@+id/tos1_next_btn"
+                android:layout_width="12dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_next"
+                android:backgroundTint="@color/white"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

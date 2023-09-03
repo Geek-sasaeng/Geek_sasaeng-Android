@@ -151,61 +151,63 @@
                             android:id="@+id/profile_card_layout_while"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/profile_card_layout_blue_top"
-                            app:layout_constraintBottom_toBottomOf="parent">
+                            app:layout_constraintVertical_bias="0.0">
 
                             <ImageView
                                 android:id="@+id/profile_card_bar_iv"
                                 android:layout_width="24.32dp"
                                 android:layout_height="102dp"
-                                android:src="@drawable/ic_profile_card_heart_bar_level1"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginBottom="-1dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"/>
+                                android:src="@drawable/ic_profile_card_heart_bar_level1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
 
                             <TextView
                                 android:id="@+id/profile_card_nick_name_tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""
-                                android:fontFamily="@font/spoqa_bold"
-                                android:textSize="20sp"
-                                android:textColor="@color/top"
-                                app:layout_constraintStart_toEndOf="@id/profile_card_bar_iv"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toTopOf="@id/profile_card_univ_tv"
                                 android:layout_marginStart="5.68dp"
-                                android:layout_marginTop="34dp"/>
+                                android:layout_marginTop="40dp"
+                                android:fontFamily="@font/spoqa_bold"
+                                android:text=""
+                                android:textColor="@color/top"
+                                android:textSize="20sp"
+                                app:layout_constraintBottom_toTopOf="@id/profile_card_univ_tv"
+                                app:layout_constraintStart_toEndOf="@id/profile_card_bar_iv"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/profile_card_univ_tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" "
+                                android:layout_marginTop="5dp"
                                 android:fontFamily="@font/spoqa_medium"
-                                android:textSize="13sp"
+                                android:text=""
                                 android:textColor="@color/gray_3"
-                                android:layout_marginTop="9dp"
+                                android:textSize="13sp"
                                 app:layout_constraintBottom_toTopOf="@id/profile_card_dormitory_name_tv"
-                                app:layout_constraintTop_toBottomOf="@id/profile_card_nick_name_tv"
-                                app:layout_constraintStart_toStartOf="@id/profile_card_nick_name_tv" />
+                                app:layout_constraintStart_toStartOf="@id/profile_card_nick_name_tv"
+                                app:layout_constraintTop_toBottomOf="@id/profile_card_nick_name_tv" />
 
                             <TextView
                                 android:id="@+id/profile_card_dormitory_name_tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" "
-                                android:fontFamily="@font/spoqa_medium"
-                                android:textSize="13sp"
-                                android:textColor="@color/gray_3"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="31dp"
+                                android:fontFamily="@font/spoqa_medium"
+                                android:text=" "
+                                android:textColor="@color/gray_3"
+                                android:textSize="13sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/profile_card_univ_tv"
-                                app:layout_constraintStart_toStartOf="@id/profile_card_nick_name_tv" />
+                                app:layout_constraintStart_toStartOf="@id/profile_card_nick_name_tv"
+                                app:layout_constraintTop_toBottomOf="@id/profile_card_univ_tv" />
 
                             <ImageView
                                 android:id="@+id/profile_card_shadow_iv"
@@ -222,17 +224,18 @@
                                 android:layout_height="110dp"
                                 android:layout_marginEnd="31.5dp"
                                 android:layout_marginBottom="6.5dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:cardCornerRadius="55dp"
                                 app:cardElevation="0dp"
-                                app:cardCornerRadius="55dp">
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent">
+
                                 <ImageView
-                                    android:visibility="invisible"
                                     android:id="@+id/profile_card_img_iv"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/profile_thumbs_up" />
+                                    android:src="@drawable/profile_thumbs_up"
+                                    android:visibility="invisible" />
                             </androidx.cardview.widget.CardView>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

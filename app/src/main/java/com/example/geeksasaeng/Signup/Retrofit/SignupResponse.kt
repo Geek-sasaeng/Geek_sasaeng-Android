@@ -146,9 +146,9 @@ data class SocialSignUpResult(
 )
 
 data class SocialSignUpRequest (
+    @SerializedName("accessToken") var accessToken: String,
     @SerializedName("email") var email: String?,
     @SerializedName("informationAgreeStatus") var informationAgreeStatus: String, //개인정보 동의
     @SerializedName("nickname") var nickname: String,
-    @SerializedName("universityName") var universityName: String,
-    @SerializedName("accessToken") var accessToken: String,
+    @SerializedName("universityName") var universityName: String
 )

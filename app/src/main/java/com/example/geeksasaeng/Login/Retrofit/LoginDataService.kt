@@ -63,14 +63,16 @@ class LoginDataService() {
         })
     }
 
-    fun socialLogin(accessToken: SocialLogin){
-        loginService?.naverLogin(accessToken)?.enqueue(object: Callback<SocialLoginResponse>{
+    fun socialLogin(token: SocialLogin){
+        loginService?.naverLogin(token)?.enqueue(object: Callback<SocialLoginResponse>{
             override fun onResponse(call: Call<SocialLoginResponse>, response: Response<SocialLoginResponse>) {
                 if (response.isSuccessful && response.code() == 200) {
+                    Log.d("API-TEST", "socialLogin code = ${response.body()!!.code}")
+                    Log.d("API-TEST", "socialLogin code = ${response.body()!!.message}")
                     val socialLoginResponse: SocialLoginResponse = response.body()!!
                     when (socialLoginResponse.code) {
                         1000 -> socialLoginView.onSocialLoginSuccess(socialLoginResponse.code, socialLoginResponse.result!!) // 로그인
-                        2807 -> socialLoginView.onSocialLoginToRegister(socialLoginResponse.message, accessToken.accessToken)
+                        2807 -> socialLoginView.onSocialLoginToRegister(socialLoginResponse.message, token.accessToken)
                         4000 -> Log.d("LOGIN", "서버 오류")
                         else -> socialLoginView.onLoginFailure(socialLoginResponse.message)
                     }

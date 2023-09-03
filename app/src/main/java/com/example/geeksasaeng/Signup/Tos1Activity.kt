@@ -17,7 +17,7 @@ class Tos1Activity : BaseActivity<ActivityTos1Binding>(ActivityTos1Binding::infl
         status = intent.getStringExtra("status")
 
         if(status!="signUp"){ // 내정보뷰에서 보는 경우가 있다.
-            binding.tos1BottomBar.visibility = View.GONE
+            binding.tos1BottomLayout.visibility = View.GONE
         }else{ //회원가입창에서 들어온 경우
             isSocial = intent.getBooleanExtra("isSocial", false)
         }

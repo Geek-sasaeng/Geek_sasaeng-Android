@@ -34,7 +34,7 @@ class SignUpNaverActivity : BaseActivity<ActivitySignUpNaverBinding>(ActivitySig
         transaction.commit()
 
         progressVM.currentPro.observe(this, Observer {
-            binding.signUpNaverProgressbar.setProgress(progressVM.currentPro.value!!.toInt())
+            binding.signUpNaverProgressbar.progress = progressVM.currentPro.value!!.toInt()
         })
     }
 }
