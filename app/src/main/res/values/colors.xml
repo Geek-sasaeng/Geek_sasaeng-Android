@@ -19,6 +19,7 @@
     <color name= "line">#F8F8F8</color>
     <color name= "error">#FF0000</color>
     <color name= "main_color">#2DB9EA</color>
+    <color name="stroke">#00ff0000</color>
 
     <!--자주 쓰이길래 임의로 넣은 것-->
     <color name= "bababa_color">#BABABA</color>

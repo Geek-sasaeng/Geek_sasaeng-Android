@@ -219,9 +219,13 @@ class ChattingRoomActivity :
                     withContext(Dispatchers.Main) {
                         // Main Thread 에서만 View 관련 작업 가능!
                         chattingRoomRVAdapter.addItem(allChatting[i])
-                        Log.d("CHATTING-SYSTEM-TEST", "allChatting = ${allChatting[i]}")
+                        Log.d("CHATTING-SYSTEM-TEST", "allChatting = ${allChatting[i].content}")
                     }
                 }
+            }
+
+            runOnUiThread {
+                chattingRoomRVAdapter.notifyDataSetChanged()
             }
 
             // 채팅 제일 밑으로 가는 방법!
@@ -260,11 +264,33 @@ class ChattingRoomActivity :
             chatDB.chatDao().insert(chatResponseMessage)
             var result = chatDB.chatDao().getAllChats()
             var resultTemp = result[result.size - 1]
+
             chattingRoomRVAdapter.addItem(chatResponseMessage)
             Log.d("CHATTING-SYSTEM-TEST", "chattingRoom chatResponseMessage = $chatResponseMessage")
-        }
-        Log.d("CHATTING-SYSTEM-TEST", "deliverCallback = ${deliverCallback}")
 
+            binding.chattingRoomChattingTextEt.setText("") // 메세지 삭제
+            Log.d("CHATTING-SYSTEM-TEST", "메세지 삭제")
+
+            //chattingRoomRVAdapter.notifyItemInserted(chattingRoomRVAdapter.itemCount -1)
+            chattingRoomRVAdapter.notifyDataSetChanged()
+            Log.d("CHATTING-SYSTEM-TEST", "notifyDataSetChanged됨")
+
+
+            // <채팅 제일 밑으로 가는 방법!>
+            var chattingSize = chattingRoomRVAdapter.itemCount
+            val smoothScroller: RecyclerView.SmoothScroller by lazy {
+                object : LinearSmoothScroller(this@ChattingRoomActivity) {
+                    override fun getVerticalSnapPreference() = SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = chattingSize
+            Log.d("CHATTING-SYSTEM-TEST", "!!" + (chattingSize).toString())
+            binding.chattingRoomChattingRv.layoutManager?.startSmoothScroll(smoothScroller)
+            Log.d("CHATTING-SYSTEM-TEST", "스크롤 젤 밑으로")
+
+        }
+
+        Log.d("CHATTING-SYSTEM-TEST", "!deliverCallback = ${deliverCallback}")
         channel.basicConsume(QUEUE_NAME, true, deliverCallback) { consumerTag: String? -> }
 
     }
@@ -513,6 +539,7 @@ class ChattingRoomActivity :
     // 메세지 전송
     private fun initSendChatListener() {
         binding.chattingRoomSendTv.setOnClickListener {
+            //binding.chattingRoomChattingTextEt.setText("")
             CoroutineScope(Dispatchers.Main).launch {
                 withContext(Dispatchers.IO) {
                     WebSocketManager.connect()
@@ -538,8 +565,6 @@ class ChattingRoomActivity :
 
                     val chatData = JsonParser.parseString(jsonObject.toString()) as JsonObject
                     WebSocketManager.sendMessage(chatData.toString())
-
-                    binding.chattingRoomChattingTextEt.setText("")
 
                     if ( WebSocketManager .sendMessage( " Client send " )) {
                         Log.d("CHATTING-SYSTEM-TEST", " Send from the client \n " )

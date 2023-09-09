@@ -178,11 +178,15 @@ class ChattingRoomRVAdapter(var chattingList: ArrayList<Chat>) : RecyclerView.Ad
     }
 
     fun addItem(item: Chat) {
+        Log.d("CHATTING-SYSTEM-TEST", "addItem 내부")
+
         chattingList.add(item)
-        this.notifyDataSetChanged()
-        Log.d("CHATTING-SYSTEM-TEST", "additem - notifydatasetchaged")
-        Log.d("CHATTING-SYSTEM-TEST", item.content.toString())
-         //스크롤 최 하단으로 내리기
+        Log.d("CHATTING-SYSTEM-TEST", "addItem 내부 size " + chattingList.size.toString())
+        Log.d("CHATTING-SYSTEM-TEST", "------------------------------")
+        Log.d("CHATTING-SYSTEM-TEST", "recyclerviewadapter의 리스트 마지막 ~ " + chattingList[chattingList.size -1].content.toString())
+        Log.d("CHATTING-SYSTEM-TEST", "------------------------------")
+        //this.notifyDataSetChanged()
+        Log.d("CHATTING-SYSTEM-TEST", "--------------end----------------")
     }
 
     fun addAllItems(items: ArrayList<Chat>) {

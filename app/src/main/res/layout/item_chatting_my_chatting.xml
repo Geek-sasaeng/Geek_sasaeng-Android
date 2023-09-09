@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="16dp"
-        app:strokeColor="#00ff0000"
+        app:strokeColor="@color/stroke"
         app:strokeWidth="1dp">
 
         <ImageView
